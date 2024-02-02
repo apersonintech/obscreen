@@ -1,4 +1,4 @@
 [
-    {"location":"https://ffmpeg.org","delay":10,"type":"url"},
+    {"location":"data/uploads/reclame.jpg","delay":10,"type":"picture"},
     {"location":"https://unix.org","delay":20,"type":"url"}
 ]
