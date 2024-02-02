@@ -62,7 +62,7 @@
 	var nextReady = true;
 	preloadIntoFirstSlide();
 
-    function loadContent(element) {
+    function loadContent(element, callbackReady) {
       switch (items[curUrl].type) {
         case 'url':
           loadUrl(element, callbackReady);
@@ -125,7 +125,7 @@
 			setTimeout(move, delay);
 		};
 
-        loadContent(element);
+        loadContent(element, callbackReady);
 	}
 
 	function moveToFirstSlide() {
@@ -153,7 +153,7 @@
 			setTimeout(move, delay);
 		};
 
-        loadContent(element);
+        loadContent(element, callbackReady);
 	}
 
 	function moveToSecondSlide() {
