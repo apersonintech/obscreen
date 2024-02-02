@@ -6,7 +6,7 @@ Use a RaspberryPi to show a full-screen Slideshow (Kiosk-mode)
 ## Installation TL;DR
 ```bash
 sudo apt-get update && sudo apt-get dist-upgrade
-sudo apt-get install git chromium-browser -y
+sudo apt-get install -y git chromium-browser
 
 git clone https://github.com/jr-k/reclame.git 
 cd reclame && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
@@ -29,7 +29,7 @@ However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
-sudo apt-get install git chromium-browser -y
+sudo apt-get install -y git chromium-browser
 
 git clone https://github.com/jr-k/reclame.git 
 cd reclame && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
