@@ -44,7 +44,7 @@ cd reclame && pip3 install -r requirements.txt && cp data/slideshow.json.dist da
 
 ### Forever with systemctl
 ```bash
-sudo cp reclame.service /etc/systemd/system/reclame.service
+sudo cp system/reclame.service /etc/systemd/system/reclame.service
 sudo systemctl daemon-reload
 sudo systemctl enable reclame.service
 sudo systemctl start reclame.service
@@ -52,9 +52,9 @@ sudo systemctl start reclame.service
 
 ## Prepare your Slideshow
 Everything slideshow-related happens in the ./data/uploads folder.
-- Put some images into the /data/uploads folder. Ideally with the same resultion of the screen (eg. 1920x1080px). 
+- Put some images into the /data/uploads folder. Ideally with the same resolution of the screen (eg. 1920x1080px). 
 - Edit the slideshow.json
     
 ## You are done now :)
-If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after bootup and after some seconds of showing the date & time (default.html) your slideshow shall start and loop endlessly.
+If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (default.html) your slideshow shall start and loop endlessly.
 
