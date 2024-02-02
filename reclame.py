@@ -25,7 +25,7 @@ xenv_presets = f"""
 @xset s noblank
 @unclutter -display :0 -noevents -grab
 @sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' ~/.config/chromium/Default/Preferences
-@chromium-browser --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --disable-restore-session-state --noerrdialogs --kiosk --incognito --window-position=0,0 --display=:0 http://localhost:{port}
+@chromium-browser --disable-features=Translate --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --disable-restore-session-state --noerrdialogs --kiosk --incognito --window-position=0,0 --display=:0 http://localhost:{port}
 """
 with open(destination_path, 'w') as file:
     file.write(xenv_presets)
