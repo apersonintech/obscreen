@@ -1,0 +1,7 @@
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+data/uploads/*
+data/slideshow.json
