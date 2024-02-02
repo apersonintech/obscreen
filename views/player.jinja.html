@@ -62,6 +62,23 @@
 	var nextReady = true;
 	preloadIntoFirstSlide();
 
+    function loadContent(element) {
+      switch (items[curUrl].type) {
+        case 'url':
+          loadUrl(element, callbackReady);
+          break;
+        case 'picture':
+          loadPicture(element, callbackReady);
+          break;
+        case 'video':
+          loadVideo(element, callbackReady);
+          break;
+        default:
+          loadUrl(element, callbackReady);
+          break;
+      }
+    }
+
 	function loadUrl(element, callbackReady) {
 		element.innerHTML = `<iframe src="${items[curUrl].location}"></iframe>`;
 		callbackReady(function () {});
@@ -94,7 +111,6 @@
 
 	function preloadIntoFirstSlide() {
 		console.log('preloadIntoFirstSlide', items[curUrl]);
-
 		var element = document.getElementById('FirstSlide');
 		var callbackReady = function (onSlideStart) {
 			var move = function () {
@@ -109,20 +125,7 @@
 			setTimeout(move, delay);
 		};
 
-		switch (items[curUrl].type) {
-			case 'url':
-				loadUrl(element, callbackReady);
-				break;
-			case 'picture':
-				loadPicture(element, callbackReady);
-				break;
-			case 'video':
-				loadVideo(element, callbackReady);
-				break;
-			default:
-				loadUrl(element, callbackReady);
-				break;
-		}
+        loadContent(element);
 	}
 
 	function moveToFirstSlide() {
@@ -136,7 +139,6 @@
 
 	function preloadIntoSecondSlide() {
 		console.log('preloadIntoSecondSlide', items[curUrl]);
-
 		var element = document.getElementById('SecondSlide');
 		var callbackReady = function (onSlideStart) {
 			var move = function () {
@@ -151,25 +153,11 @@
 			setTimeout(move, delay);
 		};
 
-		switch (items[curUrl].type) {
-			case 'url':
-				loadUrl(element, callbackReady);
-				break;
-			case 'picture':
-				loadPicture(element, callbackReady);
-				break;
-			case 'video':
-				loadVideo(element, callbackReady);
-				break;
-			default:
-				loadUrl(element, callbackReady);
-				break;
-		}
+        loadContent(element);
 	}
 
 	function moveToSecondSlide() {
 		console.log('moveToSecondSlide', items[curUrl]);
-
 		delay = items[curUrl].delay * 1000;
 		curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
 		document.querySelector('#FirstSlide').style.visibility = 'hidden';
