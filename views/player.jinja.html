@@ -1,131 +1,181 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <title>
-    Reclame
-  </title>
-  <meta name="robots" content="noindex, nofollow">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      background-color: white;
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
+    <title>
+        Reclame
+    </title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .slide {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      background: black;
-    }
+        .slide {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            background: black;
+        }
 
-    .slide, iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      padding-top: 0;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-    }
+        .slide, iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding-top: 0;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
 
-    .slide iframe {
-      background: white;
-    }
+        .slide iframe {
+            background: white;
+        }
 
-    .slide img {
-      height: 100%;
-    }
-  </style>
+        .slide img {
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
 <div id="FirstSlide" class="slide" style="visibility: hidden;">
-  <iframe src="/slide/default"></iframe>
+    <iframe src="/slide/default"></iframe>
 </div>
 <div id="SecondSlide" style="visibility: visible;">
-  <iframe src="/slide/default"></iframe>
+    <iframe src="/slide/default"></iframe>
 </div>
 <script type="text/javascript">
-  var items = {{ items|safe }};
-  var delay = 3000 / 1;
-  var curUrl = 0;
-  preloadIntoFirstSlide();
+	var items = {{items | safe}};
+	var delay = 3000 / 1;
+	var curUrl = 0;
+	var nextReady = true;
+	preloadIntoFirstSlide();
 
-  function loadUrl(element, callbackReady) {
-    element.innerHTML = `<iframe src="${items[curUrl].location}"></iframe>`;
-    callbackReady();
-  }
+	function loadUrl(element, callbackReady) {
+		element.innerHTML = `<iframe src="${items[curUrl].location}"></iframe>`;
+		callbackReady(function () {});
+	}
 
-  function loadPicture(element, callbackReady) {
-    element.innerHTML = `<img src="${items[curUrl].location}" alt="" />`;
-    callbackReady();
-  }
+	function loadPicture(element, callbackReady) {
+		element.innerHTML = `<img src="${items[curUrl].location}" alt="" />`;
+		callbackReady(function () {});
+	}
 
-  function loadVideo(element, callbackReady) {
-    element.innerHTML = `<video autoplay controls><source src=${items[curUrl].location} type="video/mp4" /></video>`;
-    var video = element.querySelector('video');
-    video.addEventListener('loadedmetadata', function() {
-      items[curUrl].delay = Math.ceil(video.duration);
-      console.log('change delay to ', video.duration)
-      console.log(items[curUrl]);
-      callbackReady();
-    });
-  }
+	function loadVideo(element, callbackReady) {
+		element.innerHTML = `<video><source src=${items[curUrl].location} type="video/mp4" /></video>`;
+		var video = element.querySelector('video');
+		items[curUrl].handle = video;
+		video.addEventListener('loadedmetadata', function () {
+			items[curUrl].delay = Math.ceil(video.duration);
+		});
 
-  function preloadIntoFirstSlide() {
-    var element = document.getElementById('FirstSlide');
-    var callbackReady = function() {
-      setTimeout("moveToFirstSlide()", delay);
-    };
+		callbackReady(function () {
+			nextReady = false;
+			video.play();
+			video.addEventListener('ended', function () {
+              nextReady = true;
+			});
+            setTimeout(function() {
+              nextReady = true;
+            }, Math.ceil(items[curUrl].delay * 1.5));
+		});
+	}
 
-    switch (items[curUrl].type) {
-      case 'url': loadUrl(element, callbackReady); break;
-      case 'picture': loadPicture(element, callbackReady); break;
-      case 'video': loadVideo(element, callbackReady); break;
-      default: loadUrl(element, callbackReady); break;
-    }
-  }
+	function preloadIntoFirstSlide() {
+		console.log('preloadIntoFirstSlide', items[curUrl]);
 
-  function moveToFirstSlide() {
-    console.log(items[curUrl]);
-    delay = items[curUrl].delay * 1000;
-    curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
-    document.querySelector('#FirstSlide').style.visibility = 'visible';
-    document.querySelector('#SecondSlide').style.visibility = 'hidden';
-    preloadIntoSecondSlide();
-  }
+		var element = document.getElementById('FirstSlide');
+		var callbackReady = function (onSlideStart) {
+			var move = function () {
+				if (nextReady) {
+					moveToFirstSlide();
+					onSlideStart();
+				} else {
+					setTimeout(move, 1000);
+				}
+			}
 
-  function preloadIntoSecondSlide() {
-    var element = document.getElementById('SecondSlide');
-    var callbackReady = function() {
-      setTimeout("moveToSecondSlide()", delay);
-    };
+			setTimeout(move, delay);
+		};
 
-    switch (items[curUrl].type) {
-      case 'url': loadUrl(element, callbackReady); break;
-      case 'picture': loadPicture(element, callbackReady); break;
-      case 'video': loadVideo(element, callbackReady); break;
-      default: loadUrl(element, callbackReady); break;
-    }
-  }
+		switch (items[curUrl].type) {
+			case 'url':
+				loadUrl(element, callbackReady);
+				break;
+			case 'picture':
+				loadPicture(element, callbackReady);
+				break;
+			case 'video':
+				loadVideo(element, callbackReady);
+				break;
+			default:
+				loadUrl(element, callbackReady);
+				break;
+		}
+	}
 
-  function moveToSecondSlide() {
-    delay = items[curUrl].delay * 1000;
-    curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
-    document.querySelector('#FirstSlide').style.visibility = 'hidden';
-    document.querySelector('#SecondSlide').style.visibility = 'visible';
-    preloadIntoFirstSlide();
-  }
+	function moveToFirstSlide() {
+		console.log('moveToFirstSlide', items[curUrl]);
+		delay = items[curUrl].delay * 1000;
+		curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
+		document.querySelector('#FirstSlide').style.visibility = 'visible';
+		document.querySelector('#SecondSlide').style.visibility = 'hidden';
+		preloadIntoSecondSlide();
+	}
+
+	function preloadIntoSecondSlide() {
+		console.log('preloadIntoSecondSlide', items[curUrl]);
+
+		var element = document.getElementById('SecondSlide');
+		var callbackReady = function (onSlideStart) {
+			var move = function () {
+				if (nextReady) {
+					moveToSecondSlide();
+					onSlideStart();
+				} else {
+					setTimeout(move, 1000);
+				}
+			}
+
+			setTimeout(move, delay);
+		};
+
+		switch (items[curUrl].type) {
+			case 'url':
+				loadUrl(element, callbackReady);
+				break;
+			case 'picture':
+				loadPicture(element, callbackReady);
+				break;
+			case 'video':
+				loadVideo(element, callbackReady);
+				break;
+			default:
+				loadUrl(element, callbackReady);
+				break;
+		}
+	}
+
+	function moveToSecondSlide() {
+		console.log('moveToSecondSlide', items[curUrl]);
+
+		delay = items[curUrl].delay * 1000;
+		curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
+		document.querySelector('#FirstSlide').style.visibility = 'hidden';
+		document.querySelector('#SecondSlide').style.visibility = 'visible';
+		preloadIntoFirstSlide();
+	}
 </script>
 </body>
 </html>

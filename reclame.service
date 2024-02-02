@@ -1,0 +1,16 @@
+[Unit]
+Description=Reclame
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/reclame
+ExecStart=/home/pi/reclame/reclame.py
+Restart=always
+RestartSec=5
+StandardOutput=inherit
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target
