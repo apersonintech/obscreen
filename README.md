@@ -33,7 +33,21 @@ sudo apt-get install -y git chromium-browser
 
 git clone https://github.com/jr-k/reclame.git 
 cd reclame && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
+```
+
+## Run
+
+### Cli mode
+```bash
 ./reclame.py
+```
+
+### Forever with systemctl
+```bash
+sudo cp reclame.service /etc/systemd/system/reclame.service
+sudo systemctl daemon-reload
+sudo systemctl enable reclame.service
+sudo systemctl start reclame.service
 ```
 
 ## Prepare your Slideshow
@@ -43,3 +57,4 @@ Everything slideshow-related happens in the ./data/uploads folder.
     
 ## You are done now :)
 If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after bootup and after some seconds of showing the date & time (default.html) your slideshow shall start and loop endlessly.
+
