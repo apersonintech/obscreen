@@ -1,12 +1,12 @@
 [Unit]
-Description=Reclame
+Description=Obscreen
 After=network.target
 
 [Service]
 User=pi
 Group=pi
-WorkingDirectory=/home/pi/reclame
-ExecStart=/home/pi/reclame/reclame.py
+WorkingDirectory=/home/pi/obscreen
+ExecStart=/home/pi/obscreen/obscreen.py
 Restart=always
 RestartSec=5
 StandardOutput=inherit
