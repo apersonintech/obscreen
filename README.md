@@ -1,4 +1,4 @@
-# Reclame
+# Obscreen
 
 ## About
 Use a RaspberryPi to show a full-screen Slideshow (Kiosk-mode)
@@ -8,9 +8,9 @@ Use a RaspberryPi to show a full-screen Slideshow (Kiosk-mode)
 sudo apt-get update && sudo apt-get dist-upgrade
 sudo apt-get install -y git chromium-browser unclutter
 
-git clone https://github.com/jr-k/reclame.git 
-cd reclame && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
-./reclame.py
+git clone https://github.com/jr-k/obscreen.git 
+cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
+./obscreen.py
 ```
 
 ## Installation - step by step
@@ -31,23 +31,23 @@ sudo apt-get upgrade
 sudo apt-get dist-upgrade
 sudo apt-get install -y git chromium-browser unclutter
 
-git clone https://github.com/jr-k/reclame.git 
-cd reclame && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
+git clone https://github.com/jr-k/obscreen.git 
+cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
 ```
 
 ## Run
 
 ### Cli mode
 ```bash
-./reclame.py
+./obscreen.py
 ```
 
 ### Forever with systemctl
 ```bash
-sudo cp system/reclame.service /etc/systemd/system/reclame.service
+sudo cp system/obscreen.service /etc/systemd/system/obscreen.service
 sudo systemctl daemon-reload
-sudo systemctl enable reclame.service
-sudo systemctl start reclame.service
+sudo systemctl enable obscreen.service
+sudo systemctl start obscreen.service
 ```
 
 ## Prepare your Slideshow
