@@ -17,6 +17,6 @@ server {
             proxy_set_header X-Real-IP $remote_addr;
         }
 
-        error_log /var/log/nginx/reclame.error.log;
-        access_log /var/log/nginx/reclame.access.log;
+        error_log /var/log/nginx/obscreen.error.log;
+        access_log /var/log/nginx/obscreen.access.log;
 }
