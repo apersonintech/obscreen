@@ -35,6 +35,15 @@ git clone https://github.com/jr-k/obscreen.git
 cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
 ```
 
+### Optional
+1. Nginx
+```bash
+sudo apt isntall -y nginx
+sudo rm /etc/nginx/sites-enabled/default 2>/dev/null
+sudo ln -s "$(pwd)/system/nginx-obscreen" /etc/nginx/sites-enabled
+sudo systemctl reload nginx
+```
+
 ## Run
 
 ### Cli mode
