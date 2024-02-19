@@ -28,7 +28,7 @@ with open('./lang/{}.json'.format(config['lang']), 'r') as file:
 
 # <reverse-proxy>
 if config['reverse_proxy_mode']:
-    reverse_proxy_config_file = 'system/nginx-reclame'
+    reverse_proxy_config_file = 'system/nginx-obscreen'
     with open(reverse_proxy_config_file, 'r') as file:
         content = file.read()
     with open(reverse_proxy_config_file, 'w') as file:
