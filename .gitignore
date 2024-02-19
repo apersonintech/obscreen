@@ -6,3 +6,4 @@ out/
 data/uploads/*
 !data/uploads/reclame.jpg
 data/slideshow.json
+config.py

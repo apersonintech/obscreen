@@ -1,0 +1,6 @@
+config = {
+    "config": False,
+    "port": 5000,
+    "reverse_proxy_mode": False,
+    "lang": "en"
+}
