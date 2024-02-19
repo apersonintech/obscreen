@@ -36,7 +36,7 @@ cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist d
 ```
 
 ### Optional
-1. Nginx
+1. Nginx server to serve pages (useful for gzip compression for instance)
 ```bash
 sudo apt isntall -y nginx
 sudo rm /etc/nginx/sites-enabled/default 2>/dev/null
