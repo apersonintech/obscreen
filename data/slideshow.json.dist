@@ -1,4 +1,14 @@
-[
-    {"location":"data/uploads/sample.jpg","delay":10,"type":"picture"},
-    {"location":"https://unix.org","delay":20,"type":"url"}
-]
+{
+  "data": [
+    {
+      "location": "data/uploads/sample.jpg",
+      "delay": 10,
+      "type": "picture"
+    },
+    {
+      "location": "https://unix.org",
+      "delay": 20,
+      "type": "url"
+    }
+  ]
+}
