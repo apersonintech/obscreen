@@ -1,13 +1,13 @@
 jQuery(document).ready(function ($) {
-    var $tableActive = $('table.active-slides');
-    var $tableInactive = $('table.inactive-slides');
-    var $modalsRoot = $('.modals');
+    const $tableActive = $('table.active-slides');
+    const $tableInactive = $('table.inactive-slides');
+    const $modalsRoot = $('.modals');
 
-    var getId = function($el) {
+    const getId = function($el) {
         return $el.is('tr') ? $el.attr('data-level') : $el.parents('tr:eq(0)').attr('data-level');
     };
 
-    var updateTable = function () {
+    const updateTable = function () {
          $('table').each(function () {
             if ($(this).find('tbody tr.slide-item:visible').length === 0) {
                 $(this).find('tr.empty-tr').removeClass('hidden');
@@ -18,18 +18,18 @@ jQuery(document).ready(function ($) {
          updatePositions();
     }
 
-    var showModal = function (modalClass) {
+    const showModal = function (modalClass) {
         $modalsRoot.removeClass('hidden').find('form').trigger('reset');
         $modalsRoot.find('.modal').addClass('hidden');
         $modalsRoot.find('.modal.' + modalClass).removeClass('hidden');
     };
 
-    var hideModal = function () {
+    const hideModal = function () {
         $modalsRoot.addClass('hidden').find('form').trigger('reset');
     };
 
-    var updatePositions = function (table, row) {
-        var positions = {};
+    const updatePositions = function (table, row) {
+        const positions = {};
         $('.slide-item').each(function(index) {
             positions[getId($(this))] = index;
         });
@@ -42,7 +42,7 @@ jQuery(document).ready(function ($) {
         });
     };
 
-    var main = function() {
+    const main = function() {
         $("table").tableDnD({
             dragHandle: 'td a.slide-sort',
             onDrop: updatePositions
@@ -57,12 +57,11 @@ jQuery(document).ready(function ($) {
             method: 'POST',
         });
 
-        var $tr = $(this).parents('tr:eq(0)').remove().clone();
+        const $tr = $(this).parents('tr:eq(0)').remove().clone();
 
         if ($(this).is(':checked')) {
             $tableActive.append($tr);
         } else {
-            console.log($tableInactive)
             $tableInactive.append($tr);
         }
 
@@ -70,8 +69,8 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('change', '#slide-add-type', function () {
-        var value = $(this).val();
-        var inputType = $(this).find('option').filter(function (i, el) {
+        const value = $(this).val();
+        const inputType = $(this).find('option').filter(function (i, el) {
             return $(el).val() === value;
         }).data('input');
 
@@ -94,7 +93,7 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('click', '.slide-edit', function () {
-        var slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
         showModal('modal-slide-edit');
         $('.modal-slide-edit input:visible:eq(0)').focus().select();
         $('#slide-edit-name').val(slide.name);
@@ -106,7 +105,7 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.slide-delete', function () {
         if (confirm('Are you sure ?')) {
-            var $tr = $(this).parents('tr:eq(0)');
+            const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();
             $.ajax({
