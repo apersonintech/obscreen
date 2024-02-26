@@ -13,11 +13,11 @@ class SlideManager():
         self._db = db.getDb(self.DB_FILE)
 
     @staticmethod
-    def hydrate_object(raw_slide) -> Slide:
+    def hydrate_object(raw_slide: dict) -> Slide:
         return Slide(**raw_slide)
 
     @staticmethod
-    def hydrate_list(raw_slides) -> List[Slide]:
+    def hydrate_list(raw_slides: list) -> List[Slide]:
         return [SlideManager.hydrate_object(raw_slide) for raw_slide in raw_slides]
 
     def get_all(self, sort: bool = False) -> List[Slide]:
