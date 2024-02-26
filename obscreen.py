@@ -6,10 +6,16 @@ import shutil
 import subprocess
 import sys
 
+
 from enum import Enum
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
+from werkzeug.utils import secure_filename
 from config import config
 from src.SlideManager import SlideManager
+from src.model.Slide import Slide
+from src.model.SlideType import SlideType
+from src.utils import str_to_enum
+
 
 
 # <config>
@@ -31,9 +37,12 @@ if config['reverse_proxy_mode']:
 
 # <server>
 app = Flask(__name__, template_folder='views', static_folder='data')
+app.config['UPLOAD_FOLDER'] = 'data/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB
 
 if config['debug']:
     app.config['TEMPLATES_AUTO_RELOAD'] = True
+
 # </server>
 
 # <xenv>
@@ -95,13 +104,34 @@ def manage():
         disabled_slides=slide_manager.get_disabled_slides()
     )
 
-@app.route('/manage/slide/add', methods=['POST'])
+@app.route('/manage/slide/add', methods=['GET', 'POST'])
 def manage_slide_add():
-    name = request.form['name']
-    print(name)
-    print(request.form)
-    response = {'message': f'Bonjour {name}, votre formulaire a été reçu !'}
-    return jsonify(response)
+    slide = Slide(
+        name=request.form['name'],
+        type=str_to_enum(request.form['type'], SlideType),
+        duration=request.form['duration'],
+    )
+
+    if slide.has_file():
+        if 'object' not in request.files:
+            return redirect(request.url)
+
+        object = request.files['object']
+
+        if object.filename == '':
+            return redirect(request.url)
+
+        if object:
+            object_name = secure_filename(object.filename)
+            object_path = os.path.join(app.config['UPLOAD_FOLDER'], object_name)
+            object.save(object_path)
+            slide.location = object_path
+    else:
+        slide.location = request.form['object']
+
+    slide_manager.add_form(slide)
+
+    return redirect(url_for('manage'))
 
 @app.route('/manage/slide/edit', methods=['POST'])
 def manage_slide_edit():
@@ -132,5 +162,9 @@ def not_found(e):
 # </web>
 
 if __name__ == '__main__':
-    app.run(host=config['bind'] if 'bind' in config else '0.0.0.0', port=config['port'])
+    app.run(
+        host=config['bind'] if 'bind' in config else '0.0.0.0',
+        port=config['port'],
+        debug=config['debug']
+    )
 

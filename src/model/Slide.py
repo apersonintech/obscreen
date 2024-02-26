@@ -1,17 +1,18 @@
 import uuid
 import json
 
-from typing import Optional
-from src.model import SlideType
+from typing import Optional, Union
+from src.model.SlideType import SlideType
+from src.utils import str_to_enum
 
 
 class Slide:
 
-    def __init__(self, location: str, duration: int, type: SlideType, enabled: bool, name: str, position: int = 999, id: Optional[int] = None):
+    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None):
         self._id = uuid.uuid4().int if id is None else id
         self._location = location
         self._duration = duration
-        self._type = type
+        self._type = str_to_enum(type, SlideType) if isinstance(type, str) else type
         self._enabled = enabled
         self._name = name
         self._position = position
@@ -88,7 +89,12 @@ class Slide:
             "id": self.id,
             "enabled": self.enabled,
             "position": self.position,
-            "type": self.type,
+            "type": self.type.value,
             "duration": self.duration,
             "location": self.location,
         }
+
+    def has_file(self) -> bool:
+        return (self.type == SlideType.VIDEO
+            or self.type == SlideType.PICTURE
+        )
