@@ -1,6 +1,6 @@
 from enum import Enum
 
-class ItemType(Enum):
+class SlideType(Enum):
     PICTURE = 'picture'
     VIDEO = 'video'
     URL = 'url'

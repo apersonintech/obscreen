@@ -185,7 +185,7 @@
                         <div class="form-group">
                             <label for="slide-add-name">Name</label>
                             <div class="widget">
-                                <input name="name" type="text" id="slide-add-name" />
+                                <input name="name" type="text" id="slide-add-name" required="required" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -210,7 +210,7 @@
                         <div class="form-group">
                             <label for="slide-add-duration">Duration</label>
                             <div class="widget">
-                                <input type="number" name="duration" id="slide-add-duration" />
+                                <input type="number" name="duration" id="slide-add-duration" required="required" />
                                 <span>seconds</span>
                             </div>
                         </div>
@@ -236,7 +236,7 @@
                         <div class="form-group">
                             <label for="slide-edit-name">Name</label>
                             <div class="widget">
-                                <input type="text" name="name" id="slide-edit-name" />
+                                <input type="text" name="name" id="slide-edit-name" required="required" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -249,10 +249,18 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="slide-edit-location">Location</label>
+                            <div class="widget">
+                                <input type="text" name="location" id="slide-edit-location" disabled="disabled" />
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="slide-edit-duration">Duration</label>
                             <div class="widget">
-                                <input type="number" name="duration" id="slide-edit-duration" />
+                                <input type="number" name="duration" id="slide-edit-duration" required="required" />
                                 <span>seconds</span>
                             </div>
                         </div>

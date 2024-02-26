@@ -90,14 +90,16 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.slide-add', function () {
         showModal('modal-slide-add');
+        $('.modal-slide-add input:eq(0)').focus().select();
     });
 
     $(document).on('click', '.slide-edit', function () {
         var slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        console.log(slide)
         showModal('modal-slide-edit');
+        $('.modal-slide-edit input:visible:eq(0)').focus().select();
         $('#slide-edit-name').val(slide.name);
         $('#slide-edit-type').val(slide.type);
+        $('#slide-edit-location').val(slide.location);
         $('#slide-edit-duration').val(slide.duration);
         $('#slide-edit-id').val(slide.id);
     });

@@ -2,6 +2,7 @@ import json
 
 from typing import Dict, Optional, List, Tuple
 from src.model.Slide import Slide
+from src.utils import str_to_enum
 from pysondb import db
 
 class SlideManager():
@@ -39,16 +40,11 @@ class SlideManager():
     def update_form(self, id: str, name: str, duration: int) -> None:
         self._db.updateById(id, {"name": name, "duration": duration})
 
-    def reindent(self) -> None:
-        with open(self.DB_FILE, 'r') as file:
-            data = json.load(file)
-
-        with open(self.DB_FILE, 'w', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
+    def add_form(self, slide: Slide) -> None:
+        self._db.add(slide.to_dict())
 
     def delete(self, id: int) -> None:
         self._db.deleteById(id)
-        self.reindent()
 
     def to_dict(self, slides: List[Slide]) -> dict:
         return [slide.to_dict() for slide in slides]
