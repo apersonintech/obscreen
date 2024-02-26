@@ -1,7 +1,7 @@
 # Obscreen
 
 ## About
-Use a RaspberryPi to show a full-screen Slideshow (Kiosk-mode)
+Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
 ## Installation
 ```bash

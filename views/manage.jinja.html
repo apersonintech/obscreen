@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <title>
-        Reclame - Manage
+        Obscreen - Manage
     </title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="google" content="notranslate">
@@ -11,494 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        * {
-            font-family: Roboto;
-        }
-        html {
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            background-color: #0f0035;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            align-self: stretch;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            flex: 1;
-            background-color: #0f0035;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            align-self: stretch;
-        }
-        .hidden {
-            display: none !important;
-        }
-        .tac {
-            text-align: center;
-        }
-        a {
-            text-decoration: none;
-        }
-
-        .container {
-            background: rgba(0,0,0,0.1);
-            margin: auto;
-            display: flex;
-            align-self: stretch;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            flex: 1;
-            min-width: 70%;
-
-            @media only screen and (max-width: 1200px) {
-                min-width: 95%;
-            }
-        }
-
-        header {
-            text-align: center;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            align-self: stretch;
-            padding: 0 25px 0 25px;
-        }
-
-        header .logo {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        header .logo img {
-            width: 32px;
-            height: 32px;
-            margin-right: 10px;
-        }
-
-        header menu {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-            flex: 1;
-        }
-
-        header menu ul {
-            list-style: none;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-        }
-
-        header menu ul li {
-            margin: 0 15px;
-
-        }
-
-        header menu ul li a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-        }
-
-        header menu ul li a:hover,
-        header menu ul li.active a {
-            color: white;
-        }
-
-        .toolbar {
-            display: flex;
-            flex-direction: row;
-            padding: 0 25px 0 25px;
-            align-self: stretch;
-        }
-
-        .toolbar h2 {
-            padding: 0 25px 0 0;
-        }
-
-        .toolbar .toolbar-actions {
-            flex: 1;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-        }
-
-        button {
-            background-color: #fff;
-            border-radius: 5px;
-            border: 1px solid #ffe333;
-            color: #270035;
-            padding: 10px 30px;
-            text-decoration: none;
-            margin: 10px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-            font-weight: 400;
-            transition: .2s linear all;
-        }
-
-        button.purple {
-            font-weight: bold;
-            border: 1px solid #692fbd;
-            color: white;
-            background: #692fbd;
-            background: linear-gradient(90deg, #bc48ff 0%, #692fbd 100%);
-        }
-
-        button.green {
-            font-weight: bold;
-            color: white;
-            border: 1px solid #0eef5f;
-            background: linear-gradient(90deg, #2fde6f 0%, #13c251 100%);
-        }
-
-        button.normal:hover {
-            color: white;
-            border-color: #692fbd;
-            background: #692fbd;
-            background: linear-gradient(90deg, #bc48ff 0%, #692fbd 100%);
-        }
-
-        button.green:hover,
-        button.purple:hover {
-            border: 1px solid #fff;
-        }
-
-
-        .panel {
-            background: rgba(255,255,255,0.15);
-            border-radius: 5px;
-            padding: 0 25px 80px 25px;
-            margin: 10px 25px;
-            border-left: 5px solid #0eef5f;
-            align-self: stretch;
-        }
-
-        .panel h3 {
-            color: #fff;
-        }
-        .panel-inactive {
-            background: white;
-            color: #AAA;
-            border-color: #BBB;
-        }
-        .panel-inactive h3 {
-            color: #333;
-        }
-
-        .panel table {
-            width: 100%;
-            margin-top: 30px;
-            border-collapse: collapse;
-            text-align: left;
-            font-weight: normal;
-        }
-        .panel th {
-            border-bottom: 1px solid #fff;
-            border-collapse: collapse;
-            padding: 10px;
-            font-weight: normal;
-        }
-        .panel-inactive th {
-            border-color: #EEE;
-
-        }
-        .panel td {
-            border-collapse: collapse;
-            padding: 10px;
-        }
-        .panel td a.asset-sort {
-            cursor: move;
-        }
-        .panel td.actions a {
-            background: white;
-            color: #333;
-            border: 1px solid #AAA;
-            border-radius: 4px;
-            padding: 2px;
-            width: 35px;
-            display: inline-block;
-            text-align: center;
-            margin: 0 2px;
-        }
-        .panel td.actions a:hover {
-            color: #0eef5f;
-            border-color: #0eef5f;
-        }
-        .panel td.actions a.asset-edit:hover {
-            color: #bc48ff;
-            border-color: #bc48ff;
-        }
-        .panel td.actions a.asset-delete:hover {
-            color: #ef0e0e;
-            border-color: #ef0e0e;
-        }
-
-        .panel td.infos {
-            display: flex;
-            flex-direction: row;
-            width: 400px;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-        .panel td.infos .inner {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
-
-        .panel a {
-            color: #0eef5f;
-            text-decoration: none;
-        }
-        .panel a:hover {
-            color: #0bc44e;
-        }
-
-        .icon-right {
-            margin: 0 0 0 10px;
-        }
-
-        .icon-left {
-            margin: 0 10px 0 0;
-        }
-
-        .pure-material-switch {
-            z-index: 0;
-            position: relative;
-            display: inline-block;
-        }
-        .pure-material-switch > input {
-            appearance: none;
-            -moz-appearance: none;
-            -webkit-appearance: none;
-            z-index: -1;
-            position: absolute;
-            right: 6px;
-            top: -8px;
-            display: block;
-            margin: 0;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0, 0, 0, 0.38);
-            outline: none;
-            opacity: 0;
-            transform: scale(1);
-            pointer-events: none;
-            transition: opacity 0.3s 0.1s, transform 0.2s 0.1s;
-        }
-        .pure-material-switch > span {
-            display: inline-block;
-            width: 100%;
-            cursor: pointer;
-        }
-        .pure-material-switch > span::before {
-            content: "";
-            float: right;
-            display: inline-block;
-            margin: 5px 0 5px 10px;
-            border-radius: 7px;
-            width: 36px;
-            height: 14px;
-            background-color: rgba(0, 0, 0, 0.38);
-            vertical-align: top;
-            transition: background-color 0.2s, opacity 0.2s;
-        }
-        .pure-material-switch > span::after {
-            content: "";
-            position: absolute;
-            top: 2px;
-            right: 16px;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            background-color: rgb(255, 255, 255);
-            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-            transition: background-color 0.2s, transform 0.2s;
-        }
-        .pure-material-switch > input:checked {
-            right: -10px;
-            background-color: rgb(14, 239, 95);
-        }
-        .pure-material-switch > input:checked + span::before {
-            background-color: rgba(14, 239, 95, 0.6);
-        }
-        .pure-material-switch > input:checked + span::after {
-            background-color: rgb(14, 239, 95);
-            transform: translateX(16px);
-        }
-        .pure-material-switch:hover > input {
-            opacity: 0.04;
-        }
-        .pure-material-switch > input:focus {
-            opacity: 0.12;
-        }
-        .pure-material-switch:hover > input:focus {
-            opacity: 0.16;
-        }
-        .pure-material-switch > input:active {
-            opacity: 1;
-            transform: scale(0);
-            transition: transform 0s, opacity 0s;
-        }
-        .pure-material-switch > input:active + span::before {
-            background-color: rgba(14, 239, 95, 0.6);
-        }
-        .pure-material-switch > input:checked:active + span::before {
-            background-color: rgba(0, 0, 0, 0.38);
-        }
-        .pure-material-switch > input:disabled {
-            opacity: 0;
-        }
-        .pure-material-switch > input:disabled + span {
-            color: rgb(0, 0, 0);
-            opacity: 0.38;
-            cursor: default;
-        }
-        .pure-material-switch > input:disabled + span::before {
-            background-color: rgba(0, 0, 0, 0.38);
-        }
-        .pure-material-switch > input:checked:disabled + span::before {
-            background-color: rgba(14, 239, 95, 0.6);
-        }
-
-        .modals {
-            position: fixed;
-            background: rgba(0, 0, 0, 0.4);
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modals-outer {
-            min-width: 30%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modals-outer .modal-close {
-            color: white;
-            font-size: 30px;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-top: -100px;
-        }
-
-        .modals-inner {
-            background: white;
-            border-radius: 10px;
-            color: #333;
-        }
-
-        .modals-inner .modal h2 {
-            border-bottom: 1px solid #DDD;
-            padding: 15px 15px;
-            margin: 0;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding: 20px;
-        }
-
-        form .form-group {
-            margin: 20px;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            align-self: stretch;
-            flex: 1;
-        }
-
-        form .form-group label {
-            flex: 1;
-            padding: 10px;
-            text-align: right;
-            margin-right: 20px;
-        }
-
-        form .form-group .widget {
-            flex: 3;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            align-self: stretch;
-        }
-
-        form .form-group input,
-        form .form-group select,
-        form .form-group textarea {
-            flex: 1;
-            padding: 10px 5px 10px 5px;
-            border: 1px solid #EEE;
-            border-radius: 4px;
-            width: auto;
-        }
-
-        form .form-group span {
-            margin-left: 10px;
-        }
-
-        form .actions {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
-            margin-top: 10px;
-            align-self: stretch;
-        }
-        form .actions button.green,
-        form .actions button {
-            font-size: 18px;
-        }
-        form .actions button.green:hover {
-            background: white;
-            color: rgb(14, 239, 95);
-            border-color: rgb(14, 239, 95)
-        }
-        form .actions button.modal-close {
-            color: #999;
-            border-color: #999;
-            font-size: 18px;
-            margin: 0;
-        }
-        form .actions button.modal-close:hover {
-            color: #555;
-            border-color: #555;
-        }
-    </style>
+    <link rel="stylesheet" href="data/www/css/manage.css" />
 </head>
 <body>
 <div class="container">
@@ -533,13 +45,13 @@
         <div class="toolbar-actions">
 <!--            <button class="normal"><i class="fa fa-chevron-left icon-left"></i>Previous Asset</button>-->
 <!--            <button class="normal">Next Asset<i class="fa fa-chevron-right icon-right"></i></button>-->
-            <button class="purple asset-add"><i class="fa fa-plus icon-left"></i>Add Asset</button>
+            <button class="purple slide-add"><i class="fa fa-plus icon-left"></i>Add Asset</button>
         </div>
     </div>
     <div class="panel">
         <div class="panel-body">
-            <h3>Active assets</h3>
-            <table class="active-assets">
+            <h3>Active slides</h3>
+            <table class="active-slides">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -549,47 +61,56 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="empty-tr hidden">
-                        <td colspan="4">Currently there are no assets. <a href="javascript:void(0);" class="asset-add">Add asset</a> now.</td>
+                    <tr class="empty-tr {% if enabled_slides|length != 0 %}hidden{% endif %}">
+                        <td colspan="4">Currently, there are no slides. <a href="javascript:void(0);" class="slide-add">Add slide</a> now.</td>
                     </tr>
-                    <tr data-level="99">
-                        <td class="infos">
-                            <div class="inner">
-                                <a href="javascript:void(0);" class="asset-sort">
-                                    <i class="fa fa-sort icon-left"></i>
+                    {% for slide in enabled_slides %}
+                        <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json() }}">
+                            <td class="infos">
+                                <div class="inner">
+                                    <a href="javascript:void(0);" class="slide-sort">
+                                        <i class="fa fa-sort icon-left"></i>
+                                    </a>
+                                    {% set icon_type = 'globe' %}
+                                    {% if slide.type == 'video' %}
+                                        {% set icon_type = 'video' %}
+                                    {% elif slide.type == 'picture' %}
+                                        {% set icon_type = 'image' %}
+                                    {% endif %}
+
+                                    <i class="fa fa-{{ icon_type }} icon-left"></i>
+                                    {{ slide.name }}
+                                </div>
+                            </td>
+                            <td class="tac">
+                                {{ slide.duration }} sec
+                            </td>
+                            <td class="tac">
+                                <label class="pure-material-switch">
+                                    <input type="checkbox" {% if slide.enabled %}checked="checked"{% endif %}><span></span>
+                                </label>
+                            </td>
+                            <td class="actions tac">
+                                <a href="javascript:void(0);" class="slide-edit">
+                                    <i class="fa fa-pencil"></i>
                                 </a>
-                                <i class="fa fa-video icon-left"></i>
-                                Big Buck Bunnyfez flijezh ofijezfoi jeziof jeziofj zeiofjze oifjez iojiozejfiozej fioezj
-                            </div>
-                        </td>
-                        <td class="tac">
-                            10 sec
-                        </td>
-                        <td class="tac">
-                            <label class="pure-material-switch">
-                                <input type="checkbox" checked="checked"><span></span>
-                            </label>
-                        </td>
-                        <td class="actions tac">
-                            <a href="javascript:void(0);" class="asset-edit">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a href="javascript:void(0);" class="asset-download">
-                                <i class="fa fa-download"></i>
-                            </a>
-                            <a href="javascript:void(0);" class="asset-delete">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
+                                <a href="{{ slide.location }}" class="slide-download" target="_blank">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="javascript:void(0);" class="slide-delete">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
     <div class="panel panel-inactive">
         <div class="panel-body">
-            <h3>Inactive assets</h3>
-            <table class="inactive-assets">
+            <h3>Inactive slides</h3>
+            <table class="inactive-slides">
                 <thead>
                 <tr>
                     <th>Name</th>
@@ -599,71 +120,48 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr class="empty-tr hidden">
-                        <td colspan="4">Currently there are no assets. <a href="javascript:void(0);" class="asset-add">Add asset</a> now.</td>
+                    <tr class="empty-tr {% if disabled_slides|length != 0 %}hidden{% endif %}">
+                        <td colspan="4">Currently, there are no slides. <a href="javascript:void(0);" class="slide-add">Add slide</a> now.</td>
                     </tr>
+                    {% for slide in disabled_slides %}
+                        <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json() }}">
+                            <td class="infos">
+                                <div class="inner">
+                                    <a href="javascript:void(0);" class="slide-sort">
+                                        <i class="fa fa-sort icon-left"></i>
+                                    </a>
+                                    {% set icon_type = 'globe' %}
+                                    {% if slide.type == 'video' %}
+                                        {% set icon_type = 'video' %}
+                                    {% elif slide.type == 'picture' %}
+                                        {% set icon_type = 'image' %}
+                                    {% endif %}
 
-                    <tr data-level="13">
-                        <td class="infos">
-                            <div class="inner">
-                                <a href="javascript:void(0);" class="asset-sort">
-                                    <i class="fa fa-sort icon-left"></i>
+                                    <i class="fa fa-{{ icon_type }} icon-left"></i>
+                                    {{ slide.name }}
+                                </div>
+                            </td>
+                            <td class="tac">
+                                {{ slide.duration }} sec
+                            </td>
+                            <td class="tac">
+                                <label class="pure-material-switch">
+                                    <input type="checkbox" {% if slide.enabled %}checked="checked"{% endif %}><span></span>
+                                </label>
+                            </td>
+                            <td class="actions tac">
+                                <a href="javascript:void(0);" class="slide-edit">
+                                    <i class="fa fa-pencil"></i>
                                 </a>
-                                <i class="fa fa-video icon-left"></i>
-                                Big Buck Bunny
-                            </div>
-                        </td>
-                        <td class="tac">
-                            10 sec
-                        </td>
-                        <td class="tac">
-                            <label class="pure-material-switch">
-                                <input type="checkbox"><span></span>
-                            </label>
-                        </td>
-                        <td class="actions tac">
-                            <a href="javascript:void(0);" class="asset-edit">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a href="javascript:void(0);" class="asset-download">
-                                <i class="fa fa-download"></i>
-                            </a>
-                            <a href="javascript:void(0);" class="asset-delete">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-
-                    <tr data-level="2">
-                        <td class="infos">
-                            <div class="inner">
-                                <a href="javascript:void(0);" class="asset-sort">
-                                    <i class="fa fa-sort icon-left"></i>
+                                <a href="{{ slide.location }}" class="slide-download" target="_blank">
+                                    <i class="fa fa-eye"></i>
                                 </a>
-                                <i class="fa fa-image icon-left"></i>
-                                Big Buck Bunny 2
-                            </div>
-                        </td>
-                        <td class="tac">
-                            3 sec
-                        </td>
-                        <td class="tac">
-                            <label class="pure-material-switch">
-                                <input type="checkbox"><span></span>
-                            </label>
-                        </td>
-                        <td class="actions tac">
-                            <a href="javascript:void(0);" class="asset-edit">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a href="javascript:void(0);" class="asset-download">
-                                <i class="fa fa-download"></i>
-                            </a>
-                            <a href="javascript:void(0);" class="asset-delete">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
+                                <a href="javascript:void(0);" class="slide-delete">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -678,22 +176,22 @@
                 <i class="fa fa-close"></i>
             </a>
             <div class="modals-inner">
-                <div class="modal modal-asset-add">
+                <div class="modal modal-slide-add">
                     <h2>
                         Add Asset
                     </h2>
 
-                    <form action="">
+                    <form action="/manage/slide/add" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label for="asset-add-name">Name</label>
+                            <label for="slide-add-name">Name</label>
                             <div class="widget">
-                                <input name="asset-add-name" type="text" id="asset-add-name">
+                                <input name="name" type="text" id="slide-add-name" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="asset-add-type">Type</label>
+                            <label for="slide-add-type">Type</label>
                             <div class="widget">
-                                <select name="asset-add-type" id="asset-add-type">
+                                <select name="type" id="slide-add-type">
                                     <option value="url" data-input="text">URL</option>
                                     <option value="video" data-input="upload">Video</option>
                                     <option value="picture" data-input="upload">Picture</option>
@@ -702,17 +200,17 @@
                         </div>
 
                         <div class="form-group object-input">
-                            <label for="asset-add-duration">Object</label>
+                            <label for="slide-add-duration">Object</label>
                             <div class="widget">
-                                <input type="text" name="asset-add-object" id="asset-add-object-input-text" class="asset-add-object-input">
-                                <input type="file" name="asset-add-object" id="asset-add-object-input-upload" class="asset-add-object-input hidden" disabled="disabled">
+                                <input type="text" name="object" id="slide-add-object-input-text" class="slide-add-object-input" />
+                                <input type="file" name="object" id="slide-add-object-input-upload" class="slide-add-object-input hidden" disabled="disabled" />
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="asset-add-duration">Duration</label>
+                            <label for="slide-add-duration">Duration</label>
                             <div class="widget">
-                                <input type="number" name="asset-add-duration" id="asset-add-duration">
+                                <input type="number" name="duration" id="slide-add-duration" />
                                 <span>seconds</span>
                             </div>
                         </div>
@@ -727,22 +225,24 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal modal-asset-edit hidden">
+                <div class="modal modal-slide-edit hidden">
                     <h2>
                         Edit Asset
                     </h2>
 
-                    <form action="">
+                    <form action="/manage/slide/edit" method="POST">
+                        <input type="hidden" name="id" id="slide-edit-id" />
+
                         <div class="form-group">
-                            <label for="asset-add-name">Name</label>
+                            <label for="slide-edit-name">Name</label>
                             <div class="widget">
-                                <input type="text" name="asset-edit-name" id="asset-edit-name">
+                                <input type="text" name="name" id="slide-edit-name" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="asset-edit-type">Type</label>
+                            <label for="slide-edit-type">Type</label>
                             <div class="widget">
-                                <select id="asset-edit-type" name="asset-edit-type" disabled="disabled">
+                                <select id="slide-edit-type" name="type" disabled="disabled">
                                     <option value="url">URL</option>
                                     <option value="video">Video</option>
                                     <option value="picture">Picture</option>
@@ -750,9 +250,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="asset-edit-duration">Duration</label>
+                            <label for="slide-edit-duration">Duration</label>
                             <div class="widget">
-                                <input type="number" name="asset-edit-duration" id="asset-edit-duration">
+                                <input type="number" name="duration" id="slide-edit-duration" />
                                 <span>seconds</span>
                             </div>
                         </div>
@@ -772,107 +272,7 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/TableDnD/0.9.1/jquery.tablednd.js" integrity="sha256-d3rtug+Hg1GZPB7Y/yTcRixO/wlI78+2m08tosoRn7A=" crossorigin="anonymous"></script>-->
-<script>
-	!function(t,e,a,i){var n="ontouchstart"in a.documentElement,r=n?"touchstart":"mousedown",l=n?"touchmove":"mousemove",s=n?"touchend":"mouseup";n&&t.each("touchstart touchmove touchend".split(" "),function(e,a){t.event.fixHooks[a]=t.event.mouseHooks}),t(a).ready(function(){function e(t){for(var e={},a=t.match(/([^;:]+)/g)||[];a.length;)e[a.shift()]=a.shift().trim();return e}t("table").each(function(){"dnd"==t(this).data("table")&&t(this).tableDnD({onDragStyle:t(this).data("ondragstyle")&&e(t(this).data("ondragstyle"))||null,onDropStyle:t(this).data("ondropstyle")&&e(t(this).data("ondropstyle"))||null,onDragClass:void 0==t(this).data("ondragclass")&&"tDnD_whileDrag"||t(this).data("ondragclass"),onDrop:t(this).data("ondrop")&&Function("table","row",t(this).data("ondrop")),onDragStart:t(this).data("ondragstart")&&Function("table","row",t(this).data("ondragstart")),scrollAmount:t(this).data("scrollamount")||5,sensitivity:t(this).data("sensitivity")||10,hierarchyLevel:t(this).data("hierarchylevel")||0,indentArtifact:t(this).data("indentartifact")||'<div class="indent">&nbsp;</div>',autoWidthAdjust:t(this).data("autowidthadjust")||!0,autoCleanRelations:t(this).data("autocleanrelations")||!0,jsonPretifySeparator:t(this).data("jsonpretifyseparator")||"	",serializeRegexp:t(this).data("serializeregexp")&&RegExp(t(this).data("serializeregexp"))||/[^\-]*$/,serializeParamName:t(this).data("serializeparamname")||!1,dragHandle:t(this).data("draghandle")||null})})}),jQuery.tableDnD={currentTable:null,dragObject:null,mouseOffset:null,oldX:0,oldY:0,build:function(e){return this.each(function(){this.tableDnDConfig=t.extend({onDragStyle:null,onDropStyle:null,onDragClass:"tDnD_whileDrag",onDrop:null,onDragStart:null,scrollAmount:5,sensitivity:10,hierarchyLevel:0,indentArtifact:'<div class="indent">&nbsp;</div>',autoWidthAdjust:!0,autoCleanRelations:!0,jsonPretifySeparator:"	",serializeRegexp:/[^\-]*$/,serializeParamName:!1,dragHandle:null},e||{}),t.tableDnD.makeDraggable(this),this.tableDnDConfig.hierarchyLevel&&t.tableDnD.makeIndented(this)}),this},makeIndented:function(e){var a,i,n=e.tableDnDConfig,r=e.rows,l=t(r).first().find("td:first")[0],s=0,o=0;if(t(e).hasClass("indtd"))return null;i=t(e).addClass("indtd").attr("style"),t(e).css({whiteSpace:"nowrap"});for(var d=0;d<r.length;d++)o<t(r[d]).find("td:first").text().length&&(o=t(r[d]).find("td:first").text().length,a=d);for(t(l).css({width:"auto"}),d=0;d<n.hierarchyLevel;d++)t(r[a]).find("td:first").prepend(n.indentArtifact);for(l&&t(l).css({width:l.offsetWidth}),i&&t(e).css(i),d=0;d<n.hierarchyLevel;d++)t(r[a]).find("td:first").children(":first").remove();return n.hierarchyLevel&&t(r).each(function(){(s=t(this).data("level")||0)<=n.hierarchyLevel&&t(this).data("level",s)||t(this).data("level",0);for(var e=0;e<t(this).data("level");e++)t(this).find("td:first").prepend(n.indentArtifact)}),this},makeDraggable:function(e){var a=e.tableDnDConfig;a.dragHandle&&t(a.dragHandle,e).each(function(){t(this).bind(r,function(i){return t.tableDnD.initialiseDrag(t(this).parents("tr")[0],e,this,i,a),!1})})||t(e.rows).each(function(){t(this).hasClass("nodrag")||t(this).bind(r,function(i){if("TD"==i.target.tagName)return t.tableDnD.initialiseDrag(this,e,this,i,a),!1}).css("cursor","move")})},currentOrder:function(){var e=this.currentTable.rows;return t.map(e,function(e){return(t(e).data("level")+e.id).replace(/\s/g,"")}).join("")},initialiseDrag:function(e,i,n,r,o){this.dragObject=e,this.currentTable=i,this.mouseOffset=this.getMouseOffset(n,r),this.originalOrder=this.currentOrder(),t(a).bind(l,this.mousemove).bind(s,this.mouseup),o.onDragStart&&o.onDragStart(i,n)},updateTables:function(){this.each(function(){this.tableDnDConfig&&t.tableDnD.makeDraggable(this)})},mouseCoords:function(t){return n?{x:event.changedTouches[0].clientX,y:event.changedTouches[0].clientY}:t.pageX||t.pageY?{x:t.pageX,y:t.pageY}:{x:t.clientX+a.body.scrollLeft-a.body.clientLeft,y:t.clientY+a.body.scrollTop-a.body.clientTop}},getMouseOffset:function(t,a){var i,n;return a=a||e.event,n=this.getPosition(t),{x:(i=this.mouseCoords(a)).x-n.x,y:i.y-n.y}},getPosition:function(t){var e=0,a=0;for(0==t.offsetHeight&&(t=t.firstChild);t.offsetParent;)e+=t.offsetLeft,a+=t.offsetTop,t=t.offsetParent;return{x:e+=t.offsetLeft,y:a+=t.offsetTop}},autoScroll:function(t){var i=this.currentTable.tableDnDConfig,n=e.pageYOffset,r=e.innerHeight?e.innerHeight:a.documentElement.clientHeight?a.documentElement.clientHeight:a.body.clientHeight;a.all&&(void 0!==a.compatMode&&"BackCompat"!=a.compatMode?n=a.documentElement.scrollTop:void 0!==a.body&&(n=a.body.scrollTop)),t.y-n<i.scrollAmount&&e.scrollBy(0,-i.scrollAmount)||r-(t.y-n)<i.scrollAmount&&e.scrollBy(0,i.scrollAmount)},moveVerticle:function(t,e){0!=t.vertical&&e&&this.dragObject!=e&&this.dragObject.parentNode==e.parentNode&&(0>t.vertical&&this.dragObject.parentNode.insertBefore(this.dragObject,e.nextSibling)||0<t.vertical&&this.dragObject.parentNode.insertBefore(this.dragObject,e))},moveHorizontal:function(e,a){var i,n=this.currentTable.tableDnDConfig;if(!n.hierarchyLevel||0==e.horizontal||!a||this.dragObject!=a)return null;i=t(a).data("level"),0<e.horizontal&&i>0&&t(a).find("td:first").children(":first").remove()&&t(a).data("level",--i),0>e.horizontal&&i<n.hierarchyLevel&&t(a).prev().data("level")>=i&&t(a).children(":first").prepend(n.indentArtifact)&&t(a).data("level",++i)},mousemove:function(e){var a,i,n,r,l,s=t(t.tableDnD.dragObject),o=t.tableDnD.currentTable.tableDnDConfig;return e&&e.preventDefault(),!!t.tableDnD.dragObject&&("touchmove"==e.type&&event.preventDefault(),o.onDragClass&&s.addClass(o.onDragClass)||s.css(o.onDragStyle),r=(i=t.tableDnD.mouseCoords(e)).x-t.tableDnD.mouseOffset.x,l=i.y-t.tableDnD.mouseOffset.y,t.tableDnD.autoScroll(i),a=t.tableDnD.findDropTargetRow(s,l),n=t.tableDnD.findDragDirection(r,l),t.tableDnD.moveVerticle(n,a),t.tableDnD.moveHorizontal(n,a),!1)},findDragDirection:function(t,e){var a=this.currentTable.tableDnDConfig.sensitivity,i=this.oldX,n=this.oldY,r={horizontal:t>=i-a&&t<=i+a?0:t>i?-1:1,vertical:e>=n-a&&e<=n+a?0:e>n?-1:1};return 0!=r.horizontal&&(this.oldX=t),0!=r.vertical&&(this.oldY=e),r},findDropTargetRow:function(e,a){for(var i=0,n=this.currentTable.rows,r=this.currentTable.tableDnDConfig,l=0,s=null,o=0;o<n.length;o++)if(s=n[o],l=this.getPosition(s).y,i=parseInt(s.offsetHeight)/2,0==s.offsetHeight&&(l=this.getPosition(s.firstChild).y,i=parseInt(s.firstChild.offsetHeight)/2),a>l-i&&a<l+i){if(!(e.is(s)||r.onAllowDrop&&!r.onAllowDrop(e,s)||t(s).hasClass("nodrop")))return s;break}return null},processMouseup:function(){if(null==this.currentTable)return null;var e=this.currentTable.tableDnDConfig,i=this.dragObject,n=0,r=0;if(!this.currentTable||!i)return null;t(a).unbind(l,this.mousemove).unbind(s,this.mouseup),e.hierarchyLevel&&e.autoCleanRelations&&t(this.currentTable.rows).first().find("td:first").children().each(function(){(r=t(this).parents("tr:first").data("level"))&&t(this).parents("tr:first").data("level",--r)&&t(this).remove()})&&e.hierarchyLevel>1&&t(this.currentTable.rows).each(function(){if((r=t(this).data("level"))>1)for(n=t(this).prev().data("level");r>n+1;)t(this).find("td:first").children(":first").remove(),t(this).data("level",--r)}),e.onDragClass&&t(i).removeClass(e.onDragClass)||t(i).css(e.onDropStyle),this.dragObject=null,e.onDrop&&this.originalOrder!=this.currentOrder()&&t(i).hide().fadeIn("fast")&&e.onDrop(this.currentTable,i),this.currentTable=null},mouseup:function(e){return e&&e.preventDefault(),t.tableDnD.processMouseup(),!1},jsonize:function(t){var e=this.currentTable;return t?JSON.stringify(this.tableData(e),null,e.tableDnDConfig.jsonPretifySeparator):JSON.stringify(this.tableData(e))},serialize:function(){return t.param(this.tableData(this.currentTable))},serializeTable:function(t){for(var e="",a=t.tableDnDConfig.serializeParamName||t.id,i=t.rows,n=0;n<i.length;n++){e.length>0&&(e+="&");var r=i[n].id;r&&t.tableDnDConfig&&t.tableDnDConfig.serializeRegexp&&(e+=a+"[]="+(r=r.match(t.tableDnDConfig.serializeRegexp)[0]))}return e},serializeTables:function(){var e=[];return t("table").each(function(){this.id&&e.push(t.param(this.tableData(this)))}),e.join("&")},tableData:function(e){var a,i,n,r,l=e.tableDnDConfig,s=[],o=0,d=0,h=null,u={};if(e||(e=this.currentTable),!e||!e.id||!e.rows||!e.rows.length)return{error:{code:500,message:"Not a valid table, no serializable unique id provided."}};r=l.autoCleanRelations&&e.rows||t.makeArray(e.rows),n=i=l.serializeParamName||e.id,a=function(t){return t&&l&&l.serializeRegexp?t.match(l.serializeRegexp)[0]:t},u[n]=[],!l.autoCleanRelations&&t(r[0]).data("level")&&r.unshift({id:"undefined"});for(var c=0;c<r.length;c++)if(l.hierarchyLevel){if(0==(d=t(r[c]).data("level")||0))n=i,s=[];else if(d>o)s.push([n,o]),n=a(r[c-1].id);else if(d<o)for(var f=0;f<s.length;f++)s[f][1]==d&&(n=s[f][0]),s[f][1]>=o&&(s[f][1]=0);o=d,t.isArray(u[n])||(u[n]=[]),(h=a(r[c].id))&&u[n].push(h)}else(h=a(r[c].id))&&u[n].push(h);return u}},jQuery.fn.extend({tableDnD:t.tableDnD.build,tableDnDUpdate:t.tableDnD.updateTables,tableDnDSerialize:t.proxy(t.tableDnD.serialize,t.tableDnD),tableDnDSerializeAll:t.tableDnD.serializeTables,tableDnDData:t.proxy(t.tableDnD.tableData,t.tableDnD)})}(jQuery,window,window.document);
-</script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		var $tableActive = $('table.active-assets');
-		var $tableInactive = $('table.inactive-assets');
-		var $modalsRoot = $('.modals');
-
-		var showModal = function(modalClass) {
-			$modalsRoot.removeClass('hidden').find('form').trigger('reset');
-			$modalsRoot.find('.modal').addClass('hidden');
-			$modalsRoot.find('.modal.'+modalClass).removeClass('hidden');
-		};
-
-		var hideModal = function() {
-			$modalsRoot.addClass('hidden').find('form').trigger('reset');
-		};
-
-		// Initialise the table
-		$("table").tableDnD({
-			dragHandle: 'td a.asset-sort',
-			onDrop: function(table, row) {
-				console.log(table, row)
-            }
-        });
-
-        $(document).on('change', 'input[type=checkbox]', function() {
-			var $tr = $(this).parents('tr:eq(0)').remove().clone();
-
-			if ($(this).is(':checked')) {
-				$tableActive.append($tr);
-            } else {
-				$tableInactive.append($tr);
-            }
-
-			$('table').each(function() {
-				if ($(this).find('tbody tr:visible').length === 0) {
-					$(this).find('tr.empty-tr').removeClass('hidden');
-				} else {
-					$(this).find('tr.empty-tr').addClass('hidden');
-				}
-            }).tableDnDUpdate();
-		});
-
-        $(document).on('change', '#asset-add-type', function() {
-			var value = $(this).val();
-			var inputType = $(this).find('option').filter(function(i, el) {
-				return $(el).val() === value;
-			}).data('input');
-
-			$('.asset-add-object-input')
-                .addClass('hidden')
-                .prop('disabled', true)
-                .filter('#asset-add-object-input-'+inputType)
-                .removeClass('hidden')
-                .prop('disabled', false)
-            ;
-		});
-
-        $(document).on('click', '.modal-close', function() {
-			hideModal();
-        });
-
-        $(document).on('click', '.asset-add', function() {
-			showModal('modal-asset-add');
-        });
-
-        $(document).on('click', '.asset-edit', function() {
-			showModal('modal-asset-edit');
-        });
-
-        $(document).on('click', '.asset-download', function() {
-			var $tr = $(this).parents('tr:eq(0)');
-			$.ajax({
-				method: 'POST',
-				url: '/assets/download/' + $tr.data('level')
-			}).done(function( msg ) {
-				console.log(msg)
-			});
-		});
-
-        $(document).on('click', '.asset-delete', function() {
-			if (confirm('Are you sure ?')) {
-				var $tr = $(this).parents('tr:eq(0)');
-				$.ajax({
-					method: 'POST',
-					url: '/assets/delete/' + $tr.data('level')
-				}).done(function (msg) {
-					$tr.remove();
-				});
-			}
-        });
-
-		$(document).keyup(function(e) {
-			if (e.key === "Escape") {
-				hideModal();
-			}
-		});
-	});
-</script>
+<script src="data/www/js/tablednd-fixed.js"></script>
+<script src="data/www/js/manage.js"></script>
 </body>
 </html>
