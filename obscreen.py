@@ -7,21 +7,14 @@ import subprocess
 import sys
 
 from enum import Enum
-from flask import Flask, render_template, redirect, request, url_for, send_from_directory
-from pysondb import db
+from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
 from config import config
+from src.SlideManager import SlideManager
 
-
-# <classes>
-class ItemType(Enum):
-    PICTURE = 'picture'
-    VIDEO = 'video'
-    URL = 'url'
-# </classes>
 
 # <config>
 PLAYER_URL = 'http://localhost:{}'.format(config['port'])
-DB = db.getDb("data/slideshow.json")
+slide_manager = SlideManager()
 with open('./lang/{}.json'.format(config['lang']), 'r') as file:
     LANGDICT = json.load(file)
 # </config>
@@ -82,7 +75,11 @@ def get_ip_address():
 # <web>
 @app.route('/')
 def index():
-    return render_template('player.jinja.html', items=json.dumps(DB.getAll()))
+    return render_template('player.jinja.html', items=json.dumps(slide_manager.to_dict(slide_manager.get_enabled_slides())))
+
+@app.route('/playlist')
+def playlist():
+    return jsonify(slide_manager.to_dict(slide_manager.get_enabled_slides()))
 
 @app.route('/slide/default')
 def slide_default():
@@ -90,13 +87,50 @@ def slide_default():
 
 @app.route('/manage')
 def manage():
-    return render_template('manage.jinja.html', ipaddr=get_ip_address(), l=LANGDICT)
+    return render_template(
+        'manage.jinja.html',
+        ipaddr=get_ip_address(),
+        l=LANGDICT,
+        enabled_slides=slide_manager.get_enabled_slides(),
+        disabled_slides=slide_manager.get_disabled_slides()
+    )
+
+@app.route('/manage/slide/add', methods=['POST'])
+def manage_slide_add():
+    name = request.form['name']
+    print(name)
+    print(request.form)
+    response = {'message': f'Bonjour {name}, votre formulaire a été reçu !'}
+    return jsonify(response)
+
+@app.route('/manage/slide/edit', methods=['POST'])
+def manage_slide_edit():
+    slide_manager.update_form(request.form['id'], request.form['name'], request.form['duration'])
+    return redirect(url_for('manage'))
+
+@app.route('/manage/slide/toggle', methods=['POST'])
+def manage_slide_toggle():
+    data = request.get_json()
+    slide_manager.update_enabled(data.get('id'), data.get('enabled'))
+    return jsonify({'status': 'ok'})
+
+@app.route('/manage/slide/delete', methods=['DELETE'])
+def manage_slide_delete():
+    data = request.get_json()
+    slide_manager.delete(data.get('id'))
+    return jsonify({'status': 'ok'})
+
+@app.route('/manage/slide/position', methods=['POST'])
+def manage_slide_position():
+    data = request.get_json()
+    slide_manager.update_positions(data)
+    return jsonify({'status': 'ok'})
 
 @app.errorhandler(404)
 def not_found(e):
-    return send_from_directory('data', '404.html'), 404
+    return send_from_directory('views', 'error404.html'), 404
 # </web>
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=config['port'])
+    app.run(host=config['bind'] if 'bind' in config else '0.0.0.0', port=config['port'])
 

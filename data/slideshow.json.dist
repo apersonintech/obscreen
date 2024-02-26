@@ -1,14 +1,22 @@
 {
   "data": [
     {
+      "id": 0,
       "location": "data/uploads/sample.jpg",
-      "delay": 10,
-      "type": "picture"
+      "duration": 10,
+      "type": "picture",
+      "enabled": true,
+      "name": "Picture Sample",
+      "position": 0
     },
     {
+      "id": 1,
       "location": "https://unix.org",
-      "delay": 20,
-      "type": "url"
+      "duration": 20,
+      "type": "url",
+      "enabled": true,
+      "name": "URL Sample",
+      "position": 1
     }
   ]
 }
