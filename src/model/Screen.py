@@ -5,9 +5,10 @@ from typing import Optional, Union
 
 class Screen:
 
-    def __init__(self, address: str = '', enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None):
+    def __init__(self, host: str = '', port: int = 5000, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None):
         self._id = id if id else None
-        self._address = address
+        self._host = host
+        self._port = port
         self._enabled = enabled
         self._name = name
         self._position = position
@@ -17,12 +18,20 @@ class Screen:
         return self._id
 
     @property
-    def address(self) -> str:
-        return self._address
+    def host(self) -> str:
+        return self._host
 
-    @address.setter
-    def address(self, value: str):
-        self._address = value
+    @host.setter
+    def host(self, value: str):
+        self._host = value
+
+    @property
+    def port(self) -> int:
+        return self._port
+
+    @port.setter
+    def port(self, value: int):
+        self._port = value
 
     @property
     def enabled(self) -> bool:
@@ -54,7 +63,8 @@ class Screen:
                f"name='{self.name}',\n" \
                f"enabled='{self.enabled}',\n" \
                f"position='{self.position}',\n" \
-               f"address='{self.address}',\n" \
+               f"host='{self.host}',\n" \
+               f"port='{self.port}',\n" \
                f")"
 
     def to_json(self) -> str:
@@ -66,5 +76,6 @@ class Screen:
             "id": self.id,
             "enabled": self.enabled,
             "position": self.position,
-            "address": self.address,
+            "host": self.host,
+            "port": self.port,
         }

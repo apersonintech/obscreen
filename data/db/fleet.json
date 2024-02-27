@@ -1,7 +1,8 @@
 {
     "version": 2,
     "keys": [
-        "address",
+        "host",
+        "port",
         "enabled",
         "name",
         "position"
@@ -10,14 +11,23 @@
         "179670684589565125": {
             "name": "aaaxx",
             "enabled": false,
-            "position": 0,
-            "address": "bbbz"
+            "position": 1,
+            "port": 5000,
+            "host": "bbbz"
         },
         "460215553937488565": {
             "name": "ff",
             "enabled": false,
-            "position": 1,
-            "address": "ee"
+            "position": 0,
+            "port": "50002",
+            "host": "ee"
+        },
+        "321877443191377836": {
+            "name": "ff",
+            "enabled": false,
+            "position": 999,
+            "host": "fff",
+            "port": "vvv"
         }
     }
 }

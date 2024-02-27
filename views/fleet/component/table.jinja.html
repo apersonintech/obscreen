@@ -2,7 +2,8 @@
     <thead>
     <tr>
         <th>{{ l.fleet_screen_panel_th_name }}</th>
-        <th class="tac">{{ l.fleet_screen_panel_th_address }}</th>
+        <th class="tac">{{ l.fleet_screen_panel_th_host }}</th>
+        <th class="tac">{{ l.fleet_screen_panel_th_port }}</th>
         <th class="tac">{{ l.fleet_screen_panel_th_enabled }}</th>
         <th class="tac">{{ l.fleet_screen_panel_th_activity }}</th>
     </tr>
@@ -12,7 +13,7 @@
         <td colspan="4">
             {{ l.fleet_screen_panel_empty|replace(
                 '%link%',
-                ('<a href="javascript:void(0);" class="item-add">'~l.fleet_screen_button_add~'</a>')|safe
+                ('<a href="javascript:void(0);" class="item-add screen-add">'~l.fleet_screen_button_add~'</a>')|safe
             ) }}
         </td>
     </tr>
@@ -28,7 +29,10 @@
                 </div>
             </td>
             <td class="tac">
-                {{ screen.address }}
+                {{ screen.host }}
+            </td>
+            <td class="tac">
+                {{ screen.port }}
             </td>
             <td class="tac">
                 <label class="pure-material-switch">
@@ -39,7 +43,7 @@
                 <a href="javascript:void(0);" class="item-edit screen-edit">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <a href="{{ screen.address }}" class="item-download screen-download" target="_blank">
+                <a href="http://{{ screen.host }}:{{ screen.port }}" class="item-download screen-download" target="_blank">
                     <i class="fa fa-eye"></i>
                 </a>
                 <a href="javascript:void(0);" class="item-delete screen-delete">
