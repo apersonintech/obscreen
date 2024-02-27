@@ -1,0 +1,30 @@
+<div class="modal modal-screen-add">
+    <h2>
+        {{ l.fleet_screen_form_add_title }}
+    </h2>
+
+    <form action="/fleet/screen/add" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="screen-add-name">{{ l.fleet_screen_form_label_name }}</label>
+            <div class="widget">
+                <input name="name" type="text" id="screen-add-name" required="required"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="screen-add-address">{{ l.fleet_screen_form_label_address }}</label>
+            <div class="widget">
+                <input type="text" name="address" id="screen-add-address" required="required"/>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="modal-close">
+                {{ l.fleet_screen_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-plus icon-left"></i> {{ l.fleet_screen_form_add_submit }}
+            </button>
+        </div>
+    </form>
+</div>

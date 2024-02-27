@@ -1,4 +1,4 @@
-import json
+import os
 
 from typing import Dict, Optional, List, Tuple, Union
 from src.model.Slide import Slide
@@ -6,15 +6,15 @@ from src.utils import str_to_enum
 from pysondb import PysonDB
 
 
-class SlideManager():
+class SlideManager:
 
-    DB_FILE = "data/slideshow.json"
+    DB_FILE = "data/db/slideshow.json"
 
     def __init__(self):
         self._db = PysonDB(self.DB_FILE)
 
     @staticmethod
-    def hydrate_object(raw_slide: dict, id: Union[int, str] = None) -> Slide:
+    def hydrate_object(raw_slide: dict, id: str = None) -> Slide:
         if id:
             raw_slide['id'] = id
 
@@ -27,6 +27,9 @@ class SlideManager():
     @staticmethod
     def hydrate_list(raw_slides: list) -> List[Slide]:
         return [SlideManager.hydrate_object(raw_slide) for raw_slide in raw_slides]
+
+    def get(self, id: str) -> Optional[Slide]:
+        return self.hydrate_object(self._db.get_by_id(id), id)
 
     def get_all(self, sort: bool = False) -> List[Slide]:
         raw_slides = self._db.get_all()
@@ -44,7 +47,7 @@ class SlideManager():
     def get_disabled_slides(self) -> List[Slide]:
         return [slide for slide in self.get_all(sort=True) if not slide.enabled]
 
-    def update_enabled(self, id: int, enabled: bool) -> None:
+    def update_enabled(self, id: str, enabled: bool) -> None:
         self._db.update_by_id(id, {"enabled": enabled, "position": 999})
         
     def update_positions(self, positions: list) -> None:
@@ -59,8 +62,13 @@ class SlideManager():
         del db_slide['id']
         self._db.add(db_slide)
 
-    def delete(self, id: int) -> None:
-        self._db.delete_by_id(id)
+    def delete(self, id: str) -> None:
+        slide = self.get(id)
+
+        if slide:
+            if slide.has_file():
+                os.unlink(slide.location)
+            self._db.delete_by_id(id)
 
     def to_dict(self, slides: List[Slide]) -> dict:
         return [slide.to_dict() for slide in slides]

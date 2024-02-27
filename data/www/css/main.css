@@ -220,19 +220,19 @@ button.purple:hover {
     padding: 10px;
 }
 
-.panel td a.slide-sort {
+.panel td a.item.sort {
     cursor: move;
 }
 
-.panel td a.slide-name {
+.panel td a.item-name {
     color: white;
 }
 
-.panel-inactive td a.slide-name {
+.panel-inactive td a.item-name {
     color: #AAA;
 }
 
-.panel td a.slide-name:hover {
+.panel td a.item-name:hover {
     text-decoration: underline;
 }
 
@@ -253,12 +253,12 @@ button.purple:hover {
     border-color: #0eef5f;
 }
 
-.panel td.actions a.slide-edit:hover {
+.panel td.actions a.item-edit:hover {
     color: #bc48ff;
     border-color: #bc48ff;
 }
 
-.panel td.actions a.slide-delete:hover {
+.panel td.actions a.item-delete:hover {
     color: #ef0e0e;
     border-color: #ef0e0e;
 }

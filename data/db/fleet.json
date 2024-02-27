@@ -1,0 +1,23 @@
+{
+    "version": 2,
+    "keys": [
+        "address",
+        "enabled",
+        "name",
+        "position"
+    ],
+    "data": {
+        "179670684589565125": {
+            "name": "aaaxx",
+            "enabled": false,
+            "position": 0,
+            "address": "bbbz"
+        },
+        "460215553937488565": {
+            "name": "ff",
+            "enabled": false,
+            "position": 1,
+            "address": "ee"
+        }
+    }
+}

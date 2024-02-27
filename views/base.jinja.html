@@ -24,18 +24,25 @@
             </h1>
             <menu>
                 <ul>
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'manage' }}">
-                        <a href="{{ url_for('manage') }}">
-                            <i class="fa-regular fa-clock"></i> {{ l.manage_page_title }}
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow' }}">
+                        <a href="{{ url_for('slideshow') }}">
+                            <i class="fa-regular fa-clock"></i> {{ l.slideshow_page_title }}
                         </a>
                     </li>
-{#                    <li class="{{ 'active' if request.url_rule.endpoint == 'manage_settings' }}">#}
+                    {% if FLEET_MODE %}
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet' }}">
+                        <a href="{{ url_for('fleet') }}">
+                            <i class="fa fa-tv"></i> {{ l.fleet_page_title }}
+                        </a>
+                    </li>
+                    {% endif %}
+{#                    <li class="{{ 'active' if request.url_rule.endpoint == 'settings' }}">#}
 {#                        <a href="#">#}
 {#                            <i class="fa-solid fa-gear"></i> {{ l.settings_page_title }}#}
 {#                        </a>#}
 {#                    </li>#}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'manage_sysinfo' }}">
-                        <a href="{{ url_for('manage_sysinfo') }}">
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo' }}">
+                        <a href="{{ url_for('sysinfo') }}">
                             <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
                         </a>
                     </li>
@@ -54,7 +61,8 @@
     {% endblock %}
 </div>
 <script>
-    var l = {'js_manage_slide_delete_confirmation': '{{ l.manage_slide_delete_confirmation }}'};
+    var l = {'js_slideshow_slide_delete_confirmation': '{{ l.slideshow_slide_delete_confirmation }}'};
+    var l = {'js_fleet_screen_delete_confirmation': '{{ l.js_fleet_screen_delete_confirmation }}'};
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 {% block add_js %}{% endblock %}

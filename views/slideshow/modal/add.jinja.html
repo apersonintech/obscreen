@@ -1,28 +1,28 @@
 <div class="modal modal-slide-add">
     <h2>
-        {{ l.manage_slide_form_add_title }}
+        {{ l.slideshow_slide_form_add_title }}
     </h2>
 
-    <form action="/manage/slide/add" method="POST" enctype="multipart/form-data">
+    <form action="/slideshow/slide/add" method="POST" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="slide-add-name">{{ l.manage_slide_form_label_name }}</label>
+            <label for="slide-add-name">{{ l.slideshow_slide_form_label_name }}</label>
             <div class="widget">
                 <input name="name" type="text" id="slide-add-name" required="required"/>
             </div>
         </div>
         <div class="form-group">
-            <label for="slide-add-type">{{ l.manage_slide_form_label_type }}</label>
+            <label for="slide-add-type">{{ l.slideshow_slide_form_label_type }}</label>
             <div class="widget">
                 <select name="type" id="slide-add-type">
-                    <option value="url" data-input="text">{{ l.manage_slide_form_label_type_url }}</option>
-                    <option value="video" data-input="upload">{{ l.manage_slide_form_label_type_video }}</option>
-                    <option value="picture" data-input="upload">{{ l.manage_slide_form_label_type_picture }}</option>
+                    <option value="url" data-input="text">{{ l.slideshow_slide_form_label_type_url }}</option>
+                    <option value="video" data-input="upload">{{ l.slideshow_slide_form_label_type_video }}</option>
+                    <option value="picture" data-input="upload">{{ l.slideshow_slide_form_label_type_picture }}</option>
                 </select>
             </div>
         </div>
 
         <div class="form-group object-input">
-            <label for="slide-add-duration">{{ l.manage_slide_form_label_object }}</label>
+            <label for="slide-add-duration">{{ l.slideshow_slide_form_label_object }}</label>
             <div class="widget">
                 <input type="text" name="object" id="slide-add-object-input-text" class="slide-add-object-input"/>
                 <input type="file" name="object" id="slide-add-object-input-upload"
@@ -31,19 +31,19 @@
         </div>
 
         <div class="form-group">
-            <label for="slide-add-duration">{{ l.manage_slide_form_label_duration }}</label>
+            <label for="slide-add-duration">{{ l.slideshow_slide_form_label_duration }}</label>
             <div class="widget">
                 <input type="number" name="duration" id="slide-add-duration" required="required"/>
-                <span>{{ l.manage_slide_form_label_duration_unit }}</span>
+                <span>{{ l.slideshow_slide_form_label_duration_unit }}</span>
             </div>
         </div>
 
         <div class="actions">
             <button type="button" class="modal-close">
-                {{ l.manage_slide_form_button_cancel }}
+                {{ l.slideshow_slide_form_button_cancel }}
             </button>
             <button type="submit" class="green">
-                <i class="fa fa-plus icon-left"></i> {{ l.manage_slide_form_add_submit }}
+                <i class="fa fa-plus icon-left"></i> {{ l.slideshow_slide_form_add_submit }}
             </button>
         </div>
     </form>

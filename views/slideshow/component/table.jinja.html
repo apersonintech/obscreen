@@ -1,18 +1,18 @@
 <table class="{{ tclass }}-slides">
     <thead>
     <tr>
-        <th>{{ l.manage_slide_panel_th_name }}</th>
-        <th class="tac">{{ l.manage_slide_panel_th_duration }}</th>
-        <th class="tac">{{ l.manage_slide_panel_th_enabled }}</th>
-        <th class="tac">{{ l.manage_slide_panel_th_activity }}</th>
+        <th>{{ l.slideshow_slide_panel_th_name }}</th>
+        <th class="tac">{{ l.slideshow_slide_panel_th_duration }}</th>
+        <th class="tac">{{ l.slideshow_slide_panel_th_enabled }}</th>
+        <th class="tac">{{ l.slideshow_slide_panel_th_activity }}</th>
     </tr>
     </thead>
     <tbody>
     <tr class="empty-tr {% if slides|length != 0 %}hidden{% endif %}">
         <td colspan="4">
-            {{ l.manage_slide_panel_empty|replace(
+            {{ l.slideshow_slide_panel_empty|replace(
                 '%link%',
-                ('<a href="javascript:void(0);" class="slide-add">'~l.manage_slide_button_add~'</a>')|safe
+                ('<a href="javascript:void(0);" class="item-add">'~l.slideshow_slide_button_add~'</a>')|safe
             ) }}
         </td>
     </tr>
@@ -20,7 +20,7 @@
         <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json() }}">
             <td class="infos">
                 <div class="inner">
-                    <a href="javascript:void(0);" class="slide-sort">
+                    <a href="javascript:void(0);" class="item-sort slide-sort">
                         <i class="fa fa-sort icon-left"></i>
                     </a>
                     {% set icon_type = 'globe' %}
@@ -35,7 +35,7 @@
                 </div>
             </td>
             <td class="tac">
-                {{ slide.duration }} {{ l.manage_slide_panel_th_duration_unit }}
+                {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
             </td>
             <td class="tac">
                 <label class="pure-material-switch">
@@ -43,13 +43,13 @@
                 </label>
             </td>
             <td class="actions tac">
-                <a href="javascript:void(0);" class="slide-edit">
+                <a href="javascript:void(0);" class="item-edit slide-edit">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <a href="{{ slide.location }}" class="slide-download" target="_blank">
+                <a href="{{ slide.location }}" class="item-download slide-download" target="_blank">
                     <i class="fa fa-eye"></i>
                 </a>
-                <a href="javascript:void(0);" class="slide-delete">
+                <a href="javascript:void(0);" class="item-delete slide-delete">
                     <i class="fa fa-trash"></i>
                 </a>
             </td>

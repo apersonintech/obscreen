@@ -1,21 +1,21 @@
 jQuery(document).ready(function ($) {
-    const $tableActive = $('table.active-slides');
-    const $tableInactive = $('table.inactive-slides');
+    const $tableActive = $('table.active-screens');
+    const $tableInactive = $('table.inactive-screens');
     const $modalsRoot = $('.modals');
 
-    const getId = function($el) {
+    const getId = function ($el) {
         return $el.is('tr') ? $el.attr('data-level') : $el.parents('tr:eq(0)').attr('data-level');
     };
 
     const updateTable = function () {
-         $('table').each(function () {
-            if ($(this).find('tbody tr.slide-item:visible').length === 0) {
+        $('table').each(function () {
+            if ($(this).find('tbody tr.screen-item:visible').length === 0) {
                 $(this).find('tr.empty-tr').removeClass('hidden');
             } else {
                 $(this).find('tr.empty-tr').addClass('hidden');
             }
         }).tableDnDUpdate();
-         updatePositions();
+        updatePositions();
     }
 
     const showModal = function (modalClass) {
@@ -30,28 +30,28 @@ jQuery(document).ready(function ($) {
 
     const updatePositions = function (table, row) {
         const positions = {};
-        $('.slide-item').each(function(index) {
+        $('.screen-item').each(function (index) {
             positions[getId($(this))] = index;
         });
 
         $.ajax({
             method: 'POST',
-            url: '/manage/slide/position',
+            url: '/fleet/screen/position',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify(positions),
         });
     };
 
-    const main = function() {
+    const main = function () {
         $("table").tableDnD({
-            dragHandle: 'td a.slide-sort',
+            dragHandle: 'td a.screen-sort',
             onDrop: updatePositions
         });
     };
 
     $(document).on('change', 'input[type=checkbox]', function () {
         $.ajax({
-            url: 'manage/slide/toggle',
+            url: 'fleet/screen/toggle',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
             method: 'POST',
@@ -68,16 +68,16 @@ jQuery(document).ready(function ($) {
         updateTable();
     });
 
-    $(document).on('change', '#slide-add-type', function () {
+    $(document).on('change', '#screen-add-type', function () {
         const value = $(this).val();
         const inputType = $(this).find('option').filter(function (i, el) {
             return $(el).val() === value;
         }).data('input');
 
-        $('.slide-add-object-input')
+        $('.screen-add-object-input')
             .addClass('hidden')
             .prop('disabled', true)
-            .filter('#slide-add-object-input-' + inputType)
+            .filter('#screen-add-object-input-' + inputType)
             .removeClass('hidden')
             .prop('disabled', false)
         ;
@@ -87,30 +87,28 @@ jQuery(document).ready(function ($) {
         hideModal();
     });
 
-    $(document).on('click', '.slide-add', function () {
-        showModal('modal-slide-add');
-        $('.modal-slide-add input:eq(0)').focus().select();
+    $(document).on('click', '.screen-add', function () {
+        showModal('modal-screen-add');
+        $('.modal-screen-add input:eq(0)').focus().select();
     });
 
-    $(document).on('click', '.slide-edit', function () {
-        const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        showModal('modal-slide-edit');
-        $('.modal-slide-edit input:visible:eq(0)').focus().select();
-        $('#slide-edit-name').val(slide.name);
-        $('#slide-edit-type').val(slide.type);
-        $('#slide-edit-location').val(slide.location);
-        $('#slide-edit-duration').val(slide.duration);
-        $('#slide-edit-id').val(slide.id);
+    $(document).on('click', '.screen-edit', function () {
+        const screen = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        showModal('modal-screen-edit');
+        $('.modal-screen-edit input:visible:eq(0)').focus().select();
+        $('#screen-edit-name').val(screen.name);
+        $('#screen-edit-address').val(screen.address);
+        $('#screen-edit-id').val(screen.id);
     });
 
-    $(document).on('click', '.slide-delete', function () {
-        if (confirm(l.manage_slide_delete_confirmation)) {
+    $(document).on('click', '.screen-delete', function () {
+        if (confirm(l.fleet_screen_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();
             $.ajax({
                 method: 'DELETE',
-                url: '/manage/slide/delete',
+                url: '/fleet/screen/delete',
                 headers: {'Content-Type': 'application/json'},
                 data: JSON.stringify({id: getId($(this))}),
             });

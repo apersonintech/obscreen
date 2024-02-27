@@ -14,10 +14,10 @@
 </head>
 <body>
 <div id="FirstSlide" class="slide" style="visibility: hidden;">
-    <iframe src="/slide/default"></iframe>
+    <iframe src="/player/default"></iframe>
 </div>
 <div id="SecondSlide" style="visibility: visible;">
-    <iframe src="/slide/default"></iframe>
+    <iframe src="/player/default"></iframe>
 </div>
 <script type="text/javascript">
     var items = {{items | safe}};
@@ -26,7 +26,7 @@
     var curUrl = 0;
     var nextReady = true;
     var itemCheck = setInterval(function () {
-        fetch('playlist').then(function(response) {
+        fetch('player/playlist').then(function(response) {
             if (response.ok) {
                 return response.json();
             }
