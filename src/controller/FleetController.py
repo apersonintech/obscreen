@@ -6,9 +6,9 @@ from src.model.Screen import Screen
 
 class FleetController:
 
-    def __init__(self, app, l, screen_manager):
+    def __init__(self, app, lang_dict, screen_manager):
         self._app = app
-        self._l = l
+        self._lang_dict = lang_dict
         self._screen_manager = screen_manager
         self.register()
 
@@ -24,14 +24,13 @@ class FleetController:
     def fleet(self):
         return render_template(
             'fleet/fleet.jinja.html',
-            l=self._l,
             screens=self._screen_manager.get_enabled_screens(),
         )
 
     def fleet_screen_list(self):
         return render_template(
             'fleet/list.jinja.html',
-            l=self._l,
+            l=self._lang_dict,
             enabled_screens=self._screen_manager.get_enabled_screens(),
             disabled_screens=self._screen_manager.get_disabled_screens(),
         )

@@ -84,8 +84,8 @@ class Slide:
 
     def to_dict(self) -> dict:
         return {
-            "name": self.name,
             "id": self.id,
+            "name": self.name,
             "enabled": self.enabled,
             "position": self.position,
             "type": self.type.value,

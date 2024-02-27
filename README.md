@@ -16,6 +16,7 @@ cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist d
 
 ## Configure
 - Server configuration is available in `config.py` file.
+- Application configuration is available in `http://localhost:5000/settings` page.
 
 ## Run
 
@@ -62,11 +63,4 @@ sudo rm /etc/nginx/sites-enabled/default 2>/dev/null
 sudo ln -s "$(pwd)/system/nginx-obscreen" /etc/nginx/sites-enabled
 sudo systemctl reload nginx
 ```
-2. Configure `nano config.py`
-```js
-{
-// ...
-    "reverse_proxy_mode": True,
-// ...
-}
-```
+2. Set `reverse_proxy_mode` to `true` in settings page

@@ -1,6 +1,7 @@
 from typing import Dict, Optional, List, Tuple, Union
 from src.model.Screen import Screen
 from pysondb import PysonDB
+from pysondb.errors import IdDoesNotExistError
 
 
 class ScreenManager:
@@ -26,7 +27,21 @@ class ScreenManager:
         return [ScreenManager.hydrate_object(raw_screen) for raw_screen in raw_screens]
 
     def get(self, id: str) -> Optional[Screen]:
-        return self.hydrate_object(self._db.get_by_id(id), id)
+        try:
+            self.hydrate_object(self._db.get_by_id(id), id)
+        except IdDoesNotExistError:
+            return None
+
+    def get_by(self, query) -> List[Screen]:
+        return self.hydrate_dict(self._db.get_by_query(query=query))
+
+    def get_one_by(self, query) -> Optional[Screen]:
+        screens = self.hydrate_dict(self._db.get_by_query(query=query))
+        if len(screens) == 1:
+            return screens[0]
+        elif len(screens) > 1:
+            raise Error("More than one result for query")
+        return None
 
     def get_all(self, sort: bool = False) -> List[Screen]:
         raw_screens = self._db.get_all()
@@ -54,9 +69,13 @@ class ScreenManager:
     def update_form(self, id: str, name: str, host: str, port: int) -> None:
         self._db.update_by_id(id, {"name": name, "host": host, "port": port})
 
-    def add_form(self, screen: Screen) -> None:
-        db_screen = screen.to_dict()
-        del db_screen['id']
+    def add_form(self, screen: Union[Screen, Dict]) -> None:
+        db_screen = screen
+
+        if not isinstance(screen, dict):
+            db_screen = screen.to_dict()
+            del db_screen['id']
+
         self._db.add(db_screen)
 
     def delete(self, id: str) -> None:

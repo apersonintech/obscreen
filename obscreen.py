@@ -8,20 +8,28 @@ import sys
 
 
 from flask import Flask, send_from_directory
-from config import config
-from src.SlideManager import SlideManager
-from src.ScreenManager import ScreenManager
+from src.manager.SlideManager import SlideManager
+from src.manager.ScreenManager import ScreenManager
+from src.manager.VariableManager import VariableManager
 from src.controller.PlayerController import PlayerController
 from src.controller.SlideshowController import SlideshowController
 from src.controller.FleetController import FleetController
 from src.controller.SysinfoController import SysinfoController
+from src.controller.SettingsController import SettingsController
+from config import config
 
 # <config>
-PLAYER_URL = 'http://localhost:{}'.format(config['port'])
+variable_manager = VariableManager()
+vars = variable_manager.get_variable_map()
+
 screen_manager = ScreenManager()
 slide_manager = SlideManager()
-with open('./lang/{}.json'.format(config['lang']), 'r') as file:
+
+PLAYER_URL = 'http://localhost:{}'.format(vars['port'].as_int())
+with open('./lang/{}.json'.format(vars['lang'].as_string()), 'r') as file:
     LANGDICT = json.load(file)
+
+variable_manager.init(LANGDICT)
 # </config>
 
 
@@ -73,17 +81,18 @@ if config['lx_file']:
 @app.context_processor
 def inject_global_vars():
     return dict(
-        FLEET_MODE=config['fleet_enabled'],
-        LANG=config['lang'],
+        FLEET_ENABLED=vars['fleet_enabled'].as_bool(),
+        LANG=vars['lang'].as_string(),
         STATIC_PREFIX='/data/www/'
     )
 
 
 PlayerController(app, LANGDICT, slide_manager)
 SlideshowController(app, LANGDICT, slide_manager)
+SettingsController(app, LANGDICT, variable_manager)
 SysinfoController(app, LANGDICT)
 
-if config['fleet_enabled']:
+if vars['fleet_enabled'].as_bool():
     FleetController(app, LANGDICT, screen_manager)
 
 @app.errorhandler(404)
@@ -94,8 +103,8 @@ def not_found(e):
 
 if __name__ == '__main__':
     app.run(
-        host=config['bind'] if 'bind' in config else '0.0.0.0',
-        port=config['port'],
+        host=vars['bind'].as_string(),
+        port=vars['port'].as_int(),
         debug=config['debug']
     )
 

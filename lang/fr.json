@@ -46,11 +46,25 @@
     "fleet_screen_form_button_cancel": "Annuler",
     "js_fleet_screen_delete_confirmation": "Êtes-vous sûr ?",
 
+    "settings_page_title": "Paramètres",
+    "settings_variable_panel": "Variables",
+    "settings_variable_panel_th_name": "Nom",
+    "settings_variable_panel_th_description": "Aide",
+    "settings_variable_panel_th_value": "Valeur",
+    "settings_variable_panel_th_activity": "Options",
+    "settings_variable_form_edit_title": "Modification de la variable",
+    "settings_variable_form_edit_submit": "Enregistrer",
+    "settings_variable_form_label_name": "Nom",
+    "settings_variable_form_label_value": "Valeur",
+    "settings_variable_form_button_cancel": "Annuler",
+    "settings_variable_help_port": "Port du serveur d'application (redémarrage nécessaire)",
+    "settings_variable_help_bind": "Hôte d'attache du serveur d'application (redémarrage nécessaire)",
+    "settings_variable_help_lang": "Langage de l'application [fr,en] (redémarrage nécessaire)",
+    "settings_variable_help_fleet_enabled": "Activer la gestion de flotte des écrans (redémarrage nécessaire)",
+
     "sysinfo_page_title": "Système",
     "sysinfo_panel_title": "Informations",
     "sysinfo_panel_th_attribute": "Attribut",
     "sysinfo_panel_th_value": "Valeur",
-    "sysinfo_panel_td_ipaddr": "Adresse IP",
-
-    "settings_page_title": "Paramètres"
+    "sysinfo_panel_td_ipaddr": "Adresse IP"
 }

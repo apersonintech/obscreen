@@ -15,9 +15,10 @@
 </head>
 <body>
 <div class="container">
+    {% set fleet_mode = request.args.get('fleet_mode') == '1' %}
 
     {% block header %}
-        {% if request.args.get('fleet_mode') != '1' %}
+        {% if not fleet_mode %}
              <header>
                 <h1 class="logo">
                     <img src="{{ STATIC_PREFIX }}img/logo.png" />
@@ -30,13 +31,18 @@
                                 <i class="fa-regular fa-clock"></i> {{ l.slideshow_page_title }}
                             </a>
                         </li>
-                        {% if FLEET_MODE %}
+                        {% if FLEET_ENABLED %}
                         <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_screen_list' }}">
                             <a href="{{ url_for('fleet_screen_list') }}">
                                 <i class="fa fa-tv"></i> {{ l.fleet_page_title }}
                             </a>
                         </li>
                         {% endif %}
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'settings_variable_list' }}">
+                            <a href="{{ url_for('settings_variable_list') }}">
+                                <i class="fa-solid fa-cogs"></i> {{ l.settings_page_title }}
+                            </a>
+                        </li>
                         <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo_attribute_list' }}">
                             <a href="{{ url_for('sysinfo_attribute_list') }}">
                                 <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}

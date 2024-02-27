@@ -1,0 +1,33 @@
+<table class="variables">
+    <thead>
+    <tr>
+        <th>{{ l.settings_variable_panel_th_name }}</th>
+        <th>{{ l.settings_variable_panel_th_value }}</th>
+        <th>{{ l.settings_variable_panel_th_description }}</th>
+        <th class="tac">{{ l.settings_variable_panel_th_activity }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for variable in variables %}
+        <tr class="variable-item" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
+            <td class="infos">
+                <div class="inner">
+                    <i class="fa fa-cog icon-left"></i>
+                    {{ variable.name }}
+                </div>
+            </td>
+            <td>
+                {{ variable.value }}
+            </td>
+            <td>
+                {{ variable.description }}
+            </td>
+            <td class="actions tac">
+                <a href="javascript:void(0);" class="item-edit variable-edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

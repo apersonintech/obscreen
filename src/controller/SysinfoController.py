@@ -1,14 +1,12 @@
-import json
-
-from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
+from flask import Flask, render_template
 from src.utils import get_ip_address
 
 
 class SysinfoController:
 
-    def __init__(self, app, l):
+    def __init__(self, app, lang_dict):
         self._app = app
-        self._l = l
+        self._lang_dict = lang_dict
         self.register()
 
     def register(self):
@@ -18,5 +16,5 @@ class SysinfoController:
         return render_template(
             'sysinfo/list.jinja.html',
             ipaddr=get_ip_address(),
-            l=self._l,
+            l=self._lang_dict,
         )
