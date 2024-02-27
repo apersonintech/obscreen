@@ -24,7 +24,12 @@ class PlayerController:
         )
 
     def player_default(self):
-        return render_template('player/default.jinja.html', ipaddr=get_ip_address(), l=self._lang_dict)
+        ipaddr = get_ip_address()
+        return render_template(
+            'player/default.jinja.html',
+            ipaddr=ipaddr if ipaddr else self._lang_dict['common_unknown_ipaddr'],
+            l=self._lang_dict
+        )
 
     def player_playlist(self):
         return jsonify(self._slide_manager.to_dict(self._slide_manager.get_enabled_slides()))

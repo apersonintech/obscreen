@@ -89,5 +89,7 @@
     "basic_month_9": "Septembre",
     "basic_month_10": "Octobre",
     "basic_month_11": "Novembre",
-    "basic_month_12": "Décembre"
+    "basic_month_12": "Décembre",
+
+    "common_unknown_ipaddr": "Adresse IP inconnue"
 }
