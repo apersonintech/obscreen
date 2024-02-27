@@ -1,7 +1,11 @@
+![Obscreen Logo](https://github.com/jr-k/obscreen/blob/master/docs/obscreen.png  "Obscreen Logo")
+
 # Obscreen
 
 ## About
 Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
+
+![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
 ## Installation
 ```bash
