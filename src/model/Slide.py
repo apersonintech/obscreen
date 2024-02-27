@@ -7,10 +7,8 @@ from src.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: Union[int, str] = 999, id: Optional[int] = None):
-        if id:
-            self._id = id
-
+    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None):
+        self._id = id if id else None
         self._location = location
         self._duration = duration
         self._type = str_to_enum(type, SlideType) if isinstance(type, str) else type
@@ -19,7 +17,7 @@ class Slide:
         self._position = position
 
     @property
-    def id(self) -> Union[int, str]:
+    def id(self) -> Optional[str]:
         return self._id
 
     @property

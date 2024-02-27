@@ -1,38 +1,38 @@
-{% extends 'manager/base.jinja.html' %}
+{% extends 'base.jinja.html' %}
 
 
 {% block page_title %}
-    {{ l.manage_page_title }}
+    {{ l.slideshow_page_title }}
 {% endblock %}
 
 {% block add_js %}
     <script src="{{ STATIC_PREFIX }}js/tablednd-fixed.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/manage.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/slideshow.js"></script>
 {% endblock %}
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.manage_page_title }}</h2>
+        <h2>{{ l.slideshow_page_title }}</h2>
 
         <div class="toolbar-actions">
-            <button class="purple slide-add"><i class="fa fa-plus icon-left"></i>{{ l.manage_slide_button_add }}</button>
+            <button class="purple slide-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_slide_button_add }}</button>
         </div>
     </div>
     <div class="panel">
         <div class="panel-body">
-            <h3>{{ l.manage_slide_panel_active }}</h3>
+            <h3>{{ l.slideshow_slide_panel_active }}</h3>
 
             {% with tclass='active', slides=enabled_slides %}
-                {% include 'manager/manage-table.jinja.html' %}
+                {% include 'slideshow/component/table.jinja.html' %}
             {% endwith %}
         </div>
     </div>
     <div class="panel panel-inactive">
         <div class="panel-body">
-            <h3>{{ l.manage_slide_panel_inactive }}</h3>
+            <h3>{{ l.slideshow_slide_panel_inactive }}</h3>
 
             {% with tclass='inactive', slides=disabled_slides %}
-                {% include 'manager/manage-table.jinja.html' %}
+                {% include 'slideshow/component/table.jinja.html' %}
             {% endwith %}
         </div>
     </div>
@@ -44,8 +44,8 @@
                 <i class="fa fa-close"></i>
             </a>
             <div class="modals-inner">
-                {% include 'manager/modal/slide-add.jinja.html' %}
-                {% include 'manager/modal/slide-edit.jinja.html' %}
+                {% include 'slideshow/modal/add.jinja.html' %}
+                {% include 'slideshow/modal/edit.jinja.html' %}
             </div>
         </div>
     </div>

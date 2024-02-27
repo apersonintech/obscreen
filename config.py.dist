@@ -3,5 +3,6 @@ config = {
     "port": 5000,                   # Application port
     "reverse_proxy_mode": False,    # True if you want to use nginx on port 80
     "lang": "en",                   # Language for manage view "fr" or "en"
-    "lx_file": '/home/pi/.config/lxsession/LXDE-pi/autostart' # Path to lx autostart file
+    "lx_file": '/home/pi/.config/lxsession/LXDE-pi/autostart' # Path to lx autostart file,
+    "fleet_enabled": False          # Enable fleet management view
 }

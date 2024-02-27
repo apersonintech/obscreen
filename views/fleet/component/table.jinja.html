@@ -1,0 +1,52 @@
+<table class="{{ tclass }}-screens">
+    <thead>
+    <tr>
+        <th>{{ l.fleet_screen_panel_th_name }}</th>
+        <th class="tac">{{ l.fleet_screen_panel_th_address }}</th>
+        <th class="tac">{{ l.fleet_screen_panel_th_enabled }}</th>
+        <th class="tac">{{ l.fleet_screen_panel_th_activity }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="empty-tr {% if screens|length != 0 %}hidden{% endif %}">
+        <td colspan="4">
+            {{ l.fleet_screen_panel_empty|replace(
+                '%link%',
+                ('<a href="javascript:void(0);" class="item-add">'~l.fleet_screen_button_add~'</a>')|safe
+            ) }}
+        </td>
+    </tr>
+    {% for screen in screens %}
+        <tr class="screen-item" data-level="{{ screen.id }}" data-entity="{{ screen.to_json() }}">
+            <td class="infos">
+                <div class="inner">
+                    <a href="javascript:void(0);" class="item-sort screen-sort">
+                        <i class="fa fa-sort icon-left"></i>
+                    </a>
+                    <i class="fa fa-tv icon-left"></i>
+                    {{ screen.name }}
+                </div>
+            </td>
+            <td class="tac">
+                {{ screen.address }}
+            </td>
+            <td class="tac">
+                <label class="pure-material-switch">
+                    <input type="checkbox" {% if screen.enabled %}checked="checked"{% endif %}><span></span>
+                </label>
+            </td>
+            <td class="actions tac">
+                <a href="javascript:void(0);" class="item-edit screen-edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a href="{{ screen.address }}" class="item-download screen-download" target="_blank">
+                    <i class="fa fa-eye"></i>
+                </a>
+                <a href="javascript:void(0);" class="item-delete screen-delete">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
