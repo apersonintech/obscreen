@@ -46,11 +46,25 @@
     "fleet_screen_form_button_cancel": "Cancel",
     "js_fleet_screen_delete_confirmation": "Are you sure?",
 
+    "settings_page_title": "Settings",
+    "settings_variable_panel": "Variables",
+    "settings_variable_panel_th_name": "Name",
+    "settings_variable_panel_th_description": "Help",
+    "settings_variable_panel_th_value": "Value",
+    "settings_variable_panel_th_activity": "Options",
+    "settings_variable_form_edit_title": "Edit Variable",
+    "settings_variable_form_edit_submit": "Save",
+    "settings_variable_form_label_name": "Name",
+    "settings_variable_form_label_value": "Value",
+    "settings_variable_form_button_cancel": "Cancel",
+    "settings_variable_help_port": "Application server port (restart needed)",
+    "settings_variable_help_bind": "Application server bind (restart needed)",
+    "settings_variable_help_lang": "Server language [fr,en] (restart needed)",
+    "settings_variable_help_fleet_enabled": "Enable fleet screen management view (restart needed)",
+
     "sysinfo_page_title": "System infos",
     "sysinfo_panel_title": "Infos",
     "sysinfo_panel_th_attribute": "Attribute",
     "sysinfo_panel_th_value": "Value",
-    "sysinfo_panel_td_ipaddr": "IP Address",
-
-    "settings_page_title": "Settings"
+    "sysinfo_panel_td_ipaddr": "IP Address"
 }

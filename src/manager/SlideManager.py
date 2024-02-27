@@ -4,6 +4,7 @@ from typing import Dict, Optional, List, Tuple, Union
 from src.model.Slide import Slide
 from src.utils import str_to_enum
 from pysondb import PysonDB
+from pysondb.errors import IdDoesNotExistError
 
 
 class SlideManager:
@@ -29,7 +30,21 @@ class SlideManager:
         return [SlideManager.hydrate_object(raw_slide) for raw_slide in raw_slides]
 
     def get(self, id: str) -> Optional[Slide]:
-        return self.hydrate_object(self._db.get_by_id(id), id)
+        try:
+            self.hydrate_object(self._db.get_by_id(id), id)
+        except IdDoesNotExistError:
+            return None
+
+    def get_by(self, query) -> List[Slide]:
+        return self.hydrate_dict(self._db.get_by_query(query=query))
+
+    def get_one_by(self, query) -> Optional[Slide]:
+        slides = self.hydrate_dict(self._db.get_by_query(query=query))
+        if len(slides) == 1:
+            return slides[0]
+        elif len(slides) > 1:
+            raise Error("More than one result for query")
+        return None
 
     def get_all(self, sort: bool = False) -> List[Slide]:
         raw_slides = self._db.get_all()
@@ -57,9 +72,13 @@ class SlideManager:
     def update_form(self, id: str, name: str, duration: int) -> None:
         self._db.update_by_id(id, {"name": name, "duration": duration})
 
-    def add_form(self, slide: Slide) -> None:
-        db_slide = slide.to_dict()
-        del db_slide['id']
+    def add_form(self, slide: Union[Slide, Dict]) -> None:
+        db_slide = slide
+
+        if not isinstance(slide, dict):
+            db_slide = slide.to_dict()
+            del db_slide['id']
+
         self._db.add(db_slide)
 
     def delete(self, id: str) -> None:

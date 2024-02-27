@@ -1,0 +1,32 @@
+<div class="modal modal-variable-edit hidden">
+    <h2>
+        {{ l.settings_variable_form_edit_submit }}
+    </h2>
+
+    <form action="/settings/variable/edit" method="POST">
+        <input type="hidden" name="id" id="variable-edit-id"/>
+
+        <div class="form-group">
+            <label for="variable-edit-name">{{ l.settings_variable_form_label_name }}</label>
+            <div class="widget">
+                <input type="text" name="name" id="variable-edit-name" required="required" disabled="disabled"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="variable-edit-value">{{ l.settings_variable_form_label_value }}</label>
+            <div class="widget">
+                <input type="text" name="value" id="variable-edit-value" required="required"/>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="modal-close">
+                {{ l.settings_variable_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-save icon-left"></i>{{ l.settings_variable_form_edit_submit }}
+            </button>
+        </div>
+    </form>
+</div>

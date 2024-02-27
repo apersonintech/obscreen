@@ -58,7 +58,7 @@ class Screen:
         self._position = value
 
     def __str__(self) -> str:
-        return f"Slide(" \
+        return f"Screen(" \
                f"id='{self.id}',\n" \
                f"name='{self.name}',\n" \
                f"enabled='{self.enabled}',\n" \
@@ -72,8 +72,8 @@ class Screen:
 
     def to_dict(self) -> dict:
         return {
-            "name": self.name,
             "id": self.id,
+            "name": self.name,
             "enabled": self.enabled,
             "position": self.position,
             "host": self.host,

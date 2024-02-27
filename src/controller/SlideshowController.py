@@ -10,9 +10,9 @@ from src.utils import str_to_enum
 
 class SlideshowController:
 
-    def __init__(self, app, l, slide_manager):
+    def __init__(self, app, lang_dict, slide_manager):
         self._app = app
-        self._l = l
+        self._lang_dict = lang_dict
         self._slide_manager = slide_manager
         self.register()
 
@@ -27,7 +27,7 @@ class SlideshowController:
     def slideshow(self):
         return render_template(
             'slideshow/list.jinja.html',
-            l=self._l,
+            l=self._lang_dict,
             enabled_slides=self._slide_manager.get_enabled_slides(),
             disabled_slides=self._slide_manager.get_disabled_slides(),
         )

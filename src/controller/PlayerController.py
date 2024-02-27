@@ -6,9 +6,9 @@ from src.utils import get_ip_address
 
 class PlayerController:
 
-    def __init__(self, app, l, slide_manager):
+    def __init__(self, app, lang_dict, slide_manager):
         self._app = app
-        self._l = l
+        self._lang_dict = lang_dict
         self._slide_manager = slide_manager
         self.register()
 
