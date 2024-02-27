@@ -1,5 +1,7 @@
 import os
 import sys
+import platform
+import subprocess
 
 from flask import Flask, render_template, jsonify
 from src.utils import get_ip_address
@@ -7,9 +9,10 @@ from src.utils import get_ip_address
 
 class SysinfoController:
 
-    def __init__(self, app, lang_dict):
+    def __init__(self, app, lang_dict, config):
         self._app = app
         self._lang_dict = lang_dict
+        self._config = config
         self.register()
 
     def register(self):
@@ -24,7 +27,18 @@ class SysinfoController:
         )
 
     def sysinfo_restart(self):
-        python = sys.executable
-        os.execl(python, python, *sys.argv)
+        if platform.system().lower() == 'darwin':
+            if self._config['debug']:
+                python = sys.executable
+                os.execl(python, python, *sys.argv)
+        else:
+            try:
+                subprocess.run(["sudo", "systemctl", "restart", 'obscreen'], check=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                pass
+            except subprocess.TimeoutExpired:
+                pass
+            except subprocess.CalledProcessError:
+                pass
+
         return jsonify({'status': 'ok'})
 

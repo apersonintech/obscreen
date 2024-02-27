@@ -90,7 +90,7 @@ def inject_global_vars():
 PlayerController(app, LANGDICT, slide_manager)
 SlideshowController(app, LANGDICT, slide_manager)
 SettingsController(app, LANGDICT, variable_manager)
-SysinfoController(app, LANGDICT)
+SysinfoController(app, LANGDICT, config)
 
 if vars['fleet_enabled'].as_bool():
     FleetController(app, LANGDICT, screen_manager)
