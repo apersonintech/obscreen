@@ -20,9 +20,10 @@ class SysinfoController:
         self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self.sysinfo_restart, methods=['POST'])
 
     def sysinfo(self):
+        ipaddr = get_ip_address()
         return render_template(
             'sysinfo/list.jinja.html',
-            ipaddr=get_ip_address(),
+            ipaddr=ipaddr if ipaddr else self._lang_dict['common_unknown_ipaddr'],
             l=self._lang_dict,
         )
 
