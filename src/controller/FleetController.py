@@ -13,6 +13,7 @@ class FleetController:
         self.register()
 
     def register(self):
+        self._app.add_url_rule('/fleet', 'fleet', self.fleet, methods=['GET'])
         self._app.add_url_rule('/fleet/screen/list', 'fleet_screen_list', self.fleet_screen_list, methods=['GET'])
         self._app.add_url_rule('/fleet/screen/add', 'fleet_screen_add', self.fleet_screen_add, methods=['POST'])
         self._app.add_url_rule('/fleet/screen/edit', 'fleet_screen_edit', self.fleet_screen_edit, methods=['POST'])
@@ -20,9 +21,16 @@ class FleetController:
         self._app.add_url_rule('/fleet/screen/delete', 'fleet_screen_delete', self.fleet_screen_delete, methods=['DELETE'])
         self._app.add_url_rule('/fleet/screen/position', 'fleet_screen_position', self.fleet_screen_position, methods=['POST'])
 
-    def fleet_screen_list(self):
+    def fleet(self):
         return render_template(
             'fleet/fleet.jinja.html',
+            l=self._l,
+            screens=self._screen_manager.get_enabled_screens(),
+        )
+
+    def fleet_screen_list(self):
+        return render_template(
+            'fleet/list.jinja.html',
             l=self._l,
             enabled_screens=self._screen_manager.get_enabled_screens(),
             disabled_screens=self._screen_manager.get_disabled_screens(),

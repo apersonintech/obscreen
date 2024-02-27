@@ -1,0 +1,53 @@
+{% extends 'base.jinja.html' %}
+
+
+{% block page_title %}
+    {{ l.fleet_page_title }}
+{% endblock %}
+
+{% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/tablednd-fixed.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/fleet.js"></script>
+{% endblock %}
+
+{% block page %}
+    <div class="toolbar">
+        <h2>{{ l.fleet_page_title }}</h2>
+
+        <div class="toolbar-actions">
+            <a class="btn normal" href="{{ url_for('fleet') }}" target="_blank"><i class="fa fa-table icon-left"></i>{{ l.fleet_screen_button_fleetview }}</a>
+            <button class="purple screen-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.fleet_screen_button_add }}</button>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-body">
+            <h3>{{ l.fleet_screen_panel_active }}</h3>
+
+            {% with tclass='active', screens=enabled_screens %}
+                {% include 'fleet/component/table.jinja.html' %}
+            {% endwith %}
+        </div>
+    </div>
+    <div class="panel panel-inactive">
+        <div class="panel-body">
+            <h3>{{ l.fleet_screen_panel_inactive }}</h3>
+
+            {% with tclass='inactive', screens=disabled_screens %}
+                {% include 'fleet/component/table.jinja.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+
+    <div class="modals hidden">
+        <div class="modals-outer">
+            <a href="javascript:void(0);" class="modal-close">
+                <i class="fa fa-close"></i>
+            </a>
+            <div class="modals-inner">
+                {% include 'fleet/modal/add.jinja.html' %}
+                {% include 'fleet/modal/edit.jinja.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -27,6 +27,7 @@
 
     "fleet_page_title": "Devices",
     "fleet_screen_button_add": "Add a screen",
+    "fleet_screen_button_fleetview": "Fleet view",
     "fleet_screen_panel_active": "Active screens",
     "fleet_screen_panel_inactive": "Inactive screens",
     "fleet_screen_panel_empty": "Currently, there are no screens. %link% now.",
