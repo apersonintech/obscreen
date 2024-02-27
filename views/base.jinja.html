@@ -30,8 +30,8 @@
                         </a>
                     </li>
                     {% if FLEET_MODE %}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet' }}">
-                        <a href="{{ url_for('fleet') }}">
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_screen_list' }}">
+                        <a href="{{ url_for('fleet_screen_list') }}">
                             <i class="fa fa-tv"></i> {{ l.fleet_page_title }}
                         </a>
                     </li>

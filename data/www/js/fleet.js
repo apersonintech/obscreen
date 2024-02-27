@@ -51,7 +51,7 @@ jQuery(document).ready(function ($) {
 
     $(document).on('change', 'input[type=checkbox]', function () {
         $.ajax({
-            url: 'fleet/screen/toggle',
+            url: '/fleet/screen/toggle',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
             method: 'POST',
