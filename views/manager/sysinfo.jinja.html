@@ -1,0 +1,35 @@
+{% extends 'manager/base.jinja.html' %}
+
+
+{% block page_title %}
+    {{ l.sysinfo_page_title }}
+{% endblock %}
+
+{% block add_js %}
+
+{% endblock %}
+
+{% block page %}
+    <div class="toolbar">
+        <h2>{{ l.sysinfo_page_title }}</h2>
+    </div>
+    <div class="panel">
+        <div class="panel-body">
+            <h3>{{ l.sysinfo_panel_title }}</h3>
+            <table class="active-slides">
+                <thead>
+                    <tr>
+                        <th>{{ l.sysinfo_panel_th_attribute }}</th>
+                        <th>{{ l.sysinfo_panel_th_value }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ l.sysinfo_panel_td_ipaddr }}</td>
+                        <td>{{ ipaddr }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

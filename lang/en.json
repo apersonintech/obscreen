@@ -1,7 +1,5 @@
 {
     "manage_page_title": "Schedule Overview",
-    "settings_page_title": "Settings",
-    "sysinfo_page_title": "System info",
     "manage_slide_button_add": "Add a slide",
     "manage_slide_panel_active": "Active slides",
     "manage_slide_panel_inactive": "Inactive slides",
@@ -25,5 +23,15 @@
     "manage_slide_form_label_duration": "Duration",
     "manage_slide_form_label_duration_unit": "seconds",
     "manage_slide_form_button_cancel": "Cancel",
-    "manage_slide_delete_confirmation": "Are you sure?"
+    "js_manage_slide_delete_confirmation": "Are you sure?",
+
+    "sysinfo_page_title": "System infos",
+    "sysinfo_panel_title": "Infos",
+    "sysinfo_panel_th_attribute": "Attribute",
+    "sysinfo_panel_th_value": "Value",
+    "sysinfo_panel_td_ipaddr": "IP Address",
+
+
+
+    "settings_page_title": "Settings"
 }
