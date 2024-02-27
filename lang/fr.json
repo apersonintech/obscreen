@@ -1,7 +1,5 @@
 {
     "manage_page_title": "Vue Planning",
-    "settings_page_title": "Paramètres",
-    "sysinfo_page_title": "Système",
     "manage_slide_button_add": "Ajouter une slide",
     "manage_slide_panel_active": "Slides actives",
     "manage_slide_panel_inactive": "Slides inactives",
@@ -25,5 +23,13 @@
     "manage_slide_form_label_duration": "Durée",
     "manage_slide_form_label_duration_unit": "secondes",
     "manage_slide_form_button_cancel": "Annuler",
-    "manage_slide_delete_confirmation": "Êtes-vous sûr ?"
+    "js_manage_slide_delete_confirmation": "Êtes-vous sûr ?",
+
+    "sysinfo_page_title": "Système",
+    "sysinfo_panel_title": "Informations",
+    "sysinfo_panel_th_attribute": "Attribut",
+    "sysinfo_panel_th_value": "Valeur",
+    "sysinfo_panel_td_ipaddr": "Adresse IP",
+
+    "settings_page_title": "Paramètres"
 }

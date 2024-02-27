@@ -82,9 +82,16 @@ def get_ip_address():
 # </utils>
 
 # <web>
+@app.context_processor
+def inject_global_vars():
+    return dict(
+        LANG=config['lang'],
+        STATIC_PREFIX='/data/www/'
+    )
+
 @app.route('/')
 def index():
-    return render_template('player.jinja.html', items=json.dumps(slide_manager.to_dict(slide_manager.get_enabled_slides())))
+    return render_template('player/player.jinja.html', items=json.dumps(slide_manager.to_dict(slide_manager.get_enabled_slides())))
 
 @app.route('/playlist')
 def playlist():
@@ -92,16 +99,23 @@ def playlist():
 
 @app.route('/slide/default')
 def slide_default():
-    return render_template('default.jinja.html', ipaddr=get_ip_address())
+    return render_template('player/default.jinja.html', ipaddr=get_ip_address())
 
 @app.route('/manage')
 def manage():
     return render_template(
-        'manage.jinja.html',
-        ipaddr=get_ip_address(),
+        'manager/manage.jinja.html',
         l=LANGDICT,
         enabled_slides=slide_manager.get_enabled_slides(),
-        disabled_slides=slide_manager.get_disabled_slides()
+        disabled_slides=slide_manager.get_disabled_slides(),
+    )
+
+@app.route('/manage/sysinfo')
+def manage_sysinfo():
+    return render_template(
+        'manager/sysinfo.jinja.html',
+        ipaddr=get_ip_address(),
+        l=LANGDICT,
     )
 
 @app.route('/manage/slide/add', methods=['GET', 'POST'])
@@ -158,7 +172,7 @@ def manage_slide_position():
 
 @app.errorhandler(404)
 def not_found(e):
-    return send_from_directory('views', 'error404.html'), 404
+    return send_from_directory('views', 'core/error404.html'), 404
 # </web>
 
 if __name__ == '__main__':
