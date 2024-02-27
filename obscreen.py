@@ -81,9 +81,10 @@ def inject_global_vars():
 
 PlayerController(app, LANGDICT, slide_manager)
 SlideshowController(app, LANGDICT, slide_manager)
-FleetController(app, LANGDICT, screen_manager)
 SysinfoController(app, LANGDICT)
 
+if config['fleet_enabled']:
+    FleetController(app, LANGDICT, screen_manager)
 
 @app.errorhandler(404)
 def not_found(e):

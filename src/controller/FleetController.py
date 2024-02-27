@@ -13,14 +13,14 @@ class FleetController:
         self.register()
 
     def register(self):
-        self._app.add_url_rule('/fleet', 'fleet', self.fleet, methods=['GET'])
+        self._app.add_url_rule('/fleet/screen/list', 'fleet_screen_list', self.fleet_screen_list, methods=['GET'])
         self._app.add_url_rule('/fleet/screen/add', 'fleet_screen_add', self.fleet_screen_add, methods=['POST'])
         self._app.add_url_rule('/fleet/screen/edit', 'fleet_screen_edit', self.fleet_screen_edit, methods=['POST'])
         self._app.add_url_rule('/fleet/screen/toggle', 'fleet_screen_toggle', self.fleet_screen_toggle, methods=['POST'])
         self._app.add_url_rule('/fleet/screen/delete', 'fleet_screen_delete', self.fleet_screen_delete, methods=['DELETE'])
         self._app.add_url_rule('/fleet/screen/position', 'fleet_screen_position', self.fleet_screen_position, methods=['POST'])
 
-    def fleet(self):
+    def fleet_screen_list(self):
         return render_template(
             'fleet/fleet.jinja.html',
             l=self._l,
@@ -34,11 +34,11 @@ class FleetController:
             host=request.form['host'],
             port=request.form['port'],
         ))
-        return redirect(url_for('fleet'))
+        return redirect(url_for('fleet_screen_list'))
 
     def fleet_screen_edit(self):
         self._screen_manager.update_form(request.form['id'], request.form['name'], request.form['host'], request.form['port'])
-        return redirect(url_for('fleet'))
+        return redirect(url_for('fleet_screen_list'))
 
     def fleet_screen_toggle(self):
         data = request.get_json()

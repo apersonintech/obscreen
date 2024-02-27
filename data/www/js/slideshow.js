@@ -51,7 +51,7 @@ jQuery(document).ready(function ($) {
 
     $(document).on('change', 'input[type=checkbox]', function () {
         $.ajax({
-            url: 'slideshow/slide/toggle',
+            url: '/slideshow/slide/toggle',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
             method: 'POST',
