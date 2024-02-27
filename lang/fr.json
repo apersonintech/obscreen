@@ -63,8 +63,11 @@
     "settings_variable_help_fleet_enabled": "Activer la gestion de flotte des écrans (redémarrage nécessaire)",
 
     "sysinfo_page_title": "Système",
+    "sysinfo_panel_button_restart": "Redémarrer",
     "sysinfo_panel_title": "Informations",
     "sysinfo_panel_th_attribute": "Attribut",
     "sysinfo_panel_th_value": "Valeur",
-    "sysinfo_panel_td_ipaddr": "Adresse IP"
+    "sysinfo_panel_td_ipaddr": "Adresse IP",
+    "js_sysinfo_restart_confirmation": "Êtes-vous sûr ?",
+    "js_sysinfo_restart_loading": "Redémarrage en cours, veuillez patienter..."
 }

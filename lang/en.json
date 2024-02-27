@@ -63,8 +63,11 @@
     "settings_variable_help_fleet_enabled": "Enable fleet screen management view (restart needed)",
 
     "sysinfo_page_title": "System infos",
+    "sysinfo_panel_button_restart": "Restart",
     "sysinfo_panel_title": "Infos",
     "sysinfo_panel_th_attribute": "Attribute",
     "sysinfo_panel_th_value": "Value",
-    "sysinfo_panel_td_ipaddr": "IP Address"
+    "sysinfo_panel_td_ipaddr": "IP Address",
+    "js_sysinfo_restart_confirmation": "Are you sure?",
+    "js_sysinfo_restart_loading": "Restarting, please wait..."
 }

@@ -6,12 +6,15 @@
 {% endblock %}
 
 {% block add_js %}
-
+    <script src="{{ STATIC_PREFIX }}js/sysinfo.js"></script>
 {% endblock %}
 
 {% block page %}
     <div class="toolbar">
         <h2>{{ l.sysinfo_page_title }}</h2>
+        <div class="toolbar-actions">
+            <button class="purple sysinfo-restart"><i class="fa fa-refresh icon-left"></i>{{ l.sysinfo_panel_button_restart }}</button>
+        </div>
     </div>
     <div class="panel">
         <div class="panel-body">
