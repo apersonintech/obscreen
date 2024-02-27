@@ -69,5 +69,25 @@
     "sysinfo_panel_th_value": "Value",
     "sysinfo_panel_td_ipaddr": "IP Address",
     "js_sysinfo_restart_confirmation": "Are you sure?",
-    "js_sysinfo_restart_loading": "Restarting, please wait..."
+    "js_sysinfo_restart_loading": "Restarting, please wait...",
+
+    "basic_day_1": "Monday",
+    "basic_day_2": "Tuesday",
+    "basic_day_3": "Wednesday",
+    "basic_day_4": "Thursday",
+    "basic_day_5": "Friday",
+    "basic_day_6": "Saturday",
+    "basic_day_7": "Sunday",
+    "basic_month_1": "January",
+    "basic_month_2": "February",
+    "basic_month_3": "March",
+    "basic_month_4": "April",
+    "basic_month_5": "May",
+    "basic_month_6": "June",
+    "basic_month_7": "July",
+    "basic_month_8": "August",
+    "basic_month_9": "September",
+    "basic_month_10": "October",
+    "basic_month_11": "November",
+    "basic_month_12": "Décember"
 }

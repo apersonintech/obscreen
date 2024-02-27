@@ -11,8 +11,8 @@
         var month = date.getMonth();
         var year = date.getFullYear();
         var day = date.getDay();
-        var dayLabels = ["Dimanche", "Lundi", "Mardis", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
-        var monthLabels = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+        var dayLabels = ["{{l.basic_day_7}}", "{{l.basic_day_1}}", "{{l.basic_day_2}}", "{{l.basic_day_3}}", "{{l.basic_day_4}}", "{{l.basic_day_5}}", "{{l.basic_day_6}}"];
+        var monthLabels = ["{{l.basic_month_1}}", "{{l.basic_month_2}}", "{{l.basic_month_3}}", "{{l.basic_month_4}}", "{{l.basic_month_5}}", "{{l.basic_month_6}}", "{{l.basic_month_7}}", "{{l.basic_month_8}}", "{{l.basic_month_9}}", "{{l.basic_month_10}}", "{{l.basic_month_11}}", "{{l.basic_month_12}}"];
 
         var timeLabel = hours + ":" + minutes;
         var dateLabel = dayLabels[day] + " " + dayInMonth + " " + monthLabels[month] + " " + year;

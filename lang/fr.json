@@ -69,5 +69,25 @@
     "sysinfo_panel_th_value": "Valeur",
     "sysinfo_panel_td_ipaddr": "Adresse IP",
     "js_sysinfo_restart_confirmation": "Êtes-vous sûr ?",
-    "js_sysinfo_restart_loading": "Redémarrage en cours, veuillez patienter..."
+    "js_sysinfo_restart_loading": "Redémarrage en cours, veuillez patienter...",
+
+    "basic_day_1": "Lundi",
+    "basic_day_2": "Mardi",
+    "basic_day_3": "Mercredi",
+    "basic_day_4": "Jeudi",
+    "basic_day_5": "Vendredi",
+    "basic_day_6": "Samedi",
+    "basic_day_7": "Dimanche",
+    "basic_month_1": "Janvier",
+    "basic_month_2": "Février",
+    "basic_month_3": "Mars",
+    "basic_month_4": "Avril",
+    "basic_month_5": "Mai",
+    "basic_month_6": "Juin",
+    "basic_month_7": "Juillet",
+    "basic_month_8": "Août",
+    "basic_month_9": "Septembre",
+    "basic_month_10": "Octobre",
+    "basic_month_11": "Novembre",
+    "basic_month_12": "Décembre"
 }
