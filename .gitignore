@@ -4,8 +4,9 @@
 *.ipr
 out/
 data/uploads/*
-!data/uploads/reclame.jpg
-data/db/slideshow.json
+!data/uploads/sample.jpg
+data/db/*
+!data/db/slideshow.json.dist
 config.py
 *.lock
 __pycache__/
