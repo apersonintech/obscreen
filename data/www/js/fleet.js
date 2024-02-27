@@ -97,7 +97,8 @@ jQuery(document).ready(function ($) {
         showModal('modal-screen-edit');
         $('.modal-screen-edit input:visible:eq(0)').focus().select();
         $('#screen-edit-name').val(screen.name);
-        $('#screen-edit-address').val(screen.address);
+        $('#screen-edit-host').val(screen.host);
+        $('#screen-edit-port').val(screen.port);
         $('#screen-edit-id').val(screen.id);
     });
 

@@ -31,12 +31,13 @@ class FleetController:
     def fleet_screen_add(self):
         self._screen_manager.add_form(Screen(
             name=request.form['name'],
-            address=request.form['address'],
+            host=request.form['host'],
+            port=request.form['port'],
         ))
         return redirect(url_for('fleet'))
 
     def fleet_screen_edit(self):
-        self._screen_manager.update_form(request.form['id'], request.form['name'], request.form['address'])
+        self._screen_manager.update_form(request.form['id'], request.form['name'], request.form['host'], request.form['port'])
         return redirect(url_for('fleet'))
 
     def fleet_screen_toggle(self):

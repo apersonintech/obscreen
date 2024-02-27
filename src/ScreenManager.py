@@ -51,8 +51,8 @@ class ScreenManager:
         for screen_id, screen_position in positions.items():
             self._db.update_by_id(screen_id, {"position": screen_position})
 
-    def update_form(self, id: str, name: str, address: int) -> None:
-        self._db.update_by_id(id, {"name": name, "address": address})
+    def update_form(self, id: str, name: str, host: str, port: int) -> None:
+        self._db.update_by_id(id, {"name": name, "host": host, "port": port})
 
     def add_form(self, screen: Screen) -> None:
         db_screen = screen.to_dict()
