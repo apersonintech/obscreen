@@ -1,6 +1,4 @@
-![Obscreen Logo](https://github.com/jr-k/obscreen/blob/master/docs/obscreen.png  "Obscreen Logo")
-
-# Obscreen
+# <img src="https://github.com/jr-k/obscreen/blob/master/docs/obscreen.png" width="22"> Obscreen
 
 ## About
 Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
