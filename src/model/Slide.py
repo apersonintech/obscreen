@@ -8,7 +8,7 @@ from src.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None):
+    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: Union[int, str] = 999, id: Optional[int] = None):
         self._id = uuid.uuid4().int if id is None else id
         self._location = location
         self._duration = duration
@@ -18,7 +18,7 @@ class Slide:
         self._position = position
 
     @property
-    def id(self) -> int:
+    def id(self) -> Union[int, str]:
         return self._id
 
     @property

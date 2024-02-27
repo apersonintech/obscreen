@@ -1,7 +1,15 @@
 {
-  "data": [
-    {
-      "id": 0,
+  "version": 2,
+  "keys": [
+    "duration",
+    "enabled",
+    "location",
+    "name",
+    "position",
+    "type"
+  ],
+  "data": {
+    "0": {
       "location": "data/uploads/sample.jpg",
       "duration": 10,
       "type": "picture",
@@ -9,8 +17,7 @@
       "name": "Picture Sample",
       "position": 0
     },
-    {
-      "id": 1,
+    "1": {
       "location": "https://unix.org",
       "duration": 20,
       "type": "url",
@@ -18,5 +25,5 @@
       "name": "URL Sample",
       "position": 1
     }
-  ]
+  }
 }
