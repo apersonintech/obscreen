@@ -17,12 +17,16 @@ class SlideshowController:
         self.register()
 
     def register(self):
+        self._app.add_url_rule('/manage', 'manage', self.manage, methods=['GET'])
         self._app.add_url_rule('/slideshow', 'slideshow_slide_list', self.slideshow, methods=['GET'])
         self._app.add_url_rule('/slideshow/slide/add', 'slideshow_slide_add', self.slideshow_slide_add, methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/edit', 'slideshow_slide_edit', self.slideshow_slide_edit, methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/toggle', 'slideshow_slide_toggle', self.slideshow_slide_toggle, methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/delete', 'slideshow_slide_delete', self.slideshow_slide_delete, methods=['DELETE'])
         self._app.add_url_rule('/slideshow/slide/position', 'slideshow_slide_position', self.slideshow_slide_position, methods=['POST'])
+
+    def manage(self):
+        return redirect(url_for('slideshow_slide_list'))
 
     def slideshow(self):
         return render_template(
