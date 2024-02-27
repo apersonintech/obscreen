@@ -104,7 +104,7 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('click', '.slide-delete', function () {
-        if (confirm('Are you sure ?')) {
+        if (confirm(l.manage_slide_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();

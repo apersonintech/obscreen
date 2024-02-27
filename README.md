@@ -9,15 +9,11 @@ sudo apt-get update
 sudo apt-get install -y git chromium-browser unclutter
 
 git clone https://github.com/jr-k/obscreen.git 
-cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json
+cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json && cp config.py.dist config.py
 ```
 
 ## Configure
-Everything slideshow-related happens in the ./data/uploads folder.
-- Put some images into the /data/uploads folder. Ideally with the same resolution of the screen (eg. 1920x1080px). 
-- Edit the slideshow.json
-- Initialize base configuration (feel free to edit any value) `sudo cp config.py.dist config.py`
-
+- Server configuration is available in `config.py` file.
 
 ## Run
 
@@ -34,6 +30,10 @@ sudo systemctl enable obscreen.service
 sudo systemctl start obscreen.service
 ```
 
+## Usage
+- Hostname will be http://localhost:5000 or http://localhost with nginx or http://[SERVER_IP]:[PORT]
+- Page which play slideshow is reachable at `http://localhost:5000`
+- Slideshow manager is reachable at `http://localhost:5000/manage`
     
 ## You are done now :)
 If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (default.html) your slideshow shall start and loop endlessly.
