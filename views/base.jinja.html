@@ -17,38 +17,35 @@
 <div class="container">
 
     {% block header %}
-         <header>
-            <h1 class="logo">
-                <img src="{{ STATIC_PREFIX }}img/logo.png" />
-                Obscreen
-            </h1>
-            <menu>
-                <ul>
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow' }}">
-                        <a href="{{ url_for('slideshow') }}">
-                            <i class="fa-regular fa-clock"></i> {{ l.slideshow_page_title }}
-                        </a>
-                    </li>
-                    {% if FLEET_MODE %}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_screen_list' }}">
-                        <a href="{{ url_for('fleet_screen_list') }}">
-                            <i class="fa fa-tv"></i> {{ l.fleet_page_title }}
-                        </a>
-                    </li>
-                    {% endif %}
-{#                    <li class="{{ 'active' if request.url_rule.endpoint == 'settings' }}">#}
-{#                        <a href="#">#}
-{#                            <i class="fa-solid fa-gear"></i> {{ l.settings_page_title }}#}
-{#                        </a>#}
-{#                    </li>#}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo' }}">
-                        <a href="{{ url_for('sysinfo') }}">
-                            <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
-                        </a>
-                    </li>
-                </ul>
-            </menu>
-        </header>
+        {% if request.args.get('fleet_mode') != '1' %}
+             <header>
+                <h1 class="logo">
+                    <img src="{{ STATIC_PREFIX }}img/logo.png" />
+                    Obscreen
+                </h1>
+                <nav>
+                    <ul>
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
+                            <a href="{{ url_for('slideshow_slide_list') }}">
+                                <i class="fa-regular fa-clock"></i> {{ l.slideshow_page_title }}
+                            </a>
+                        </li>
+                        {% if FLEET_MODE %}
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_screen_list' }}">
+                            <a href="{{ url_for('fleet_screen_list') }}">
+                                <i class="fa fa-tv"></i> {{ l.fleet_page_title }}
+                            </a>
+                        </li>
+                        {% endif %}
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo_attribute_list' }}">
+                            <a href="{{ url_for('sysinfo_attribute_list') }}">
+                                <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+        {% endif %}
     {% endblock %}
 
     {% block page %}

@@ -77,7 +77,7 @@ header .logo img {
     margin-right: 10px;
 }
 
-header menu {
+header nav {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -85,7 +85,7 @@ header menu {
     flex: 1;
 }
 
-header menu ul {
+header nav ul {
     list-style: none;
     display: flex;
     flex-direction: row;
@@ -93,18 +93,18 @@ header menu ul {
     align-items: center;
 }
 
-header menu ul li {
+header nav ul li {
     margin: 0 15px;
 
 }
 
-header menu ul li a {
+header nav ul li a {
     color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
 }
 
-header menu ul li a:hover,
-header menu ul li.active a {
+header nav ul li a:hover,
+header nav ul li.active a {
     color: white;
 }
 
@@ -127,10 +127,11 @@ header menu ul li.active a {
     align-items: center;
 }
 
+a.btn,
 button {
     background-color: #fff;
     border-radius: 5px;
-    border: 1px solid #ffe333;
+    border: 1px solid #bc48ff;
     color: #270035;
     padding: 10px 30px;
     text-decoration: none;
@@ -141,7 +142,13 @@ button {
     justify-content: center;
     align-items: center;
     font-weight: 400;
+    font-size: 14px;
     transition: .2s linear all;
+}
+
+a.btn:hover,
+button:hover {
+    color: #bc48ff;
 }
 
 button.purple {

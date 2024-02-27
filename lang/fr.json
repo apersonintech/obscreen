@@ -27,6 +27,7 @@
 
     "fleet_page_title": "Appareils",
     "fleet_screen_button_add": "Ajouter un écran",
+    "fleet_screen_button_fleetview": "Vue flotte",
     "fleet_screen_panel_active": "Écrans actifs",
     "fleet_screen_panel_inactive": "Écrans inactifs",
     "fleet_screen_panel_empty": "Actuellement, il n'y a pas d'écrans. %link% maintenant.",

@@ -17,7 +17,7 @@ class SlideshowController:
         self.register()
 
     def register(self):
-        self._app.add_url_rule('/slideshow', 'slideshow', self.slideshow, methods=['GET'])
+        self._app.add_url_rule('/slideshow', 'slideshow_slide_list', self.slideshow, methods=['GET'])
         self._app.add_url_rule('/slideshow/slide/add', 'slideshow_slide_add', self.slideshow_slide_add, methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/edit', 'slideshow_slide_edit', self.slideshow_slide_edit, methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/toggle', 'slideshow_slide_toggle', self.slideshow_slide_toggle, methods=['POST'])
@@ -26,7 +26,7 @@ class SlideshowController:
 
     def slideshow(self):
         return render_template(
-            'slideshow/slideshow.jinja.html',
+            'slideshow/list.jinja.html',
             l=self._l,
             enabled_slides=self._slide_manager.get_enabled_slides(),
             disabled_slides=self._slide_manager.get_disabled_slides(),
@@ -58,11 +58,11 @@ class SlideshowController:
 
         self._slide_manager.add_form(slide)
 
-        return redirect(url_for('slideshow'))
+        return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_edit(self):
         self._slide_manager.update_form(request.form['id'], request.form['name'], request.form['duration'])
-        return redirect(url_for('slideshow'))
+        return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_toggle(self):
         data = request.get_json()

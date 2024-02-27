@@ -1,52 +1,49 @@
-{% extends 'base.jinja.html' %}
-
-
-{% block page_title %}
-    {{ l.fleet_page_title }}
-{% endblock %}
-
-{% block add_js %}
-    <script src="{{ STATIC_PREFIX }}js/tablednd-fixed.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/fleet.js"></script>
-{% endblock %}
-
-{% block page %}
-    <div class="toolbar">
-        <h2>{{ l.fleet_page_title }}</h2>
-
-        <div class="toolbar-actions">
-            <button class="purple screen-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.fleet_screen_button_add }}</button>
+<html>
+<head>
+    <title>Obscreen - Fleet View</title>
+    <style>
+        html {margin:0;padding:0;display:flex;flex:1;background: #0f0035;font-family: 'Arial', 'sans-serif'; color: white;}
+        body {margin:0;padding:0;display:flex;flex:1;flex-direction: column}
+        ul {list-style:none;margin: 0;padding:0;display: flex;flex-direction: row;border-bottom: 1px solid #0eef5f;}
+        ul li {flex:1;display: flex;flex-direction: row;justify-content: center;align-items: center;border-right: 1px solid #0eef5f;}
+        ul li a {flex:1;display: flex;flex-direction: row;justify-content: center;align-items: center;padding: 20px 5px;color:#0eef5f;font-weight: bold;text-decoration: none;}
+        ul li.active a { background: #0eef5f;color:white; }
+        main {display: flex;flex:1;}
+        main .screen-frame {display: flex; flex:1;}
+        main .screen-frame iframe {display: flex; flex: 1;}
+        .hidden {display: none !important;}
+    </style>
+</head>
+<body>
+<ul>
+    {% for screen in screens %}
+    <li class="{% if loop.first %}active{% endif %}">
+        <a href="javascript:void(0);" class="screen-switch" data-id="{{ screen.id }}" onclick="tab('{{ screen.id }}')">
+            {{ screen.name }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+<main>
+    {% for screen in screens %}
+        <div class="screen-frame {% if not loop.first %}hidden{% endif %}" data-id="{{ screen.id }}">
+            <iframe src="http://{{ screen.host }}:{{ screen.port }}/slideshow?fleet_mode=1" frameborder="0" allowtransparency=""></iframe>
         </div>
-    </div>
-    <div class="panel">
-        <div class="panel-body">
-            <h3>{{ l.fleet_screen_panel_active }}</h3>
-
-            {% with tclass='active', screens=enabled_screens %}
-                {% include 'fleet/component/table.jinja.html' %}
-            {% endwith %}
-        </div>
-    </div>
-    <div class="panel panel-inactive">
-        <div class="panel-body">
-            <h3>{{ l.fleet_screen_panel_inactive }}</h3>
-
-            {% with tclass='inactive', screens=disabled_screens %}
-                {% include 'fleet/component/table.jinja.html' %}
-            {% endwith %}
-        </div>
-    </div>
-
-
-    <div class="modals hidden">
-        <div class="modals-outer">
-            <a href="javascript:void(0);" class="modal-close">
-                <i class="fa fa-close"></i>
-            </a>
-            <div class="modals-inner">
-                {% include 'fleet/modal/add.jinja.html' %}
-                {% include 'fleet/modal/edit.jinja.html' %}
-            </div>
-        </div>
-    </div>
-{% endblock %}
+    {% endfor %}
+</main>
+<script type="text/javascript">
+    const tab = function(id) {
+        const $switches = document.getElementsByClassName('screen-switch');
+        const $frames = document.getElementsByClassName('screen-frame');
+        for (let i = 0; i < $switches.length; i++) {
+            const $switch = $switches[i];
+            $switch.parentElement.className = $switch.dataset.id === id ? 'active' : '';
+        }
+        for (let j = 0; j < $frames.length; j++) {
+            const $frame = $frames[j];
+            $frame.className = $frame.dataset.id === id ? 'screen-frame' : 'screen-frame hidden';
+        }
+    };
+</script>
+</body>
+</html>
