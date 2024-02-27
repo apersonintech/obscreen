@@ -5,6 +5,7 @@ from src.model.Slide import Slide
 from src.utils import str_to_enum
 from pysondb import PysonDB
 
+
 class SlideManager():
 
     DB_FILE = "data/slideshow.json"
@@ -31,7 +32,9 @@ class SlideManager():
         raw_slides = self._db.get_all()
 
         if isinstance(raw_slides, dict):
-            return sorted(SlideManager.hydrate_dict(raw_slides), key=lambda x: x.position) if sort else SlideManager.hydrate_dict(raw_slides)
+            if sort:
+                return sorted(SlideManager.hydrate_dict(raw_slides), key=lambda x: x.position)
+            return SlideManager.hydrate_dict(raw_slides)
 
         return SlideManager.hydrate_list(sorted(raw_slides, key=lambda x: x['position']) if sort else raw_slides)
 
@@ -52,9 +55,9 @@ class SlideManager():
         self._db.update_by_id(id, {"name": name, "duration": duration})
 
     def add_form(self, slide: Slide) -> None:
-        dbslide = slide.to_dict()
-        del dbslide['id']
-        self._db.add(dbslide)
+        db_slide = slide.to_dict()
+        del db_slide['id']
+        self._db.add(db_slide)
 
     def delete(self, id: int) -> None:
         self._db.delete_by_id(id)

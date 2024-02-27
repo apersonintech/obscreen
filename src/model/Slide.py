@@ -1,4 +1,3 @@
-import uuid
 import json
 
 from typing import Optional, Union
@@ -9,7 +8,9 @@ from src.utils import str_to_enum
 class Slide:
 
     def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: Union[int, str] = 999, id: Optional[int] = None):
-        self._id = uuid.uuid4().int if id is None else id
+        if id:
+            self._id = id
+
         self._location = location
         self._duration = duration
         self._type = str_to_enum(type, SlideType) if isinstance(type, str) else type
