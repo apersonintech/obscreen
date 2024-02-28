@@ -32,6 +32,9 @@
             }
         }).then(function(data) {
             items = data;
+        }).catch(function(err) {
+            console.error(err);
+            document.location.reload();
         });
     }, playlistCheck);
 
