@@ -46,7 +46,7 @@
                 <a href="javascript:void(0);" class="item-edit slide-edit">
                     <i class="fa fa-pencil"></i>
                 </a>
-                {% if not fleet_mode %}
+                {% if not fleet_mode or not slide.has_file() %}
                     <a href="{{ slide.location }}" class="item-download slide-download" target="_blank">
                         <i class="fa fa-eye"></i>
                     </a>
