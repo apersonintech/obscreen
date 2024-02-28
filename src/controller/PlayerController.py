@@ -12,6 +12,14 @@ class PlayerController:
         self._slide_manager = slide_manager
         self.register()
 
+    def _get_playlist(self) -> dict:
+        slides = self._slide_manager.to_dict(self._slide_manager.get_enabled_slides())
+
+        if len(slides) == 1:
+            return [slides[0], slides[0]]
+
+        return slides
+
     def register(self):
         self._app.add_url_rule('/', 'player', self.player, methods=['GET'])
         self._app.add_url_rule('/player/default', 'player_default', self.player_default, methods=['GET'])
@@ -20,7 +28,7 @@ class PlayerController:
     def player(self):
         return render_template(
             'player/player.jinja.html',
-            items=json.dumps(self._slide_manager.to_dict(self._slide_manager.get_enabled_slides()))
+            items=json.dumps(self._get_playlist())
         )
 
     def player_default(self):
@@ -32,4 +40,4 @@ class PlayerController:
         )
 
     def player_playlist(self):
-        return jsonify(self._slide_manager.to_dict(self._slide_manager.get_enabled_slides()))
+        return jsonify(self._get_playlist())
