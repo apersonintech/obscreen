@@ -1,2 +1,2 @@
 flask
-pysondb-v2
+pysondb-v2==2.1.0
