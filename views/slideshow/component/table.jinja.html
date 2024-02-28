@@ -50,6 +50,10 @@
                     <a href="{{ slide.location }}" class="item-download slide-download" target="_blank">
                         <i class="fa fa-eye"></i>
                     </a>
+                {% elif var_external_url.value|length > 0 %}
+                    <a href="{{ var_external_url.value }}/{{ slide.location }}" class="item-download slide-download" target="_blank">
+                        <i class="fa fa-eye"></i>
+                    </a>
                 {% endif %}
                 <a href="javascript:void(0);" class="item-delete slide-delete">
                     <i class="fa fa-trash"></i>

@@ -8,6 +8,7 @@
 {% block add_js %}
     <script src="{{ STATIC_PREFIX }}js/tablednd-fixed.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
 {% endblock %}
 
 {% block page %}
@@ -15,6 +16,10 @@
         <h2>{{ l.slideshow_page_title }}</h2>
 
         <div class="toolbar-actions">
+            {% if fleet_mode %}
+                <button class="normal sysinfo-restart"><i class="fa fa-refresh icon-left"></i>{{ l.sysinfo_panel_button_restart }}</button>
+            {% endif %}
+
             <button class="purple slide-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_slide_button_add }}</button>
         </div>
     </div>
@@ -36,7 +41,6 @@
             {% endwith %}
         </div>
     </div>
-
 
     <div class="modals hidden">
         <div class="modals-outer">
