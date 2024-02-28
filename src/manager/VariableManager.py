@@ -53,7 +53,7 @@ class VariableManager:
 
     def get(self, id: str) -> Optional[Variable]:
         try:
-            self.hydrate_object(self._db.get_by_id(id), id)
+            return self.hydrate_object(self._db.get_by_id(id), id)
         except IdDoesNotExistError:
             return None
 
