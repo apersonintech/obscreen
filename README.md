@@ -35,10 +35,15 @@ cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist d
 
 ### Forever with systemctl
 ```bash
-sudo cp system/obscreen.service /etc/systemd/system/obscreen.service
+sudo ln -s "$(pwd)/system/obscreen.service" /etc/systemd/system/obscreen.service
 sudo systemctl daemon-reload
 sudo systemctl enable obscreen.service
 sudo systemctl start obscreen.service
+```
+
+To troubleshoot you can check logs
+```bash
+sudo journalctl -u obscreen -f 
 ```
 
 ## Usage
