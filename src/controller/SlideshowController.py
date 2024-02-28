@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
@@ -10,10 +11,11 @@ from src.utils import str_to_enum
 
 class SlideshowController:
 
-    def __init__(self, app, lang_dict, slide_manager):
+    def __init__(self, app, lang_dict, slide_manager, variable_manager):
         self._app = app
         self._lang_dict = lang_dict
         self._slide_manager = slide_manager
+        self._variable_manager = variable_manager
         self.register()
 
     def register(self):
@@ -34,6 +36,8 @@ class SlideshowController:
             l=self._lang_dict,
             enabled_slides=self._slide_manager.get_enabled_slides(),
             disabled_slides=self._slide_manager.get_disabled_slides(),
+            var_last_restart=self._variable_manager.get_one_by_name('last_restart'),
+            var_external_url=self._variable_manager.get_one_by_name('external_url')
         )
 
     def slideshow_slide_add(self):
@@ -61,24 +65,33 @@ class SlideshowController:
             slide.location = request.form['object']
 
         self._slide_manager.add_form(slide)
+        self._post_update()
 
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_edit(self):
         self._slide_manager.update_form(request.form['id'], request.form['name'], request.form['duration'])
+        self._post_update()
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_toggle(self):
         data = request.get_json()
         self._slide_manager.update_enabled(data.get('id'), data.get('enabled'))
+        self._post_update()
         return jsonify({'status': 'ok'})
 
     def slideshow_slide_delete(self):
         data = request.get_json()
         self._slide_manager.delete(data.get('id'))
+        self._post_update()
         return jsonify({'status': 'ok'})
 
     def slideshow_slide_position(self):
         data = request.get_json()
         self._slide_manager.update_positions(data)
+        self._post_update()
         return jsonify({'status': 'ok'})
+
+    def _post_update(self):
+        self._variable_manager.update_by_name("last_slide_update", time.time())
+

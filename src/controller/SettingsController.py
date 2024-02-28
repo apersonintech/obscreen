@@ -19,7 +19,7 @@ class SettingsController:
         return render_template(
             'settings/list.jinja.html',
             l=self._lang_dict,
-            variables=self._variable_manager.get_all(),
+            variables=self._variable_manager.get_editable_variables(),
         )
 
     def settings_variable_edit(self):

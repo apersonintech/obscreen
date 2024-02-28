@@ -5,6 +5,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 
 
 from flask import Flask, send_from_directory
@@ -87,10 +88,16 @@ def inject_global_vars():
     )
 
 
+@app.template_filter('ctime')
+def time_ctime(s):
+    return time.ctime(s)
+
+
+
 PlayerController(app, LANGDICT, slide_manager)
-SlideshowController(app, LANGDICT, slide_manager)
+SlideshowController(app, LANGDICT, slide_manager, variable_manager)
 SettingsController(app, LANGDICT, variable_manager)
-SysinfoController(app, LANGDICT, config)
+SysinfoController(app, LANGDICT, config, variable_manager)
 
 if vars['fleet_enabled'].as_bool():
     FleetController(app, LANGDICT, screen_manager)

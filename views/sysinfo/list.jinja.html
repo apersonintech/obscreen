@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block add_js %}
-    <script src="{{ STATIC_PREFIX }}js/sysinfo.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
 {% endblock %}
 
 {% block page %}
@@ -31,6 +31,12 @@
                         <td>{{ l.sysinfo_panel_td_ipaddr }}</td>
                         <td>{{ ipaddr }}</td>
                     </tr>
+                    {% for ro_variable in ro_variables %}
+                        <tr>
+                            <td>{{ ro_variable.description }}</td>
+                            <td>{{ ro_variable.display() }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

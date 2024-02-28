@@ -61,6 +61,10 @@
     "settings_variable_help_bind": "Hôte d'attache du serveur d'application (redémarrage nécessaire)",
     "settings_variable_help_lang": "Langage de l'application [fr,en] (redémarrage nécessaire)",
     "settings_variable_help_fleet_enabled": "Activer la gestion de flotte des écrans (redémarrage nécessaire)",
+    "settings_variable_help_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
+
+    "settings_variable_help_ro_editable":  "Date de dernier redémarrage de l'application",
+    "settings_variable_help_ro_last_slide_update":  "Date de dernière modification d'une slide",
 
     "sysinfo_page_title": "Système",
     "sysinfo_panel_button_restart": "Redémarrer",

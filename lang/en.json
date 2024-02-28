@@ -61,6 +61,10 @@
     "settings_variable_help_bind": "Application server bind (restart needed)",
     "settings_variable_help_lang": "Server language [fr,en] (restart needed)",
     "settings_variable_help_fleet_enabled": "Enable fleet screen management view (restart needed)",
+    "settings_variable_help_external_url": "External url (i.e: https://screen-01.company.com or http://10.10.3.100)",
+
+    "settings_variable_help_ro_editable":  "Last application reboot datetime",
+    "settings_variable_help_ro_last_slide_update":  "Last slide update datetime",
 
     "sysinfo_page_title": "System infos",
     "sysinfo_panel_button_restart": "Restart",

@@ -1,7 +1,9 @@
 from typing import Dict, Optional, List, Tuple, Union
 from src.model.Variable import Variable
+from src.model.VariableType import VariableType
 from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError
+import time
 
 
 class VariableManager:
@@ -14,19 +16,26 @@ class VariableManager:
 
     def init(self, lang_dict: Optional[Dict] = None) -> None:
         default_vars = [
-            {"name": "port", "value": 5000, "description": lang_dict['settings_variable_help_port'] if lang_dict else ""},
-            {"name": "bind", "value": '0.0.0.0', "description": lang_dict['settings_variable_help_bind'] if lang_dict else ""},
-            {"name": "lang", "value": "en", "description": lang_dict['settings_variable_help_lang'] if lang_dict else ""},
-            {"name": "fleet_enabled", "value": "0", "description": lang_dict['settings_variable_help_fleet_enabled'] if lang_dict else ""},
+            {"name": "port", "value": 5000, "type": VariableType.INT.value, "editable": True, "description": lang_dict['settings_variable_help_port'] if lang_dict else ""},
+            {"name": "bind", "value": '0.0.0.0', "type": VariableType.STRING.value, "editable": True, "description": lang_dict['settings_variable_help_bind'] if lang_dict else ""},
+            {"name": "lang", "value": "en", "type": VariableType.STRING.value, "editable": True, "description": lang_dict['settings_variable_help_lang'] if lang_dict else ""},
+            {"name": "fleet_enabled", "value": "0", "type": VariableType.BOOL.value, "editable": True, "description": lang_dict['settings_variable_help_fleet_enabled'] if lang_dict else ""},
+            {"name": "external_url", "value": "", "type": VariableType.STRING.value, "editable": True, "description": lang_dict['settings_variable_help_external_url'] if lang_dict else ""},
+            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_dict['settings_variable_help_ro_editable'] if lang_dict else ""},
+            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_dict['settings_variable_help_ro_last_slide_update'] if lang_dict else ""},
         ]
 
         for default_var in default_vars:
-            variable = self.get_one_by(query=lambda v: v['name'] == default_var['name'])
+            variable = self.get_one_by_name(default_var['name'])
 
             if not variable:
                 self.add_form(default_var)
+                variable = self.get_one_by_name(default_var['name'])
             elif variable.description != default_var['description']:
                 self._db.update_by_id(variable.id, {"description": default_var['description']})
+
+            if variable.name == 'last_restart':
+                self._db.update_by_id(variable.id, {"value": time.time()})
 
     def get_variable_map(self) -> Dict[str, Variable]:
         var_map = {}
@@ -60,6 +69,9 @@ class VariableManager:
     def get_by(self, query) -> List[Variable]:
         return self.hydrate_dict(self._db.get_by_query(query=query))
 
+    def get_one_by_name(self, name: str) -> Optional[Variable]:
+        return self.get_one_by(query=lambda v: v['name'] == name)
+
     def get_one_by(self, query) -> Optional[Variable]:
         variables = self.hydrate_dict(self._db.get_by_query(query=query))
         if len(variables) == 1:
@@ -76,8 +88,17 @@ class VariableManager:
 
         return VariableManager.hydrate_list(raw_variables)
 
+    def get_editable_variables(self) -> List[Variable]:
+        return [variable for variable in self.get_all() if variable.editable]
+
+    def get_readonly_variables(self) -> List[Variable]:
+        return [variable for variable in self.get_all() if not variable.editable]
+
     def update_form(self, id: str, value: Union[int, bool, str]) -> None:
         self._db.update_by_id(id, {"value": value})
+
+    def update_by_name(self, name: str, value) -> Optional[Variable]:
+        return self._db.update_by_query(query=lambda v: v['name'] == name, new_data={"value": value})
 
     def add_form(self, variable: Union[Variable, Dict]) -> None:
         db_variable = variable
