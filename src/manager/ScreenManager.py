@@ -28,7 +28,7 @@ class ScreenManager:
 
     def get(self, id: str) -> Optional[Screen]:
         try:
-            self.hydrate_object(self._db.get_by_id(id), id)
+            return self.hydrate_object(self._db.get_by_id(id), id)
         except IdDoesNotExistError:
             return None
 

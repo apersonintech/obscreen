@@ -31,7 +31,7 @@ class SlideManager:
 
     def get(self, id: str) -> Optional[Slide]:
         try:
-            self.hydrate_object(self._db.get_by_id(id), id)
+            return self.hydrate_object(self._db.get_by_id(id), id)
         except IdDoesNotExistError:
             return None
 
@@ -83,6 +83,7 @@ class SlideManager:
 
     def delete(self, id: str) -> None:
         slide = self.get(id)
+        print(id)
 
         if slide:
             if slide.has_file():
