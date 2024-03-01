@@ -87,7 +87,11 @@ class SlideManager:
 
         if slide:
             if slide.has_file():
-                os.unlink(slide.location)
+                try:
+                    os.unlink(slide.location)
+                except FileNotFoundError:
+                    pass
+
             self._db.delete_by_id(id)
 
     def to_dict(self, slides: List[Slide]) -> dict:

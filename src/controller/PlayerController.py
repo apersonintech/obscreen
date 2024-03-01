@@ -1,19 +1,19 @@
 import json
 
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
+from src.service.ModelManager import ModelManager
 from src.utils import get_ip_address
 
 
 class PlayerController:
 
-    def __init__(self, app, lang_dict, slide_manager):
+    def __init__(self, app, model_manager: ModelManager):
         self._app = app
-        self._lang_dict = lang_dict
-        self._slide_manager = slide_manager
+        self._model_manager = model_manager
         self.register()
 
     def _get_playlist(self) -> dict:
-        slides = self._slide_manager.to_dict(self._slide_manager.get_enabled_slides())
+        slides = self._model_manager.slide().to_dict(self._model_manager.slide().get_enabled_slides())
 
         if len(slides) == 1:
             return [slides[0], slides[0]]
@@ -35,8 +35,8 @@ class PlayerController:
         ipaddr = get_ip_address()
         return render_template(
             'player/default.jinja.html',
-            ipaddr=ipaddr if ipaddr else self._lang_dict['common_unknown_ipaddr'],
-            l=self._lang_dict
+            ipaddr=ipaddr if ipaddr else self._model_manager.lang().map().get('common_unknown_ipaddr'),
+            l=self._model_manager.lang().map()
         )
 
     def player_playlist(self):

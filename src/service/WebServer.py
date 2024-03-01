@@ -58,16 +58,13 @@ class WebServer:
             self._app.config['TEMPLATES_AUTO_RELOAD'] = True
 
     def _setup_view_controllers(self) -> None:
-        lang_map = self._model_manager.lang().map()
-        mm = self._model_manager
-
-        PlayerController(self._app, lang_map, mm.slide())
-        SlideshowController(self._app, lang_map, mm.slide(), mm.variable())
-        SettingsController(self._app, lang_map, mm.variable())
-        SysinfoController(self._app, lang_map, mm.config(), mm.variable())
+        PlayerController(self._app, self._model_manager)
+        SlideshowController(self._app, self._model_manager)
+        SettingsController(self._app, self._model_manager)
+        SysinfoController(self._app, self._model_manager)
 
         if self._model_manager.variable().map().get('fleet_enabled').as_bool():
-            FleetController(self._app, lang_map, mm.screen())
+            FleetController(self._app, self._model_manager)
 
     def _setup_view_globals(self) -> None:
         @self._app.context_processor
