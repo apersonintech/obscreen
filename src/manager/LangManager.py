@@ -8,12 +8,16 @@ class LangManager:
 
     def __init__(self, lang: str):
         self._map = {}
+        self._lang = lang
+        self.load()
 
-        file_name = self.LANG_FILE.format(lang)
+    def load(self, prefix: str = ""):
+        file_name = "{}{}{}".format(prefix, "/" if prefix else "", self.LANG_FILE.format(self._lang))
 
         try:
             with open(file_name, 'r') as file:
-                self._map = json.load(file)
+                for key, value in json.load(file).items():
+                    self._map[key] = value
         except FileNotFoundError:
             logging.error("Lang file {} not found".format(file_name))
 

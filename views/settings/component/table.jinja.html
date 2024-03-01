@@ -17,7 +17,11 @@
                 </div>
             </td>
             <td>
-                {{ variable.value }}
+                {% if  variable.value %}
+                    {{ variable.value }}
+                {% else %}
+                    <span class="empty">{{ l.common_empty }}</span>
+                {% endif %}
             </td>
             <td>
                 {{ variable.description }}

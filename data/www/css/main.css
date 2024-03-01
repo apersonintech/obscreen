@@ -540,3 +540,9 @@ form .actions button.modal-close:hover {
     color: #555;
     border-color: #555;
 }
+
+span.empty {
+    text-transform: uppercase;
+    opacity: 0.5;
+    color: #999;
+}
