@@ -1,10 +1,12 @@
 import abc
 
 from typing import Optional, List, Dict, Union
-from src.model.Variable import Variable
-from src.model.VariableType import VariableType
-from src.model.HookType import HookType
-from src.model.HookRegistration import HookRegistration
+from src.model.entity.Variable import Variable
+from src.model.enum.VariableType import VariableType
+from src.model.enum.HookType import HookType
+from src.model.hook.HookRegistration import HookRegistration
+from src.model.hook.StaticHookRegistration import StaticHookRegistration
+from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.service.ModelStore import ModelStore
 
 
@@ -41,10 +43,13 @@ class ObPlugin(abc.ABC):
     def get_plugin_variable_name(self, name: str) -> str:
         return "{}_{}".format(self.get_plugin_variable_prefix(), name)
 
-    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str) -> Variable:
+    def add_variable(self, name: str, value, type: VariableType, editable: bool, description: str) -> Variable:
         return self._model_store.variable().set_variable(
-            name=self.get_plugin_variable_name(name), value=value, type=type, editable=editable, description=description
+            name=self.get_plugin_variable_name(name), value=value, type=type, editable=editable, description=description, plugin=self.use_id()
         )
 
-    def set_hook_registration(self, hook: HookType, priority: int = 0) -> HookRegistration:
-        return HookRegistration(plugin=self, hook=hook, priority=priority)
+    def add_static_hook_registration(self, hook: HookType, priority: int = 0) -> StaticHookRegistration:
+        return StaticHookRegistration(plugin=self, hook=hook, priority=priority)
+
+    def add_functional_hook_registration(self, hook: HookType, priority: int = 0, function=None) -> FunctionalHookRegistration:
+        return FunctionalHookRegistration(plugin=self, hook=hook, priority=priority, function=function)

@@ -1,14 +1,12 @@
-from src.model.HookType import HookType
-from typing import Optional
+from src.model.enum.HookType import HookType
 
 
 class HookRegistration:
 
-    def __init__(self, plugin, hook: HookType, priority: int = 0, template: Optional[str] = None):
+    def __init__(self, plugin, hook: HookType, priority: int = 0):
         self._plugin = plugin
         self._hook = hook
         self._priority = priority
-        self._template = template
 
     @property
     def plugin(self):
@@ -34,18 +32,9 @@ class HookRegistration:
     def priority(self, value: int):
         self._priority = value
 
-    @property
-    def template(self) -> Optional[str]:
-        return self._template
-
-    @template.setter
-    def template(self, value: Optional[str]):
-        self._template = value
-
     def __str__(self) -> str:
         return f"HookRegistration(" \
                f"plugin='{self.plugin.get_id()}',\n" \
                f"hook='{self.hook}',\n" \
                f"priority='{self.priority}',\n" \
-               f"template='{self.template}',\n" \
                f")"

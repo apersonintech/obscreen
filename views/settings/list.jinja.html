@@ -15,9 +15,21 @@
     </div>
     <div class="panel">
         <div class="panel-body">
-            <h3>{{ l.settings_variable_panel }}</h3>
+            <h3>{{ l.settings_variable_panel_system_variables }}</h3>
 
-            {% include 'settings/component/table.jinja.html' %}
+            {% with variables=system_variables %}
+                {% include 'settings/component/table.jinja.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="panel panel-inactive">
+        <div class="panel-body">
+            <h3>{{ l.settings_variable_panel_plugin_variables }}</h3>
+
+            {% with variables=plugin_variables %}
+                {% include 'settings/component/table.jinja.html' %}
+            {% endwith %}
         </div>
     </div>
 

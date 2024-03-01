@@ -5,8 +5,8 @@ import time
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from src.service.ModelStore import ModelStore
-from src.model.Slide import Slide
-from src.model.SlideType import SlideType
+from src.model.entity.Slide import Slide
+from src.model.enum.SlideType import SlideType
 from src.utils import str_to_enum
 
 

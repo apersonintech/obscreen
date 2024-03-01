@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, render_template, redirect, request, url_for, jsonify
 from src.service.ModelStore import ModelStore
-from src.model.Screen import Screen
+from src.model.entity.Screen import Screen
 
 
 class FleetController:

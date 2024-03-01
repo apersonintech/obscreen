@@ -2,18 +2,22 @@ import json
 import time
 
 from typing import Optional, Union
-from src.model.VariableType import VariableType
+from src.model.enum.VariableType import VariableType
 from src.utils import str_to_enum
+
 
 class Variable:
 
-    def __init__(self, name: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING, value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None):
+    def __init__(self, name: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING,
+                 value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None,
+                 plugin: Optional[str] = None):
         self._id = id if id else None
         self._name = name
         self._type = str_to_enum(type, VariableType) if isinstance(type, str) else type
         self._description = description
         self._value = value
         self._editable = editable
+        self._plugin = plugin
 
     @property
     def id(self) -> Union[int, str]:
@@ -59,6 +63,14 @@ class Variable:
     def value(self, value: Union[int, bool, str]):
         self._value = value
 
+    @property
+    def plugin(self) -> Optional[str]:
+        return self._plugin
+
+    @plugin.setter
+    def plugin(self, value: Optional[str]):
+        self._plugin = value
+
     def __str__(self) -> str:
         return f"Variable(" \
                f"id='{self.id}',\n" \
@@ -67,6 +79,7 @@ class Variable:
                f"type='{self.type}',\n" \
                f"description='{self.description}',\n" \
                f"editable='{self.editable}',\n" \
+               f"plugin='{self.plugin}',\n" \
                f")"
 
     def to_json(self) -> str:
@@ -80,6 +93,7 @@ class Variable:
             "type": self.type.value,
             "description": self.description,
             "editable": self.editable,
+            "plugin": self.plugin,
         }
 
     def as_bool(self) -> bool:
@@ -104,3 +118,5 @@ class Variable:
 
         return self.as_string()
 
+    def is_from_plugin(self):
+        return self.plugin

@@ -1,6 +1,6 @@
 from typing import Dict, Optional, List, Tuple, Union
-from src.model.Variable import Variable
-from src.model.VariableType import VariableType
+from src.model.entity.Variable import Variable
+from src.model.enum.VariableType import VariableType
 from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError
 import time
@@ -15,7 +15,7 @@ class VariableManager:
         self._var_map = {}
         self.reload()
 
-    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str) -> Variable:
+    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, plugin: Optional[None] = None) -> Variable:
         if isinstance(value, bool) and value:
             value = '1'
         elif isinstance(value, bool) and not value:
@@ -26,7 +26,8 @@ class VariableManager:
             "value": value,
             "type": type.value,
             "editable": editable,
-            "description": description
+            "description": description,
+            "plugin": plugin
         }
         variable = self.get_one_by_name(default_var['name'])
 
@@ -99,6 +100,9 @@ class VariableManager:
     def get_by_prefix(self, prefix: str) -> List[Variable]:
         return self.hydrate_dict(self._db.get_by_query(query=lambda v: v['name'].startswith(prefix)))
 
+    def get_by_plugin(self, plugin: str) -> List[Variable]:
+        return self.hydrate_dict(self._db.get_by_query(query=lambda v: v['plugin'] == plugin))
+
     def get_one_by_name(self, name: str) -> Optional[Variable]:
         return self.get_one_by(query=lambda v: v['name'] == name)
 
@@ -118,8 +122,9 @@ class VariableManager:
 
         return VariableManager.hydrate_list(raw_variables)
 
-    def get_editable_variables(self) -> List[Variable]:
-        return [variable for variable in self.get_all() if variable.editable]
+    def get_editable_variables(self, plugin: bool = True) -> List[Variable]:
+        query = lambda v: (not plugin and not isinstance(v['plugin'], str)) or (plugin and isinstance(v['plugin'], str))
+        return [variable for variable in self.get_by(query=query) if variable.editable]
 
     def get_readonly_variables(self) -> List[Variable]:
         return [variable for variable in self.get_all() if not variable.editable]

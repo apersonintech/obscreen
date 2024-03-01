@@ -1,7 +1,7 @@
 import os
 
 from typing import Dict, Optional, List, Tuple, Union
-from src.model.Slide import Slide
+from src.model.entity.Slide import Slide
 from src.utils import str_to_enum
 from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError

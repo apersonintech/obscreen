@@ -10,7 +10,7 @@ from src.controller.SlideshowController import SlideshowController
 from src.controller.FleetController import FleetController
 from src.controller.SysinfoController import SysinfoController
 from src.controller.SettingsController import SettingsController
-from src.model.HookType import HookType
+from src.model.enum.HookType import HookType
 
 
 class WebServer:
@@ -19,6 +19,7 @@ class WebServer:
     FOLDER_STATIC = "data"
     FOLDER_STATIC_WEB_UPLOADS = "uploads"
     FOLDER_STATIC_WEB_ASSETS = "www"
+    FOLDER_PLUGIN_HOOKS = "hooks"
     MAX_UPLOADS = 16 * 1024 * 1024
 
     def __init__(self, project_dir: str, model_store: ModelStore, plugin_store: PluginStore):
@@ -101,11 +102,14 @@ class WebServer:
         for hook_registration in self._plugin_store.map_hooks()[hook]:
 
             env = Environment(
-                loader=FileSystemLoader("{}/{}".format(hook_registration.plugin.get_directory(), self.FOLDER_TEMPLATES)),
+                loader=FileSystemLoader("{}/{}".format(
+                    hook_registration.plugin.get_directory(),
+                    self.FOLDER_TEMPLATES
+                )),
                 autoescape=select_autoescape(['html', 'xml'])
             )
 
-            template = env.get_template(os.path.basename(hook_registration.template))
+            template = env.get_template("{}/{}".format(self.FOLDER_PLUGIN_HOOKS, os.path.basename(hook_registration.template)))
             content.append(
                 template.render(
                     l=self._model_store.lang().map()
