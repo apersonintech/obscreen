@@ -12,9 +12,10 @@ class VariableManager:
 
     def __init__(self):
         self._db = PysonDB(self.DB_FILE)
-        self.init()
+        self._var_map = {}
+        self.reload()
 
-    def init(self, lang_dict: Optional[Dict] = None) -> None:
+    def reload(self, lang_dict: Optional[Dict] = None) -> None:
         default_vars = [
             {"name": "port", "value": 5000, "type": VariableType.INT.value, "editable": True, "description": lang_dict['settings_variable_help_port'] if lang_dict else ""},
             {"name": "bind", "value": '0.0.0.0', "type": VariableType.STRING.value, "editable": True, "description": lang_dict['settings_variable_help_bind'] if lang_dict else ""},
@@ -37,7 +38,12 @@ class VariableManager:
             if variable.name == 'last_restart':
                 self._db.update_by_id(variable.id, {"value": time.time()})
 
-    def get_variable_map(self) -> Dict[str, Variable]:
+        self._var_map = self.prepare_variable_map()
+
+    def map(self) -> dict:
+        return self._var_map
+
+    def prepare_variable_map(self) -> Dict[str, Variable]:
         var_map = {}
 
         for var in self.get_all():

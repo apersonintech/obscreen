@@ -1,3 +1,4 @@
+import re
 import subprocess
 import platform
 
@@ -10,7 +11,6 @@ def str_to_enum(str_val: str, enum_class) -> Enum:
         if enum_item.value == str_val:
             return enum_item
     raise ValueError(f"{str_val} is not a valid {enum_class.__name__} item")
-
 
 def get_ip_address() -> Optional[str]:
     try:

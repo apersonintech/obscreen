@@ -4,15 +4,17 @@ import platform
 import subprocess
 
 from flask import Flask, render_template, jsonify
+from src.manager.VariableManager import VariableManager
+from src.manager.ConfigManager import ConfigManager
 from src.utils import get_ip_address
 
 
 class SysinfoController:
 
-    def __init__(self, app, lang_dict, config, variable_manager):
+    def __init__(self, app, lang_dict, config_manager: ConfigManager, variable_manager: VariableManager):
         self._app = app
         self._lang_dict = lang_dict
-        self._config = config
+        self._config_manager = config_manager
         self._variable_manager = variable_manager
         self.register()
 
@@ -32,7 +34,7 @@ class SysinfoController:
 
     def sysinfo_restart(self):
         if platform.system().lower() == 'darwin':
-            if self._config['debug']:
+            if self._config_manager.map().get('debug'):
                 python = sys.executable
                 os.execl(python, python, *sys.argv)
         else:
