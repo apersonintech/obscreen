@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/main.css" />
     {% block add_css %}{% endblock %}
+    {{ HOOK(H_ROOT_CSS) }}
 </head>
 <body>
 <div class="container">
@@ -26,6 +27,7 @@
                 </h1>
                 <nav>
                     <ul>
+                        {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
                         <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
                             <a href="{{ url_for('slideshow_slide_list') }}">
                                 <i class="fa-regular fa-clock"></i> {{ l.slideshow_page_title }}
@@ -48,6 +50,7 @@
                                 <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
                             </a>
                         </li>
+                        {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
                     </ul>
                 </nav>
             </header>
@@ -60,7 +63,9 @@
 
 
     {% block footer %}
-        <footer></footer>
+        <footer>
+            {{ HOOK(H_ROOT_FOOTER) }}
+        </footer>
     {% endblock %}
 </div>
 <script>
@@ -72,6 +77,7 @@
     };
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+{{ HOOK(H_ROOT_JAVASCRIPT) }}
 {% block add_js %}{% endblock %}
 </body>
 </html>
