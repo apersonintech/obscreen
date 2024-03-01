@@ -15,15 +15,15 @@ class VariableManager:
         self._var_map = {}
         self.reload()
 
-    def reload(self, lang_dict: Optional[Dict] = None) -> None:
+    def reload(self, lang_map: Optional[Dict] = None) -> None:
         default_vars = [
-            {"name": "port", "value": 5000, "type": VariableType.INT.value, "editable": True, "description": lang_dict['settings_variable_help_port'] if lang_dict else ""},
-            {"name": "bind", "value": '0.0.0.0', "type": VariableType.STRING.value, "editable": True, "description": lang_dict['settings_variable_help_bind'] if lang_dict else ""},
-            {"name": "lang", "value": "en", "type": VariableType.STRING.value, "editable": True, "description": lang_dict['settings_variable_help_lang'] if lang_dict else ""},
-            {"name": "fleet_enabled", "value": "0", "type": VariableType.BOOL.value, "editable": True, "description": lang_dict['settings_variable_help_fleet_enabled'] if lang_dict else ""},
-            {"name": "external_url", "value": "", "type": VariableType.STRING.value, "editable": True, "description": lang_dict['settings_variable_help_external_url'] if lang_dict else ""},
-            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_dict['settings_variable_help_ro_editable'] if lang_dict else ""},
-            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_dict['settings_variable_help_ro_last_slide_update'] if lang_dict else ""},
+            {"name": "port", "value": 5000, "type": VariableType.INT.value, "editable": True, "description": lang_map['settings_variable_help_port'] if lang_map else ""},
+            {"name": "bind", "value": '0.0.0.0', "type": VariableType.STRING.value, "editable": True, "description": lang_map['settings_variable_help_bind'] if lang_map else ""},
+            {"name": "lang", "value": "en", "type": VariableType.STRING.value, "editable": True, "description": lang_map['settings_variable_help_lang'] if lang_map else ""},
+            {"name": "fleet_enabled", "value": "0", "type": VariableType.BOOL.value, "editable": True, "description": lang_map['settings_variable_help_fleet_enabled'] if lang_map else ""},
+            {"name": "external_url", "value": "", "type": VariableType.STRING.value, "editable": True, "description": lang_map['settings_variable_help_external_url'] if lang_map else ""},
+            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_map['settings_variable_help_ro_editable'] if lang_map else ""},
+            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_map['settings_variable_help_ro_last_slide_update'] if lang_map else ""},
         ]
 
         for default_var in default_vars:
