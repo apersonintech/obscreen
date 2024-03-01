@@ -35,7 +35,7 @@ class TemplateRenderer:
         content = []
 
         for hook_registration in hooks_registrations:
-            template = hook_registration.plugin.get_rendering_env().get_template("{}/{}".format(
+            template = hook_registration.plugin.get_rendering_env().get_template("@{}/{}".format(
                 WebDirConstant.FOLDER_PLUGIN_HOOK,
                 os.path.basename(hook_registration.template)
             ))

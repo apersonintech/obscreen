@@ -90,5 +90,5 @@ class ObPlugin(abc.ABC):
             request=request,
             url_for=url_for,
             **parameters,
-            **self._template_renderer.get_view_globals()
+            **self._template_renderer.get_view_globals(),
         )
