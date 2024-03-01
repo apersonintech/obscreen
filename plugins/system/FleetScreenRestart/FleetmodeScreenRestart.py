@@ -7,18 +7,18 @@ from src.model.HookType import HookType
 from src.model.HookRegistration import HookRegistration
 
 
-class FleetScreenRestart(ObPlugin):
+class FleetmodeScreenRestart(ObPlugin):
 
     def use_id(self):
-        return 'fleet_screen_restart'
+        return 'fleetmode_screen_restart'
 
     def use_title(self):
-        return 'Fleet Screen Restart'
+        return 'Fleetmode Screen Restart'
 
     def use_variables(self) -> List[Variable]:
         return []
 
     def use_hooks_registrations(self) -> List[HookRegistration]:
         return [
-            super().set_hook_registration(hook=HookType.H_FLEET_SLIDESHOW_TOOLBAR_ACTIONS, priority=10)
+            super().set_hook_registration(hook=HookType.H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS, priority=10)
         ]
