@@ -1,15 +1,15 @@
 import json
 
 from flask import Flask, render_template, redirect, request, url_for, jsonify
-from src.service.ModelManager import ModelManager
+from src.service.ModelStore import ModelStore
 from src.model.Screen import Screen
 
 
 class FleetController:
 
-    def __init__(self, app, model_manager: ModelManager):
+    def __init__(self, app, model_store: ModelStore):
         self._app = app
-        self._model_manager = model_manager
+        self._model_store = model_store
         self.register()
 
     def register(self):
@@ -24,19 +24,19 @@ class FleetController:
     def fleet(self):
         return render_template(
             'fleet/fleet.jinja.html',
-            screens=self._model_manager.screen().get_enabled_screens(),
+            screens=self._model_store.screen().get_enabled_screens(),
         )
 
     def fleet_screen_list(self):
         return render_template(
             'fleet/list.jinja.html',
-            l=self._model_manager.lang().map(),
-            enabled_screens=self._model_manager.screen().get_enabled_screens(),
-            disabled_screens=self._model_manager.screen().get_disabled_screens(),
+            l=self._model_store.lang().map(),
+            enabled_screens=self._model_store.screen().get_enabled_screens(),
+            disabled_screens=self._model_store.screen().get_disabled_screens(),
         )
 
     def fleet_screen_add(self):
-        self._model_manager.screen().add_form(Screen(
+        self._model_store.screen().add_form(Screen(
             name=request.form['name'],
             host=request.form['host'],
             port=request.form['port'],
@@ -44,20 +44,20 @@ class FleetController:
         return redirect(url_for('fleet_screen_list'))
 
     def fleet_screen_edit(self):
-        self._model_manager.screen().update_form(request.form['id'], request.form['name'], request.form['host'], request.form['port'])
+        self._model_store.screen().update_form(request.form['id'], request.form['name'], request.form['host'], request.form['port'])
         return redirect(url_for('fleet_screen_list'))
 
     def fleet_screen_toggle(self):
         data = request.get_json()
-        self._model_manager.screen().update_enabled(data.get('id'), data.get('enabled'))
+        self._model_store.screen().update_enabled(data.get('id'), data.get('enabled'))
         return jsonify({'status': 'ok'})
 
     def fleet_screen_delete(self):
         data = request.get_json()
-        self._model_manager.screen().delete(data.get('id'))
+        self._model_store.screen().delete(data.get('id'))
         return jsonify({'status': 'ok'})
 
     def fleet_screen_position(self):
         data = request.get_json()
-        self._model_manager.screen().update_positions(data)
+        self._model_store.screen().update_positions(data)
         return jsonify({'status': 'ok'})

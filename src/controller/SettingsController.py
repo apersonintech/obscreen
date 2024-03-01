@@ -1,14 +1,14 @@
 import json
 
 from flask import Flask, render_template, redirect, request, url_for
-from src.service.ModelManager import ModelManager
+from src.service.ModelStore import ModelStore
 
 
 class SettingsController:
 
-    def __init__(self, app, model_manager: ModelManager):
+    def __init__(self, app, model_store: ModelStore):
         self._app = app
-        self._model_manager = model_manager
+        self._model_store = model_store
         self.register()
 
     def register(self):
@@ -18,10 +18,10 @@ class SettingsController:
     def settings_variable_list(self):
         return render_template(
             'settings/list.jinja.html',
-            l=self._model_manager.lang().map(),
-            variables=self._model_manager.variable().get_editable_variables(),
+            l=self._model_store.lang().map(),
+            variables=self._model_store.variable().get_editable_variables(),
         )
 
     def settings_variable_edit(self):
-        self._model_manager.variable().update_form(request.form['id'], request.form['value'])
+        self._model_store.variable().update_form(request.form['id'], request.form['value'])
         return redirect(url_for('settings_variable_list'))

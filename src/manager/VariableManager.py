@@ -15,28 +15,45 @@ class VariableManager:
         self._var_map = {}
         self.reload()
 
+    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str) -> Variable:
+        if isinstance(value, bool) and value:
+            value = '1'
+        elif isinstance(value, bool) and not value:
+            value = '0'
+
+        default_var = {
+            "name": name,
+            "value": value,
+            "type": type.value,
+            "editable": editable,
+            "description": description
+        }
+        variable = self.get_one_by_name(default_var['name'])
+
+        if not variable:
+            self.add_form(default_var)
+            variable = self.get_one_by_name(default_var['name'])
+        elif variable.description != default_var['description']:
+            self._db.update_by_id(variable.id, {"description": default_var['description']})
+
+        if variable.name == 'last_restart':
+            self._db.update_by_id(variable.id, {"value": time.time()})
+
+        return variable
+
     def reload(self, lang_map: Optional[Dict] = None) -> None:
         default_vars = [
-            {"name": "port", "value": 5000, "type": VariableType.INT.value, "editable": True, "description": lang_map['settings_variable_help_port'] if lang_map else ""},
-            {"name": "bind", "value": '0.0.0.0', "type": VariableType.STRING.value, "editable": True, "description": lang_map['settings_variable_help_bind'] if lang_map else ""},
-            {"name": "lang", "value": "en", "type": VariableType.STRING.value, "editable": True, "description": lang_map['settings_variable_help_lang'] if lang_map else ""},
-            {"name": "fleet_enabled", "value": "0", "type": VariableType.BOOL.value, "editable": True, "description": lang_map['settings_variable_help_fleet_enabled'] if lang_map else ""},
-            {"name": "external_url", "value": "", "type": VariableType.STRING.value, "editable": True, "description": lang_map['settings_variable_help_external_url'] if lang_map else ""},
-            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_map['settings_variable_help_ro_editable'] if lang_map else ""},
-            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP.value, "editable": False, "description": lang_map['settings_variable_help_ro_last_slide_update'] if lang_map else ""},
+            {"name": "port", "value": 5000, "type": VariableType.INT, "editable": True, "description": lang_map['settings_variable_help_port'] if lang_map else ""},
+            {"name": "bind", "value": '0.0.0.0', "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_bind'] if lang_map else ""},
+            {"name": "lang", "value": "en", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_lang'] if lang_map else ""},
+            {"name": "fleet_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_help_fleet_enabled'] if lang_map else ""},
+            {"name": "external_url", "value": "", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_external_url'] if lang_map else ""},
+            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_help_ro_editable'] if lang_map else ""},
+            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_help_ro_last_slide_update'] if lang_map else ""},
         ]
 
         for default_var in default_vars:
-            variable = self.get_one_by_name(default_var['name'])
-
-            if not variable:
-                self.add_form(default_var)
-                variable = self.get_one_by_name(default_var['name'])
-            elif variable.description != default_var['description']:
-                self._db.update_by_id(variable.id, {"description": default_var['description']})
-
-            if variable.name == 'last_restart':
-                self._db.update_by_id(variable.id, {"value": time.time()})
+            self.set_variable(**default_var)
 
         self._var_map = self.prepare_variable_map()
 
@@ -44,9 +61,13 @@ class VariableManager:
         return self._var_map
 
     def prepare_variable_map(self) -> Dict[str, Variable]:
+        return self.list_to_map(self.get_all())
+
+    @staticmethod
+    def list_to_map(list: List[Variable]) -> Dict[str, Variable]:
         var_map = {}
 
-        for var in self.get_all():
+        for var in list:
             var_map[var.name] = var
 
         return var_map
@@ -74,6 +95,9 @@ class VariableManager:
 
     def get_by(self, query) -> List[Variable]:
         return self.hydrate_dict(self._db.get_by_query(query=query))
+
+    def get_by_prefix(self, prefix: str) -> List[Variable]:
+        return self.hydrate_dict(self._db.get_by_query(query=lambda v: v['name'].startswith(prefix)))
 
     def get_one_by_name(self, name: str) -> Optional[Variable]:
         return self.get_one_by(query=lambda v: v['name'] == name)

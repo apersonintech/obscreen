@@ -4,7 +4,7 @@ import time
 
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
-from src.service.ModelManager import ModelManager
+from src.service.ModelStore import ModelStore
 from src.model.Slide import Slide
 from src.model.SlideType import SlideType
 from src.utils import str_to_enum
@@ -12,9 +12,9 @@ from src.utils import str_to_enum
 
 class SlideshowController:
 
-    def __init__(self, app, model_manager: ModelManager):
+    def __init__(self, app, model_store: ModelStore):
         self._app = app
-        self._model_manager = model_manager
+        self._model_store = model_store
         self.register()
 
     def register(self):
@@ -32,11 +32,11 @@ class SlideshowController:
     def slideshow(self):
         return render_template(
             'slideshow/list.jinja.html',
-            l=self._model_manager.lang().map(),
-            enabled_slides=self._model_manager.slide().get_enabled_slides(),
-            disabled_slides=self._model_manager.slide().get_disabled_slides(),
-            var_last_restart=self._model_manager.variable().get_one_by_name('last_restart'),
-            var_external_url=self._model_manager.variable().get_one_by_name('external_url')
+            l=self._model_store.lang().map(),
+            enabled_slides=self._model_store.slide().get_enabled_slides(),
+            disabled_slides=self._model_store.slide().get_disabled_slides(),
+            var_last_restart=self._model_store.variable().get_one_by_name('last_restart'),
+            var_external_url=self._model_store.variable().get_one_by_name('external_url')
         )
 
     def slideshow_slide_add(self):
@@ -63,34 +63,34 @@ class SlideshowController:
         else:
             slide.location = request.form['object']
 
-        self._model_manager.slide().add_form(slide)
+        self._model_store.slide().add_form(slide)
         self._post_update()
 
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_edit(self):
-        self._model_manager.slide().update_form(request.form['id'], request.form['name'], request.form['duration'])
+        self._model_store.slide().update_form(request.form['id'], request.form['name'], request.form['duration'])
         self._post_update()
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_toggle(self):
         data = request.get_json()
-        self._model_manager.slide().update_enabled(data.get('id'), data.get('enabled'))
+        self._model_store.slide().update_enabled(data.get('id'), data.get('enabled'))
         self._post_update()
         return jsonify({'status': 'ok'})
 
     def slideshow_slide_delete(self):
         data = request.get_json()
-        self._model_manager.slide().delete(data.get('id'))
+        self._model_store.slide().delete(data.get('id'))
         self._post_update()
         return jsonify({'status': 'ok'})
 
     def slideshow_slide_position(self):
         data = request.get_json()
-        self._model_manager.slide().update_positions(data)
+        self._model_store.slide().update_positions(data)
         self._post_update()
         return jsonify({'status': 'ok'})
 
     def _post_update(self):
-        self._model_manager.variable().update_by_name("last_slide_update", time.time())
+        self._model_store.variable().update_by_name("last_slide_update", time.time())
 
