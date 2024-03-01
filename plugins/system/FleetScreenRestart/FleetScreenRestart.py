@@ -10,7 +10,7 @@ from src.model.HookRegistration import HookRegistration
 class FleetScreenRestart(ObPlugin):
 
     def use_id(self):
-        return self.__class__.__name__.lower()
+        return 'fleet_screen_restart'
 
     def use_title(self):
         return 'Fleet Screen Restart'

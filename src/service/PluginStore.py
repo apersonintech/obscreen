@@ -105,7 +105,7 @@ class PluginStore:
         ))
 
         # LANGS
-        self._model_store.lang().load(prefix=plugin.get_directory())
+        self._model_store.lang().load(directory=plugin.get_directory(), prefix=plugin.use_id())
         self._model_store.variable().reload(lang_map=self._model_store.lang().map())
 
     def clean_dead_variables(self) -> None:

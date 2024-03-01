@@ -11,13 +11,13 @@ class LangManager:
         self._lang = lang
         self.load()
 
-    def load(self, prefix: str = ""):
-        file_name = "{}{}{}".format(prefix, "/" if prefix else "", self.LANG_FILE.format(self._lang))
+    def load(self, directory: str = "", prefix: str = ""):
+        file_name = "{}{}{}".format(directory, "/" if directory else "", self.LANG_FILE.format(self._lang))
 
         try:
             with open(file_name, 'r') as file:
                 for key, value in json.load(file).items():
-                    self._map[key] = value
+                    self._map["{}{}{}".format(prefix, "_" if prefix else "", key)] = value
         except FileNotFoundError:
             logging.error("Lang file {} not found".format(file_name))
 
