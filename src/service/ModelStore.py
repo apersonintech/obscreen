@@ -6,7 +6,7 @@ from src.manager.ConfigManager import ConfigManager
 from src.manager.LoggingManager import LoggingManager
 
 
-class ModelManager:
+class ModelStore:
 
     def __init__(self):
         self._variable_manager = VariableManager()

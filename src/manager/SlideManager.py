@@ -83,7 +83,6 @@ class SlideManager:
 
     def delete(self, id: str) -> None:
         slide = self.get(id)
-        print(id)
 
         if slide:
             if slide.has_file():

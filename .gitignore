@@ -8,5 +8,7 @@ data/uploads/*
 data/db/*
 !data/db/slideshow.json.dist
 config.json
+/plugins/user/*
+!/plugins/user/.gitkeep
 *.lock
 __pycache__/

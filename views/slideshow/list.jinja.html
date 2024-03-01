@@ -16,8 +16,9 @@
         <h2>{{ l.slideshow_page_title }}</h2>
 
         <div class="toolbar-actions">
+
             {% if fleet_mode %}
-                <button class="normal sysinfo-restart"><i class="fa fa-refresh icon-left"></i>{{ l.sysinfo_panel_button_restart }}</button>
+                {{ HOOK(H_FLEET_SLIDESHOW_TOOLBAR_ACTIONS) }}
             {% endif %}
 
             <button class="purple slide-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_slide_button_add }}</button>
