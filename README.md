@@ -9,6 +9,7 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 - Fleet view to manage many devices easily
 - Very few dependencies
 - JSON database files
+- Plugin system
 - No stupid pricing plan
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
