@@ -8,15 +8,11 @@ from src.manager.VariableManager import VariableManager
 from src.manager.ConfigManager import ConfigManager
 from src.service.ModelStore import ModelStore
 
+from src.interface.ObController import ObController
 from src.utils import get_ip_address
 
 
-class SysinfoController:
-
-    def __init__(self, app, model_store: ModelStore):
-        self._app = app
-        self._model_store = model_store
-        self.register()
+class SysinfoController(ObController):
 
     def register(self):
         self._app.add_url_rule('/sysinfo', 'sysinfo_attribute_list', self.sysinfo, methods=['GET'])

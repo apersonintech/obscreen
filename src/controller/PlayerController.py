@@ -2,15 +2,11 @@ import json
 
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
 from src.service.ModelStore import ModelStore
+from src.interface.ObController import ObController
 from src.utils import get_ip_address
 
 
-class PlayerController:
-
-    def __init__(self, app, model_store: ModelStore):
-        self._app = app
-        self._model_store = model_store
-        self.register()
+class PlayerController(ObController):
 
     def _get_playlist(self) -> dict:
         slides = self._model_store.slide().to_dict(self._model_store.slide().get_enabled_slides())

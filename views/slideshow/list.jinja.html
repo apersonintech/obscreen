@@ -20,7 +20,7 @@
         <h2>{{ l.slideshow_page_title }}</h2>
 
         <div class="toolbar-actions">
-            {{ HOOK(H_SLIDESHOW_TOOLBAR_ACTIONS_START) }}
+            {{ HOOK(H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS) }}
 
             {% if fleet_mode %}
                 {{ HOOK(H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS) }}

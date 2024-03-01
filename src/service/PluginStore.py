@@ -3,8 +3,12 @@ import logging
 import inspect
 import importlib
 
-from plugins.system.ObPlugin import ObPlugin
+from src.interface.ObPlugin import ObPlugin
+from src.interface.ObController import ObController
+from src.constant.WebDirConstant import WebDirConstant
 from src.service.ModelStore import ModelStore
+from src.service.WebServer import WebServer
+from src.service.TemplateRenderer import TemplateRenderer
 from src.manager.VariableManager import VariableManager
 from src.model.enum.VariableType import VariableType
 from src.model.enum.HookType import HookType
@@ -19,9 +23,11 @@ class PluginStore:
     FOLDER_PLUGINS_USER = 'plugins/user'
     DEFAULT_PLUGIN_ENABLED_VARIABLE = "enabled"
 
-    def __init__(self, project_dir: str, model_store: ModelStore):
+    def __init__(self, project_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer, web_server: WebServer):
         self._project_dir = project_dir
         self._model_store = model_store
+        self._template_renderer = template_renderer
+        self._web_server = web_server
         self._hooks = self.pre_load_hooks()
         self._dead_variables_candidates = VariableManager.list_to_map(self._model_store.variable().get_by_prefix(ObPlugin.PLUGIN_PREFIX))
         self._system_plugins = self.find_plugins_in_directory(self.FOLDER_PLUGINS_SYSTEM)
@@ -46,13 +52,38 @@ class PluginStore:
                     for name, obj in inspect.getmembers(module):
                         if inspect.isclass(obj) and issubclass(obj, ObPlugin) and obj is not ObPlugin:
                             plugin = obj(
-                                directory=root,
-                                model_store=self._model_store
+                                project_dir=self._project_dir,
+                                plugin_dir=root,
+                                model_store=self._model_store,
+                                template_renderer=self._template_renderer
                             )
                             plugins.append(plugin)
                             self.setup_plugin(plugin)
 
         return plugins
+
+    def load_controllers(self, plugin: ObPlugin) -> None:
+        for root, dirs, files in os.walk("{}/{}".format(plugin.get_directory(), WebDirConstant.FOLDER_CONTROLLER)):
+            for file in files:
+                if file.endswith(".py"):
+                    module_name = file[:-3]
+                    module_path = os.path.join(root, file)
+                    spec = importlib.util.spec_from_file_location(module_name, module_path)
+                    module = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(module)
+                    for name, obj in inspect.getmembers(module):
+                        if inspect.isclass(obj) and issubclass(obj, ObController) and obj is not ObController:
+                            obj(
+                                app=self._web_server.get_app(),
+                                model_store=self._model_store,
+                                template_renderer=self._template_renderer,
+                                plugin=plugin
+                            )
+
+                            logging.info("[plugin:{}] Controller {} loaded".format(
+                                plugin.use_id(),
+                                obj.__name__
+                            ))
 
     def pre_load_hooks(self) -> Dict[HookType, List[HookRegistration]]:
         hooks = {}
@@ -90,7 +121,7 @@ class PluginStore:
 
         for hook_registration in hooks_registrations:
             if hook_registration.hook not in self._hooks:
-                logging.error("Hook {} does not exist".format(hook.name))
+                logging.error("[plugin:{}] Hook {} does not exist".format(plugin.use_id(), hook.name))
                 continue
 
             if isinstance(hook_registration, StaticHookRegistration):
@@ -98,18 +129,25 @@ class PluginStore:
 
             self._hooks[hook_registration.hook].append(hook_registration)
 
-        logging.info("Plugin {} loaded ({} var{} and {} hook) from {}".format(
-            plugin.use_title(),
+        logging.info("[plugin:{}] {} variable{} loaded".format(
+            plugin.use_id(),
             len(variables),
             "s" if len(variables) > 1 else "",
+        ))
+
+        logging.info("[plugin:{}] {} hook{} loaded".format(
+            plugin.use_id(),
             len(hooks_registrations),
             "s" if len(hooks_registrations) > 1 else "",
-            plugin.get_directory()
         ))
 
         # LANGS
         self._model_store.lang().load(directory=plugin.get_directory(), prefix=plugin.use_id())
         self._model_store.variable().reload(lang_map=self._model_store.lang().map())
+
+        # WEB CONTROLLERS
+        self.load_controllers(plugin)
+
 
     def clean_dead_variables(self) -> None:
         for variable_name, variable in self._dead_variables_candidates.items():

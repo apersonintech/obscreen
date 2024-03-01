@@ -12,3 +12,4 @@ config.json
 !/plugins/user/.gitkeep
 *.lock
 __pycache__/
+*.log

@@ -1,0 +1,9 @@
+{% extends '::base.jinja.html' %}
+
+{% block page %}
+    {% include '@plugin_local_inclusion.jinja.html' %}
+
+    <p>
+        Using base template for page {{ page_name }} !
+    </p>
+{% endblock %}
