@@ -1,4 +1,4 @@
-from plugins.system.ObPlugin import ObPlugin
+from src.interface.ObPlugin import ObPlugin
 
 from typing import List, Dict
 from src.model.entity.Variable import Variable

@@ -2,14 +2,10 @@ import json
 
 from flask import Flask, render_template, redirect, request, url_for
 from src.service.ModelStore import ModelStore
+from src.interface.ObController import ObController
 
 
-class SettingsController:
-
-    def __init__(self, app, model_store: ModelStore):
-        self._app = app
-        self._model_store = model_store
-        self.register()
+class SettingsController(ObController):
 
     def register(self):
         self._app.add_url_rule('/settings/variable/list', 'settings_variable_list', self.settings_variable_list, methods=['GET'])

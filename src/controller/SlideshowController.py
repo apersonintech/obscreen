@@ -7,15 +7,11 @@ from werkzeug.utils import secure_filename
 from src.service.ModelStore import ModelStore
 from src.model.entity.Slide import Slide
 from src.model.enum.SlideType import SlideType
+from src.interface.ObController import ObController
 from src.utils import str_to_enum
 
 
-class SlideshowController:
-
-    def __init__(self, app, model_store: ModelStore):
-        self._app = app
-        self._model_store = model_store
-        self.register()
+class SlideshowController(ObController):
 
     def register(self):
         self._app.add_url_rule('/manage', 'manage', self.manage, methods=['GET'])

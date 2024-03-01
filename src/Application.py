@@ -5,7 +5,9 @@ import threading
 
 from src.service.ModelStore import ModelStore
 from src.service.PluginStore import PluginStore
+from src.service.TemplateRenderer import TemplateRenderer
 from src.service.WebServer import WebServer
+from src.model.enum.HookType import HookType
 
 
 class Application:
@@ -14,8 +16,9 @@ class Application:
         self._project_dir = project_dir
         self._stop_event = threading.Event()
         self._model_store = ModelStore()
-        self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store)
-        self._web_server = WebServer(project_dir=project_dir, model_store=self._model_store, plugin_store=self._plugin_store)
+        self._template_renderer = TemplateRenderer(project_dir=project_dir, model_store=self._model_store, render_hook=self.render_hook)
+        self._web_server = WebServer(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer)
+        self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
 
         signal.signal(signal.SIGINT, self.signal_handler)
 
@@ -27,4 +30,6 @@ class Application:
         self._stop_event.set()
         sys.exit(0)
 
+    def render_hook(self, hook: HookType) -> str:
+        return self._template_renderer.render_hooks(self._plugin_store.map_hooks()[hook])
 
