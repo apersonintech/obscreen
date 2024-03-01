@@ -35,16 +35,16 @@ class TemplateRenderer:
         content = []
 
         for hook_registration in hooks_registrations:
-            template = hook_registration.plugin.get_rendering_env().get_template("@{}/{}".format(
-                WebDirConstant.FOLDER_PLUGIN_HOOK,
-                os.path.basename(hook_registration.template)
-            ))
-
-            content.append(
-                template.render(
+            if isinstance(hook_registration, StaticHookRegistration):
+                template = hook_registration.plugin.get_rendering_env().get_template("@{}/{}".format(
+                    WebDirConstant.FOLDER_PLUGIN_HOOK,
+                    os.path.basename(hook_registration.template)
+                ))
+                content.append(template.render(
                     l=self._model_store.lang().map(),
                     **self.get_view_globals()
-                )
-            )
+                ))
+            elif isinstance(hook_registration, FunctionalHookRegistration):
+                content.append(hook_registration.function())
 
         return Markup("".join(content))

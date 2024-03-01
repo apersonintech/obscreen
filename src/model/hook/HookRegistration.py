@@ -34,7 +34,7 @@ class HookRegistration:
 
     def __str__(self) -> str:
         return f"HookRegistration(" \
-               f"plugin='{self.plugin.get_id()}',\n" \
+               f"plugin='{self.plugin.use_id()}',\n" \
                f"hook='{self.hook}',\n" \
                f"priority='{self.priority}',\n" \
                f")"

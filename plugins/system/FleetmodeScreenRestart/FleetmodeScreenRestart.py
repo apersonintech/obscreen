@@ -20,5 +20,9 @@ class FleetmodeScreenRestart(ObPlugin):
 
     def use_hooks_registrations(self) -> List[HookRegistration]:
         return [
-            super().add_static_hook_registration(hook=HookType.H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS, priority=10)
+            super().add_static_hook_registration(hook=HookType.H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS, priority=10),
+            # super().add_functional_hook_registration(hook=HookType.H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS, priority=10, function=self.functional_foo),
         ]
+
+    # def functional_foo(self) -> str:
+    #     return 'functional_foo hook'
