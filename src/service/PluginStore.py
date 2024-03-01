@@ -66,6 +66,7 @@ class PluginStore:
             self._hooks[hook_type] = sorted(self._hooks[hook_type], key=lambda hook_reg: hook_reg.priority, reverse=True)
 
     def setup_plugin(self, plugin: ObPlugin) -> None:
+        # VARIABLES
         variables = plugin.use_variables() + [
             plugin.set_variable(
                 name=self.DEFAULT_PLUGIN_ENABLED_VARIABLE,
@@ -83,6 +84,7 @@ class PluginStore:
             if variable.name in self._dead_variables_candidates:
                 del self._dead_variables_candidates[variable.name]
 
+        # HOOKS
         hooks_registrations = plugin.use_hooks_registrations()
 
         for hook_registration in hooks_registrations:
@@ -102,6 +104,10 @@ class PluginStore:
             plugin.get_directory()
         ))
 
+        # LANGS
+        self._model_store.lang().load(prefix=plugin.get_directory())
+        self._model_store.variable().reload(lang_map=self._model_store.lang().map())
+
     def clean_dead_variables(self) -> None:
         for variable_name, variable in self._dead_variables_candidates.items():
             logging.info("Removing dead plugin variable {}".format(variable_name))
@@ -110,3 +116,5 @@ class PluginStore:
     def is_plugin_enabled(self, plugin: ObPlugin) -> bool:
         var = self._model_store.variable().get_one_by_name(plugin.get_plugin_variable_name(self.DEFAULT_PLUGIN_ENABLED_VARIABLE))
         return var.as_bool() if var else False
+
+

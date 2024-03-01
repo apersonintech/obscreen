@@ -57,10 +57,10 @@
     "settings_variable_form_label_name": "Nom",
     "settings_variable_form_label_value": "Valeur",
     "settings_variable_form_button_cancel": "Annuler",
-    "settings_variable_help_port": "Port du serveur d'application (redémarrage nécessaire)",
-    "settings_variable_help_bind": "Hôte d'attache du serveur d'application (redémarrage nécessaire)",
-    "settings_variable_help_lang": "Langage de l'application [fr,en] (redémarrage nécessaire)",
-    "settings_variable_help_fleet_enabled": "Activer la gestion de flotte des écrans (redémarrage nécessaire)",
+    "settings_variable_help_port": "Port du serveur d'application",
+    "settings_variable_help_bind": "Hôte d'attache du serveur d'application",
+    "settings_variable_help_lang": "Langage de l'application [fr,en]",
+    "settings_variable_help_fleet_enabled": "Activer la gestion de flotte des écrans",
     "settings_variable_help_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
 
     "settings_variable_help_ro_editable":  "Date de dernier redémarrage de l'application",
@@ -95,5 +95,6 @@
     "basic_month_11": "Novembre",
     "basic_month_12": "Décembre",
 
-    "common_unknown_ipaddr": "Adresse IP inconnue"
+    "common_unknown_ipaddr": "Adresse IP inconnue",
+    "common_empty": "[Vide]"
 }
