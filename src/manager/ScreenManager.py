@@ -1,5 +1,5 @@
 from typing import Dict, Optional, List, Tuple, Union
-from src.model.Screen import Screen
+from src.model.entity.Screen import Screen
 from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError
 

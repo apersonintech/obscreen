@@ -6,9 +6,10 @@ import importlib
 from plugins.system.ObPlugin import ObPlugin
 from src.service.ModelStore import ModelStore
 from src.manager.VariableManager import VariableManager
-from src.model.VariableType import VariableType
-from src.model.HookType import HookType
-from src.model.HookRegistration import HookRegistration
+from src.model.enum.VariableType import VariableType
+from src.model.enum.HookType import HookType
+from src.model.hook.HookRegistration import HookRegistration
+from src.model.hook.StaticHookRegistration import StaticHookRegistration
 from typing import List, Dict, Union
 
 
@@ -68,7 +69,7 @@ class PluginStore:
     def setup_plugin(self, plugin: ObPlugin) -> None:
         # VARIABLES
         variables = plugin.use_variables() + [
-            plugin.set_variable(
+            plugin.add_variable(
                 name=self.DEFAULT_PLUGIN_ENABLED_VARIABLE,
                 value=False,
                 type=VariableType.BOOL,
@@ -77,12 +78,12 @@ class PluginStore:
             )
         ]
 
-        if not self.is_plugin_enabled(plugin):
-            return
-
         for variable in variables:
             if variable.name in self._dead_variables_candidates:
                 del self._dead_variables_candidates[variable.name]
+
+        if not self.is_plugin_enabled(plugin):
+            return
 
         # HOOKS
         hooks_registrations = plugin.use_hooks_registrations()
@@ -92,7 +93,9 @@ class PluginStore:
                 logging.error("Hook {} does not exist".format(hook.name))
                 continue
 
-            hook_registration.template = "{}/views/{}.jinja.html".format(plugin.get_directory(), hook_registration.hook.value)
+            if isinstance(hook_registration, StaticHookRegistration):
+                hook_registration.template = "{}/views/{}.jinja.html".format(plugin.get_directory(), hook_registration.hook.value)
+
             self._hooks[hook_registration.hook].append(hook_registration)
 
         logging.info("Plugin {} loaded ({} var{} and {} hook) from {}".format(

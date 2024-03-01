@@ -19,7 +19,8 @@ class SettingsController:
         return render_template(
             'settings/list.jinja.html',
             l=self._model_store.lang().map(),
-            variables=self._model_store.variable().get_editable_variables(),
+            system_variables=self._model_store.variable().get_editable_variables(plugin=False),
+            plugin_variables=self._model_store.variable().get_editable_variables(plugin=True),
         )
 
     def settings_variable_edit(self):

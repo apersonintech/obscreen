@@ -47,9 +47,9 @@
     "js_fleet_screen_delete_confirmation": "Êtes-vous sûr ?",
 
     "settings_page_title": "Paramètres",
-    "settings_variable_panel": "Variables",
-    "settings_variable_panel_th_name": "Nom",
-    "settings_variable_panel_th_description": "Aide",
+    "settings_variable_panel_system_variables": "System Variables",
+    "settings_variable_panel_plugin_variables": "Plugins Variables",
+    "settings_variable_panel_th_description": "Description",
     "settings_variable_panel_th_value": "Valeur",
     "settings_variable_panel_th_activity": "Options",
     "settings_variable_form_edit_title": "Modification de la variable",

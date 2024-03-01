@@ -1,19 +1,28 @@
 <table class="variables">
     <thead>
     <tr>
-        <th>{{ l.settings_variable_panel_th_name }}</th>
-        <th>{{ l.settings_variable_panel_th_value }}</th>
         <th>{{ l.settings_variable_panel_th_description }}</th>
+        <th>{{ l.settings_variable_panel_th_value }}</th>
         <th class="tac">{{ l.settings_variable_panel_th_activity }}</th>
     </tr>
     </thead>
     <tbody>
+    {% set last_plugin = '' %}
     {% for variable in variables %}
+        {% if variable.plugin and last_plugin != variable.plugin %}
+        <tr>
+            <td colspan="2">
+                <h3>
+                    <i class="fa fa-puzzle-piece"></i> {{ variable.plugin.replace('_',' ')|capitalize }}
+                </h3>
+            </td>
+        </tr>
+        {% endif %}
         <tr class="variable-item" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
             <td class="infos">
                 <div class="inner">
                     <i class="fa fa-cog icon-left"></i>
-                    {{ variable.name }}
+                    {{ variable.description }}
                 </div>
             </td>
             <td>
@@ -23,15 +32,13 @@
                     <span class="empty">{{ l.common_empty }}</span>
                 {% endif %}
             </td>
-            <td>
-                {{ variable.description }}
-            </td>
             <td class="actions tac">
                 <a href="javascript:void(0);" class="item-edit variable-edit">
                     <i class="fa fa-pencil"></i>
                 </a>
             </td>
         </tr>
+        {% set last_plugin = variable.plugin %}
     {% endfor %}
     </tbody>
 </table>

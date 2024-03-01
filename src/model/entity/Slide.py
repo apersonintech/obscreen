@@ -1,7 +1,7 @@
 import json
 
 from typing import Optional, Union
-from src.model.SlideType import SlideType
+from src.model.enum.SlideType import SlideType
 from src.utils import str_to_enum
 
 

@@ -1,10 +1,10 @@
 from plugins.system.ObPlugin import ObPlugin
 
 from typing import List, Dict
-from src.model.Variable import Variable
-from src.model.VariableType import VariableType
-from src.model.HookType import HookType
-from src.model.HookRegistration import HookRegistration
+from src.model.entity.Variable import Variable
+from src.model.enum.VariableType import VariableType
+from src.model.enum.HookType import HookType
+from src.model.hook.HookRegistration import HookRegistration
 
 
 class FleetmodeScreenRestart(ObPlugin):
@@ -20,5 +20,5 @@ class FleetmodeScreenRestart(ObPlugin):
 
     def use_hooks_registrations(self) -> List[HookRegistration]:
         return [
-            super().set_hook_registration(hook=HookType.H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS, priority=10)
+            super().add_static_hook_registration(hook=HookType.H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS, priority=10)
         ]
