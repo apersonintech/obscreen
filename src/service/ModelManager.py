@@ -15,7 +15,7 @@ class ModelManager:
         self._screen_manager = ScreenManager()
         self._slide_manager = SlideManager()
         self._lang_manager = LangManager(lang=self.variable().map().get('lang').as_string())
-        self._variable_manager.reload(lang_dict=self._lang_manager.map())
+        self._variable_manager.reload(lang_map=self._lang_manager.map())
 
     def logging(self) -> LoggingManager:
         return self._logging_manager
