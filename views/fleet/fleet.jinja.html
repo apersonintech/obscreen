@@ -43,7 +43,14 @@
             const $frame = $frames[j];
             $frame.className = $frame.dataset.id === id ? 'screen-frame' : 'screen-frame hidden';
         }
+        document.location.hash = id;
     };
+
+    var hash = document.location.hash.replace('#', '');
+
+    if (hash) {
+        tab(hash);
+    }
 </script>
 </body>
 </html>
