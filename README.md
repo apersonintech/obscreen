@@ -20,7 +20,7 @@ sudo apt-get update
 sudo apt-get install -y git chromium-browser unclutter
 
 git clone https://github.com/jr-k/obscreen.git 
-cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json && cp config.json.dist config.json
+cd obscreen && pip3 install -r requirements.txt && cp data/db/slideshow.json.dist data/db/slideshow.json && cp config.json.dist config.json
 ```
 
 ## Configure
