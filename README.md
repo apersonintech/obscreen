@@ -20,11 +20,11 @@ sudo apt-get update
 sudo apt-get install -y git chromium-browser unclutter
 
 git clone https://github.com/jr-k/obscreen.git 
-cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json && cp config.py.dist config.py
+cd obscreen && pip3 install -r requirements.txt && cp data/slideshow.json.dist data/slideshow.json && cp config.json.dist config.json
 ```
 
 ## Configure
-- Server configuration is available in `config.py` file.
+- Server configuration is available in `config.json` file.
 - Application configuration is available in `http://localhost:5000/settings` page.
 
 ## Run
