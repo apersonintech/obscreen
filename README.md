@@ -53,7 +53,7 @@ sudo journalctl -u obscreen -f
 - Slideshow manager is reachable at `http://localhost:5000/manage`
     
 ## You are done now :)
-If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (default.html) your slideshow shall start and loop endlessly.
+If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (`views/player/default.jinja.html`) your slideshow shall start and loop endlessly.
 
 
 ## Additional
