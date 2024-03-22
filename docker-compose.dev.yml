@@ -1,0 +1,16 @@
+version: '3'
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: obscreen
+    restart: unless-stopped
+    image: obscreen:latest
+    environment:
+    - DEBUG=false
+    - REVERSE_PROXY_MODE=false
+    - LX_FILE=./var/run/lxfile
+    volumes:
+      - .:/app
+#      - /home/pi/.config/lxsession/LXDE-pi/autostart:./var/run/lxfile

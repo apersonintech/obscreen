@@ -26,6 +26,7 @@ class SysinfoController(ObController):
             ipaddr=ipaddr if ipaddr else self._model_store.lang().map().get('common_unknown_ipaddr'),
             l=self._model_store.lang().map(),
             ro_variables=self._model_store.variable().get_readonly_variables(),
+            env_variables=self._model_store.config().map()
         )
 
     def sysinfo_restart(self):

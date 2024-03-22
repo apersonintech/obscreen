@@ -13,3 +13,5 @@ config.json
 *.lock
 __pycache__/
 *.log
+var/run/*
+!var/run/.gitkeep

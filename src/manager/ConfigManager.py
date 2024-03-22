@@ -73,8 +73,13 @@ class ConfigManager:
 
     def load_from_env(self) -> None:
         for key in self._CONFIG:
-            if key in os.environ:
-                self._CONFIG[key] = os.environ[key]
+            if key.upper() in os.environ:
+                value = os.environ[key.upper()]
+                if value.lower() == 'false' or value == '0' or value == '':
+                    value = False
+                elif value.lower() == 'true' or value == '1':
+                    value = True
+                self._CONFIG[key.lower()] = value
                 logging.info(f"Env var {key} has been found")
 
     def autoconfigure(self) -> None:
@@ -98,17 +103,17 @@ class ConfigManager:
         player_url = self.map().get('player_url')
         os.makedirs(os.path.dirname(destination_path), exist_ok=True)
         xenv_presets = f"""
-        @lxpanel --profile LXDE-pi
-        @pcmanfm --desktop --profile LXDE-pi
-        @xscreensaver -no-splash
-        #@point-rpi
-        @xset s off
-        @xset -dpms
-        @xset s noblank
-        @unclutter -display :0 -noevents -grab
-        @sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' ~/.config/chromium/Default/Preferences
-        #@sleep 10
-        @chromium-browser --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --disable-restore-session-state --noerrdialogs --kiosk --incognito --window-position=0,0 --display=:0 {player_url}
+@lxpanel --profile LXDE-pi
+@pcmanfm --desktop --profile LXDE-pi
+@xscreensaver -no-splash
+#@point-rpi
+@xset s off
+@xset -dpms
+@xset s noblank
+@unclutter -display :0 -noevents -grab
+@sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' ~/.config/chromium/Default/Preferences
+#@sleep 10
+@chromium-browser --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --disable-restore-session-state --noerrdialogs --kiosk --incognito --window-position=0,0 --display=:0 {player_url}
         """
         with open(destination_path, 'w') as file:
             file.write(xenv_presets)
