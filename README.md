@@ -14,7 +14,14 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
-## Installation
+## Installation (docker)
+```bash
+git clone https://github.com/jr-k/obscreen.git
+cd obscreen
+docker compose up
+```
+
+## Installation (manual)
 ```bash
 sudo apt-get update
 sudo apt-get install -y git chromium-browser unclutter
