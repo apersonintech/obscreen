@@ -1,2 +1,2 @@
-flask
+flask==2.3.3
 pysondb-v2==2.1.0
