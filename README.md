@@ -3,7 +3,7 @@
 ## About
 Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
-### Featured:
+### Features:
 - Dead simple chromium webview
 - Clear GUI
 - Fleet view to manage many devices easily
