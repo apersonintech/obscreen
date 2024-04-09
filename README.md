@@ -56,7 +56,7 @@ sudo journalctl -u obscreen -f
 
 ## Usage
 - Hostname will be http://localhost:5000 or http://localhost with nginx or http://[SERVER_IP]:[PORT]
-- Page which play slideshow is reachable at `http://localhost:5000`
+- Page which plays slideshow is reachable at `http://localhost:5000`
 - Slideshow manager is reachable at `http://localhost:5000/manage`
     
 ## You are done now :)
@@ -84,4 +84,4 @@ sudo rm /etc/nginx/sites-enabled/default 2>/dev/null
 sudo ln -s "$(pwd)/system/nginx-obscreen" /etc/nginx/sites-enabled
 sudo systemctl reload nginx
 ```
-2. Set `reverse_proxy_mode` to `true` in settings page
+2. Set `reverse_proxy_mode` to `true` in server `config.js` file
