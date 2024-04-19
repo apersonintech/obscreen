@@ -79,7 +79,7 @@ However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
 ### B. Nginx server to serve pages (useful for gzip compression for instance)
 1. Install
 ```bash
-sudo apt isntall -y nginx
+sudo apt install -y nginx
 sudo rm /etc/nginx/sites-enabled/default 2>/dev/null
 sudo ln -s "$(pwd)/system/nginx-obscreen" /etc/nginx/sites-enabled
 sudo systemctl reload nginx
