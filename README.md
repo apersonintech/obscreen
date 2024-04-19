@@ -11,6 +11,8 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 - JSON database files
 - Plugin system
 - No stupid pricing plan
+- No cloud
+- No telemetry
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
