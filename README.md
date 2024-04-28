@@ -1,5 +1,7 @@
 # <img src="https://github.com/jr-k/obscreen/blob/master/docs/obscreen.png" width="22"> Obscreen
 
+🧑‍🎄 Open to feature request and pull request
+
 ## About
 Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
