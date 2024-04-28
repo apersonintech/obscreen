@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   webapp:
     container_name: obscreen
@@ -7,7 +7,7 @@ services:
     environment:
     - DEBUG=false
     - REVERSE_PROXY_MODE=false
-    - LX_FILE=./var/run/lxfile
+    - LX_FILE=/app/var/run/lxfile
     volumes:
       - .:/app
-      - /home/pi/.config/lxsession/LXDE-pi/autostart:./var/run/lxfile
+      - /home/pi/.config/lxsession/LXDE-pi/autostart:/app/var/run/lxfile
