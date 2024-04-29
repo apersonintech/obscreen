@@ -24,7 +24,7 @@ class Application:
 
     def start(self) -> None:
         self._web_server.run()
-        
+
     def signal_handler(self, signal, frame) -> None:
         logging.info("Shutting down...")
         self._stop_event.set()
