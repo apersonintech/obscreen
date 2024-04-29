@@ -16,7 +16,16 @@ class FleetmodeScreenRestart(ObPlugin):
         return 'Fleetmode Screen Restart'
 
     def use_variables(self) -> List[Variable]:
-        return []
+        return [
+    #         self.add_variable(
+    #             name="foo",
+    #             description="foo",
+    #             type=VariableType.SELECT_SINGLE,
+    #             value="foo",
+    #             editable=True,
+    #             selectables={"alpha": "Alpha", "beta": "Beta"}
+    #         )
+        ]
 
     def use_hooks_registrations(self) -> List[HookRegistration]:
         return [

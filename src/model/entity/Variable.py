@@ -1,8 +1,9 @@
 import json
 import time
 
-from typing import Optional, Union
+from typing import Optional, Union, Dict, List
 from src.model.enum.VariableType import VariableType
+from src.model.entity.Selectable import Selectable
 from src.utils import str_to_enum
 
 
@@ -10,7 +11,7 @@ class Variable:
 
     def __init__(self, name: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING,
                  value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None,
-                 plugin: Optional[str] = None):
+                 plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None):
         self._id = id if id else None
         self._name = name
         self._type = str_to_enum(type, VariableType) if isinstance(type, str) else type
@@ -18,10 +19,22 @@ class Variable:
         self._value = value
         self._editable = editable
         self._plugin = plugin
+        self._selectables = selectables
 
     @property
     def id(self) -> Union[int, str]:
         return self._id
+
+    @property
+    def selectables(self) -> List[Selectable]:
+        return self._selectables
+
+    @selectables.setter
+    def selectables(self, value: List[Selectable]):
+        self._selectables = value
+
+    def add_selectable(self, value: Selectable):
+        self._selectables.append(value)
 
     @property
     def name(self) -> str:
@@ -80,6 +93,7 @@ class Variable:
                f"description='{self.description}',\n" \
                f"editable='{self.editable}',\n" \
                f"plugin='{self.plugin}',\n" \
+               f"selectables='{self.selectables}',\n" \
                f")"
 
     def to_json(self) -> str:
@@ -94,6 +108,7 @@ class Variable:
             "description": self.description,
             "editable": self.editable,
             "plugin": self.plugin,
+            "selectables": [selectable.to_dict() for selectable in self.selectables] if isinstance(self._selectables, list) else None
         }
 
     def as_bool(self) -> bool:
@@ -105,18 +120,22 @@ class Variable:
     def as_int(self) -> int:
         return int(self._value)
 
-    def as_ctime(self):
+    def as_ctime(self) -> int:
         return time.ctime(self._value)
 
-    def display(self):
+    def display(self) -> Union[int, bool, str]:
         if self.type == VariableType.INT:
             return self.as_int()
         elif self.type == VariableType.BOOL:
             return self.as_bool()
         elif self.type == VariableType.TIMESTAMP:
             return self.as_ctime()
+        elif self.type == VariableType.SELECT_SINGLE:
+            for selectable in self.selectables:
+                if selectable.key == self.value:
+                    return str(selectable.label)
 
         return self.as_string()
 
-    def is_from_plugin(self):
+    def is_from_plugin(self) -> Optional[str]:
         return self.plugin
