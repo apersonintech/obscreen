@@ -35,14 +35,18 @@
                         <tr>
                             <td>{{ ro_variable.description }}</td>
                             <td>
-                                {% if ro_variable.type.value == 'bool' %}
-                                    {% if ro_variable.display() %}
-                                        ✅
+                                {% if ro_variable.value %}
+                                    {% if ro_variable.type.value == 'bool' %}
+                                        {% if ro_variable.display() %}
+                                            ✅
+                                        {% else %}
+                                            ❌
+                                        {% endif %}
                                     {% else %}
-                                        ❌
+                                        {{ ro_variable.display() }}
                                     {% endif %}
                                 {% else %}
-                                    {{ ro_variable.display() }}
+                                        <span class="empty">{{ l.common_empty }}</span>
                                 {% endif %}
                             </td>
                         </tr>
@@ -55,6 +59,8 @@
                                     ✅
                                 {% elif env_value == false %}
                                     ❌
+                                {% elif env_value == none %}
+                                    <span class="empty">{{ l.common_empty }}</span>
                                 {% else %}
                                     {{ env_value }}
                                 {% endif %}
