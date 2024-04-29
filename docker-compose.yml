@@ -4,11 +4,12 @@ services:
     restart: unless-stopped
     image: jierka/obscreen:latest
     environment:
-    - DEBUG=false
-    - REVERSE_PROXY_MODE=false
-    - PORT=5000
+      - DEBUG=${DEBUG-false}
+      - PORT=${PORT-5000}
+      - AUTOCONFIGURE_REVERSE_PROXY_MODE=${AUTOCONFIGURE_REVERSE_PROXY_MODE-false}
+      - AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile
     volumes:
       - .:/app
-      - ${LX_FILE-./var/run/dummy}:/app/var/run/lxfile
+      - ${AUTOCONFIGURE_LX_FILE-./var/run/dummy}:/app/var/run/lxfile
     ports:
-      - "${PORT}:5000"
+      - ${PORT}:${PORT}

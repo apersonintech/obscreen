@@ -25,8 +25,8 @@ class WebServer:
 
     def run(self) -> None:
         self._app.run(
-            host=self._model_store.variable().map().get('bind').as_string(),
-            port=self._model_store.variable().map().get('port').as_int(),
+            host=self._model_store.config().map().get('bind'),
+            port=self._model_store.config().map().get('port'),
             debug=self._debug
         )
 
