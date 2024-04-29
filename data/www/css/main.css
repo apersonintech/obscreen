@@ -71,6 +71,13 @@ header .logo {
     align-items: center;
 }
 
+header .logo a {
+    color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 header .logo img {
     width: 32px;
     height: 32px;

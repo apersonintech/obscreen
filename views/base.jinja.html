@@ -40,8 +40,10 @@
         {% if not fleet_mode %}
              <header>
                 <h1 class="logo">
-                    <img src="{{ STATIC_PREFIX }}img/logo.png" />
-                    Obscreen
+                    <a href="{{ url_for('slideshow_slide_list') }}">
+                        <img src="{{ STATIC_PREFIX }}img/logo.png" />
+                        Obscreen
+                    </a>
                 </h1>
                 <nav>
                     <ul>
