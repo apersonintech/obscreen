@@ -2,15 +2,13 @@ name: Build and Push Docker images
 
 on:
   push:
-    branches-ignore:
-      - master
-  pull_request_target:
     branches:
       - master
-    types:
-      - closed
     paths:
       - 'version.txt'
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
 
 
@@ -42,11 +40,15 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: jierka/obscreen:${{ steps.version.outputs.VERSION }}
+        tags: |
+          jierka/obscreen:v${{ steps.version.outputs.VERSION }}
+          jierka/obscreen:latest
         platforms: linux/amd64, linux/arm64/v8, linux/arm/v7
 
     - name: Create and push manifest
       uses: docker/metadata-action@v3
       with:
         images: jierka/obscreen
-        tags: type=semver,pattern={{version}}
+        tags: type=semver,pattern=v{{version}}
+        flavor: |
+          latest=true
