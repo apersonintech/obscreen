@@ -57,7 +57,7 @@
     "settings_variable_form_label_name": "Name",
     "settings_variable_form_label_value": "Value",
     "settings_variable_form_button_cancel": "Cancel",
-    "settings_variable_help_lang": "Server language [fr,en] (restart needed)",
+    "settings_variable_help_lang": "Server language (restart needed)",
     "settings_variable_help_fleet_enabled": "Enable fleet screen management view (restart needed)",
     "settings_variable_help_external_url": "External url (i.e: https://screen-01.company.com or http://10.10.3.100)",
 
