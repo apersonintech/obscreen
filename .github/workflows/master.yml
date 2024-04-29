@@ -2,15 +2,13 @@ name: Build and Push Docker images
 
 on:
   push:
-    branches-ignore:
-      - master
-  pull_request_target:
     branches:
       - master
-    types:
-      - closed
     paths:
       - 'version.txt'
+  pull_request:
+    branches:
+      - master
   workflow_dispatch:
 
 
