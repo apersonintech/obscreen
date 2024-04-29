@@ -41,7 +41,7 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: |
-          jierka/obscreen:${{ steps.version.outputs.VERSION }}
+          jierka/obscreen:v${{ steps.version.outputs.VERSION }}
           jierka/obscreen:latest
         platforms: linux/amd64, linux/arm64/v8, linux/arm/v7
 
@@ -49,6 +49,6 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: jierka/obscreen
-        tags: type=semver,pattern={{version}}
+        tags: type=semver,pattern=v{{version}}
         flavor: |
           latest=true
