@@ -42,7 +42,9 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: jierka/obscreen:${{ steps.version.outputs.VERSION }}
+        tags: |
+          jierka/obscreen:${{ steps.version.outputs.VERSION }}
+          jierka/obscreen:latest
         platforms: linux/amd64, linux/arm64/v8, linux/arm/v7
 
     - name: Create and push manifest
@@ -50,3 +52,5 @@ jobs:
       with:
         images: jierka/obscreen
         tags: type=semver,pattern={{version}}
+        flavor: |
+          latest=true
