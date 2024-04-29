@@ -1,10 +1,13 @@
 from typing import Dict, Optional, List, Tuple, Union
 from src.model.entity.Variable import Variable
+from src.model.entity.Selectable import Selectable
 from src.model.enum.VariableType import VariableType
 from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError
+from src.utils import get_keys
 import time
 
+SELECTABLE_BOOLEAN = {"1": "✅", "0": "❌"}
 
 class VariableManager:
 
@@ -15,11 +18,14 @@ class VariableManager:
         self._var_map = {}
         self.reload()
 
-    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, plugin: Optional[None] = None) -> Variable:
+    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, plugin: Optional[None] = None, selectables: Optional[Dict[str, str]] = None) -> Variable:
         if isinstance(value, bool) and value:
             value = '1'
         elif isinstance(value, bool) and not value:
             value = '0'
+
+        if type == VariableType.BOOL:
+            selectables = SELECTABLE_BOOLEAN
 
         default_var = {
             "name": name,
@@ -27,15 +33,22 @@ class VariableManager:
             "type": type.value,
             "editable": editable,
             "description": description,
-            "plugin": plugin
+            "plugin": plugin,
+            "selectables": ([{"key": key, "label": label} for key, label in selectables.items()]) if isinstance(selectables, dict) else None
         }
         variable = self.get_one_by_name(default_var['name'])
 
         if not variable:
             self.add_form(default_var)
             variable = self.get_one_by_name(default_var['name'])
-        elif variable.description != default_var['description']:
-            self._db.update_by_id(variable.id, {"description": default_var['description']})
+        else:
+            same_selectables = get_keys(default_var, 'selectables') == get_keys(variable, 'selectables')
+
+            if variable.description != default_var['description']:
+                self._db.update_by_id(variable.id, {"description": default_var['description']})
+
+            if not same_selectables:
+                self._db.update_by_id(variable.id, {"selectables": default_var['selectables']})
 
         if variable.name == 'last_restart':
             self._db.update_by_id(variable.id, {"value": time.time()})
@@ -44,7 +57,7 @@ class VariableManager:
 
     def reload(self, lang_map: Optional[Dict] = None) -> None:
         default_vars = [
-            {"name": "lang", "value": "en", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_lang'] if lang_map else ""},
+            {"name": "lang", "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_help_lang'] if lang_map else "", "selectables": {"en": "English", "fr": "French"}},
             {"name": "fleet_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_help_fleet_enabled'] if lang_map else ""},
             {"name": "external_url", "value": "", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_external_url'] if lang_map else ""},
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_help_ro_editable'] if lang_map else ""},
@@ -76,6 +89,9 @@ class VariableManager:
         if id:
             raw_variable['id'] = id
 
+        if 'selectables' in raw_variable and raw_variable['selectables']:
+            raw_variable['selectables'] = [Selectable(**selectable) for selectable in raw_variable['selectables']]
+
         return Variable(**raw_variable)
 
     @staticmethod
@@ -105,7 +121,8 @@ class VariableManager:
         return self.get_one_by(query=lambda v: v['name'] == name)
 
     def get_one_by(self, query) -> Optional[Variable]:
-        variables = self.hydrate_dict(self._db.get_by_query(query=query))
+        object = self._db.get_by_query(query=query)
+        variables = self.hydrate_dict(object)
         if len(variables) == 1:
             return variables[0]
         elif len(variables) > 1:

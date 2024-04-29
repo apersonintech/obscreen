@@ -4,12 +4,12 @@
     </h2>
 
     <form action="/slideshow/slide/edit" method="POST">
-        <input type="hidden" name="id" id="slide-edit-id"/>
+        <input type="hidden" name="id" id="slide-edit-id" />
 
         <div class="form-group">
             <label for="slide-edit-name">{{ l.slideshow_slide_form_label_name }}</label>
             <div class="widget">
-                <input type="text" name="name" id="slide-edit-name" required="required"/>
+                <input type="text" name="name" id="slide-edit-name" required="required" />
             </div>
         </div>
         <div class="form-group">
@@ -26,14 +26,14 @@
         <div class="form-group">
             <label for="slide-edit-location">{{ l.slideshow_slide_form_label_location }}</label>
             <div class="widget">
-                <input type="text" name="location" id="slide-edit-location" disabled="disabled"/>
+                <input type="text" name="location" id="slide-edit-location" disabled="disabled" />
             </div>
         </div>
 
         <div class="form-group">
             <label for="slide-edit-duration">{{ l.slideshow_slide_form_label_duration }}</label>
             <div class="widget">
-                <input type="number" name="duration" id="slide-edit-duration" required="required"/>
+                <input type="number" name="duration" id="slide-edit-duration" required="required" />
                 <span>{{ l.slideshow_slide_form_label_duration_unit }}</span>
             </div>
         </div>

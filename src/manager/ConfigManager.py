@@ -11,10 +11,12 @@ load_dotenv()
 class ConfigManager:
 
     DEFAULT_PORT = 5000
+    VERSION_FILE = 'version.txt'
 
     def __init__(self, variable_manager: VariableManager):
         self._variable_manager = variable_manager
         self._CONFIG = {
+            'version': None,
             'port': self.DEFAULT_PORT,
             'bind': '0.0.0.0',
             'debug': False,
@@ -26,6 +28,7 @@ class ConfigManager:
             'player_url': 'http://localhost:{}'.format(self.DEFAULT_PORT)
         }
 
+        self.load_version()
         self.load_from_env()
         self.load_from_args()
 
@@ -49,8 +52,13 @@ class ConfigManager:
         parser.add_argument('--log-file', '-lf', default=self._CONFIG['log_file'], help='Log File path')
         parser.add_argument('--log-level', '-ll', default=self._CONFIG['log_level'], help='Log Level')
         parser.add_argument('--log-stdout', '-ls', default=self._CONFIG['log_stdout'], action='store_true', help='Log to standard output')
+        parser.add_argument('--version', '-v', default=None, action='store_true', help='Get version number')
 
         return parser.parse_args()
+
+    def load_version(self) -> str:
+        with open(self.VERSION_FILE, 'r') as file:
+            self._CONFIG['version'] = file.read()
 
     def load_from_args(self) -> None:
         args = self.parse_arguments()
@@ -67,6 +75,9 @@ class ConfigManager:
             self._CONFIG['log_level'] = args.log_level
         if args.log_stdout:
             self._CONFIG['log_stdout'] = args.log_stdout
+        if args.version:
+            print("Obscreen version v{} (https://github.com/jr-k/obscreen)".format(self._CONFIG['version']))
+            sys.exit(0)
 
     def load_from_env(self) -> None:
         for key in self._CONFIG:
