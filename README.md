@@ -31,11 +31,11 @@ sudo apt-get update
 sudo apt-get install -y git chromium-browser unclutter
 
 git clone https://github.com/jr-k/obscreen.git 
-cd obscreen && pip3 install -r requirements.txt && cp data/db/slideshow.json.dist data/db/slideshow.json && cp config.json.dist config.json
+cd obscreen && pip3 install -r requirements.txt && cp data/db/slideshow.json.dist data/db/slideshow.json && cp .env.dist .env
 ```
 
 ## Configure
-- Server configuration is available in `config.json` file.
+- Server configuration is available in `.env` file.
 - Application configuration is available in `http://localhost:5000/settings` page.
 
 ## Run
@@ -64,8 +64,8 @@ sudo journalctl -u obscreen -f
 - Slideshow manager is reachable at `http://localhost:5000/manage`
     
 ## You are done now :)
-If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (`views/player/default.jinja.html`) your slideshow shall start and loop endlessly.
-
+- If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (`views/player/default.jinja.html`) your slideshow shall start and loop endlessly.
+- Be sure that `AUTOCONFIGURE_LX_FILE` is writeable !
 
 ## Additional
 
@@ -88,4 +88,4 @@ sudo rm /etc/nginx/sites-enabled/default 2>/dev/null
 sudo ln -s "$(pwd)/system/nginx-obscreen" /etc/nginx/sites-enabled
 sudo systemctl reload nginx
 ```
-2. Set `reverse_proxy_mode` to `true` in server `config.js` file
+2. Set `autoconfigure_reverse_proxy_mode` to `true` in `.env` file

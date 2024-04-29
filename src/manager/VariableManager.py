@@ -44,8 +44,6 @@ class VariableManager:
 
     def reload(self, lang_map: Optional[Dict] = None) -> None:
         default_vars = [
-            {"name": "port", "value": 5000, "type": VariableType.INT, "editable": True, "description": lang_map['settings_variable_help_port'] if lang_map else ""},
-            {"name": "bind", "value": '0.0.0.0', "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_bind'] if lang_map else ""},
             {"name": "lang", "value": "en", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_lang'] if lang_map else ""},
             {"name": "fleet_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_help_fleet_enabled'] if lang_map else ""},
             {"name": "external_url", "value": "", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_external_url'] if lang_map else ""},

@@ -57,8 +57,6 @@
     "settings_variable_form_label_name": "Nom",
     "settings_variable_form_label_value": "Valeur",
     "settings_variable_form_button_cancel": "Annuler",
-    "settings_variable_help_port": "Port du serveur d'application",
-    "settings_variable_help_bind": "Hôte d'attache du serveur d'application",
     "settings_variable_help_lang": "Langage de l'application [fr,en]",
     "settings_variable_help_fleet_enabled": "Activer la gestion de flotte des écrans",
     "settings_variable_help_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",

@@ -7,7 +7,6 @@ data/uploads/*
 !data/uploads/sample.jpg
 data/db/*
 !data/db/slideshow.json.dist
-config.json
 /plugins/user/*
 !/plugins/user/.gitkeep
 *.lock
@@ -16,3 +15,4 @@ __pycache__/
 var/run/*
 !var/run/.gitkeep
 *.swp
+.env

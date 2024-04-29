@@ -1,5 +1,0 @@
-{
-    "debug": false,
-    "reverse_proxy_mode": false,
-    "lx_file": "/home/pi/.config/lxsession/LXDE-pi/autostart"
-}
