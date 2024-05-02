@@ -37,16 +37,17 @@
             console.error(err);
         });
     }, playlistCheck);
-
     var animate = {{ 'true' if slide_animation_enabled.eval() else 'false' }};
     var animate_transitions = [
         "animate__{{ slide_animation_entrance_effect.eval()|default("fadeIn") }}",
         "animate__{{ slide_animation_exit_effect.eval()|default("none") }}"
     ];
     var animate_speed = "animate__{{ slide_animation_speed.eval()|default("normal") }}";
+    var firstSlide = document.getElementById('FirstSlide');
+    var secondSlide = document.getElementById('SecondSlide');
 
     function main() {
-         preloadIntoSecondSlide();
+        preloadSlide('SecondSlide')
     }
 
     function loadContent(element, callbackReady) {
@@ -95,13 +96,12 @@
         });
     }
 
-    function preloadIntoFirstSlide() {
-        //console.log('preloadIntoFirstSlide', items[curUrl]);
-        var element = document.getElementById('FirstSlide');
+    function preloadSlide(slide) {
+        var element = document.getElementById(slide);
         var callbackReady = function (onSlideStart) {
             var move = function () {
                 if (nextReady) {
-                    moveToFirstSlide();
+                    moveToSlide(slide);
                     onSlideStart();
                 } else {
                     setTimeout(move, 1000);
@@ -114,73 +114,28 @@
         loadContent(element, callbackReady);
     }
 
-    function moveToFirstSlide() {
-        //console.log('moveToFirstSlide', items[curUrl]);
-        var firstSlide = document.querySelector('#FirstSlide');
-        var secondSlide = document.querySelector('#SecondSlide');
+    function moveToSlide(slide) {
+        var nextSlide = document.getElementById(slide);
+        var curSlide = nextSlide == firstSlide ? secondSlide : firstSlide;
 
         duration = items[curUrl].duration * 1000;
         curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
 
-        firstSlide.style.zIndex = 1000;
-        secondSlide.style.zIndex = 500;
+        nextSlide.style.zIndex = 1000;
+        curSlide.style.zIndex = 500;
 
         if (animate) {
-            firstSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
-            firstSlide.onanimationend = () => {
-                firstSlide.classList.remove(animate_transitions[0], animate_speed);
-                preloadIntoSecondSlide();
+            nextSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
+            nextSlide.onanimationend = () => {
+                nextSlide.classList.remove(animate_transitions[0], animate_speed);
+            preloadSlide(curSlide.attributes['id'].value);
             };
-            secondSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
-            secondSlide.onanimationend = () => {
-                secondSlide.classList.remove(animate_transitions[1], animate_speed);
-            };
-        } else {
-            preloadIntoSecondSlide();
-        }
-    }
-
-    function preloadIntoSecondSlide() {
-        //console.log('preloadIntoSecondSlide', items[curUrl]);
-        var element = document.getElementById('SecondSlide');
-        var callbackReady = function (onSlideStart) {
-            var move = function () {
-                if (nextReady) {
-                    moveToSecondSlide();
-                    onSlideStart();
-                } else {
-                    setTimeout(move, 1000);
-                }
-            }
-
-            setTimeout(move, duration);
-        };
-
-        loadContent(element, callbackReady);
-    }
-
-    function moveToSecondSlide() {
-        //console.log('moveToSecondSlide', items[curUrl]);
-        var firstSlide = document.querySelector('#FirstSlide');
-        var secondSlide = document.querySelector('#SecondSlide');
-        duration = items[curUrl].duration * 1000;
-        curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
-
-        secondSlide.style.zIndex = 1000;
-        firstSlide.style.zIndex = 500;
-
-        if (animate) {
-            secondSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
-            secondSlide.onanimationend = () => {
-                secondSlide.classList.remove(animate_transitions[0], animate_speed);
-                preloadIntoFirstSlide();
-            };
-            firstSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
-            firstSlide.onanimationend = () => {
-                firstSlide.classList.remove(animate_transitions[1], animate_speed);
+            curSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
+            curSlide.onanimationend = () => {
+                curSlide.classList.remove(animate_transitions[1], animate_speed);
             };
         } else {
-            preloadIntoFirstSlide();
+            preloadSlide(curSlide.attributes['id'].value);
         }
     }
 
