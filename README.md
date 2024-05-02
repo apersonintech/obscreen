@@ -5,6 +5,8 @@
 ## About
 Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
+[![Docker Pulls](https://badgen.net/docker/pulls/jierka/obscreen?icon=docker&label=docker%20pulls)](https://hub.docker.com/r/jierka/obscreen/)
+
 ### Features:
 - Dead simple chromium webview
 - Clear GUI
