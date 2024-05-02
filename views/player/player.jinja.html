@@ -4,6 +4,7 @@
     <title>Obscreen</title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="google" content="notranslate">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/animate.min.css" />
     <style>
         html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: white; display: flex; flex-direction: row; justify-content: center; align-items: center; }
         .slide { display: flex; flex-direction: row; justify-content: center; align-items: center; background: black; }
@@ -13,10 +14,10 @@
     </style>
 </head>
 <body>
-<div id="FirstSlide" class="slide" style="visibility: hidden;">
+<div id="FirstSlide" class="slide" style="z-index: 1000;">
     <iframe src="/player/default"></iframe>
 </div>
-<div id="SecondSlide" class="slide" style="visibility: visible;">
+<div id="SecondSlide" class="slide" style="z-index: 500">
     <iframe src="/player/default"></iframe>
 </div>
 <script type="text/javascript">
@@ -37,8 +38,15 @@
         });
     }, playlistCheck);
 
+    var animate = {{ 'true' if slide_animation_enabled.eval() else 'false' }};
+    var animate_transitions = [
+        "animate__{{ slide_animation_entrance_effect.eval()|default("fadeIn") }}",
+        "animate__{{ slide_animation_exit_effect.eval()|default("none") }}"
+    ];
+    var animate_speed = "animate__{{ slide_animation_speed.eval()|default("normal") }}";
+
     function main() {
-         preloadIntoFirstSlide();
+         preloadIntoSecondSlide();
     }
 
     function loadContent(element, callbackReady) {
@@ -108,11 +116,28 @@
 
     function moveToFirstSlide() {
         //console.log('moveToFirstSlide', items[curUrl]);
+        var firstSlide = document.querySelector('#FirstSlide');
+        var secondSlide = document.querySelector('#SecondSlide');
+
         duration = items[curUrl].duration * 1000;
         curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
-        document.querySelector('#FirstSlide').style.visibility = 'visible';
-        document.querySelector('#SecondSlide').style.visibility = 'hidden';
-        preloadIntoSecondSlide();
+
+        firstSlide.style.zIndex = 1000;
+        secondSlide.style.zIndex = 500;
+
+        if (animate) {
+            firstSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
+            firstSlide.onanimationend = () => {
+                firstSlide.classList.remove(animate_transitions[0], animate_speed);
+                preloadIntoSecondSlide();
+            };
+            secondSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
+            secondSlide.onanimationend = () => {
+                secondSlide.classList.remove(animate_transitions[1], animate_speed);
+            };
+        } else {
+            preloadIntoSecondSlide();
+        }
     }
 
     function preloadIntoSecondSlide() {
@@ -136,11 +161,27 @@
 
     function moveToSecondSlide() {
         //console.log('moveToSecondSlide', items[curUrl]);
+        var firstSlide = document.querySelector('#FirstSlide');
+        var secondSlide = document.querySelector('#SecondSlide');
         duration = items[curUrl].duration * 1000;
         curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
-        document.querySelector('#FirstSlide').style.visibility = 'hidden';
-        document.querySelector('#SecondSlide').style.visibility = 'visible';
-        preloadIntoFirstSlide();
+
+        secondSlide.style.zIndex = 1000;
+        firstSlide.style.zIndex = 500;
+
+        if (animate) {
+            secondSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
+            secondSlide.onanimationend = () => {
+                secondSlide.classList.remove(animate_transitions[0], animate_speed);
+                preloadIntoFirstSlide();
+            };
+            firstSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
+            firstSlide.onanimationend = () => {
+                firstSlide.classList.remove(animate_transitions[1], animate_speed);
+            };
+        } else {
+            preloadIntoFirstSlide();
+        }
     }
 
     main();
