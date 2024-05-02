@@ -8,7 +8,7 @@ from src.service.ModelStore import ModelStore
 from src.model.entity.Slide import Slide
 from src.model.enum.SlideType import SlideType
 from src.interface.ObController import ObController
-from src.utils import str_to_enum
+from src.utils import str_to_enum, get_optional_string
 
 
 class SlideshowController(ObController):
@@ -40,6 +40,7 @@ class SlideshowController(ObController):
             name=request.form['name'],
             type=str_to_enum(request.form['type'], SlideType),
             duration=request.form['duration'],
+            cron_schedule=get_optional_string(request.form['cron_schedule']),
         )
 
         if slide.has_file():
@@ -65,7 +66,7 @@ class SlideshowController(ObController):
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_edit(self):
-        self._model_store.slide().update_form(request.form['id'], request.form['name'], request.form['duration'])
+        self._model_store.slide().update_form(request.form['id'], request.form['name'], request.form['duration'], request.form['cron_schedule'])
         self._post_update()
         return redirect(url_for('slideshow_slide_list'))
 

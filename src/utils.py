@@ -6,6 +6,17 @@ from typing import Optional, List
 from enum import Enum
 
 
+def get_optional_string(var: Optional[str]) -> Optional[str]:
+    if var is None:
+        return None
+
+    var = var.strip()
+
+    if var:
+        return var
+
+    return None
+
 def get_keys(dict_or_object, key_list_name: str, key_attr_name: str = 'key') -> Optional[List]:
     if dict_or_object is None:
         return None

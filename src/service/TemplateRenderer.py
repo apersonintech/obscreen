@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask, send_from_directory, Markup
+from cron_descriptor import ExpressionDescriptor
+from cron_descriptor.Exception import FormatException, WrongArgumentException, MissingFieldException
 from typing import List
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from src.service.ModelStore import ModelStore
@@ -18,6 +20,22 @@ class TemplateRenderer:
         self._model_store = model_store
         self._render_hook = render_hook
 
+    def cron_descriptor(self, expression: str, use_24hour_time_format=True) -> str:
+        try:
+            return str(
+                ExpressionDescriptor(
+                    expression=expression,
+                    use_24hour_time_format=use_24hour_time_format,
+                    locale_code=self._model_store.lang().get_locale(local_with_country=True)
+                )
+            )
+        except FormatException:
+            return ''
+        except WrongArgumentException:
+            return ''
+        except MissingFieldException:
+            return ''
+
     def get_view_globals(self) -> dict:
         globals = dict(
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
@@ -25,6 +43,7 @@ class TemplateRenderer:
             VERSION=self._model_store.config().map().get('version'),
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,
+            cron_descriptor=self.cron_descriptor
         )
 
         for hook in HookType:

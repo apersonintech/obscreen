@@ -2,7 +2,7 @@ import os
 
 from typing import Dict, Optional, List, Tuple, Union
 from src.model.entity.Slide import Slide
-from src.utils import str_to_enum
+from src.utils import str_to_enum, get_optional_string
 from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError
 
@@ -69,8 +69,12 @@ class SlideManager:
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(slide_id, {"position": slide_position})
 
-    def update_form(self, id: str, name: str, duration: int) -> None:
-        self._db.update_by_id(id, {"name": name, "duration": duration})
+    def update_form(self, id: str, name: str, duration: int, cron_schedule: Optional[str] = '') -> None:
+        self._db.update_by_id(id, {
+            "name": name,
+            "duration": duration,
+            "cron_schedule": get_optional_string(cron_schedule)
+        })
 
     def add_form(self, slide: Union[Slide, Dict]) -> None:
         db_slide = slide

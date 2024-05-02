@@ -7,14 +7,14 @@ from src.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None, cron_schedule: str = ''):
+    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None, cron_schedule: Optional[str] = None):
         self._id = id if id else None
         self._location = location
         self._duration = duration
         self._type = str_to_enum(type, SlideType) if isinstance(type, str) else type
         self._enabled = enabled
         self._name = name
-        self._position = position,
+        self._position = position
         self._cron_schedule = cron_schedule
 
     @property
@@ -38,11 +38,11 @@ class Slide:
         self._type = value
 
     @property
-    def cron_schedule(self) -> str:
+    def cron_schedule(self) -> Optional[str]:
         return self._cron_schedule
 
     @cron_schedule.setter
-    def cron_schedule(self, value: str):
+    def cron_schedule(self, value: Optional[str]):
         self._cron_schedule = value
 
     @property
