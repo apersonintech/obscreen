@@ -7,9 +7,9 @@
     </tr>
     </thead>
     <tbody>
-    {% set last_plugin = '' %}
+    {% set ns = namespace(last_plugin='') %}
     {% for variable in variables %}
-        {% if variable.plugin and last_plugin != variable.plugin %}
+        {% if variable.plugin and ns.last_plugin != variable.plugin %}
         <tr>
             <td colspan="2">
                 <h3>
@@ -26,8 +26,16 @@
                 </div>
             </td>
             <td>
-                {% if  variable.value %}
-                    {{ variable.value }}
+                {% if variable.value %}
+                    {% if variable.type.value == 'bool' %}
+                        {% if variable.display() %}
+                            ✅
+                        {% else %}
+                            ❌
+                        {% endif %}
+                    {% else %}
+                        {{ variable.display() }}
+                    {% endif %}
                 {% else %}
                     <span class="empty">{{ l.common_empty }}</span>
                 {% endif %}
@@ -38,7 +46,7 @@
                 </a>
             </td>
         </tr>
-        {% set last_plugin = variable.plugin %}
+        {% set ns.last_plugin = variable.plugin %}
     {% endfor %}
     </tbody>
 </table>

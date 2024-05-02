@@ -34,13 +34,37 @@
                     {% for ro_variable in ro_variables %}
                         <tr>
                             <td>{{ ro_variable.description }}</td>
-                            <td>{{ ro_variable.display() }}</td>
+                            <td>
+                                {% if ro_variable.value %}
+                                    {% if ro_variable.type.value == 'bool' %}
+                                        {% if ro_variable.display() %}
+                                            ✅
+                                        {% else %}
+                                            ❌
+                                        {% endif %}
+                                    {% else %}
+                                        {{ ro_variable.display() }}
+                                    {% endif %}
+                                {% else %}
+                                        <span class="empty">{{ l.common_empty }}</span>
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                     {% for env_key, env_value in env_variables.items() %}
                         <tr>
                             <td>{{ env_key }}</td>
-                            <td>{{ env_value }}</td>
+                            <td>
+                                {% if env_value == true %}
+                                    ✅
+                                {% elif env_value == false %}
+                                    ❌
+                                {% elif env_value == none %}
+                                    <span class="empty">{{ l.common_empty }}</span>
+                                {% else %}
+                                    {{ env_value }}
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

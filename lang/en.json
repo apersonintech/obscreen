@@ -57,12 +57,17 @@
     "settings_variable_form_label_name": "Name",
     "settings_variable_form_label_value": "Value",
     "settings_variable_form_button_cancel": "Cancel",
-    "settings_variable_help_lang": "Server language [fr,en] (restart needed)",
-    "settings_variable_help_fleet_enabled": "Enable fleet screen management view (restart needed)",
-    "settings_variable_help_external_url": "External url (i.e: https://screen-01.company.com or http://10.10.3.100)",
+    "settings_variable_desc_lang": "Server language",
+    "settings_variable_desc_fleet_enabled": "Enable fleet screen management view",
+    "settings_variable_desc_external_url": "External url (i.e: https://screen-01.company.com or http://10.10.3.100)",
 
-    "settings_variable_help_ro_editable":  "Last application reboot datetime",
-    "settings_variable_help_ro_last_slide_update":  "Last slide update datetime",
+    "settings_variable_desc_slide_animation_enabled": "Enable animation effect between slides",
+    "settings_variable_desc_slide_animation_entrance_effect": "Slide animation entrance effect",
+    "settings_variable_desc_slide_animation_exit_effect": "Slide animation exit effect (generally better off without it)",
+    "settings_variable_desc_slide_animation_speed": "Slide animation speed",
+
+    "settings_variable_desc_ro_editable":  "Last application reboot datetime",
+    "settings_variable_desc_ro_last_slide_update":  "Last slide update datetime",
 
     "sysinfo_page_title": "System infos",
     "sysinfo_panel_button_restart": "Restart",
@@ -94,5 +99,11 @@
     "basic_month_12": "Décember",
 
     "common_unknown_ipaddr": "Unknown IP address",
-    "common_empty": "[Empty]"
+    "common_empty": "[Empty]",
+
+    "enum_animation_speed_slower": "Slower",
+    "enum_animation_speed_slow": "Slow",
+    "enum_animation_speed_normal": "Normal",
+    "enum_animation_speed_fast": "Fast",
+    "enum_animation_speed_faster": "Faster"
 }

@@ -2,9 +2,30 @@ import re
 import subprocess
 import platform
 
-from typing import Optional
+from typing import Optional, List
 from enum import Enum
 
+
+def get_keys(dict_or_object, key_list_name: str, key_attr_name: str = 'key') -> Optional[List]:
+    if dict_or_object is None:
+        return None
+
+    is_dict = isinstance(dict_or_object, dict)
+    is_object = not is_dict and isinstance(dict_or_object, object)
+
+    if is_dict:
+        iterable = dict_or_object[key_list_name]
+        if iterable is None:
+            return None
+        return [item[key_attr_name] for item in iterable]
+
+    if is_object:
+        iterable = getattr(dict_or_object, key_list_name)
+        if iterable is None:
+            return None
+        return [getattr(item, key_attr_name) for item in iterable]
+
+    return None
 
 def str_to_enum(str_val: str, enum_class) -> Enum:
     for enum_item in enum_class:

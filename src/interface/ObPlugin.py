@@ -55,9 +55,15 @@ class ObPlugin(abc.ABC):
     def get_plugin_variable_name(self, name: str) -> str:
         return "{}_{}".format(self.get_plugin_variable_prefix(), name)
 
-    def add_variable(self, name: str, value, type: VariableType, editable: bool, description: str) -> Variable:
+    def add_variable(self, name: str, value='', type: VariableType = VariableType.STRING, editable: bool = True, description: str = '', selectables: Optional[Dict[str, str]] = None) -> Variable:
         return self._model_store.variable().set_variable(
-            name=self.get_plugin_variable_name(name), value=value, type=type, editable=editable, description=description, plugin=self.use_id()
+            name=self.get_plugin_variable_name(name),
+            value=value,
+            type=type,
+            editable=editable,
+            description=description,
+            selectables=selectables if isinstance(selectables, dict) else None,
+            plugin=self.use_id(),
         )
 
     def add_static_hook_registration(self, hook: HookType, priority: int = 0) -> StaticHookRegistration:
