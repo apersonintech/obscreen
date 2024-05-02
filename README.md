@@ -18,11 +18,12 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
-## Installation (docker)
+## Installation and configure (docker)
 ```bash
 git clone https://github.com/jr-k/obscreen.git
 cd obscreen
 cp .env.dist .env
+nano .env # be sure to have a valid file path for AUTOCONFIGURE_LX_FILE variable, you should use ./var/run/dummy if you don't care about monitor and just want to test
 docker compose up
 ```
 
