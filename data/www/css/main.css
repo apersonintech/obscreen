@@ -71,6 +71,13 @@ header .logo {
     align-items: center;
 }
 
+header .logo a {
+    color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 header .logo img {
     width: 32px;
     height: 32px;
@@ -545,4 +552,17 @@ span.empty {
     text-transform: uppercase;
     opacity: 0.5;
     color: #999;
+}
+
+footer {
+    align-self: stretch;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    padding: 20px;
+}
+
+footer .version {
+    opacity: 0.3;
 }

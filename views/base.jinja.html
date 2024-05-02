@@ -6,6 +6,24 @@
     </title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="google" content="notranslate">
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ STATIC_PREFIX }}favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ STATIC_PREFIX }}favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_PREFIX }}favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ STATIC_PREFIX }}favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_PREFIX }}favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ STATIC_PREFIX }}favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ STATIC_PREFIX }}favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ STATIC_PREFIX }}favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ STATIC_PREFIX }}favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="{{ STATIC_PREFIX }}favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ STATIC_PREFIX }}favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ STATIC_PREFIX }}favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ STATIC_PREFIX }}favicon/favicon-16x16.png">
+    <link rel="manifest" href="{{ STATIC_PREFIX }}/manifest.json">
+    <meta name="msapplication-TileColor" content="#692fbd">
+    <meta name="msapplication-TileImage" content="{{ STATIC_PREFIX }}favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#692fbd">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -22,8 +40,10 @@
         {% if not fleet_mode %}
              <header>
                 <h1 class="logo">
-                    <img src="{{ STATIC_PREFIX }}img/logo.png" />
-                    Obscreen
+                    <a href="{{ url_for('slideshow_slide_list') }}">
+                        <img src="{{ STATIC_PREFIX }}img/logo.png" />
+                        Obscreen
+                    </a>
                 </h1>
                 <nav>
                     <ul>
@@ -65,6 +85,8 @@
     {% block footer %}
         <footer>
             {{ HOOK(H_ROOT_FOOTER) }}
+
+            <p class="version">Obscreen version {{ VERSION }}</p>
         </footer>
     {% endblock %}
 </div>

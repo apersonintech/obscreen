@@ -57,12 +57,17 @@
     "settings_variable_form_label_name": "Nom",
     "settings_variable_form_label_value": "Valeur",
     "settings_variable_form_button_cancel": "Annuler",
-    "settings_variable_help_lang": "Langage de l'application [fr,en]",
-    "settings_variable_help_fleet_enabled": "Activer la gestion de flotte des écrans",
-    "settings_variable_help_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
+    "settings_variable_desc_lang": "Langage de l'application",
+    "settings_variable_desc_fleet_enabled": "Activer la gestion de flotte des écrans",
+    "settings_variable_desc_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
 
-    "settings_variable_help_ro_editable":  "Date de dernier redémarrage de l'application",
-    "settings_variable_help_ro_last_slide_update":  "Date de dernière modification d'une slide",
+    "settings_variable_desc_slide_animation_enabled": "Activer les effets d'animation entre les slides",
+    "settings_variable_desc_slide_animation_entrance_effect": "Effet d'animation d'arrivée de la slide",
+    "settings_variable_desc_slide_animation_exit_effect": "Effet d'animation de sortie de la slide (généralement mieux sans)",
+    "settings_variable_desc_slide_animation_speed": "Vitesse de l'animation de la slide",
+
+    "settings_variable_desc_ro_editable":  "Date de dernier redémarrage de l'application",
+    "settings_variable_desc_ro_last_slide_update":  "Date de dernière modification d'une slide",
 
     "sysinfo_page_title": "Système",
     "sysinfo_panel_button_restart": "Redémarrer",
@@ -94,5 +99,11 @@
     "basic_month_12": "Décembre",
 
     "common_unknown_ipaddr": "Adresse IP inconnue",
-    "common_empty": "[Vide]"
+    "common_empty": "[Vide]",
+
+    "enum_animation_speed_slower": "Très lent",
+    "enum_animation_speed_slow": "Lent",
+    "enum_animation_speed_normal": "Normal",
+    "enum_animation_speed_fast": "Rapide",
+    "enum_animation_speed_faster": "Très rapide"
 }
