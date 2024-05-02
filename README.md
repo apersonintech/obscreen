@@ -22,6 +22,7 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 ```bash
 git clone https://github.com/jr-k/obscreen.git
 cd obscreen
+cp .env.dist .env
 docker compose up
 ```
 
