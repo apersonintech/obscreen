@@ -23,7 +23,12 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 git clone https://github.com/jr-k/obscreen.git
 cd obscreen
 cp .env.dist .env
-nano .env # be sure to have a valid file path for AUTOCONFIGURE_LX_FILE variable, you should use ./var/run/dummy if you don't care about monitor and just want to test
+
+# be sure to have a valid file path for AUTOCONFIGURE_LX_FILE variable
+# you should use ./var/run/dummy if you don't care about monitor and just want to test
+nano .env
+
+# run
 docker compose up
 ```
 
