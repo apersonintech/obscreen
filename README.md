@@ -20,7 +20,7 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
-## Installation and configure (docker)
+## Installation and configuration (docker)
 ```bash
 git clone https://github.com/jr-k/obscreen.git
 cd obscreen

@@ -4,6 +4,26 @@ import platform
 
 from typing import Optional, List
 from enum import Enum
+from cron_descriptor import ExpressionDescriptor
+from cron_descriptor.Exception import FormatException, WrongArgumentException, MissingFieldException
+
+
+def get_safe_cron_descriptor(expression: str, use_24hour_time_format=True, locale_code: Optional[str] = None) -> str:
+    options = {
+        "expression": expression,
+        "use_24hour_time_format": use_24hour_time_format
+    }
+
+    if locale_code:
+        options["locale_code"] = locale_code
+    try:
+        return str(ExpressionDescriptor(**options))
+    except FormatException:
+        return ''
+    except WrongArgumentException:
+        return ''
+    except MissingFieldException:
+        return ''
 
 
 def get_optional_string(var: Optional[str]) -> Optional[str]:
@@ -16,6 +36,7 @@ def get_optional_string(var: Optional[str]) -> Optional[str]:
         return var
 
     return None
+
 
 def get_keys(dict_or_object, key_list_name: str, key_attr_name: str = 'key') -> Optional[List]:
     if dict_or_object is None:
@@ -38,11 +59,13 @@ def get_keys(dict_or_object, key_list_name: str, key_attr_name: str = 'key') -> 
 
     return None
 
+
 def str_to_enum(str_val: str, enum_class) -> Enum:
     for enum_item in enum_class:
         if enum_item.value == str_val:
             return enum_item
     raise ValueError(f"{str_val} is not a valid {enum_class.__name__} item")
+
 
 def get_ip_address() -> Optional[str]:
     try:
