@@ -512,6 +512,14 @@ form .form-group textarea {
     width: auto;
 }
 
+form .form-group input[type=checkbox] {
+    flex: 0;
+}
+
+form .form-group input[type=checkbox].trigger {
+    margin-right: 10px;
+}
+
 form .form-group span {
     margin-left: 10px;
 }

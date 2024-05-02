@@ -49,7 +49,7 @@ jQuery(document).ready(function ($) {
         });
     };
 
-    $(document).on('change', 'input[type=checkbox]', function () {
+    $(document).on('change', '.slide-item input[type=checkbox]', function () {
         $.ajax({
             url: '/slideshow/slide/toggle',
             headers: {'Content-Type': 'application/json'},
@@ -66,6 +66,16 @@ jQuery(document).ready(function ($) {
         }
 
         updateTable();
+    });
+
+    $(document).on('change', '.modal-slide input[type=checkbox]', function () {
+        const $target = $('#'+ $(this).attr('id').replace('-trigger', ''));
+        const hide = !$(this).is(':checked');
+        $target.toggleClass('hidden', hide);
+
+        if (hide) {
+            $target.val('');
+        }
     });
 
     $(document).on('change', '#slide-add-type', function () {
@@ -95,11 +105,14 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.slide-edit', function () {
         const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
         showModal('modal-slide-edit');
+        const hasCron = slide.cron_schedule && slide.cron_schedule.length > 0;
         $('.modal-slide-edit input:visible:eq(0)').focus().select();
         $('#slide-edit-name').val(slide.name);
         $('#slide-edit-type').val(slide.type);
         $('#slide-edit-location').val(slide.location);
         $('#slide-edit-duration').val(slide.duration);
+        $('#slide-edit-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron);
+        $('#slide-edit-cron-schedule-trigger').prop('checked', hasCron);
         $('#slide-edit-id').val(slide.id);
     });
 

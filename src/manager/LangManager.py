@@ -8,7 +8,7 @@ class LangManager:
 
     def __init__(self, lang: str):
         self._map = {}
-        self._lang = lang
+        self._lang = lang.lower()
         self.load()
 
     def load(self, directory: str = "", prefix: str = ""):
@@ -23,3 +23,6 @@ class LangManager:
 
     def map(self) -> dict:
         return self._map
+
+    def get_locale(self, local_with_country: bool = False) -> str:
+        return "{}_{}".format(self._lang, self._lang.upper()) if local_with_country else self._lang
