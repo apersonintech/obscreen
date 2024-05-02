@@ -12,6 +12,7 @@
         .slide iframe { background: white; }
         .slide img { height: 100%; }
     </style>
+    <script type="application/javascript" src="{{ STATIC_PREFIX }}js/is-cron-now.js"></script>
 </head>
 <body>
 <div id="FirstSlide" class="slide" style="z-index: 1000;">
@@ -51,7 +52,7 @@
     }
 
     function loadContent(element, callbackReady) {
-        switch (items[curUrl].type) {
+        switch (items.loop[curUrl].type) {
             case 'url':
                 loadUrl(element, callbackReady);
                 break;
@@ -68,20 +69,20 @@
     }
 
     function loadUrl(element, callbackReady) {
-        element.innerHTML = `<iframe src="${items[curUrl].location}"></iframe>`;
+        element.innerHTML = `<iframe src="${items.loop[curUrl].location}"></iframe>`;
         callbackReady(function () {});
     }
 
     function loadPicture(element, callbackReady) {
-        element.innerHTML = `<img src="${items[curUrl].location}" alt="" />`;
+        element.innerHTML = `<img src="${items.loop[curUrl].location}" alt="" />`;
         callbackReady(function () {});
     }
 
     function loadVideo(element, callbackReady) {
-        element.innerHTML = `<video><source src=${items[curUrl].location} type="video/mp4" /></video>`;
+        element.innerHTML = `<video><source src=${items.loop[curUrl].location} type="video/mp4" /></video>`;
         var video = element.querySelector('video');
         video.addEventListener('loadedmetadata', function () {
-            items[curUrl].duration = Math.ceil(video.duration);
+            items.loop[curUrl].duration = Math.ceil(video.duration);
         });
 
         callbackReady(function () {
@@ -92,7 +93,7 @@
             });
             setTimeout(function () {
                 nextReady = true;
-            }, Math.ceil(items[curUrl].duration * 1.5));
+            }, Math.ceil(items.loop[curUrl].duration * 1.5));
         });
     }
 
@@ -118,8 +119,8 @@
         var nextSlide = document.getElementById(slide);
         var curSlide = nextSlide == firstSlide ? secondSlide : firstSlide;
 
-        duration = items[curUrl].duration * 1000;
-        curUrl = (curUrl + 1) === items.length ? 0 : curUrl + 1;
+        duration = items.loop[curUrl].duration * 1000;
+        curUrl = (curUrl + 1) === items.loop.length ? 0 : curUrl + 1;
 
         nextSlide.style.zIndex = 1000;
         curSlide.style.zIndex = 500;
