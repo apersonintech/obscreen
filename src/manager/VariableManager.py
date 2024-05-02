@@ -2,6 +2,9 @@ from typing import Dict, Optional, List, Tuple, Union
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
 from src.model.enum.VariableType import VariableType
+from src.model.enum.AnimationEntranceEffect import AnimationEntranceEffect
+from src.model.enum.AnimationExitEffect import AnimationExitEffect
+from src.model.enum.AnimationSpeed import AnimationSpeed
 from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError
 from src.utils import get_keys
@@ -57,11 +60,15 @@ class VariableManager:
 
     def reload(self, lang_map: Optional[Dict] = None) -> None:
         default_vars = [
-            {"name": "lang", "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_help_lang'] if lang_map else "", "selectables": {"en": "English", "fr": "French"}},
-            {"name": "fleet_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_help_fleet_enabled'] if lang_map else ""},
-            {"name": "external_url", "value": "", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_help_external_url'] if lang_map else ""},
-            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_help_ro_editable'] if lang_map else ""},
-            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_help_ro_last_slide_update'] if lang_map else ""},
+            {"name": "lang", "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_lang'] if lang_map else "", "selectables": {"en": "English", "fr": "French"}},
+            {"name": "fleet_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_desc_fleet_enabled'] if lang_map else ""},
+            {"name": "external_url", "value": "", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_desc_external_url'] if lang_map else ""},
+            {"name": "slide_animation_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_enabled'] if lang_map else ""},
+            {"name": "slide_animation_entrance_effect", "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_entrance_effect'] if lang_map else "", "selectables": AnimationEntranceEffect.get_values()},
+            {"name": "slide_animation_exit_effect", "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_exit_effect'] if lang_map else "", "selectables": AnimationExitEffect.get_values()},
+            {"name": "slide_animation_speed", "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_speed'] if lang_map else "", "selectables": AnimationSpeed.get_values(lang_map)},
+            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_desc_ro_editable'] if lang_map else ""},
+            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_desc_ro_last_slide_update'] if lang_map else ""},
         ]
 
         for default_var in default_vars:

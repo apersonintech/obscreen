@@ -24,7 +24,11 @@ class PlayerController(ObController):
     def player(self):
         return render_template(
             'player/player.jinja.html',
-            items=json.dumps(self._get_playlist())
+            items=json.dumps(self._get_playlist()),
+            slide_animation_enabled=self._model_store.variable().get_one_by_name('slide_animation_enabled'),
+            slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
+            slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
+            slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed')
         )
 
     def player_default(self):

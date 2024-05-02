@@ -124,16 +124,22 @@ class Variable:
         return time.ctime(self._value)
 
     def display(self) -> Union[int, bool, str]:
+        value = self.eval()
+
+        if self.type == VariableType.SELECT_SINGLE:
+            for selectable in self.selectables:
+                if selectable.key == value:
+                    return str(selectable.label)
+
+        return value
+
+    def eval(self) -> Union[int, bool, str]:
         if self.type == VariableType.INT:
             return self.as_int()
         elif self.type == VariableType.BOOL:
             return self.as_bool()
         elif self.type == VariableType.TIMESTAMP:
             return self.as_ctime()
-        elif self.type == VariableType.SELECT_SINGLE:
-            for selectable in self.selectables:
-                if selectable.key == self.value:
-                    return str(selectable.label)
 
         return self.as_string()
 
