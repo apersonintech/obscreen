@@ -3,18 +3,31 @@ import json
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
-from src.utils import get_ip_address
+from src.utils import get_ip_address, get_safe_cron_descriptor
 
 
 class PlayerController(ObController):
 
     def _get_playlist(self) -> dict:
-        slides = self._model_store.slide().to_dict(self._model_store.slide().get_enabled_slides())
+        enabled_slides = self._model_store.slide().get_enabled_slides()
+        slides = self._model_store.slide().to_dict(enabled_slides)
 
-        if len(slides) == 1:
-            return [slides[0], slides[0]]
+        playlist_loop = []
+        playlist_cron = []
 
-        return slides
+        for slide in slides:
+            if 'cron_schedule' in slide and slide['cron_schedule']:
+                if get_safe_cron_descriptor(slide['cron_schedule']):
+                    playlist_cron.append(slide)
+            else:
+                playlist_loop.append(slide)
+
+        playlists = {
+            'loop': playlist_loop,
+            'cron': playlist_cron
+        }
+
+        return playlists
 
     def register(self):
         self._app.add_url_rule('/', 'player', self.player, methods=['GET'])

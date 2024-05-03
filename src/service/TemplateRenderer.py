@@ -9,6 +9,7 @@ from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
 from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.constant.WebDirConstant import WebDirConstant
+from src.utils import get_safe_cron_descriptor
 
 
 class TemplateRenderer:
@@ -18,6 +19,9 @@ class TemplateRenderer:
         self._model_store = model_store
         self._render_hook = render_hook
 
+    def cron_descriptor(self, expression: str, use_24hour_time_format=True) -> str:
+        return get_safe_cron_descriptor(expression, use_24hour_time_format, self._model_store.lang().get_locale(local_with_country=True))
+
     def get_view_globals(self) -> dict:
         globals = dict(
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
@@ -25,6 +29,7 @@ class TemplateRenderer:
             VERSION=self._model_store.config().map().get('version'),
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,
+            cron_descriptor=self.cron_descriptor
         )
 
         for hook in HookType:
