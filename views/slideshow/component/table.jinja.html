@@ -4,6 +4,7 @@
         <th>{{ l.slideshow_slide_panel_th_name }}</th>
         <th class="tac">{{ l.slideshow_slide_panel_th_duration }}</th>
         <th class="tac">{{ l.slideshow_slide_panel_th_enabled }}</th>
+        <th class="">{{ l.slideshow_slide_panel_th_cron_scheduled }}</th>
         <th class="tac">{{ l.slideshow_slide_panel_th_activity }}</th>
     </tr>
     </thead>
@@ -41,6 +42,18 @@
                 <label class="pure-material-switch">
                     <input type="checkbox" {% if slide.enabled %}checked="checked"{% endif %}><span></span>
                 </label>
+            </td>
+            <td class="">
+                {% if slide.cron_schedule %}
+                    {% set cron_desc = cron_descriptor(slide.cron_schedule)  %}
+                    {% if cron_desc %}
+                        ⏳ {{ cron_desc }}
+                    {% else %}
+                        <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
+                    {% endif %}
+                {% else %}
+                    🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
+                {% endif %}
             </td>
             <td class="actions tac">
                 <a href="javascript:void(0);" class="item-edit slide-edit">
