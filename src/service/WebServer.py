@@ -33,7 +33,6 @@ class WebServer:
     def setup(self) -> None:
         self._setup_flask_app()
         self._setup_web_globals()
-        self._setup_web_extensions()
         self._setup_web_errors()
         self._setup_web_controllers()
 
@@ -73,12 +72,8 @@ class WebServer:
         def inject_global_vars() -> dict:
             return self._template_renderer.get_view_globals()
 
-    def _setup_web_extensions(self) -> None:
-        @self._app.template_filter('ctime')
-        def time_ctime(s):
-            return time.ctime(s)
-
     def _setup_web_errors(self) -> None:
         @self._app.errorhandler(404)
         def not_found(e):
             return send_from_directory(self._get_template_folder(), 'core/error404.html'), 404
+

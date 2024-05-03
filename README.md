@@ -5,6 +5,8 @@
 ## About
 Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
+[![Docker Pulls](https://badgen.net/docker/pulls/jierka/obscreen?icon=docker&label=docker%20pulls)](https://hub.docker.com/r/jierka/obscreen/)
+
 ### Features:
 - Dead simple chromium webview
 - Clear GUI
@@ -18,11 +20,17 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
-## Installation (docker)
+## Installation and configuration (docker)
 ```bash
 git clone https://github.com/jr-k/obscreen.git
 cd obscreen
 cp .env.dist .env
+
+# be sure to have a valid file path for AUTOCONFIGURE_LX_FILE variable
+# you should use ./var/run/dummy if you don't care about monitor and just want to test
+nano .env
+
+# run
 docker compose up
 ```
 
