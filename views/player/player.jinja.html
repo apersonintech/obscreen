@@ -18,14 +18,14 @@
 <div id="FirstSlide" class="slide" style="z-index: 1000;">
     <iframe src="/player/default"></iframe>
 </div>
-<div id="SecondSlide" class="slide" style="z-index: 500">
+<div id="SecondSlide" class="slide" style="z-index: 500;">
     <iframe src="/player/default"></iframe>
 </div>
 <script type="text/javascript">
     var items = {{items | safe}};
     var duration = 3000 / 1;
     var playlistCheck = 10 * 1000; // 10 seconds check
-    var curUrl = 0;
+    var curItemIndex = 0;
     var nextReady = true;
     var itemCheck = setInterval(function () {
         fetch('player/playlist').then(function(response) {
@@ -46,46 +46,86 @@
     var animate_speed = "animate__{{ slide_animation_speed.eval()|default("normal") }}";
     var firstSlide = document.getElementById('FirstSlide');
     var secondSlide = document.getElementById('SecondSlide');
+    var previousSlide = secondSlide;
+    var curSlide = firstSlide;
+    var cronState = {
+        active: false,
+        itemIndex: null,
+        interval: null
+    };
 
-    function main() {
-        preloadSlide('SecondSlide')
+    var cronTick = function() {
+        if ((new Date()).getSeconds() != 0) {
+            return;
+        }
+
+        // console.log('Cron Tick');
+        
+        for (var i = 0; i < items.cron.length; i++) {
+            var item = items.cron[i];
+
+            if (cron.isActive(item.cron_schedule) && cronState.itemIndex != i) {
+                cronState.active = true;
+                cronState.itemIndex = i;
+                var callbackReady = function (onSlideStart) {
+                    onSlideStart();
+                    moveToSlide(curSlide.attributes['id'].value, item);
+                    var move = function () {
+                        if (nextReady) {
+                            curItemIndex = (curItemIndex + 1) === items.loop.length ? 0 : curItemIndex + 1;
+                            cronState.active = false;
+                            cronState.itemIndex = null;
+                        } else {
+                            setTimeout(move, 1000);
+                        }
+                    }
+                    setTimeout(move, item.duration * 1000);
+                };
+                loadContent(curSlide, callbackReady, item);
+            }
+        }
     }
 
-    function loadContent(element, callbackReady) {
-        switch (items.loop[curUrl].type) {
+    function main() {
+        preloadSlide('SecondSlide', items.loop[curItemIndex])
+        cronState.interval = setInterval(cronTick, 1000);
+    }
+
+    function loadContent(element, callbackReady, item) {
+        switch (item.type) {
             case 'url':
-                loadUrl(element, callbackReady);
+                loadUrl(element, callbackReady, item);
                 break;
             case 'picture':
-                loadPicture(element, callbackReady);
+                loadPicture(element, callbackReady, item);
                 break;
             case 'video':
-                loadVideo(element, callbackReady);
+                loadVideo(element, callbackReady, item);
                 break;
             default:
-                loadUrl(element, callbackReady);
+                loadUrl(element, callbackReady, item);
                 break;
         }
     }
 
-    function loadUrl(element, callbackReady) {
-        element.innerHTML = `<iframe src="${items.loop[curUrl].location}"></iframe>`;
+    function loadUrl(element, callbackReady, item) {
+        element.innerHTML = `<iframe src="${item.location}"></iframe>`;
         callbackReady(function () {});
     }
 
-    function loadPicture(element, callbackReady) {
-        element.innerHTML = `<img src="${items.loop[curUrl].location}" alt="" />`;
+    function loadPicture(element, callbackReady, item) {
+        element.innerHTML = `<img src="${item.location}" alt="" />`;
         callbackReady(function () {});
     }
 
-    function loadVideo(element, callbackReady) {
-        element.innerHTML = `<video><source src=${items.loop[curUrl].location} type="video/mp4" /></video>`;
+    function loadVideo(element, callbackReady, item) {
+        element.innerHTML = `<video><source src=${item.location} type="video/mp4" /></video>`;
         var video = element.querySelector('video');
         video.addEventListener('loadedmetadata', function () {
-            items.loop[curUrl].duration = Math.ceil(video.duration);
+            item.duration = Math.ceil(video.duration);
         });
 
-        callbackReady(function () {
+        var onSlideStart = function () {
             nextReady = false;
             video.play();
             video.addEventListener('ended', function () {
@@ -93,16 +133,17 @@
             });
             setTimeout(function () {
                 nextReady = true;
-            }, Math.ceil(items.loop[curUrl].duration * 1.5));
-        });
+            }, Math.ceil(item.duration * 1.5));
+        };
+        callbackReady(onSlideStart);
     }
 
-    function preloadSlide(slide) {
+    function preloadSlide(slide, item) {
         var element = document.getElementById(slide);
         var callbackReady = function (onSlideStart) {
             var move = function () {
-                if (nextReady) {
-                    moveToSlide(slide);
+                if (nextReady && !cronState.active) {
+                    moveToSlide(slide, item);
                     onSlideStart();
                 } else {
                     setTimeout(move, 1000);
@@ -112,31 +153,31 @@
             setTimeout(move, duration);
         };
 
-        loadContent(element, callbackReady);
+        loadContent(element, callbackReady, item);
     }
 
-    function moveToSlide(slide) {
-        var nextSlide = document.getElementById(slide);
-        var curSlide = nextSlide == firstSlide ? secondSlide : firstSlide;
+    function moveToSlide(slide, item) {
+        curSlide = document.getElementById(slide);
+        previousSlide = curSlide == firstSlide ? secondSlide : firstSlide;
 
-        duration = items.loop[curUrl].duration * 1000;
-        curUrl = (curUrl + 1) === items.loop.length ? 0 : curUrl + 1;
+        duration = item.duration * 1000;
+        curItemIndex = (curItemIndex + 1) === items.loop.length ? 0 : curItemIndex + 1;
 
-        nextSlide.style.zIndex = 1000;
-        curSlide.style.zIndex = 500;
+        curSlide.style.zIndex = 1000;
+        previousSlide.style.zIndex = 500;
 
         if (animate) {
-            nextSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
-            nextSlide.onanimationend = () => {
-                nextSlide.classList.remove(animate_transitions[0], animate_speed);
-            preloadSlide(curSlide.attributes['id'].value);
-            };
-            curSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
+            curSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
             curSlide.onanimationend = () => {
-                curSlide.classList.remove(animate_transitions[1], animate_speed);
+                curSlide.classList.remove(animate_transitions[0], animate_speed);
+                preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
+            };
+            previousSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
+            previousSlide.onanimationend = () => {
+                previousSlide.classList.remove(animate_transitions[1], animate_speed);
             };
         } else {
-            preloadSlide(curSlide.attributes['id'].value);
+            preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
         }
     }
 
