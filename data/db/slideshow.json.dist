@@ -6,7 +6,8 @@
     "location",
     "name",
     "position",
-    "type"
+    "type",
+    "cron_schedule"
   ],
   "data": {
     "0": {
@@ -15,7 +16,8 @@
       "type": "picture",
       "enabled": true,
       "name": "Picture Sample",
-      "position": 0
+      "position": 0,
+      "cron_schedule": null
     },
     "1": {
       "location": "https://unix.org",
@@ -23,7 +25,8 @@
       "type": "url",
       "enabled": true,
       "name": "URL Sample",
-      "position": 1
+      "position": 1,
+      "cron_schedule": null
     }
   }
 }

@@ -1,4 +1,4 @@
-<div class="modal modal-slide-edit hidden">
+<div class="modal modal-slide-edit modal-slide hidden">
     <h2>
         {{ l.slideshow_slide_form_edit_submit }}
     </h2>
@@ -35,6 +35,14 @@
             <div class="widget">
                 <input type="number" name="duration" id="slide-edit-duration" required="required" />
                 <span>{{ l.slideshow_slide_form_label_duration_unit }}</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="slide-edit-cron-schedule">{{ l.slideshow_slide_form_label_cron_scheduled }}</label>
+            <div class="widget">
+                <input type="checkbox" id="slide-edit-cron-schedule-trigger" class="trigger" />
+                <input type="text" name="cron_schedule" id="slide-edit-cron-schedule" placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}" class="hidden" />
             </div>
         </div>
 
