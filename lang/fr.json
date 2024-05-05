@@ -65,6 +65,7 @@
     "settings_variable_desc_lang": "Langage de l'application",
     "settings_variable_desc_fleet_enabled": "Activer la gestion de flotte des écrans",
     "settings_variable_desc_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
+    "settings_variable_desc_slide_upload_limit": "Limite d'upload du fichier d'une slide (en octets, 32*1024*1024 pour 32Mo)",
 
     "settings_variable_desc_slide_animation_enabled": "Activer les effets d'animation entre les slides",
     "settings_variable_desc_slide_animation_entrance_effect": "Effet d'animation d'arrivée de la slide",

@@ -5,6 +5,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from typing import Optional, List, Dict, Union
 from src.model.entity.Variable import Variable
 from src.model.enum.VariableType import VariableType
+from src.model.enum.VariableUnit import VariableUnit
 from src.model.enum.HookType import HookType
 from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
@@ -55,13 +56,14 @@ class ObPlugin(abc.ABC):
     def get_plugin_variable_name(self, name: str) -> str:
         return "{}_{}".format(self.get_plugin_variable_prefix(), name)
 
-    def add_variable(self, name: str, value='', type: VariableType = VariableType.STRING, editable: bool = True, description: str = '', selectables: Optional[Dict[str, str]] = None) -> Variable:
+    def add_variable(self, name: str, value='', type: VariableType = VariableType.STRING, editable: bool = True, description: str = '', selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None) -> Variable:
         return self._model_store.variable().set_variable(
             name=self.get_plugin_variable_name(name),
             value=value,
             type=type,
             editable=editable,
             description=description,
+            unit=unit,
             selectables=selectables if isinstance(selectables, dict) else None,
             plugin=self.use_id(),
         )

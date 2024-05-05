@@ -1,15 +1,24 @@
-from typing import Dict, Optional, List, Tuple, Union
-from src.model.entity.Screen import Screen
-from pysondb import PysonDB
 from pysondb.errors import IdDoesNotExistError
+from typing import Dict, Optional, List, Tuple, Union
+
+from src.model.entity.Screen import Screen
+from src.manager.DatabaseManager import DatabaseManager
 
 
 class ScreenManager:
 
-    DB_FILE = "data/db/fleet.json"
+    TABLE_NAME = "fleet"
+    TABLE_MODEL = [
+        "name",
+        "enabled",
+        "position",
+        "host",
+        "port"
+    ]
 
-    def __init__(self):
-        self._db = PysonDB(self.DB_FILE)
+    def __init__(self, database_manager: DatabaseManager):
+        self._database_manager = database_manager
+        self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     @staticmethod
     def hydrate_object(raw_screen: dict, id: Optional[str] = None) -> Screen:
