@@ -15,8 +15,6 @@ from src.constant.WebDirConstant import WebDirConstant
 
 class WebServer:
 
-    MAX_UPLOADS = 16 * 1024 * 1024
-
     def __init__(self, project_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer):
         self._project_dir = project_dir
         self._model_store = model_store
@@ -54,7 +52,7 @@ class WebServer:
         )
 
         self._app.config['UPLOAD_FOLDER'] = "{}/{}".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_UPLOADS)
-        self._app.config['MAX_CONTENT_LENGTH'] = self.MAX_UPLOADS
+        self._app.config['MAX_CONTENT_LENGTH'] = self._model_store.variable().map().get('slide_upload_limit').as_int()
 
         if self._debug:
             self._app.config['TEMPLATES_AUTO_RELOAD'] = True
