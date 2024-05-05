@@ -1,18 +1,29 @@
 import os
 
 from typing import Dict, Optional, List, Tuple, Union
+from pysondb.errors import IdDoesNotExistError
+
 from src.model.entity.Slide import Slide
 from src.utils import str_to_enum, get_optional_string
-from pysondb import PysonDB
-from pysondb.errors import IdDoesNotExistError
+from src.manager.DatabaseManager import DatabaseManager
 
 
 class SlideManager:
 
-    DB_FILE = "data/db/slideshow.json"
+    TABLE_NAME = "slideshow"
+    TABLE_MODEL = [
+        "name",
+        "type",
+        "enabled",
+        "duration",
+        "position",
+        "location",
+        "cron_schedule"
+    ]
 
-    def __init__(self):
-        self._db = PysonDB(self.DB_FILE)
+    def __init__(self, database_manager: DatabaseManager):
+        self._database_manager = database_manager
+        self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     @staticmethod
     def hydrate_object(raw_slide: dict, id: str = None) -> Slide:

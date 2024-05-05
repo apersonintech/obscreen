@@ -60,6 +60,14 @@ def get_keys(dict_or_object, key_list_name: str, key_attr_name: str = 'key') -> 
     return None
 
 
+def enum_to_str(enum: Optional[Enum]) -> Optional[str]:
+    if enum:
+        print(enum)
+        return str(enum.value)
+
+    return None
+
+
 def str_to_enum(str_val: str, enum_class) -> Enum:
     for enum_item in enum_class:
         if enum_item.value == str_val:
