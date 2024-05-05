@@ -4,7 +4,10 @@
     <title>Obscreen</title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="google" content="notranslate">
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/animate.min.css" />
+    <link rel="shortcut icon" href="{{ STATIC_PREFIX }}/favicon.ico">
+    {% if slide_animation_enabled.eval() %}
+        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/animate.min.css" />
+    {% endif %}
     <style>
         html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: white; display: flex; flex-direction: row; justify-content: center; align-items: center; }
         .slide { display: flex; flex-direction: row; justify-content: center; align-items: center; background: black; }
