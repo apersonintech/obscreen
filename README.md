@@ -20,41 +20,71 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
-## Installation and configuration (docker)
+## 🐳 Run with docker
+### With docker (for test)
 ```bash
-git clone https://github.com/jr-k/obscreen.git
-cd obscreen
-cp .env.dist .env
+# Prepare application data file tree
+mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
-# be sure to have a valid file path for AUTOCONFIGURE_LX_FILE variable
-# you should use ./var/run/dummy if you don't care about monitor and just want to test
-nano .env
+# Run the Docker container
+# If you ARE NOT on a RaspberryPi ignore the line (-v /home/pi/....)
+docker run --rm --name obscreen --pull=always \
+  -e DEBUG=false \
+  -e PORT=5000 \
+  -e AUTOCONFIGURE_REVERSE_PROXY_MODE=false \
+  -e AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile \
+  -p 5000:5000 \
+  -v ./data/db:/app/data/db \
+  -v ./data/uploads:/app/data/uploads \
+  -v /home/pi/.config/lxsession/LXDE-pi/autostart:/app/var/run/lxfile \
+  jierka/obscreen:latest
+```
 
-# run
+### With docker-compose
+```bash
+# Prepare application data file tree
+mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
+
+# Download docker-compose.yml
+curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml > docker-compose.yml
+
+# If you ARE NOT on a RaspberryPi execute the line below
+uname | grep -q 'Darwin' && sed -i '' '/\/home\/pi/s/^/#/' docker-compose.yml || sed -i '/\/home\/pi/s/^/#/' docker-compose.yml
+
+# Run
 docker compose up
 ```
 
-## Installation (manual)
+## 📠 Run on your system
+## Installation and configuration (manual)
 ```bash
+# Install system dependencies
 sudo apt-get update
 sudo apt-get install -y git chromium-browser unclutter
 
-git clone https://github.com/jr-k/obscreen.git 
-cd obscreen && pip3 install -r requirements.txt && cp data/db/slideshow.json.dist data/db/slideshow.json && cp .env.dist .env
+# Get files
+git clone https://github.com/jr-k/obscreen.git && cd obscreen
+
+# Install application dependencies
+pip3 install -r requirements.txt
+
+# Add some sample data
+cp data/db/slideshow.json.dist data/db/slideshow.json
+
+# Customize server default values
+cp .env.dist .env
 ```
 
-## Configure
-- Server configuration is available in `.env` file.
+### Configure
+- Server configuration is editable in `.env` file.
 - Application configuration is available in `http://localhost:5000/settings` page.
 
-## Run
-
-### Cli mode
+### Start server (for test)
 ```bash
 ./obscreen.py
 ```
 
-### Forever with systemctl
+### Start server forever with systemctl
 ```bash
 sudo ln -s "$(pwd)/system/obscreen.service" /etc/systemd/system/obscreen.service
 sudo systemctl daemon-reload
@@ -67,7 +97,7 @@ To troubleshoot you can check logs
 sudo journalctl -u obscreen -f 
 ```
 
-## Usage
+## 👌 Usage
 - Hostname will be http://localhost:5000 or http://localhost with nginx or http://[SERVER_IP]:[PORT]
 - Page which plays slideshow is reachable at `http://localhost:5000`
 - Slideshow manager is reachable at `http://localhost:5000/manage`
