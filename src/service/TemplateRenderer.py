@@ -9,7 +9,7 @@ from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
 from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.constant.WebDirConstant import WebDirConstant
-from src.utils import get_safe_cron_descriptor
+from src.utils import get_safe_cron_descriptor, is_validate_cron_date_time
 
 
 class TemplateRenderer:
@@ -29,7 +29,8 @@ class TemplateRenderer:
             VERSION=self._model_store.config().map().get('version'),
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,
-            cron_descriptor=self.cron_descriptor
+            cron_descriptor=self.cron_descriptor,
+            is_validate_cron_date_time=is_validate_cron_date_time
         )
 
         for hook in HookType:

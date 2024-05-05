@@ -516,8 +516,12 @@ form .form-group input[type=checkbox] {
     flex: 0;
 }
 
-form .form-group input[type=checkbox].trigger {
+form .form-group .trigger {
     margin-right: 10px;
+}
+
+form .form-group select.trigger {
+    max-width: 120px;
 }
 
 form .form-group span {
