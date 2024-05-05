@@ -3,6 +3,7 @@ import time
 
 from typing import Optional, Union, Dict, List
 from src.model.enum.VariableType import VariableType
+from src.model.enum.VariableUnit import VariableUnit
 from src.model.entity.Selectable import Selectable
 from src.utils import str_to_enum
 
@@ -11,10 +12,11 @@ class Variable:
 
     def __init__(self, name: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING,
                  value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None,
-                 plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None):
+                 plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None, unit: Optional[VariableUnit] = None):
         self._id = id if id else None
         self._name = name
         self._type = str_to_enum(type, VariableType) if isinstance(type, str) else type
+        self._unit = str_to_enum(unit, VariableUnit) if isinstance(unit, str) else unit
         self._description = description
         self._value = value
         self._editable = editable
@@ -51,6 +53,14 @@ class Variable:
     @type.setter
     def type(self, value: VariableType):
         self._type = value
+
+    @property
+    def unit(self) -> VariableUnit:
+        return self._unit
+
+    @unit.setter
+    def unit(self, value: VariableUnit):
+        self._unit = value
 
     @property
     def description(self) -> str:
@@ -90,6 +100,7 @@ class Variable:
                f"name='{self.name}',\n" \
                f"value='{self.value}',\n" \
                f"type='{self.type}',\n" \
+               f"unit='{self.unit}',\n" \
                f"description='{self.description}',\n" \
                f"editable='{self.editable}',\n" \
                f"plugin='{self.plugin}',\n" \
@@ -105,6 +116,7 @@ class Variable:
             "name": self.name,
             "value": self.value,
             "type": self.type.value,
+            "unit": self.unit.value if self.unit else None,
             "description": self.description,
             "editable": self.editable,
             "plugin": self.plugin,
@@ -127,9 +139,17 @@ class Variable:
         value = self.eval()
 
         if self.type == VariableType.SELECT_SINGLE:
-            for selectable in self.selectables:
-                if selectable.key == value:
-                    return str(selectable.label)
+            if isinstance(self._selectables, list):
+                for selectable in self.selectables:
+                    if selectable.key == value:
+                        value = str(selectable.label)
+                        break
+
+        if self.unit == VariableUnit.BYTE:
+            value = "{} {}".format(
+                value / 1024 / 1024,
+                "MB"
+            )
 
         return value
 

@@ -1,5 +1,6 @@
 import os
 import time
+from waitress import serve
 
 from flask import Flask, send_from_directory
 from src.service.ModelStore import ModelStore
@@ -14,8 +15,6 @@ from src.constant.WebDirConstant import WebDirConstant
 
 class WebServer:
 
-    MAX_UPLOADS = 16 * 1024 * 1024
-
     def __init__(self, project_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer):
         self._project_dir = project_dir
         self._model_store = model_store
@@ -24,10 +23,10 @@ class WebServer:
         self.setup()
 
     def run(self) -> None:
-        self._app.run(
+        serve(
+            self._app,
             host=self._model_store.config().map().get('bind'),
-            port=self._model_store.config().map().get('port'),
-            debug=self._debug
+            port=self._model_store.config().map().get('port')
         )
 
     def setup(self) -> None:
@@ -53,7 +52,7 @@ class WebServer:
         )
 
         self._app.config['UPLOAD_FOLDER'] = "{}/{}".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_UPLOADS)
-        self._app.config['MAX_CONTENT_LENGTH'] = self.MAX_UPLOADS
+        self._app.config['MAX_CONTENT_LENGTH'] = self._model_store.variable().map().get('slide_upload_limit').as_int()
 
         if self._debug:
             self._app.config['TEMPLATES_AUTO_RELOAD'] = True

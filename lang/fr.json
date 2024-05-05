@@ -26,6 +26,10 @@
     "slideshow_slide_form_label_duration": "Durée",
     "slideshow_slide_form_label_duration_unit": "secondes",
     "slideshow_slide_form_label_cron_scheduled": "Programmer",
+    "slideshow_slide_form_label_cron_scheduled_loop": "Dans la boucle",
+    "slideshow_slide_form_label_cron_scheduled_datetime": "Date & Heure",
+    "slideshow_slide_form_label_cron_scheduled_datetime_placeholder": "Choisir une date et un heure",
+    "slideshow_slide_form_label_cron_scheduled_cron": "Cron",
     "slideshow_slide_form_widget_cron_scheduled_placeholder": "Utiliser le format crontab: * * * * *",
     "slideshow_slide_form_button_cancel": "Annuler",
     "js_slideshow_slide_delete_confirmation": "Êtes-vous sûr ?",
@@ -65,6 +69,7 @@
     "settings_variable_desc_lang": "Langage de l'application",
     "settings_variable_desc_fleet_enabled": "Activer la gestion de flotte des écrans",
     "settings_variable_desc_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
+    "settings_variable_desc_slide_upload_limit": "Limite d'upload du fichier d'une slide (en octets, 32*1024*1024 pour 32Mo)",
 
     "settings_variable_desc_slide_animation_enabled": "Activer les effets d'animation entre les slides",
     "settings_variable_desc_slide_animation_entrance_effect": "Effet d'animation d'arrivée de la slide",
