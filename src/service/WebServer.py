@@ -1,5 +1,6 @@
 import os
 import time
+from waitress import serve
 
 from flask import Flask, send_from_directory
 from src.service.ModelStore import ModelStore
@@ -24,10 +25,10 @@ class WebServer:
         self.setup()
 
     def run(self) -> None:
-        self._app.run(
+        serve(
+            self._app,
             host=self._model_store.config().map().get('bind'),
-            port=self._model_store.config().map().get('port'),
-            debug=self._debug
+            port=self._model_store.config().map().get('port')
         )
 
     def setup(self) -> None:
