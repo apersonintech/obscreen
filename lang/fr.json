@@ -28,7 +28,7 @@
     "slideshow_slide_form_label_cron_scheduled": "Programmer",
     "slideshow_slide_form_label_cron_scheduled_loop": "Dans la boucle",
     "slideshow_slide_form_label_cron_scheduled_datetime": "Date & Heure",
-    "slideshow_slide_form_label_cron_scheduled_datetime_placeholder": "Choisir une date et un heure",
+    "slideshow_slide_form_label_cron_scheduled_datetime_placeholder": "Choisir une date et une heure",
     "slideshow_slide_form_label_cron_scheduled_cron": "Cron",
     "slideshow_slide_form_widget_cron_scheduled_placeholder": "Utiliser le format crontab: * * * * *",
     "slideshow_slide_form_button_cancel": "Annuler",
