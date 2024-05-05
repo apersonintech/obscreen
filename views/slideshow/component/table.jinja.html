@@ -47,7 +47,11 @@
                 {% if slide.cron_schedule %}
                     {% set cron_desc = cron_descriptor(slide.cron_schedule)  %}
                     {% if cron_desc %}
+                        {% if is_validate_cron_date_time(slide.cron_schedule) %}
+                        📆 {{ cron_desc }}
+                        {% else %}
                         ⏳ {{ cron_desc }}
+                        {% endif %}
                     {% else %}
                         <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                     {% endif %}

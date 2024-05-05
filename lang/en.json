@@ -26,6 +26,10 @@
     "slideshow_slide_form_label_duration": "Duration",
     "slideshow_slide_form_label_duration_unit": "seconds",
     "slideshow_slide_form_label_cron_scheduled": "Scheduled",
+    "slideshow_slide_form_label_cron_scheduled_loop": "In the loop",
+    "slideshow_slide_form_label_cron_scheduled_datetime": "Date & Time",
+    "slideshow_slide_form_label_cron_scheduled_datetime_placeholder": "Set a date and time",
+    "slideshow_slide_form_label_cron_scheduled_cron": "Cron",
     "slideshow_slide_form_widget_cron_scheduled_placeholder": "Use crontab format: * * * * *",
     "slideshow_slide_form_button_cancel": "Cancel",
     "js_slideshow_slide_delete_confirmation": "Are you sure?",
@@ -65,6 +69,7 @@
     "settings_variable_desc_lang": "Server language",
     "settings_variable_desc_fleet_enabled": "Enable fleet screen management view",
     "settings_variable_desc_external_url": "External url (i.e: https://screen-01.company.com or http://10.10.3.100)",
+    "settings_variable_desc_slide_upload_limit": "Slide upload limit (in bytes, 32*1024*1024 for 32MB)",
 
     "settings_variable_desc_slide_animation_enabled": "Enable animation effect between slides",
     "settings_variable_desc_slide_animation_entrance_effect": "Slide animation entrance effect",

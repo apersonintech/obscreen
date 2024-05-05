@@ -8,7 +8,22 @@ from cron_descriptor import ExpressionDescriptor
 from cron_descriptor.Exception import FormatException, WrongArgumentException, MissingFieldException
 
 
+def is_validate_cron_date_time(expression) -> bool:
+    pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$')
+    return bool(pattern.match(expression))
+
+
 def get_safe_cron_descriptor(expression: str, use_24hour_time_format=True, locale_code: Optional[str] = None) -> str:
+    if is_validate_cron_date_time(expression):
+        [minutes, hours, day, month, _, year] = expression.split(' ')
+        return "{}-{}-{} at {}:{}".format(
+            year,
+            month.zfill(2),
+            day.zfill(2),
+            hours.zfill(2),
+            minutes.zfill(2)
+        )
+
     options = {
         "expression": expression,
         "use_24hour_time_format": use_24hour_time_format
@@ -56,6 +71,14 @@ def get_keys(dict_or_object, key_list_name: str, key_attr_name: str = 'key') -> 
         if iterable is None:
             return None
         return [getattr(item, key_attr_name) for item in iterable]
+
+    return None
+
+
+def enum_to_str(enum: Optional[Enum]) -> Optional[str]:
+    if enum:
+        print(enum)
+        return str(enum.value)
 
     return None
 
