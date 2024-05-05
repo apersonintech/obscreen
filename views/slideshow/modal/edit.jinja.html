@@ -41,8 +41,13 @@
         <div class="form-group">
             <label for="slide-edit-cron-schedule">{{ l.slideshow_slide_form_label_cron_scheduled }}</label>
             <div class="widget">
-                <input type="checkbox" id="slide-edit-cron-schedule-trigger" class="trigger" />
-                <input type="text" name="cron_schedule" id="slide-edit-cron-schedule" placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}" class="hidden" />
+                <select id="slide-edit-cron-schedule-trigger" class="trigger">
+                    <option value="loop">{{ l.slideshow_slide_form_label_cron_scheduled_loop }}</option>
+                    <option value="datetime">{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}</option>
+                    <option value="cron">{{ l.slideshow_slide_form_label_cron_scheduled_cron }}</option>
+                </select>
+                <input type="text" id="slide-edit-cron-schedule-datetimepicker" class="datetimepicker" value="" placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}" />
+                <input type="text" name="cron_schedule" id="slide-edit-cron-schedule" class="target hidden" placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}" />
             </div>
         </div>
 
