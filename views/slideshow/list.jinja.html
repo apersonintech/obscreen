@@ -5,10 +5,12 @@
 {% endblock %}
 
 {% block add_css %}
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/flatpickr.min.css" />
     {{ HOOK(H_SLIDESHOW_CSS) }}
 {% endblock %}
 
 {% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/flatpickr.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/tablednd-fixed.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow.js"></script>
     <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
