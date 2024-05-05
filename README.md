@@ -55,8 +55,8 @@ uname | grep -q 'Darwin' && sed -i '' '/\/home\/pi/s/^/#/' docker-compose.yml ||
 docker compose up
 ```
 
-## 📠 Run on your system
-## Installation and configuration (manual)
+## 📠 Run system wide
+### Install
 ```bash
 # Install system dependencies
 sudo apt-get update
@@ -102,11 +102,11 @@ sudo journalctl -u obscreen -f
 - Page which plays slideshow is reachable at `http://localhost:5000`
 - Slideshow manager is reachable at `http://localhost:5000/manage`
     
-## You are done now :)
+## ✨ You are done now :)
 - If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (`views/player/default.jinja.html`) your slideshow shall start and loop endlessly.
 - Be sure that `AUTOCONFIGURE_LX_FILE` is writeable !
 
-## Additional
+## 📎 Additional
 
 ### A. Hardware checks
 - Basic Setup
