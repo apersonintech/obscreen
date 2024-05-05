@@ -127,9 +127,10 @@ class Variable:
         value = self.eval()
 
         if self.type == VariableType.SELECT_SINGLE:
-            for selectable in self.selectables:
-                if selectable.key == value:
-                    return str(selectable.label)
+            if isinstance(self._selectables, list):
+                for selectable in self.selectables:
+                    if selectable.key == value:
+                        return str(selectable.label)
 
         return value
 
