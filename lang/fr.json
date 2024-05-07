@@ -1,5 +1,6 @@
 {
     "slideshow_page_title": "Vue Planning",
+    "slideshow_goto_player": "Voir le lecteur",
     "slideshow_slide_button_add": "Ajouter une slide",
     "slideshow_slide_panel_active": "Slides actives",
     "slideshow_slide_panel_inactive": "Slides inactives",
@@ -56,7 +57,7 @@
     "js_fleet_screen_delete_confirmation": "Êtes-vous sûr ?",
 
     "settings_page_title": "Paramètres",
-    "settings_variable_panel_system_variables": "Paramètres système",
+    "settings_variable_panel_system_variables": "Paramètres généraux",
     "settings_variable_panel_plugin_variables": "Paramètres des plugins",
     "settings_variable_panel_th_description": "Description",
     "settings_variable_panel_th_value": "Valeur",
@@ -81,6 +82,8 @@
 
     "sysinfo_page_title": "Système",
     "sysinfo_panel_button_restart": "Redémarrer",
+    "sysinfo_panel_table_section_system": "Système",
+    "sysinfo_panel_table_section_application": "Application",
     "sysinfo_panel_title": "Informations",
     "sysinfo_panel_th_attribute": "Attribut",
     "sysinfo_panel_th_value": "Valeur",
@@ -115,5 +118,7 @@
     "enum_animation_speed_slow": "Lent",
     "enum_animation_speed_normal": "Normal",
     "enum_animation_speed_fast": "Rapide",
-    "enum_animation_speed_faster": "Très rapide"
+    "enum_animation_speed_faster": "Très rapide",
+    "enum_variable_section_general": "Général",
+    "enum_variable_section_animation": "Animation"
 }

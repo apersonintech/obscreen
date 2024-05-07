@@ -20,7 +20,7 @@ class TemplateRenderer:
         self._render_hook = render_hook
 
     def cron_descriptor(self, expression: str, use_24hour_time_format=True) -> str:
-        return get_safe_cron_descriptor(expression, use_24hour_time_format, self._model_store.lang().get_locale(local_with_country=True))
+        return get_safe_cron_descriptor(expression, use_24hour_time_format, self._model_store.lang().get_lang(local_with_country=True))
 
     def get_view_globals(self) -> dict:
         globals = dict(
