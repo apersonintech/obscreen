@@ -27,6 +27,10 @@ body {
     align-self: stretch;
 }
 
+.invisible {
+    visibility: hidden !important;
+}
+
 .hidden {
     display: none !important;
 }
@@ -280,7 +284,6 @@ button.purple:hover {
 .panel td.infos {
     display: flex;
     flex-direction: row;
-    width: 400px;
     justify-content: flex-start;
     align-items: flex-start;
 }

@@ -3,9 +3,11 @@ from typing import Dict, Optional, List, Tuple, Union
 
 from src.model.entity.Screen import Screen
 from src.manager.DatabaseManager import DatabaseManager
+from src.manager.LangManager import LangManager
+from src.service.ModelManager import ModelManager
 
 
-class ScreenManager:
+class ScreenManager(ModelManager):
 
     TABLE_NAME = "fleet"
     TABLE_MODEL = [
@@ -16,8 +18,8 @@ class ScreenManager:
         "port"
     ]
 
-    def __init__(self, database_manager: DatabaseManager):
-        self._database_manager = database_manager
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager):
+        super().__init__(lang_manager, database_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     @staticmethod

@@ -1,12 +1,22 @@
 import json
 import logging
 
+from typing import Union, Dict
+from enum import Enum
+
+from src.utils import camel_to_snake
+
 
 class LangManager:
 
     LANG_FILE = "lang/{}.json"
 
-    def __init__(self, lang: str):
+    def __init__(self, lang: str = "en"):
+        self._map = {}
+        self._lang = lang.lower()
+        self.load()
+
+    def set_lang(self, lang):
         self._map = {}
         self._lang = lang.lower()
         self.load()
@@ -24,5 +34,31 @@ class LangManager:
     def map(self) -> dict:
         return self._map
 
-    def get_locale(self, local_with_country: bool = False) -> str:
+    def get_lang(self, local_with_country: bool = False) -> str:
         return "{}_{}".format(self._lang, self._lang.upper()) if local_with_country else self._lang
+
+    @staticmethod
+    def enum_to_translation_key(enum: Enum) -> str:
+        translation_key = str(enum)
+
+        [classname, case] = translation_key.split('.')
+        return "enum_{}_{}".format(
+            camel_to_snake(classname),
+            case.lower()
+        )
+
+    def translate(self, token: Union[Enum, str]) -> Union[Dict, str]:
+        translation_key = str(token)
+
+        if isinstance(token, type) and type(token).__name__ == 'EnumType':
+            values = {}
+            for enum_item in token:
+                tkey = self.enum_to_translation_key(enum_item)
+                values[enum_item.value] = self.translate(tkey)
+            return values
+        elif isinstance(token, Enum):
+            translation_key = self.enum_to_translation_key(token)
+
+        map = self.map()
+
+        return map[translation_key] if translation_key in map else translation_key

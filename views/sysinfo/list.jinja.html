@@ -28,6 +28,13 @@
                 </thead>
                 <tbody>
                     <tr>
+                        <td colspan="2">
+                            <h3>
+                                <i class="fa fa-server icon-left"></i> {{ l.sysinfo_panel_table_section_system }}
+                            </h3>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>{{ l.sysinfo_panel_td_ipaddr }}</td>
                         <td>{{ ipaddr }}</td>
                     </tr>
@@ -51,9 +58,17 @@
                             </td>
                         </tr>
                     {% endfor %}
+
+                     <tr>
+                        <td colspan="2">
+                            <h3>
+                                <i class="fa fa-box-open icon-left"></i> {{ l.sysinfo_panel_table_section_application }}
+                            </h3>
+                        </td>
+                    </tr>
                     {% for env_key, env_value in env_variables.items() %}
                         <tr>
-                            <td>{{ env_key }}</td>
+                            <td>{{ env_key.replace('_',' ')|capitalize }}</td>
                             <td>
                                 {% if env_value == true %}
                                     ✅

@@ -56,12 +56,3 @@ class AnimationExitEffect(Enum):
     SLIDE_OUT_LEFT = 'slideOutLeft'
     SLIDE_OUT_RIGHT = 'slideOutRight'
     SLIDE_OUT_UP = 'slideOutUp'
-
-    @staticmethod
-    def get_values() -> dict:
-        values = {}
-
-        for enum_item in AnimationExitEffect:
-            values[enum_item.value] = enum_item.value
-
-        return values

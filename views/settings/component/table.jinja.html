@@ -7,13 +7,20 @@
     </tr>
     </thead>
     <tbody>
-    {% set ns = namespace(last_plugin='') %}
+    {% set ns = namespace(last_section='') %}
     {% for variable in variables %}
-        {% if variable.plugin and ns.last_plugin != variable.plugin %}
+        {% if
+            variable.plugin and ns.last_section != variable.plugin
+            or variable.section and ns.last_section != variable.section
+        %}
         <tr>
             <td colspan="2">
                 <h3>
-                    <i class="fa fa-puzzle-piece"></i> {{ variable.plugin.replace('_',' ')|capitalize }}
+                    {% if variable.is_from_plugin() %}
+                        <i class="fa fa-puzzle-piece icon-left"></i> {{ variable.plugin.replace('_',' ')|capitalize }}
+                    {% else %}
+                        <i class="fa fa-cog icon-left"></i> {{ variable.section }}
+                    {% endif %}
                 </h3>
             </td>
         </tr>
@@ -21,7 +28,6 @@
         <tr class="variable-item" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
             <td class="infos">
                 <div class="inner">
-                    <i class="fa fa-cog icon-left"></i>
                     {{ variable.description }}
                 </div>
             </td>
@@ -46,7 +52,11 @@
                 </a>
             </td>
         </tr>
-        {% set ns.last_plugin = variable.plugin %}
+        {% if variable.is_from_plugin() %}
+            {% set ns.last_section = variable.plugin %}
+        {% else %}
+            {% set ns.last_section = variable.section %}
+        {% endif %}
     {% endfor %}
     </tbody>
 </table>

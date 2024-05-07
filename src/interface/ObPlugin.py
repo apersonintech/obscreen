@@ -56,9 +56,10 @@ class ObPlugin(abc.ABC):
     def get_plugin_variable_name(self, name: str) -> str:
         return "{}_{}".format(self.get_plugin_variable_prefix(), name)
 
-    def add_variable(self, name: str, value='', type: VariableType = VariableType.STRING, editable: bool = True, description: str = '', selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None) -> Variable:
+    def add_variable(self, name: str, value='', section: str = '', type: VariableType = VariableType.STRING, editable: bool = True, description: str = '', selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None) -> Variable:
         return self._model_store.variable().set_variable(
             name=self.get_plugin_variable_name(name),
+            section=section,
             value=value,
             type=type,
             editable=editable,

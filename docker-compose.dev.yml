@@ -9,7 +9,6 @@ services:
     environment:
       - DEBUG=${DEBUG-false}
       - PORT=${PORT-5000}
-      - AUTOCONFIGURE_REVERSE_PROXY_MODE=${AUTOCONFIGURE_REVERSE_PROXY_MODE-false}
       - AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile
     volumes:
       - .:/app
