@@ -87,10 +87,11 @@ class ConfigManager:
                 logging.info(f"Env var {key} has been found")
 
     def autoconfigure(self) -> None:
+        self.autoconfigure_player_url()
+
         if self.map().get('autoconfigure_lx_file'):
             self.autoconfigure_lxconf()
 
-        self.autoconfigure_player_url()
 
     def autoconfigure_player_url(self) -> str:
         self._CONFIG['player_url'] = 'http://localhost:{}'.format(self.map().get('port'))
