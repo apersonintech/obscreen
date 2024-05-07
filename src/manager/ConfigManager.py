@@ -20,7 +20,6 @@ class ConfigManager:
             'port': self.DEFAULT_PORT,
             'bind': '0.0.0.0',
             'debug': False,
-            'autoconfigure_reverse_proxy_mode': False,
             'autoconfigure_lx_file': '/home/pi/.config/lxsession/LXDE-pi/autostart',
             'log_file': None,
             'log_level': 'INFO',
@@ -47,7 +46,6 @@ class ConfigManager:
         parser.add_argument('--debug', '-d', default=self._CONFIG['debug'], help='Debug mode')
         parser.add_argument('--port', '-p', default=self._CONFIG['port'], help='Application port')
         parser.add_argument('--bind', '-b', default=self._CONFIG['bind'], help='Application bind address')
-        parser.add_argument('--autoconfigure-reverse-proxy-mode', '-r', default=self._CONFIG['autoconfigure_reverse_proxy_mode'], action='store_true',  help='true if you want to use nginx on port 80')
         parser.add_argument('--autoconfigure-lx-file', '-x', default=self._CONFIG['autoconfigure_lx_file'], help='Path to lx autostart file')
         parser.add_argument('--log-file', '-lf', default=self._CONFIG['log_file'], help='Log File path')
         parser.add_argument('--log-level', '-ll', default=self._CONFIG['log_level'], help='Log Level')
@@ -65,8 +63,6 @@ class ConfigManager:
 
         if args.debug:
             self._CONFIG['debug'] = args.debug
-        if args.autoconfigure_reverse_proxy_mode:
-            self._CONFIG['autoconfigure_reverse_proxy_mode'] = args.autoconfigure_reverse_proxy_mode
         if args.autoconfigure_lx_file:
             self._CONFIG['autoconfigure_lx_file'] = args.autoconfigure_lx_file
         if args.log_file:
@@ -91,20 +87,8 @@ class ConfigManager:
                 logging.info(f"Env var {key} has been found")
 
     def autoconfigure(self) -> None:
-        if self.map().get('autoconfigure_reverse_proxy_mode'):
-            self.autoconfigure_nginx()
-
         if self.map().get('autoconfigure_lx_file'):
             self.autoconfigure_lxconf()
-
-    def autoconfigure_nginx(self) -> None:
-        reverse_proxy_config_file = 'system/nginx-obscreen'
-        with open(reverse_proxy_config_file, 'r') as file:
-            content = file.read()
-        with open(reverse_proxy_config_file, 'w') as file:
-            file.write(re.sub(r'proxy_pass .*?;', 'proxy_pass {};'.format(self.map().get('player_url')), content))
-
-        self._CONFIG['player_url'] = 'http://localhost'
 
     def autoconfigure_lxconf(self) -> None:
         destination_path = self.map().get('autoconfigure_lx_file')
