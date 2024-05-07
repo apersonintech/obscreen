@@ -11,7 +11,7 @@ class ModelManager:
         self._lang_manager = lang_manager
         self._database_manager = database_manager
 
-    def t(self, token: Union[Enum, str]) -> Union[Dict, str]:
+    def t(self, token) -> Union[Dict, str]:
         return self.lang_manager.translate(token)
 
     @property
