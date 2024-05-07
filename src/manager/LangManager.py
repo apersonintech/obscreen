@@ -47,7 +47,7 @@ class LangManager:
             case.lower()
         )
 
-    def translate(self, token: Union[Enum, str]) -> Union[Dict, str]:
+    def translate(self, token) -> Union[Dict, str]:
         translation_key = str(token)
 
         if isinstance(token, type) and type(token).__name__ == 'EnumType':
