@@ -31,7 +31,6 @@ mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 docker run --rm --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
-  -e AUTOCONFIGURE_REVERSE_PROXY_MODE=false \
   -e AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile \
   -p 5000:5000 \
   -v ./data/db:/app/data/db \
@@ -98,7 +97,6 @@ sudo journalctl -u obscreen -f
 ```
 
 ## 👌 Usage
-- Hostname will be http://localhost:5000 or http://localhost with nginx or http://[SERVER_IP]:[PORT]
 - Page which plays slideshow is reachable at `http://localhost:5000`
 - Slideshow manager is reachable at `http://localhost:5000/manage`
     
@@ -108,7 +106,7 @@ sudo journalctl -u obscreen -f
 
 ## 📎 Additional
 
-### A. Hardware checks
+### Hardware checks
 - Basic Setup
 For basic RaspberryPi setup you can use most of the available guides, for example this one:
 https://gist.github.com/blackjid/dfde6bedef148253f987
@@ -118,13 +116,3 @@ You may need to set the HDMI Mode on the raspi to ensure the hdmi resolution mat
 https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
 
 However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
-
-### B. Nginx server to serve pages (useful for gzip compression for instance)
-1. Install
-```bash
-sudo apt install -y nginx
-sudo rm /etc/nginx/sites-enabled/default 2>/dev/null
-sudo ln -s "$(pwd)/system/nginx-obscreen" /etc/nginx/sites-enabled
-sudo systemctl reload nginx
-```
-2. Set `autoconfigure_reverse_proxy_mode` to `true` in `.env` file

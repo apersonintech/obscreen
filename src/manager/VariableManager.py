@@ -3,25 +3,29 @@ from typing import Dict, Optional, List, Tuple, Union
 from pysondb.errors import IdDoesNotExistError
 
 from src.manager.DatabaseManager import DatabaseManager
+from src.manager.LangManager import LangManager
+from src.service.ModelManager import ModelManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
 from src.model.enum.VariableType import VariableType
 from src.model.enum.VariableUnit import VariableUnit
+from src.model.enum.VariableSection import VariableSection
 from src.model.enum.AnimationEntranceEffect import AnimationEntranceEffect
 from src.model.enum.AnimationExitEffect import AnimationExitEffect
 from src.model.enum.AnimationSpeed import AnimationSpeed
-from src.utils import get_keys, enum_to_str
+from src.utils import get_keys, enum_to_str, enum_to_dict
 
 SELECTABLE_BOOLEAN = {"1": "✅", "0": "❌"}
 
 
-class VariableManager:
+class VariableManager(ModelManager):
 
     TABLE_NAME = "settings"
     TABLE_MODEL = [
         "description",
         "editable",
         "name",
+        "section",
         "plugin",
         "selectables",
         "type",
@@ -29,13 +33,13 @@ class VariableManager:
         "value"
     ]
 
-    def __init__(self, database_manager: DatabaseManager):
-        self._database_manager = database_manager
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager):
+        super().__init__(lang_manager, database_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
         self._var_map = {}
         self.reload()
 
-    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, plugin: Optional[None] = None, selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None) -> Variable:
+    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, plugin: Optional[None] = None, selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None, section: str = '') -> Variable:
         if isinstance(value, bool) and value:
             value = '1'
         elif isinstance(value, bool) and not value:
@@ -46,6 +50,7 @@ class VariableManager:
 
         default_var = {
             "name": name,
+            "section": section,
             "value": value,
             "type": type.value,
             "editable": editable,
@@ -68,6 +73,9 @@ class VariableManager:
             if variable.unit != default_var['unit']:
                 self._db.update_by_id(variable.id, {"unit": default_var['unit']})
 
+            if variable.section != default_var['section']:
+                self._db.update_by_id(variable.id, {"section": default_var['section']})
+
             if not same_selectables:
                 self._db.update_by_id(variable.id, {"selectables": default_var['selectables']})
 
@@ -76,18 +84,21 @@ class VariableManager:
 
         return variable
 
-    def reload(self, lang_map: Optional[Dict] = None) -> None:
+    def reload(self) -> None:
         default_vars = [
-            {"name": "lang", "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_lang'] if lang_map else "", "selectables": {"en": "English", "fr": "French"}},
-            {"name": "fleet_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_desc_fleet_enabled'] if lang_map else ""},
-            {"name": "external_url", "value": "", "type": VariableType.STRING, "editable": True, "description": lang_map['settings_variable_desc_external_url'] if lang_map else ""},
-            {"name": "slide_upload_limit", "value": 32 * 1024 * 1024, "unit": VariableUnit.BYTE,  "type": VariableType.INT, "editable": True, "description": lang_map['settings_variable_desc_slide_upload_limit'] if lang_map else ""},
-            {"name": "slide_animation_enabled", "value": False, "type": VariableType.BOOL, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_enabled'] if lang_map else ""},
-            {"name": "slide_animation_entrance_effect", "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_entrance_effect'] if lang_map else "", "selectables": AnimationEntranceEffect.get_values()},
-            {"name": "slide_animation_exit_effect", "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_exit_effect'] if lang_map else "", "selectables": AnimationExitEffect.get_values()},
-            {"name": "slide_animation_speed", "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": lang_map['settings_variable_desc_slide_animation_speed'] if lang_map else "", "selectables": AnimationSpeed.get_values(lang_map)},
-            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_desc_ro_editable'] if lang_map else ""},
-            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": lang_map['settings_variable_desc_ro_last_slide_update'] if lang_map else ""},
+            # Editable (Customizable settings)
+            {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": {"en": "English", "fr": "French"}},
+            {"name": "fleet_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_enabled')},
+            {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": True, "description": self.t('settings_variable_desc_external_url')},
+            {"name": "slide_upload_limit", "section": self.t(VariableSection.ANIMATION), "value": 32 * 1024 * 1024, "unit": VariableUnit.BYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit')},
+            {"name": "slide_animation_enabled", "section": self.t(VariableSection.ANIMATION), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_slide_animation_enabled')},
+            {"name": "slide_animation_entrance_effect", "section": self.t(VariableSection.ANIMATION), "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_entrance_effect'), "selectables": enum_to_dict(AnimationEntranceEffect)},
+            {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect)},
+            {"name": "slide_animation_speed", "section": self.t(VariableSection.ANIMATION), "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_speed'), "selectables": self.t(AnimationSpeed)},
+
+            # Not editable (System information)
+            {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},
+            {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_last_slide_update')},
         ]
 
         for default_var in default_vars:

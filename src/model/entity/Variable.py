@@ -10,11 +10,12 @@ from src.utils import str_to_enum
 
 class Variable:
 
-    def __init__(self, name: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING,
+    def __init__(self, name: str = '', section: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING,
                  value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None,
                  plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None, unit: Optional[VariableUnit] = None):
         self._id = id if id else None
         self._name = name
+        self._section = section
         self._type = str_to_enum(type, VariableType) if isinstance(type, str) else type
         self._unit = str_to_enum(unit, VariableUnit) if isinstance(unit, str) else unit
         self._description = description
@@ -45,6 +46,14 @@ class Variable:
     @name.setter
     def name(self, value: str):
         self._name = value
+
+    @property
+    def section(self) -> str:
+        return self._section
+
+    @section.setter
+    def section(self, value: str):
+        self._section = value
 
     @property
     def type(self) -> VariableType:
@@ -98,6 +107,7 @@ class Variable:
         return f"Variable(" \
                f"id='{self.id}',\n" \
                f"name='{self.name}',\n" \
+               f"section='{self.section}',\n" \
                f"value='{self.value}',\n" \
                f"type='{self.type}',\n" \
                f"unit='{self.unit}',\n" \
@@ -114,6 +124,7 @@ class Variable:
         return {
             "id": self.id,
             "name": self.name,
+            "section": self.section,
             "value": self.value,
             "type": self.type.value,
             "unit": self.unit.value if self.unit else None,

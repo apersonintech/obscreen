@@ -10,14 +10,22 @@ from src.manager.LoggingManager import LoggingManager
 class ModelStore:
 
     def __init__(self):
+        # Pure
+        self._lang_manager = LangManager()
         self._database_manager = DatabaseManager()
-        self._variable_manager = VariableManager(database_manager=self._database_manager)
+
+        # Dynamics
+        self._variable_manager = VariableManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
+        self._lang_manager.set_lang(self.variable().map().get('lang').as_string())
+
+        # Core
         self._config_manager = ConfigManager(variable_manager=self._variable_manager)
         self._logging_manager = LoggingManager(config_manager=self._config_manager)
-        self._screen_manager = ScreenManager(database_manager=self._database_manager)
-        self._slide_manager = SlideManager(database_manager=self._database_manager)
-        self._lang_manager = LangManager(lang=self.variable().map().get('lang').as_string())
-        self._variable_manager.reload(lang_map=self._lang_manager.map())
+
+        # Model
+        self._screen_manager = ScreenManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
+        self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
+        self._variable_manager.reload()
 
     def logging(self) -> LoggingManager:
         return self._logging_manager
