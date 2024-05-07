@@ -54,12 +54,4 @@ class AnimationEntranceEffect(Enum):
     SLIDE_IN_LEFT = 'slideInLeft'
     SLIDE_IN_RIGHT = 'slideInRight'
     SLIDE_IN_UP = 'slideInUp'
-
-    @staticmethod
-    def get_values() -> dict:
-        values = {}
-
-        for enum_item in AnimationEntranceEffect:
-            values[enum_item.value] = enum_item.value
-
-        return values
+    

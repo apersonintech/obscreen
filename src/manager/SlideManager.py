@@ -6,9 +6,11 @@ from pysondb.errors import IdDoesNotExistError
 from src.model.entity.Slide import Slide
 from src.utils import str_to_enum, get_optional_string
 from src.manager.DatabaseManager import DatabaseManager
+from src.manager.LangManager import LangManager
+from src.service.ModelManager import ModelManager
 
 
-class SlideManager:
+class SlideManager(ModelManager):
 
     TABLE_NAME = "slideshow"
     TABLE_MODEL = [
@@ -21,8 +23,8 @@ class SlideManager:
         "cron_schedule"
     ]
 
-    def __init__(self, database_manager: DatabaseManager):
-        self._database_manager = database_manager
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager):
+        super().__init__(lang_manager, database_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     @staticmethod
