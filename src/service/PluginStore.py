@@ -143,7 +143,7 @@ class PluginStore:
 
         # LANGS
         self._model_store.lang().load(directory=plugin.get_directory(), prefix=plugin.use_id())
-        self._model_store.variable().reload(lang_map=self._model_store.lang().map())
+        self._model_store.variable().reload()
 
         # WEB CONTROLLERS
         self.load_controllers(plugin)

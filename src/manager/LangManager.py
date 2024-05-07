@@ -50,7 +50,7 @@ class LangManager:
     def translate(self, token) -> Union[Dict, str]:
         translation_key = str(token)
 
-        if isinstance(token, type) and type(token).__name__ == 'EnumType':
+        if isinstance(token, type) and 'enum' in type(token).__name__.lower():
             values = {}
             for enum_item in token:
                 tkey = self.enum_to_translation_key(enum_item)
