@@ -114,6 +114,7 @@ jQuery(document).ready(function ($) {
 
         if (flushValue) {
             $target.val('');
+            $datetimepicker.val('');
         }
     });
 
