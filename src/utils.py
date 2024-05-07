@@ -2,10 +2,25 @@ import re
 import subprocess
 import platform
 
-from typing import Optional, List
+from typing import Optional, List, Dict
 from enum import Enum
 from cron_descriptor import ExpressionDescriptor
 from cron_descriptor.Exception import FormatException, WrongArgumentException, MissingFieldException
+
+CAMEL_CASE_TO_SNAKE_CASE_PATTERN = re.compile(r'(?<!^)(?=[A-Z])')
+
+
+def enum_to_dict(enum_class) -> Dict:
+    values = {}
+
+    for enum_item in enum_class:
+        values[enum_item.value] = enum_item.value
+
+    return values
+
+
+def camel_to_snake(camel: str) -> str:
+    return CAMEL_CASE_TO_SNAKE_CASE_PATTERN.sub('_', camel).lower()
 
 
 def is_validate_cron_date_time(expression) -> bool:

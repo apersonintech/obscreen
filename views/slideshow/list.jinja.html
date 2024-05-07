@@ -28,6 +28,11 @@
                 {{ HOOK(H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS) }}
             {% endif %}
 
+
+            <a href="/" target="_blank" class="btn">
+                <i class="fa fa-play icon-left"></i>
+                {{ l.slideshow_goto_player }}
+            </a>
             <button class="purple slide-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_slide_button_add }}</button>
             {{ HOOK(H_SLIDESHOW_TOOLBAR_ACTIONS_END) }}
         </div>
