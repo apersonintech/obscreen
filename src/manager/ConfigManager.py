@@ -90,6 +90,13 @@ class ConfigManager:
         if self.map().get('autoconfigure_lx_file'):
             self.autoconfigure_lxconf()
 
+        self.autoconfigure_player_url()
+
+    def autoconfigure_player_url(self) -> str:
+        self._CONFIG['player_url'] = 'http://localhost:{}'.format(self.map().get('port'))
+
+        return self._CONFIG['player_url']
+
     def autoconfigure_lxconf(self) -> None:
         destination_path = self.map().get('autoconfigure_lx_file')
         player_url = self.map().get('player_url')
