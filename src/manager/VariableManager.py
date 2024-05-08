@@ -204,16 +204,16 @@ class VariableManager(ModelManager):
         return self._db.update_by_query(query=lambda v: v['name'] == name, new_data={"value": value})
 
     def add_form(self, variable: Union[Variable, Dict]) -> None:
-        db_variable = variable
+        form = variable
 
         if not isinstance(variable, dict):
-            db_variable = variable.to_dict()
-            del db_variable['id']
+            form = variable.to_dict()
+            del form['id']
 
-        self._db.add(db_variable)
+        self._db.add(form)
 
     def delete(self, id: str) -> None:
         self._db.delete_by_id(id)
 
-    def to_dict(self, variables: List[Variable]) -> dict:
+    def to_dict(self, variables: List[Variable]) -> List[Dict]:
         return [variable.to_dict() for variable in variables]
