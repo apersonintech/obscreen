@@ -1,7 +1,7 @@
 import json
 
 from typing import Optional, Union
-from src.model.enum.SlideType import SlideType
+from src.model.enum.SlideType import SlideType, SlideInputType
 from src.utils import str_to_enum
 
 
@@ -99,6 +99,7 @@ class Slide:
             "enabled": self.enabled,
             "position": self.position,
             "type": self.type.value,
+            "is_editable": self.is_editable(),
             "duration": self.duration,
             "location": self.location,
             "cron_schedule": self.cron_schedule,
@@ -109,3 +110,9 @@ class Slide:
             self.type == SlideType.VIDEO
             or self.type == SlideType.PICTURE
         )
+
+    def get_input_type(self) -> SlideInputType:
+        return SlideType.get_input(self.type)
+
+    def is_editable(self) -> bool:
+        return SlideInputType.is_editable(self.get_input_type())

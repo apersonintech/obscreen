@@ -29,11 +29,11 @@ class SlideshowController(ObController):
     def slideshow(self):
         return render_template(
             'slideshow/list.jinja.html',
-            l=self._model_store.lang().map(),
             enabled_slides=self._model_store.slide().get_enabled_slides(),
             disabled_slides=self._model_store.slide().get_disabled_slides(),
             var_last_restart=self._model_store.variable().get_one_by_name('last_restart'),
-            var_external_url=self._model_store.variable().get_one_by_name('external_url')
+            var_external_url=self._model_store.variable().get_one_by_name('external_url'),
+            enum_slide_type=SlideType
         )
 
     def slideshow_slide_add(self):
@@ -67,7 +67,13 @@ class SlideshowController(ObController):
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_edit(self):
-        self._model_store.slide().update_form(request.form['id'], request.form['name'], request.form['duration'], request.form['cron_schedule'])
+        self._model_store.slide().update_form(
+            id=request.form['id'],
+            name=request.form['name'],
+            duration=request.form['duration'],
+            cron_schedule=request.form['cron_schedule'],
+            location=request.form['location'] if 'location' in request.form else None
+        )
         self._post_update()
         return redirect(url_for('slideshow_slide_list'))
 

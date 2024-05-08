@@ -2,6 +2,7 @@ import re
 import subprocess
 import platform
 
+from urllib.parse import urlparse, parse_qs
 from typing import Optional, List, Dict
 from enum import Enum
 from cron_descriptor import ExpressionDescriptor
@@ -142,3 +143,22 @@ def get_ip_address() -> Optional[str]:
         print(f"Error obtaining IP address: {e}")
         return None
 
+
+def get_yt_video_id(url: str) -> str:
+    if url.startswith(('youtu', 'www')):
+        url = 'http://' + url
+
+    query = urlparse(url)
+
+    try:
+        if 'youtube' in query.hostname:
+            if query.path == '/watch':
+                return parse_qs(query.query)['v'][0]
+            elif query.path.startswith(('/embed/', '/v/')):
+                return query.path.split('/')[2]
+        elif 'youtu.be' in query.hostname:
+            return query.path[1:]
+    except:
+        return ''
+
+    return ''

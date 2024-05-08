@@ -150,11 +150,16 @@ jQuery(document).ready(function ($) {
 
         const hasCron = slide.cron_schedule && slide.cron_schedule.length > 0;
         const hasDateTime = hasCron && validateCronDateTime(slide.cron_schedule);
+        let location = slide.location;
+
+        if (slide.type == 'youtube') {
+            location = 'https://www.youtube.com/watch?v=' + slide.location;
+        }
 
         $('.modal-slide-edit input:visible:eq(0)').focus().select();
         $('#slide-edit-name').val(slide.name);
         $('#slide-edit-type').val(slide.type);
-        $('#slide-edit-location').val(slide.location);
+        $('#slide-edit-location').val(location).prop('disabled', !slide.is_editable);
         $('#slide-edit-duration').val(slide.duration);
         $('#slide-edit-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
         $('#slide-edit-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
