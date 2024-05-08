@@ -189,6 +189,24 @@ button.purple:hover {
     border: 1px solid #fff;
 }
 
+.alert {
+    margin: 10px 30px 20px 30px;
+    padding: 20px 50px;
+    flex: 1;
+    align-self: stretch;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.alert-success {
+    color: rgb(14, 239, 95);
+    border: 1px solid rgb(14, 239, 95);
+    background: rgba(14, 239, 95, .2);
+    border-radius: 4px;
+}
+
 
 .panel {
     background: rgba(255, 255, 255, 0.15);
@@ -548,7 +566,7 @@ form .actions button {
 form .actions button.green:hover {
     background: white;
     color: rgb(14, 239, 95);
-    border-color: rgb(14, 239, 95)
+    border-color: rgb(14, 239, 95);
 }
 
 form .actions button.modal-close {

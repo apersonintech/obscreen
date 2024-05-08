@@ -19,16 +19,21 @@
 </head>
 <body>
 <div id="FirstSlide" class="slide" style="z-index: 1000;">
-    <iframe src="/player/default"></iframe>
+    {% if default_slide_duration.eval() > 0 %}
+        <iframe src="/player/default"></iframe>
+    {% endif %}
 </div>
 <div id="SecondSlide" class="slide" style="z-index: 500;">
-    <iframe src="/player/default"></iframe>
+    {% if default_slide_duration.eval() > 0 %}
+        <iframe src="/player/default"></iframe>
+    {% endif %}
 </div>
 <script type="text/javascript">
     var items = {{items | safe}};
-    var duration = 3000 / 1;
-    var playlistCheck = 10 * 1000; // 10 seconds check
+    var duration = {{ default_slide_duration.eval() * 1000 }};
+    var playlistCheck = {{ polling_interval.eval() * 1000 }};
     var curItemIndex = 0;
+    var needHardRefresh = null;
     var nextReady = true;
     var itemCheck = setInterval(function () {
         fetch('player/playlist').then(function(response) {
@@ -37,6 +42,12 @@
             }
         }).then(function(data) {
             items = data;
+
+            if (needHardRefresh === null) {
+                needHardRefresh = items.hard_refresh_request;
+            } else if (needHardRefresh != items.hard_refresh_request) {
+                document.location.reload();
+            }
         }).catch(function(err) {
             console.error(err);
         });

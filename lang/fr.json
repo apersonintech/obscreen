@@ -1,6 +1,8 @@
 {
     "slideshow_page_title": "Vue Planning",
     "slideshow_goto_player": "Voir le lecteur",
+    "slideshow_refresh_player": "Rafraîchir le lecteur",
+    "slideshow_refresh_player_success": "Un rafraîchissement du lecteur a été programmé, il devrait avoir lieu sous peu (%time% secondes maximum)",
     "slideshow_slide_button_add": "Ajouter une slide",
     "slideshow_slide_panel_active": "Slides actives",
     "slideshow_slide_panel_inactive": "Slides inactives",
@@ -71,6 +73,8 @@
     "settings_variable_desc_fleet_enabled": "Activer la gestion de flotte des écrans",
     "settings_variable_desc_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
     "settings_variable_desc_slide_upload_limit": "Limite d'upload du fichier d'une slide (en octets, 32*1024*1024 pour 32Mo)",
+    "settings_variable_desc_default_slide_duration": "Durée de la slide d'introduction (en secondes)",
+    "settings_variable_desc_polling_interval": "Intervalle de rafraîchissement des paramètres à appliquer au lecteur (en secondes)",
 
     "settings_variable_desc_slide_animation_enabled": "Activer les effets d'animation entre les slides",
     "settings_variable_desc_slide_animation_entrance_effect": "Effet d'animation d'arrivée de la slide",
@@ -79,6 +83,7 @@
 
     "settings_variable_desc_ro_editable":  "Date de dernier redémarrage de l'application",
     "settings_variable_desc_ro_last_slide_update":  "Date de dernière modification d'une slide",
+    "settings_variable_desc_ro_refresh_player_request":  "Date de dernière demande de rafraîchissement du lecteur",
 
     "sysinfo_page_title": "Système",
     "sysinfo_panel_button_restart": "Redémarrer",
@@ -120,5 +125,6 @@
     "enum_animation_speed_fast": "Rapide",
     "enum_animation_speed_faster": "Très rapide",
     "enum_variable_section_general": "Général",
-    "enum_variable_section_animation": "Animation"
+    "enum_variable_section_player_animation": "Animation du lecteur",
+    "enum_variable_section_player_options": "Options du lecteur"
 }
