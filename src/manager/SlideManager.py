@@ -82,12 +82,17 @@ class SlideManager(ModelManager):
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(slide_id, {"position": slide_position})
 
-    def update_form(self, id: str, name: str, duration: int, cron_schedule: Optional[str] = '') -> None:
-        self._db.update_by_id(id, {
+    def update_form(self, id: str, name: str, duration: int, cron_schedule: Optional[str] = '', location: Optional[str] = None) -> None:
+        form = {
             "name": name,
             "duration": duration,
             "cron_schedule": get_optional_string(cron_schedule)
-        })
+        }
+
+        if location is not None and location:
+            form["location"] = location
+
+        self._db.update_by_id(id, form)
 
     def add_form(self, slide: Union[Slide, Dict]) -> None:
         db_slide = slide

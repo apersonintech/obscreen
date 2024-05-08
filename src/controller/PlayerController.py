@@ -51,8 +51,7 @@ class PlayerController(ObController):
         ipaddr = get_ip_address()
         return render_template(
             'player/default.jinja.html',
-            ipaddr=ipaddr if ipaddr else self._model_store.lang().map().get('common_unknown_ipaddr'),
-            l=self._model_store.lang().map()
+            ipaddr=ipaddr if ipaddr else self._model_store.lang().map().get('common_unknown_ipaddr')
         )
 
     def player_playlist(self):

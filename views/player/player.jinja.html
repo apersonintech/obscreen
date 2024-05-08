@@ -116,13 +116,16 @@
             case 'video':
                 loadVideo(element, callbackReady, item);
                 break;
+            case 'youtube':
+                loadYoutube(element, callbackReady, item);
+                break;
             default:
                 loadUrl(element, callbackReady, item);
                 break;
         }
     }
 
-    function loadUrl(element, callbackReady, item) {
+    function loadUrl(element, callbackReady, item, delay) {
         element.innerHTML = `<iframe src="${item.location}"></iframe>`;
         callbackReady(function () {});
     }
@@ -130,6 +133,15 @@
     function loadPicture(element, callbackReady, item) {
         element.innerHTML = `<img src="${item.location}" alt="" />`;
         callbackReady(function () {});
+    }
+
+    function loadYoutube(element, callbackReady, item) {
+        element.innerHTML = ``;
+        callbackReady(function () {});
+
+        setTimeout(function() {
+            element.innerHTML = `<iframe src="https://www.youtube.com/embed/HfWhaPEH-Ck?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+        }, Math.max(100, duration - 2000));
     }
 
     function loadVideo(element, callbackReady, item) {
