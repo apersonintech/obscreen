@@ -7,6 +7,7 @@ from src.manager.LangManager import LangManager
 from src.service.ModelManager import ModelManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
+from src.model.enum.ApplicationLanguage import ApplicationLanguage
 from src.model.enum.VariableType import VariableType
 from src.model.enum.VariableUnit import VariableUnit
 from src.model.enum.VariableSection import VariableSection
@@ -67,7 +68,8 @@ class VariableManager(ModelManager):
             self.add_form(default_var)
             variable = self.get_one_by_name(default_var['name'])
         else:
-            same_selectables = get_keys(default_var, 'selectables') == get_keys(variable, 'selectables')
+            same_selectables_keys = get_keys(default_var, 'selectables', 'key') == get_keys(variable, 'selectables', 'key')
+            same_selectables_label = get_keys(default_var, 'selectables', 'label') == get_keys(variable, 'selectables', 'label')
 
             if variable.description != default_var['description']:
                 self._db.update_by_id(variable.id, {"description": default_var['description']})
@@ -81,7 +83,7 @@ class VariableManager(ModelManager):
             if variable.refresh_player != default_var['refresh_player']:
                 self._db.update_by_id(variable.id, {"refresh_player": default_var['refresh_player']})
 
-            if not same_selectables:
+            if not same_selectables_keys or not same_selectables_label:
                 self._db.update_by_id(variable.id, {"selectables": default_var['selectables']})
 
         if variable.name == 'last_restart':
@@ -94,7 +96,7 @@ class VariableManager(ModelManager):
             # Editable (Customizable settings)
 
             ### General
-            {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": {"en": "English", "fr": "French"}, "refresh_player": False},
+            {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": self.t(ApplicationLanguage), "refresh_player": False},
             {"name": "fleet_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_enabled'), "refresh_player": False},
             {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": True, "description": self.t('settings_variable_desc_external_url'), "refresh_player": False},
             {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32 * 1024 * 1024, "unit": VariableUnit.BYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
