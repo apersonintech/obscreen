@@ -30,7 +30,9 @@ class TemplateRenderer:
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,
             cron_descriptor=self.cron_descriptor,
-            is_validate_cron_date_time=is_validate_cron_date_time
+            is_validate_cron_date_time=is_validate_cron_date_time,
+            l=self._model_store.lang().map(),
+            t=self._model_store.lang().translate,
         )
 
         for hook in HookType:
@@ -48,7 +50,6 @@ class TemplateRenderer:
                     os.path.basename(hook_registration.template)
                 ))
                 content.append(template.render(
-                    l=self._model_store.lang().map(),
                     **self.get_view_globals()
                 ))
             elif isinstance(hook_registration, FunctionalHookRegistration):

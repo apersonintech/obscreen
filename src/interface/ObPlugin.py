@@ -96,7 +96,6 @@ class ObPlugin(abc.ABC):
         template = self.get_rendering_env().get_template(template_file)
 
         return template.render(
-            l=self._model_store.lang().map(),
             request=request,
             url_for=url_for,
             **parameters,
