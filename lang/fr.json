@@ -126,5 +126,7 @@
     "enum_animation_speed_faster": "Très rapide",
     "enum_variable_section_general": "Général",
     "enum_variable_section_player_animation": "Animation du lecteur",
-    "enum_variable_section_player_options": "Options du lecteur"
+    "enum_variable_section_player_options": "Options du lecteur",
+    "enum_application_language_english": "Anglais",
+    "enum_application_language_french": "Français"
 }
