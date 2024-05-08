@@ -26,7 +26,6 @@ class FleetController(ObController):
     def fleet_screen_list(self):
         return render_template(
             'fleet/list.jinja.html',
-            l=self._model_store.lang().map(),
             enabled_screens=self._model_store.screen().get_enabled_screens(),
             disabled_screens=self._model_store.screen().get_disabled_screens(),
         )
