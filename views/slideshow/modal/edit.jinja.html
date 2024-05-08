@@ -16,9 +16,11 @@
             <label for="slide-edit-type">{{ l.slideshow_slide_form_label_type }}</label>
             <div class="widget">
                 <select id="slide-edit-type" name="type" disabled="disabled">
-                    <option value="url" data-input="text">{{ l.slideshow_slide_form_label_type_url }}</option>
-                    <option value="video" data-input="upload">{{ l.slideshow_slide_form_label_type_video }}</option>
-                    <option value="picture" data-input="upload">{{ l.slideshow_slide_form_label_type_picture }}</option>
+                    {% for type in enum_slide_type %}
+                        <option value="{{ type.value }}" data-input="{% if type.value == 'url' or type.value == 'youtube' %}text{% else %}upload{% endif %}">
+                            {{ t(type) }}
+                        </option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
@@ -26,7 +28,7 @@
         <div class="form-group">
             <label for="slide-edit-location">{{ l.slideshow_slide_form_label_location }}</label>
             <div class="widget">
-                <input type="text" name="location" id="slide-edit-location" disabled="disabled" />
+                <input type="text" name="location" id="slide-edit-location" />
             </div>
         </div>
 

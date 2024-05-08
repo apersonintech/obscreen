@@ -14,9 +14,12 @@
             <label for="slide-add-type">{{ l.slideshow_slide_form_label_type }}</label>
             <div class="widget">
                 <select name="type" id="slide-add-type">
-                    <option value="url" data-input="text">{{ l.slideshow_slide_form_label_type_url }}</option>
-                    <option value="video" data-input="upload">{{ l.slideshow_slide_form_label_type_video }}</option>
-                    <option value="picture" data-input="upload">{{ l.slideshow_slide_form_label_type_picture }}</option>
+                    {% for type in enum_slide_type %}
+                        {% set input_type = enum_slide_type.get_input(type) %}
+                        <option value="{{ type.value }}" data-input="{{ input_type.value }}">
+                            {{ t(type) }}
+                        </option>
+                    {% endfor %}
                 </select>
             </div>
         </div>

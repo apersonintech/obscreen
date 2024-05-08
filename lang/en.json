@@ -22,9 +22,6 @@
     "slideshow_slide_form_label_name": "Name",
     "slideshow_slide_form_label_location": "Location",
     "slideshow_slide_form_label_type": "Type",
-    "slideshow_slide_form_label_type_url": "URL",
-    "slideshow_slide_form_label_type_video": "Video",
-    "slideshow_slide_form_label_type_picture": "Picture",
     "slideshow_slide_form_label_object": "Object",
     "slideshow_slide_form_label_duration": "Duration",
     "slideshow_slide_form_label_duration_unit": "seconds",
@@ -128,5 +125,9 @@
     "enum_variable_section_player_animation": "Player animation",
     "enum_variable_section_player_options": "Options du lecteur",
     "enum_application_language_english": "English",
-    "enum_application_language_french": "French"
+    "enum_application_language_french": "French",
+    "enum_slide_type_url": "URL",
+    "enum_slide_type_video": "Video",
+    "enum_slide_type_picture": "Picture",
+    "enum_slide_type_youtube": "Youtube"
 }

@@ -4,7 +4,8 @@ from typing import Dict, Optional, List, Tuple, Union
 from pysondb.errors import IdDoesNotExistError
 
 from src.model.entity.Slide import Slide
-from src.utils import str_to_enum, get_optional_string
+from src.model.enum.SlideType import SlideType
+from src.utils import get_optional_string, get_yt_video_id
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 from src.service.ModelManager import ModelManager
@@ -82,21 +83,37 @@ class SlideManager(ModelManager):
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(slide_id, {"position": slide_position})
 
-    def update_form(self, id: str, name: str, duration: int, cron_schedule: Optional[str] = '') -> None:
-        self._db.update_by_id(id, {
+    def update_form(self, id: str, name: str, duration: int, cron_schedule: Optional[str] = '', location: Optional[str] = None) -> None:
+        slide = self.get(id)
+
+        if not slide:
+            return
+
+        form = {
             "name": name,
             "duration": duration,
             "cron_schedule": get_optional_string(cron_schedule)
-        })
+        }
+
+        if location is not None and location:
+            form["location"] = location
+
+        if slide.type == SlideType.YOUTUBE:
+            form['location'] = get_yt_video_id(form['location'])
+
+        self._db.update_by_id(id, form)
 
     def add_form(self, slide: Union[Slide, Dict]) -> None:
-        db_slide = slide
+        form = slide
 
         if not isinstance(slide, dict):
-            db_slide = slide.to_dict()
-            del db_slide['id']
+            form = slide.to_dict()
+            del form['id']
 
-        self._db.add(db_slide)
+        if form['type'] == SlideType.YOUTUBE:
+            form['location'] = get_yt_video_id(form['location'])
+
+        self._db.add(form)
 
     def delete(self, id: str) -> None:
         slide = self.get(id)
@@ -110,5 +127,6 @@ class SlideManager(ModelManager):
 
             self._db.delete_by_id(id)
 
-    def to_dict(self, slides: List[Slide]) -> dict:
+    def to_dict(self, slides: List[Slide]) -> List[Dict]:
         return [slide.to_dict() for slide in slides]
+
