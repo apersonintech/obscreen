@@ -140,7 +140,7 @@
         callbackReady(function () {});
 
         setTimeout(function() {
-            element.innerHTML = `<iframe src="https://www.youtube.com/embed/HfWhaPEH-Ck?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+            element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
         }, Math.max(100, duration - 2000));
     }
 
