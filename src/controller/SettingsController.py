@@ -1,3 +1,4 @@
+import time
 import json
 
 from flask import Flask, render_template, redirect, request, url_for
@@ -21,4 +22,12 @@ class SettingsController(ObController):
 
     def settings_variable_edit(self):
         self._model_store.variable().update_form(request.form['id'], request.form['value'])
+        self._post_update(request.form['id'])
         return redirect(url_for('settings_variable_list'))
+
+    def _post_update(self, id: str):
+        variable = self._model_store.variable().get(id)
+
+        if variable.refresh_player:
+            self._model_store.variable().update_by_name("refresh_player_request", time.time())
+

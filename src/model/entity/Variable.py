@@ -12,7 +12,8 @@ class Variable:
 
     def __init__(self, name: str = '', section: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING,
                  value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None,
-                 plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None, unit: Optional[VariableUnit] = None):
+                 plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None, unit: Optional[VariableUnit] = None,
+                 refresh_player: bool = False):
         self._id = id if id else None
         self._name = name
         self._section = section
@@ -22,6 +23,7 @@ class Variable:
         self._value = value
         self._editable = editable
         self._plugin = plugin
+        self._refresh_player = refresh_player
         self._selectables = selectables
 
     @property
@@ -88,6 +90,14 @@ class Variable:
         self._editable = value
 
     @property
+    def refresh_player(self) -> bool:
+        return self._refresh_player
+
+    @refresh_player.setter
+    def refresh_player(self, value: bool):
+        self._refresh_player = value
+
+    @property
     def value(self) -> Union[int, bool, str]:
         return self._value
 
@@ -113,6 +123,7 @@ class Variable:
                f"unit='{self.unit}',\n" \
                f"description='{self.description}',\n" \
                f"editable='{self.editable}',\n" \
+               f"refresh_player='{self.refresh_player}',\n" \
                f"plugin='{self.plugin}',\n" \
                f"selectables='{self.selectables}',\n" \
                f")"
@@ -130,6 +141,7 @@ class Variable:
             "unit": self.unit.value if self.unit else None,
             "description": self.description,
             "editable": self.editable,
+            "refresh_player": self.refresh_player,
             "plugin": self.plugin,
             "selectables": [selectable.to_dict() for selectable in self.selectables] if isinstance(self._selectables, list) else None
         }
@@ -161,6 +173,8 @@ class Variable:
                 value / 1024 / 1024,
                 "MB"
             )
+        elif self.unit == VariableUnit.SECOND:
+            value = "{}{}".format(value, "s")
 
         return value
 
