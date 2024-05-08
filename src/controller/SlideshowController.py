@@ -21,6 +21,7 @@ class SlideshowController(ObController):
         self._app.add_url_rule('/slideshow/slide/toggle', 'slideshow_slide_toggle', self.slideshow_slide_toggle, methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/delete', 'slideshow_slide_delete', self.slideshow_slide_delete, methods=['DELETE'])
         self._app.add_url_rule('/slideshow/slide/position', 'slideshow_slide_position', self.slideshow_slide_position, methods=['POST'])
+        self._app.add_url_rule('/slideshow/player-refresh', 'slideshow_player_refresh', self.slideshow_player_refresh, methods=['GET'])
 
     def manage(self):
         return redirect(url_for('slideshow_slide_list'))
@@ -87,6 +88,15 @@ class SlideshowController(ObController):
         self._model_store.slide().update_positions(data)
         self._post_update()
         return jsonify({'status': 'ok'})
+
+    def slideshow_player_refresh(self):
+        self._model_store.variable().update_by_name("refresh_player_request", time.time())
+        return redirect(
+            url_for(
+                'slideshow_slide_list',
+                refresh_player=self._model_store.variable().get_one_by_name('polling_interval').as_int()
+            )
+        )
 
     def _post_update(self):
         self._model_store.variable().update_by_name("last_slide_update", time.time())

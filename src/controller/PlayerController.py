@@ -24,7 +24,8 @@ class PlayerController(ObController):
 
         playlists = {
             'loop': playlist_loop,
-            'cron': playlist_cron
+            'cron': playlist_cron,
+            'hard_refresh_request': self._model_store.variable().get_one_by_name("refresh_player_request").as_int()
         }
 
         return playlists
@@ -38,6 +39,8 @@ class PlayerController(ObController):
         return render_template(
             'player/player.jinja.html',
             items=json.dumps(self._get_playlist()),
+            default_slide_duration=self._model_store.variable().get_one_by_name('default_slide_duration'),
+            polling_interval=self._model_store.variable().get_one_by_name('polling_interval'),
             slide_animation_enabled=self._model_store.variable().get_one_by_name('slide_animation_enabled'),
             slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
             slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),

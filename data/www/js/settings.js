@@ -29,7 +29,8 @@ jQuery(document).ready(function ($) {
             });
             $('#variable-edit-value').replaceWith($select);
         } else {
-            $('#variable-edit-value').replaceWith('<input type="text" name="value" id="variable-edit-value" required="required" />');
+            var type = variable.type === 'int' ? 'number' : 'text';
+            $('#variable-edit-value').replaceWith('<input type="'+type+'" name="value" id="variable-edit-value" required="required" />');
         }
 
         showModal('modal-variable-edit');

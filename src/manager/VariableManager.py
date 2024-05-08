@@ -30,6 +30,7 @@ class VariableManager(ModelManager):
         "selectables",
         "type",
         "unit",
+        "refresh_player",
         "value"
     ]
 
@@ -39,7 +40,7 @@ class VariableManager(ModelManager):
         self._var_map = {}
         self.reload()
 
-    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, plugin: Optional[None] = None, selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None, section: str = '') -> Variable:
+    def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, plugin: Optional[None] = None, selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None, section: str = '', refresh_player: bool = False) -> Variable:
         if isinstance(value, bool) and value:
             value = '1'
         elif isinstance(value, bool) and not value:
@@ -54,6 +55,7 @@ class VariableManager(ModelManager):
             "value": value,
             "type": type.value,
             "editable": editable,
+            "refresh_player": refresh_player,
             "description": description,
             "plugin": plugin,
             "unit": unit.value if unit else None,
@@ -76,6 +78,9 @@ class VariableManager(ModelManager):
             if variable.section != default_var['section']:
                 self._db.update_by_id(variable.id, {"section": default_var['section']})
 
+            if variable.refresh_player != default_var['refresh_player']:
+                self._db.update_by_id(variable.id, {"refresh_player": default_var['refresh_player']})
+
             if not same_selectables:
                 self._db.update_by_id(variable.id, {"selectables": default_var['selectables']})
 
@@ -87,18 +92,27 @@ class VariableManager(ModelManager):
     def reload(self) -> None:
         default_vars = [
             # Editable (Customizable settings)
-            {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": {"en": "English", "fr": "French"}},
-            {"name": "fleet_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_enabled')},
-            {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": True, "description": self.t('settings_variable_desc_external_url')},
-            {"name": "slide_upload_limit", "section": self.t(VariableSection.ANIMATION), "value": 32 * 1024 * 1024, "unit": VariableUnit.BYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit')},
-            {"name": "slide_animation_enabled", "section": self.t(VariableSection.ANIMATION), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_slide_animation_enabled')},
-            {"name": "slide_animation_entrance_effect", "section": self.t(VariableSection.ANIMATION), "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_entrance_effect'), "selectables": enum_to_dict(AnimationEntranceEffect)},
-            {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect)},
-            {"name": "slide_animation_speed", "section": self.t(VariableSection.ANIMATION), "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_speed'), "selectables": self.t(AnimationSpeed)},
+
+            ### General
+            {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": {"en": "English", "fr": "French"}, "refresh_player": False},
+            {"name": "fleet_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_enabled'), "refresh_player": False},
+            {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": True, "description": self.t('settings_variable_desc_external_url'), "refresh_player": False},
+            {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32 * 1024 * 1024, "unit": VariableUnit.BYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
+
+            ### Player Options
+            {"name": "default_slide_duration", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 3, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_default_slide_duration'), "refresh_player": False},
+            {"name": "polling_interval", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 5, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_polling_interval'), "refresh_player": True},
+
+             ### Player Animation
+            {"name": "slide_animation_enabled", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_slide_animation_enabled'), "refresh_player": True},
+            {"name": "slide_animation_entrance_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_entrance_effect'), "selectables": enum_to_dict(AnimationEntranceEffect), "refresh_player": True},
+            {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect), "refresh_player": True},
+            {"name": "slide_animation_speed", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_speed'), "selectables": self.t(AnimationSpeed), "refresh_player": True},
 
             # Not editable (System information)
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},
             {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_last_slide_update')},
+            {"name": "refresh_player_request", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_refresh_player_request')},
         ]
 
         for default_var in default_vars:
