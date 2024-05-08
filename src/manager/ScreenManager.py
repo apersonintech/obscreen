@@ -81,16 +81,16 @@ class ScreenManager(ModelManager):
         self._db.update_by_id(id, {"name": name, "host": host, "port": port})
 
     def add_form(self, screen: Union[Screen, Dict]) -> None:
-        db_screen = screen
+        form = screen
 
         if not isinstance(screen, dict):
-            db_screen = screen.to_dict()
-            del db_screen['id']
+            form = screen.to_dict()
+            del form['id']
 
-        self._db.add(db_screen)
+        self._db.add(form)
 
     def delete(self, id: str) -> None:
         self._db.delete_by_id(id)
 
-    def to_dict(self, screens: List[Screen]) -> dict:
+    def to_dict(self, screens: List[Screen]) -> List[Dict]:
         return [screen.to_dict() for screen in screens]
