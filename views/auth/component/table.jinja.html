@@ -1,0 +1,42 @@
+<table class="{{ tclass }}-users">
+    <thead>
+    <tr>
+        <th>{{ l.auth_user_panel_th_username }}</th>
+        <th class="tac">{{ l.auth_user_panel_th_enabled }}</th>
+        <th class="tac">{{ l.auth_user_panel_th_activity }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="empty-tr {% if users|length != 0 %}hidden{% endif %}">
+        <td colspan="4">
+            {{ l.auth_user_panel_empty|replace(
+                '%link%',
+                ('<a href="javascript:void(0);" class="item-add user-add">'~l.auth_user_button_add~'</a>')|safe
+            ) }}
+        </td>
+    </tr>
+    {% for user in users %}
+        <tr class="user-item" data-level="{{ user.id }}" data-entity="{{ user.to_json() }}">
+            <td class="infos">
+                <div class="inner">
+                    <i class="fa fa-user icon-left"></i>
+                    {{ user.username }}
+                </div>
+            </td>
+            <td class="tac">
+                <label class="pure-material-switch">
+                    <input type="checkbox" {% if user.enabled %}checked="checked"{% endif %}><span></span>
+                </label>
+            </td>
+            <td class="actions tac">
+                <a href="javascript:void(0);" class="item-edit user-edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a href="javascript:void(0);" class="item-delete user-delete">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

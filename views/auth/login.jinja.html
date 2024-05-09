@@ -1,0 +1,23 @@
+{% extends 'base.jinja.html' %}
+
+{% block page_title %}
+    {{ l.login_page_title }}
+{% endblock %}
+
+{% block add_css %}
+    {{ HOOK(H_LOGIN_CSS) }}
+{% endblock %}
+
+{% block add_js %}
+    {{ HOOK(H_LOGIN_JAVASCRIPT) }}
+{% endblock %}
+
+{% block page %}
+    Hello
+    <form action="{{ url_for('login') }}" method="post">
+    error: {{ login_error }}
+        <input type="text" name="username" />
+        <input type="password" name="password" />
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}
