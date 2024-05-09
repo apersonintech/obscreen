@@ -32,6 +32,7 @@ docker run --rm --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
   -e AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile \
+  -e SECRET_KEY=ANY_SECRET_KEY_HERE \
   -p 5000:5000 \
   -v ./data/db:/app/data/db \
   -v ./data/uploads:/app/data/uploads \

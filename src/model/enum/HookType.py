@@ -15,6 +15,14 @@ class HookType(Enum):
     H_FLEET_CSS = 'h_fleet_css'
     H_FLEET_JAVASCRIPT = 'h_fleet_javascript'
 
+    H_AUTH_TOOLBAR_ACTIONS_START = 'h_auth_toolbar_actions_start'
+    H_AUTH_TOOLBAR_ACTIONS_END = 'h_auth_toolbar_actions_end'
+    H_AUTH_CSS = 'h_auth_css'
+    H_AUTH_JAVASCRIPT = 'h_auth_javascript'
+
+    H_LOGIN_CSS = 'h_login_css'
+    H_LOGIN_JAVASCRIPT = 'h_login_javascript'
+
     H_ROOT_CSS = 'h_root_css'
     H_ROOT_JAVASCRIPT = 'h_root_javascript'
     H_ROOT_NAV_ELEMENT_START = 'h_root_nav_element_start'

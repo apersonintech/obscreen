@@ -5,7 +5,7 @@ from src.interface.ObController import ObController
 # class FooController(ObController):
 
     # def register(self):
-    #     self._app.add_url_rule('/foo', 'foo', self.foo, methods=['GET'])
+    #     self._app.add_url_rule('/foo', 'foo', self._auth(self.foo), methods=['GET'])
     #     self._app.add_url_rule('/foo_html', 'foo_html', self.foo_html, methods=['GET'])
     #
     # def foo(self):

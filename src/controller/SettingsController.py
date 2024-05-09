@@ -9,14 +9,14 @@ from src.interface.ObController import ObController
 class SettingsController(ObController):
 
     def register(self):
-        self._app.add_url_rule('/settings/variable/list', 'settings_variable_list', self.settings_variable_list, methods=['GET'])
-        self._app.add_url_rule('/settings/variable/edit', 'settings_variable_edit', self.settings_variable_edit, methods=['POST'])
+        self._app.add_url_rule('/settings/variable/list', 'settings_variable_list', self._auth(self.settings_variable_list), methods=['GET'])
+        self._app.add_url_rule('/settings/variable/edit', 'settings_variable_edit', self._auth(self.settings_variable_edit), methods=['POST'])
 
     def settings_variable_list(self):
         return render_template(
             'settings/list.jinja.html',
-            system_variables=self._model_store.variable().get_editable_variables(plugin=False),
-            plugin_variables=self._model_store.variable().get_editable_variables(plugin=True),
+            system_variables=self._model_store.variable().get_editable_variables(plugin=False, sort='section'),
+            plugin_variables=self._model_store.variable().get_editable_variables(plugin=True, sort='plugin'),
         )
 
     def settings_variable_edit(self):
