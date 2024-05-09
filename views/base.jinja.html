@@ -46,6 +46,7 @@
                         Obscreen
                     </a>
                 </h1>
+                {% if (current_user and current_user.is_authenticated) or not current_user %}
                 <nav>
                     <ul>
                         {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
@@ -61,6 +62,13 @@
                             </a>
                         </li>
                         {% endif %}
+                        {% if AUTH_ENABLED %}
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'auth_user_list' }}">
+                            <a href="{{ url_for('auth_user_list') }}">
+                                <i class="fa fa-user"></i> {{ l.auth_page_title }}
+                            </a>
+                        </li>
+                        {% endif %}
                         <li class="{{ 'active' if request.url_rule.endpoint == 'settings_variable_list' }}">
                             <a href="{{ url_for('settings_variable_list') }}">
                                 <i class="fa-solid fa-cogs"></i> {{ l.settings_page_title }}
@@ -71,9 +79,17 @@
                                 <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
                             </a>
                         </li>
+                        {% if AUTH_ENABLED %}
+                        <li>
+                            <a href="{{ url_for('logout') }}" title="{{ l.logout }}">
+                                <i class="fa fa-right-from-bracket"></i>
+                            </a>
+                        </li>
+                        {% endif %}
                         {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
                     </ul>
                 </nav>
+                {% endif %}
             </header>
         {% endif %}
     {% endblock %}
@@ -95,6 +111,7 @@
     var l = {
         'js_slideshow_slide_delete_confirmation': '{{ l.slideshow_slide_delete_confirmation }}',
         'js_fleet_screen_delete_confirmation': '{{ l.js_fleet_screen_delete_confirmation }}',
+        'js_auth_user_delete_confirmation': '{{ l.js_auth_user_delete_confirmation }}',
         'js_sysinfo_restart_confirmation': '{{ l.js_sysinfo_restart_confirmation }}',
         'js_sysinfo_restart_loading': '{{ l.js_sysinfo_restart_loading }}'
     };

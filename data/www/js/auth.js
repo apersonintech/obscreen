@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
-    const $tableActive = $('table.active-screens');
-    const $tableInactive = $('table.inactive-screens');
+    const $tableActive = $('table.active-users');
+    const $tableInactive = $('table.inactive-users');
     const $modalsRoot = $('.modals');
 
     const getId = function ($el) {
@@ -9,13 +9,12 @@ jQuery(document).ready(function ($) {
 
     const updateTable = function () {
         $('table').each(function () {
-            if ($(this).find('tbody tr.screen-item:visible').length === 0) {
+            if ($(this).find('tbody tr.user-item:visible').length === 0) {
                 $(this).find('tr.empty-tr').removeClass('hidden');
             } else {
                 $(this).find('tr.empty-tr').addClass('hidden');
             }
-        }).tableDnDUpdate();
-        updatePositions();
+        });
     }
 
     const showModal = function (modalClass) {
@@ -28,30 +27,13 @@ jQuery(document).ready(function ($) {
         $modalsRoot.addClass('hidden').find('form').trigger('reset');
     };
 
-    const updatePositions = function (table, row) {
-        const positions = {};
-        $('.screen-item').each(function (index) {
-            positions[getId($(this))] = index;
-        });
-
-        $.ajax({
-            method: 'POST',
-            url: '/fleet/screen/position',
-            headers: {'Content-Type': 'application/json'},
-            data: JSON.stringify(positions),
-        });
-    };
-
     const main = function () {
-        $("table").tableDnD({
-            dragHandle: 'td a.screen-sort',
-            onDrop: updatePositions
-        });
+
     };
 
     $(document).on('change', 'input[type=checkbox]', function () {
         $.ajax({
-            url: '/fleet/screen/toggle',
+            url: '/auth/user/toggle',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
             method: 'POST',
@@ -68,16 +50,16 @@ jQuery(document).ready(function ($) {
         updateTable();
     });
 
-    $(document).on('change', '#screen-add-type', function () {
+    $(document).on('change', '#user-add-type', function () {
         const value = $(this).val();
         const inputType = $(this).find('option').filter(function (i, el) {
             return $(el).val() === value;
         }).data('input');
 
-        $('.screen-add-object-input')
+        $('.user-add-object-input')
             .addClass('hidden')
             .prop('disabled', true)
-            .filter('#screen-add-object-input-' + inputType)
+            .filter('#user-add-object-input-' + inputType)
             .removeClass('hidden')
             .prop('disabled', false)
         ;
@@ -87,29 +69,27 @@ jQuery(document).ready(function ($) {
         hideModal();
     });
 
-    $(document).on('click', '.screen-add', function () {
-        showModal('modal-screen-add');
-        $('.modal-screen-add input:eq(0)').focus().select();
+    $(document).on('click', '.user-add', function () {
+        showModal('modal-user-add');
+        $('.modal-user-add input:eq(0)').focus().select();
     });
 
-    $(document).on('click', '.screen-edit', function () {
-        const screen = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        showModal('modal-screen-edit');
-        $('.modal-screen-edit input:visible:eq(0)').focus().select();
-        $('#screen-edit-name').val(screen.name);
-        $('#screen-edit-host').val(screen.host);
-        $('#screen-edit-port').val(screen.port);
-        $('#screen-edit-id').val(screen.id);
+    $(document).on('click', '.user-edit', function () {
+        const user = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        showModal('modal-user-edit');
+        $('.modal-user-edit input:visible:eq(0)').focus().select();
+        $('#user-edit-username').val(user.username);
+        $('#user-edit-id').val(user.id);
     });
 
-    $(document).on('click', '.screen-delete', function () {
-        if (confirm(l.js_fleet_screen_delete_confirmation)) {
+    $(document).on('click', '.user-delete', function () {
+        if (confirm(l.js_auth_user_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();
             $.ajax({
                 method: 'DELETE',
-                url: '/fleet/screen/delete',
+                url: '/auth/user/delete',
                 headers: {'Content-Type': 'application/json'},
                 data: JSON.stringify({id: getId($(this))}),
             });
