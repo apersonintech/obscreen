@@ -135,6 +135,12 @@
     "common_unknown_ipaddr": "Adresse IP inconnue",
     "common_empty": "[Vide]",
     "logout": "Déconnexion",
+    "login_error_not_found": "Identifiants invalides",
+    "login_error_bad_credentials": "Identifiants invalides",
+    "login_form_title": "Connexion",
+    "login_form_username": "Identifiant",
+    "login_form_password": "Mot de passe",
+    "login_form_submit": "Valider",
 
     "enum_animation_speed_slower": "Très lent",
     "enum_animation_speed_slow": "Lent",

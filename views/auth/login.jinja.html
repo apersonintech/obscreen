@@ -13,11 +13,34 @@
 {% endblock %}
 
 {% block page %}
-    Hello
-    <form action="{{ url_for('login') }}" method="post">
-    error: {{ login_error }}
-        <input type="text" name="username" />
-        <input type="password" name="password" />
-        <button type="submit">Login</button>
-    </form>
+    <div class="login-page">
+
+        {% if login_error %}
+            <div class="alert alert-error">
+                {{ t('login_error_' ~ login_error) }}
+            </div>
+        {% endif %}
+
+        <div class="card">
+            <h3>
+                {{ l.login_form_title }}
+            </h3>
+            <form action="{{ url_for('login') }}" method="post">
+                <div class="form-group">
+                    <label for="password">{{ l.login_form_username }}</label>
+                    <div class="widget">
+                        <input type="text" name="username" required="required" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">{{ l.login_form_password }}</label>
+                    <div class="widget">
+                        <input type="password" name="password" required="required" />
+                    </div>
+                </div>
+                <button type="submit">{{ l.login_form_submit }}</button>
+            </form>
+        </div>
+
+    </div>
 {% endblock %}
