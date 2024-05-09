@@ -1,0 +1,30 @@
+<div class="modal modal-user-add">
+    <h2>
+        {{ l.auth_user_form_add_title }}
+    </h2>
+
+    <form action="/auth/user/add" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="user-add-name">{{ l.auth_user_form_label_username }}</label>
+            <div class="widget">
+                <input name="username" type="text" id="user-add-username" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="user-add-password">{{ l.auth_user_form_label_password }}</label>
+            <div class="widget">
+                <input type="password" name="password" id="user-add-password" required="required" />
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="modal-close">
+                {{ l.auth_user_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-plus icon-left"></i> {{ l.auth_user_form_add_submit }}
+            </button>
+        </div>
+    </form>
+</div>

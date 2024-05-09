@@ -170,7 +170,7 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('click', '.slide-delete', function () {
-        if (confirm(l.slideshow_slide_delete_confirmation)) {
+        if (confirm(l.js_slideshow_slide_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();

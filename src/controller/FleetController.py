@@ -9,13 +9,13 @@ from src.interface.ObController import ObController
 class FleetController(ObController):
 
     def register(self):
-        self._app.add_url_rule('/fleet', 'fleet', self.fleet, methods=['GET'])
-        self._app.add_url_rule('/fleet/screen/list', 'fleet_screen_list', self.fleet_screen_list, methods=['GET'])
-        self._app.add_url_rule('/fleet/screen/add', 'fleet_screen_add', self.fleet_screen_add, methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/edit', 'fleet_screen_edit', self.fleet_screen_edit, methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/toggle', 'fleet_screen_toggle', self.fleet_screen_toggle, methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/delete', 'fleet_screen_delete', self.fleet_screen_delete, methods=['DELETE'])
-        self._app.add_url_rule('/fleet/screen/position', 'fleet_screen_position', self.fleet_screen_position, methods=['POST'])
+        self._app.add_url_rule('/fleet', 'fleet', self._auth(self.fleet), methods=['GET'])
+        self._app.add_url_rule('/fleet/screen/list', 'fleet_screen_list', self._auth(self.fleet_screen_list), methods=['GET'])
+        self._app.add_url_rule('/fleet/screen/add', 'fleet_screen_add', self._auth(self.fleet_screen_add), methods=['POST'])
+        self._app.add_url_rule('/fleet/screen/edit', 'fleet_screen_edit', self._auth(self.fleet_screen_edit), methods=['POST'])
+        self._app.add_url_rule('/fleet/screen/toggle', 'fleet_screen_toggle', self._auth(self.fleet_screen_toggle), methods=['POST'])
+        self._app.add_url_rule('/fleet/screen/delete', 'fleet_screen_delete', self._auth(self.fleet_screen_delete), methods=['DELETE'])
+        self._app.add_url_rule('/fleet/screen/position', 'fleet_screen_position', self._auth(self.fleet_screen_position), methods=['POST'])
 
     def fleet(self):
         return render_template(
