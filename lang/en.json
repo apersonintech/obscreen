@@ -135,6 +135,12 @@
     "common_unknown_ipaddr": "Unknown IP address",
     "common_empty": "[Empty]",
     "logout": "Logout",
+    "login_error_not_found": "Bad credentials",
+    "login_error_bad_credentials": "Bad credentials",
+    "login_form_title": "Sign in",
+    "login_form_username": "Username",
+    "login_form_password": "Password",
+    "login_form_submit": "Connect",
 
     "enum_animation_speed_slower": "Slower",
     "enum_animation_speed_slow": "Slow",

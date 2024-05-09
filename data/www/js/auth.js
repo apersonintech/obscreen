@@ -83,7 +83,7 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('click', '.user-delete', function () {
-        if (confirm(l.auth_user_delete_confirmation)) {
+        if (confirm(l.js_auth_user_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();

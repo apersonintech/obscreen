@@ -103,7 +103,7 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('click', '.screen-delete', function () {
-        if (confirm(l.fleet_screen_delete_confirmation)) {
+        if (confirm(l.js_fleet_screen_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();
