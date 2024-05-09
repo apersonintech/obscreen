@@ -15,9 +15,9 @@ from src.utils import get_ip_address
 class SysinfoController(ObController):
 
     def register(self):
-        self._app.add_url_rule('/sysinfo', 'sysinfo_attribute_list', self.sysinfo, methods=['GET'])
-        self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self.sysinfo_restart, methods=['POST'])
-        self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self.sysinfo_restart_needed, methods=['GET'])
+        self._app.add_url_rule('/sysinfo', 'sysinfo_attribute_list', self._auth(self.sysinfo), methods=['GET'])
+        self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self._auth(self.sysinfo_restart), methods=['POST'])
+        self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self._auth(self.sysinfo_restart_needed), methods=['GET'])
 
     def sysinfo(self):
         ipaddr = get_ip_address()

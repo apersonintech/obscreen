@@ -24,6 +24,7 @@ class ConfigManager:
             'log_file': None,
             'log_level': 'INFO',
             'log_stdout': True,
+            'secret_key': 'ANY_SECRET_KEY_HERE',
             'player_url': 'http://localhost:{}'.format(self.DEFAULT_PORT)
         }
 
@@ -46,6 +47,7 @@ class ConfigManager:
         parser.add_argument('--debug', '-d', default=self._CONFIG['debug'], help='Debug mode')
         parser.add_argument('--port', '-p', default=self._CONFIG['port'], help='Application port')
         parser.add_argument('--bind', '-b', default=self._CONFIG['bind'], help='Application bind address')
+        parser.add_argument('--secret-key', '-s', default=self._CONFIG['secret_key'], help='Application secret key (any random string)')
         parser.add_argument('--autoconfigure-lx-file', '-x', default=self._CONFIG['autoconfigure_lx_file'], help='Path to lx autostart file')
         parser.add_argument('--log-file', '-lf', default=self._CONFIG['log_file'], help='Log File path')
         parser.add_argument('--log-level', '-ll', default=self._CONFIG['log_level'], help='Log Level')
@@ -67,6 +69,8 @@ class ConfigManager:
             self._CONFIG['autoconfigure_lx_file'] = args.autoconfigure_lx_file
         if args.log_file:
             self._CONFIG['log_file'] = args.log_file
+        if args.secret_key:
+            self._CONFIG['secret_key'] = args.secret_key
         if args.log_level:
             self._CONFIG['log_level'] = args.log_level
         if args.log_stdout:
