@@ -97,6 +97,7 @@ class VariableManager(ModelManager):
 
             ### General
             {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": self.t(ApplicationLanguage), "refresh_player": False},
+            {"name": "auth_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "refresh_player": False},
             {"name": "fleet_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_enabled'), "refresh_player": False},
             {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": True, "description": self.t('settings_variable_desc_external_url'), "refresh_player": False},
             {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32 * 1024 * 1024, "unit": VariableUnit.BYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
@@ -190,9 +191,12 @@ class VariableManager(ModelManager):
 
         return VariableManager.hydrate_list(raw_variables)
 
-    def get_editable_variables(self, plugin: bool = True) -> List[Variable]:
+    def get_editable_variables(self, plugin: bool = True, sort: Optional[str] = None) -> List[Variable]:
         query = lambda v: (not plugin and not isinstance(v['plugin'], str)) or (plugin and isinstance(v['plugin'], str))
-        return [variable for variable in self.get_by(query=query) if variable.editable]
+        variables = [variable for variable in self.get_by(query=query) if variable.editable]
+        if sort is not None and sort:
+            return sorted(variables, key=lambda x: getattr(x, sort))
+        return variables
 
     def get_readonly_variables(self) -> List[Variable]:
         return [variable for variable in self.get_all() if not variable.editable]

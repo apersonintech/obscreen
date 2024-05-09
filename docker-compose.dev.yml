@@ -10,6 +10,7 @@ services:
       - DEBUG=${DEBUG-false}
       - PORT=${PORT-5000}
       - AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile
+      - SECRET_KEY=${SECRET_KEY-ANY_SECRET_KEY_HERE}
     volumes:
       - .:/app
       - ${AUTOCONFIGURE_LX_FILE-./var/run/dummy}:/app/var/run/lxfile

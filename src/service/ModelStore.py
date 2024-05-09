@@ -1,5 +1,6 @@
 from src.manager.SlideManager import SlideManager
 from src.manager.ScreenManager import ScreenManager
+from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
 from src.manager.LangManager import LangManager
 from src.manager.DatabaseManager import DatabaseManager
@@ -23,6 +24,7 @@ class ModelStore:
         self._logging_manager = LoggingManager(config_manager=self._config_manager)
 
         # Model
+        self._user_manager = UserManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
         self._screen_manager = ScreenManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
         self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
         self._variable_manager.reload()
@@ -47,4 +49,7 @@ class ModelStore:
 
     def lang(self) -> LangManager:
         return self._lang_manager
+
+    def user(self) -> UserManager:
+        return self._user_manager
 
