@@ -3,5 +3,5 @@ from enum import Enum
 
 class VariableUnit(Enum):
 
-    BYTE = 'byte'
+    MEGABYTE = 'megabyte'
     SECOND = 'second'

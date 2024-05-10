@@ -18,13 +18,17 @@ class Variable:
         self._name = name
         self._section = section
         self._type = str_to_enum(type, VariableType) if isinstance(type, str) else type
-        self._unit = str_to_enum(unit, VariableUnit) if isinstance(unit, str) else unit
         self._description = description
         self._value = value
         self._editable = editable
         self._plugin = plugin
         self._refresh_player = refresh_player
         self._selectables = selectables
+
+        try:
+            self._unit = str_to_enum(unit, VariableUnit) if isinstance(unit, str) else unit
+        except ValueError:
+            self._unit = None
 
     @property
     def id(self) -> Union[int, str]:
@@ -66,11 +70,11 @@ class Variable:
         self._type = value
 
     @property
-    def unit(self) -> VariableUnit:
+    def unit(self) -> Optional[VariableUnit]:
         return self._unit
 
     @unit.setter
-    def unit(self, value: VariableUnit):
+    def unit(self, value: Optional[VariableUnit]):
         self._unit = value
 
     @property
@@ -168,9 +172,9 @@ class Variable:
                         value = str(selectable.label)
                         break
 
-        if self.unit == VariableUnit.BYTE:
+        if self.unit == VariableUnit.MEGABYTE:
             value = "{} {}".format(
-                value / 1024 / 1024,
+                value,
                 "MB"
             )
         elif self.unit == VariableUnit.SECOND:
