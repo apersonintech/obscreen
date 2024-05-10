@@ -90,20 +90,24 @@ class Slide:
                f")"
 
     def to_json(self) -> str:
-        return json.dumps(self.to_dict())
+        return json.dumps(self.to_dict(with_virtual=True))
 
-    def to_dict(self) -> dict:
-        return {
+    def to_dict(self, with_virtual: bool = False) -> dict:
+        slide = {
             "id": self.id,
             "name": self.name,
             "enabled": self.enabled,
             "position": self.position,
             "type": self.type.value,
-            "is_editable": self.is_editable(),
             "duration": self.duration,
             "location": self.location,
             "cron_schedule": self.cron_schedule,
         }
+
+        if with_virtual:
+            slide['is_editable'] = self.is_editable()
+
+        return slide
 
     def has_file(self) -> bool:
         return (

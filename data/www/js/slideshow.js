@@ -72,6 +72,22 @@ jQuery(document).ready(function ($) {
         });
     };
 
+    const inputTypeUpdate = function () {
+        const $el = $('#slide-add-type');
+        const value = $el.val();
+        const inputType = $el.find('option').filter(function (i, el) {
+            return $(el).val() === value;
+        }).data('input');
+
+        $('.slide-add-object-input')
+            .addClass('hidden')
+            .prop('disabled', true)
+            .filter('#slide-add-object-input-' + inputType)
+            .removeClass('hidden')
+            .prop('disabled', false)
+        ;
+    }
+
     const main = function () {
         $("table").tableDnD({
             dragHandle: 'td a.slide-sort',
@@ -118,20 +134,7 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $(document).on('change', '#slide-add-type', function () {
-        const value = $(this).val();
-        const inputType = $(this).find('option').filter(function (i, el) {
-            return $(el).val() === value;
-        }).data('input');
-
-        $('.slide-add-object-input')
-            .addClass('hidden')
-            .prop('disabled', true)
-            .filter('#slide-add-object-input-' + inputType)
-            .removeClass('hidden')
-            .prop('disabled', false)
-        ;
-    });
+    $(document).on('change', '#slide-add-type', inputTypeUpdate);
 
     $(document).on('click', '.modal-close', function () {
         hideModal();
@@ -140,6 +143,7 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.slide-add', function () {
         showModal('modal-slide-add');
         loadDateTimePicker($('.modal-slide-add .datetimepicker'))
+        inputTypeUpdate();
         $('.modal-slide-add input:eq(0)').focus().select();
     });
 
