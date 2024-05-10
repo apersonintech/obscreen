@@ -88,7 +88,7 @@
     "settings_variable_desc_fleet_enabled": "Activer la gestion de flotte des écrans",
     "settings_variable_desc_auth_enabled": "Activer la gestion de l'authentification",
     "settings_variable_desc_external_url": "URL externe (i.e: https://screen-01.company.com or http://10.10.3.100)",
-    "settings_variable_desc_slide_upload_limit": "Limite d'upload du fichier d'une slide (en octets, 32*1024*1024 pour 32Mo)",
+    "settings_variable_desc_slide_upload_limit": "Limite d'upload du fichier d'une slide (en mégaoctets)",
     "settings_variable_desc_default_slide_duration": "Durée de la slide d'introduction (en secondes)",
     "settings_variable_desc_polling_interval": "Intervalle de rafraîchissement des paramètres à appliquer au lecteur (en secondes)",
 

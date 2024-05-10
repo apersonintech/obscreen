@@ -16,10 +16,10 @@ class SlideInputType(Enum):
 
 class SlideType(Enum):
 
-    PICTURE = 'picture'
-    YOUTUBE = 'youtube'
-    VIDEO = 'video'
     URL = 'url'
+    YOUTUBE = 'youtube'
+    PICTURE = 'picture'
+    VIDEO = 'video'
 
     @staticmethod
     def get_input(value: Enum) -> SlideInputType:
