@@ -29,3 +29,6 @@ class ObController(abc.ABC):
 
     def reload_web_server(self):
         self._web_server.reload()
+
+    def t(self, token) -> Union[Dict, str]:
+        return self._model_store.lang().translate(token)

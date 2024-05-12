@@ -22,6 +22,7 @@ class WebServer:
 
     def __init__(self, project_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer):
         self._app = None
+        self._auth_enabled = False
         self._login_manager = None
         self._project_dir = project_dir
         self._model_store = model_store
@@ -40,6 +41,7 @@ class WebServer:
         self.setup()
 
     def setup(self) -> None:
+        self._auth_enabled = self._model_store.variable().map().get('auth_enabled').as_bool()
         self._setup_flask_app()
         self._setup_web_globals()
         self._setup_web_errors()
@@ -69,29 +71,22 @@ class WebServer:
         if self._debug:
             self._app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-    def _setup_flask_login(self) -> bool:
-        auth_module = self._model_store.variable().map().get('auth_enabled').as_bool()
-
-        if not auth_module:
-            return auth_module
-
+    def _setup_flask_login(self):
         self._app.config['SECRET_KEY'] = self._model_store.config().map().get('secret_key')
         self._login_manager = LoginManager()
         self._login_manager.init_app(self._app)
         self._login_manager.login_view = 'login'
 
-        if self._model_store.user().count_all() == 0:
+        if self._auth_enabled and self._model_store.user().count_all_enabled() == 0:
             self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
 
         @self._login_manager.user_loader
         def load_user(user_id):
             return self._model_store.user().get(user_id)
 
-        return auth_module
-
     def _setup_web_controllers(self) -> None:
         def auth_required(f):
-            if not self._login_manager:
+            if not self._auth_enabled:
                 return f
 
             def decorated_function(*args, **kwargs):
