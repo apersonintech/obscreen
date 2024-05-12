@@ -13,6 +13,6 @@ services:
       - SECRET_KEY=${SECRET_KEY-ANY_SECRET_KEY_HERE}
     volumes:
       - .:/app
-      - ${AUTOCONFIGURE_LX_FILE-./var/run/dummy}:/app/var/run/lxfile
+      - ${AUTOCONFIGURE_LX_FILE-/dev/null}:/app/var/run/lxfile
     ports:
       - ${PORT}:${PORT}

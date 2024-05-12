@@ -9,7 +9,7 @@ services:
       - AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile
       - SECRET_KEY=ANY_SECRET_KEY_HERE
     volumes:
-      - /home/pi/.config/lxsession/LXDE-pi/autostart:/app/var/run/lxfile
+      - /dev/null:/app/var/run/lxfile
       - ./data/db:/app/data/db
       - ./data/uploads:/app/data/uploads
     ports:
