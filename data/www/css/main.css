@@ -618,14 +618,14 @@ form .actions button.green:hover {
     border-color: rgb(14, 239, 95);
 }
 
-form .actions button.modal-close {
+form .actions button.btn-normal {
     color: #999;
     border-color: #999;
     font-size: 18px;
     margin: 0;
 }
 
-form .actions button.modal-close:hover {
+form .actions button.btn-normal:hover {
     color: #555;
     border-color: #555;
 }

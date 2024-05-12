@@ -140,8 +140,13 @@ class Slide:
                f"cron_schedule_end='{self.cron_schedule_end}',\n" \
                f")"
 
-    def to_json(self) -> str:
-        return json.dumps(self.to_dict(with_virtual=True))
+    def to_json(self, edits: dict = {}) -> str:
+        obj = self.to_dict(with_virtual=True)
+
+        for k,v in edits.items():
+            obj[k] = v
+
+        return json.dumps(obj)
 
     def to_dict(self, with_virtual: bool = False) -> dict:
         slide = {
