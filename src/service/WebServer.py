@@ -36,6 +36,9 @@ class WebServer:
             port=self._model_store.config().map().get('port')
         )
 
+    def reload(self) -> None:
+        self.setup()
+
     def setup(self) -> None:
         self._setup_flask_app()
         self._setup_web_globals()
@@ -77,6 +80,9 @@ class WebServer:
         self._login_manager.init_app(self._app)
         self._login_manager.login_view = 'login'
 
+        if self._model_store.user().count_all() == 0:
+            self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
+
         @self._login_manager.user_loader
         def load_user(user_id):
             return self._model_store.user().get(user_id)
@@ -95,16 +101,16 @@ class WebServer:
 
             return decorated_function
 
-        PlayerController(self._app, auth_required, self._model_store, self._template_renderer)
-        SlideshowController(self._app, auth_required, self._model_store, self._template_renderer)
-        SettingsController(self._app, auth_required, self._model_store, self._template_renderer)
-        SysinfoController(self._app, auth_required, self._model_store, self._template_renderer)
+        PlayerController(self, self._app, auth_required, self._model_store, self._template_renderer)
+        SlideshowController(self, self._app, auth_required, self._model_store, self._template_renderer)
+        SettingsController(self, self._app, auth_required, self._model_store, self._template_renderer)
+        SysinfoController(self, self._app, auth_required, self._model_store, self._template_renderer)
 
         if self._model_store.variable().map().get('fleet_enabled').as_bool():
-            FleetController(self._app, auth_required, self._model_store, self._template_renderer)
+            FleetController(self, self._app, auth_required, self._model_store, self._template_renderer)
 
         if self._login_manager:
-            AuthController(self._app, auth_required, self._model_store, self._template_renderer)
+            AuthController(self, self._app, auth_required, self._model_store, self._template_renderer)
 
     def _setup_web_globals(self) -> None:
         @self._app.context_processor
