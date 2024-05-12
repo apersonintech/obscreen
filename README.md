@@ -52,9 +52,9 @@ mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Download docker-compose.yml
 # 🚨 If you ARE NOT on a RaspberryPi 
-curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml > docker-compose.yml
-# 🚨 If you ARE on a RaspberryPi
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.norpi.yml > docker-compose.yml
+# 🚨 If you ARE on a RaspberryPi
+curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml > docker-compose.yml
 
 # Run
 docker compose up
