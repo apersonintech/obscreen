@@ -10,7 +10,7 @@ from src.utils import str_to_enum
 
 class Variable:
 
-    def __init__(self, name: str = '', section: str = '', description: str = '', type: Union[VariableType, str] = VariableType.STRING,
+    def __init__(self, name: str = '', section: str = '', description: str = '', description_edition: str = '', type: Union[VariableType, str] = VariableType.STRING,
                  value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None,
                  plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None, unit: Optional[VariableUnit] = None,
                  refresh_player: bool = False):
@@ -19,6 +19,7 @@ class Variable:
         self._section = section
         self._type = str_to_enum(type, VariableType) if isinstance(type, str) else type
         self._description = description
+        self._description_edition = description_edition
         self._value = value
         self._editable = editable
         self._plugin = plugin
@@ -86,6 +87,14 @@ class Variable:
         self._description = value
 
     @property
+    def description_edition(self) -> str:
+        return self._description_edition
+
+    @description_edition.setter
+    def description_edition(self, value: str):
+        self._description_edition = value
+
+    @property
     def editable(self) -> bool:
         return self._editable
 
@@ -126,6 +135,7 @@ class Variable:
                f"type='{self.type}',\n" \
                f"unit='{self.unit}',\n" \
                f"description='{self.description}',\n" \
+               f"description_edition='{self.description_edition}',\n" \
                f"editable='{self.editable}',\n" \
                f"refresh_player='{self.refresh_player}',\n" \
                f"plugin='{self.plugin}',\n" \
@@ -144,6 +154,7 @@ class Variable:
             "type": self.type.value,
             "unit": self.unit.value if self.unit else None,
             "description": self.description,
+            "description_edition": self.description_edition,
             "editable": self.editable,
             "refresh_player": self.refresh_player,
             "plugin": self.plugin,

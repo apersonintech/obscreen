@@ -56,7 +56,7 @@ class ObPlugin(abc.ABC):
     def get_plugin_variable_name(self, name: str) -> str:
         return "{}_{}".format(self.get_plugin_variable_prefix(), name)
 
-    def add_variable(self, name: str, value='', section: str = '', type: VariableType = VariableType.STRING, editable: bool = True, description: str = '', selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None, refresh_player: bool = False) -> Variable:
+    def add_variable(self, name: str, value='', section: str = '', type: VariableType = VariableType.STRING, editable: bool = True, description: str = '', description_edition: str = '', selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None, refresh_player: bool = False) -> Variable:
         return self._model_store.variable().set_variable(
             name=self.get_plugin_variable_name(name),
             section=section,
@@ -64,6 +64,7 @@ class ObPlugin(abc.ABC):
             type=type,
             editable=editable,
             description=description,
+            description_edition=description_edition,
             unit=unit,
             refresh_player=refresh_player,
             selectables=selectables if isinstance(selectables, dict) else None,
