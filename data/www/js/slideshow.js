@@ -154,6 +154,10 @@ jQuery(document).ready(function ($) {
 
         const hasCron = slide.cron_schedule && slide.cron_schedule.length > 0;
         const hasDateTime = hasCron && validateCronDateTime(slide.cron_schedule);
+
+        const hasCronEnd = slide.cron_schedule_end && slide.cron_schedule_end.length > 0;
+        const hasDateTimeEnd = hasCronEnd && validateCronDateTime(slide.cron_schedule_end);
+
         let location = slide.location;
 
         if (slide.type == 'youtube') {
@@ -165,10 +169,19 @@ jQuery(document).ready(function ($) {
         $('#slide-edit-type').val(slide.type);
         $('#slide-edit-location').val(location).prop('disabled', !slide.is_editable);
         $('#slide-edit-duration').val(slide.duration);
+
         $('#slide-edit-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
         $('#slide-edit-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
+
+        $('#slide-edit-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || hasDateTimeEnd);
+        $('#slide-edit-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : 'loop'));
+
         $('#slide-edit-cron-schedule-datetimepicker').toggleClass('hidden', !hasDateTime).val(
             hasDateTime ? getCronDateTime(slide.cron_schedule) : ''
+        );
+
+        $('#slide-edit-cron-schedule-end-datetimepicker').toggleClass('hidden', !hasDateTimeEnd).val(
+            hasDateTimeEnd ? getCronDateTime(slide.cron_schedule_end) : ''
         );
         $('#slide-edit-id').val(slide.id);
     });
