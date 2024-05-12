@@ -5,12 +5,14 @@ import logging
 import argparse
 
 from src.manager.VariableManager import VariableManager
+from src.utils import am_i_in_docker
 from dotenv import load_dotenv
 load_dotenv()
 
 class ConfigManager:
 
     DEFAULT_PORT = 5000
+    DEFAULT_LXDE_AUTOSTART_PATH = '/home/pi/.config/lxsession/LXDE-pi/autostart'
     VERSION_FILE = 'version.txt'
 
     def __init__(self, variable_manager: VariableManager):
@@ -20,7 +22,7 @@ class ConfigManager:
             'port': self.DEFAULT_PORT,
             'bind': '0.0.0.0',
             'debug': False,
-            'autoconfigure_lx_file': '/home/pi/.config/lxsession/LXDE-pi/autostart',
+            'autoconfigure_lx_file': self.DEFAULT_LXDE_AUTOSTART_PATH,
             'log_file': None,
             'log_level': 'INFO',
             'log_stdout': True,
@@ -103,9 +105,23 @@ class ConfigManager:
         return self._CONFIG['player_url']
 
     def autoconfigure_lxconf(self) -> None:
-        destination_path = self.map().get('autoconfigure_lx_file')
+        path = self.map().get('autoconfigure_lx_file')
+        in_docker = am_i_in_docker()
+        lx_path = self.DEFAULT_LXDE_AUTOSTART_PATH if in_docker else path
+
+        if os.path.isdir(path) or not os.path.exists(path):
+            logging.error(
+                "LXDE autostart file {} doesn't exist on your server, please create it by executing follow command: \n'rm -rf ./var/run/lxfile 2>/dev/null ; sudo rm -rf /home/pi/.config/lxsession/LXDE-pi 2>/dev/null; sudo mkdir -p /home/pi/.config/lxsession/LXDE-pi 2>/dev/null ; sudo touch {}'\n".format(
+                    lx_path,
+                    self.DEFAULT_LXDE_AUTOSTART_PATH
+                )
+            )
+            sys.exit(1)
+        else:
+            logging.info("Overriding LXDE autostart file {}".format(lx_path))
+
         player_url = self.map().get('player_url')
-        os.makedirs(os.path.dirname(destination_path), exist_ok=True)
+        os.makedirs(os.path.dirname(lx_path), exist_ok=True)
         xenv_presets = f"""
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
@@ -119,5 +135,5 @@ class ConfigManager:
 #@sleep 10
 @chromium-browser --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --disable-restore-session-state --noerrdialogs --kiosk --incognito --window-position=0,0 --display=:0 {player_url}
         """
-        with open(destination_path, 'w') as file:
+        with open(lx_path, 'w') as file:
             file.write(xenv_presets)
