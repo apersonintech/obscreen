@@ -30,3 +30,6 @@ class SettingsController(ObController):
         if variable.refresh_player:
             self._model_store.variable().update_by_name("refresh_player_request", time.time())
 
+        if variable.name == 'auth_enabled':
+            self.reload_web_server()
+

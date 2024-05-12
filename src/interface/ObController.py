@@ -8,8 +8,9 @@ from src.interface.ObPlugin import ObPlugin
 
 class ObController(abc.ABC):
 
-    def __init__(self, app, auth_required, model_store: ModelStore, template_renderer: TemplateRenderer, plugin: Optional[ObPlugin] = None):
+    def __init__(self, web_server, app, auth_required, model_store: ModelStore, template_renderer: TemplateRenderer, plugin: Optional[ObPlugin] = None):
         self._app = app
+        self._web_server = web_server
         self._auth = auth_required
         self._model_store = model_store
         self._template_renderer = template_renderer
@@ -26,3 +27,5 @@ class ObController(abc.ABC):
 
         return self._plugin
 
+    def reload_web_server(self):
+        self._web_server.reload()
