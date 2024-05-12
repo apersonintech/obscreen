@@ -27,6 +27,12 @@ class ObController(abc.ABC):
 
         return self._plugin
 
+    def get_template_folder(self):
+        return self._web_server.get_template_folder()
+
+    def get_web_folder(self):
+        return self._web_server.get_web_folder()
+
     def reload_web_server(self):
         self._web_server.reload()
 
