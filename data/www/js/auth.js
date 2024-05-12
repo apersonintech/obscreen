@@ -85,13 +85,18 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.user-delete', function () {
         if (confirm(l.js_auth_user_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
-            $tr.remove();
             updateTable();
             $.ajax({
                 method: 'DELETE',
                 url: '/auth/user/delete',
                 headers: {'Content-Type': 'application/json'},
                 data: JSON.stringify({id: getId($(this))}),
+                success: function(data) {
+                    $tr.remove();
+                },
+                error: function(data) {
+                    $('.alert-error').html(data.responseJSON.message).removeClass('hidden');
+                }
             });
         }
     });
