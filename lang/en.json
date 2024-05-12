@@ -91,6 +91,7 @@
     "settings_variable_desc_lang": "Server language",
     "settings_variable_desc_fleet_enabled": "Enable fleet screen management view",
     "settings_variable_desc_auth_enabled": "Enable auth management",
+    "settings_variable_desc_edition_auth_enabled": "Default user credentials will be admin/admin",
     "settings_variable_desc_external_url": "External url (i.e: https://screen-01.company.com or http://10.10.3.100)",
     "settings_variable_desc_slide_upload_limit": "Slide upload limit (in megabytes)",
     "settings_variable_desc_default_slide_duration": "Intro slide duration (in seconds)",
