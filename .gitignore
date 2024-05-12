@@ -14,6 +14,5 @@ __pycache__/
 *.log
 var/run/*
 !var/run/.gitkeep
-!var/run/dummy
 *.swp
 .env
