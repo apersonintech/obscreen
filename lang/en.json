@@ -146,6 +146,12 @@
     "login_form_username": "Username",
     "login_form_password": "Password",
     "login_form_submit": "Connect",
+    "utrack_title": "About users",
+    "created_at": "Created on",
+    "updated_at": "Modified on",
+    "created_by": "Created by",
+    "updated_by": "Last update by",
+    "close": "Close",
 
     "enum_animation_speed_slower": "Slower",
     "enum_animation_speed_slow": "Slow",

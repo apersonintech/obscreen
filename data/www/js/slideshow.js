@@ -152,6 +152,15 @@ jQuery(document).ready(function ($) {
         $('.modal-slide-add input:eq(0)').focus().select();
     });
 
+    $(document).on('click', '.slide-utrack', function () {
+        const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        showModal('modal-slide-utrack');
+        $('#slide-utrack-created-by').val(slide.created_by);
+        $('#slide-utrack-updated-by').val(slide.updated_by);
+        $('#slide-utrack-created-at').val(slide.created_at);
+        $('#slide-utrack-created-at').val(slide.updated_at);
+    });
+
     $(document).on('click', '.slide-edit', function () {
         const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
         showModal('modal-slide-edit');
