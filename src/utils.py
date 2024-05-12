@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 import platform
@@ -9,6 +10,21 @@ from cron_descriptor import ExpressionDescriptor
 from cron_descriptor.Exception import FormatException, WrongArgumentException, MissingFieldException
 
 CAMEL_CASE_TO_SNAKE_CASE_PATTERN = re.compile(r'(?<!^)(?=[A-Z])')
+
+
+def am_i_in_docker():
+    docker_env = os.path.exists('/.dockerenv')
+    docker_cgroup = False
+    try:
+        with open('/proc/1/cgroup', 'rt') as f:
+            for line in f:
+                if 'docker' in line:
+                    docker_cgroup = True
+                    break
+    except Exception:
+        pass
+
+    return docker_env or docker_cgroup
 
 
 def enum_to_dict(enum_class) -> Dict:
