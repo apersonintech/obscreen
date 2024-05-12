@@ -13,6 +13,10 @@ jQuery(document).ready(function ($) {
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
     };
 
+    const prettyTimestamp = function(timestamp) {
+        const d = new Date(timestamp);
+        return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')} `
+    }
 
     const loadDateTimePicker = function($el) {
         $el.val('');
@@ -157,8 +161,9 @@ jQuery(document).ready(function ($) {
         showModal('modal-slide-utrack');
         $('#slide-utrack-created-by').val(slide.created_by);
         $('#slide-utrack-updated-by').val(slide.updated_by);
-        $('#slide-utrack-created-at').val(slide.created_at);
-        $('#slide-utrack-created-at').val(slide.updated_at);
+        console.log(slide.created_at)
+        $('#slide-utrack-created-at').val(prettyTimestamp(slide.created_at * 1000));
+        $('#slide-utrack-created-at').val(prettyTimestamp(slide.updated_at * 1000));
     });
 
     $(document).on('click', '.slide-edit', function () {
