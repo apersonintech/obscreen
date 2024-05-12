@@ -70,6 +70,8 @@ class AuthController(ObController):
         return jsonify({'status': 'ok'})
 
     def auth_user_delete(self):
+        if self._model_store.user().count_all_enabled() == 1:
+            return jsonify({'status': 'error', 'message': self.t('auth_user_delete_at_least_one_account')}), 400
         data = request.get_json()
         self._model_store.user().delete(data.get('id'))
         return jsonify({'status': 'ok'})

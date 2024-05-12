@@ -21,8 +21,8 @@ class SettingsController(ObController):
 
     def settings_variable_edit(self):
         self._model_store.variable().update_form(request.form['id'], request.form['value'])
-        self._post_update(request.form['id'])
-        return redirect(url_for('settings_variable_list'))
+        forward = self._post_update(request.form['id'])
+        return forward if forward is not None else redirect(url_for('settings_variable_list'))
 
     def _post_update(self, id: str):
         variable = self._model_store.variable().get(id)
@@ -38,6 +38,8 @@ class SettingsController(ObController):
 
         if variable.name == 'auth_enabled':
             self.reload_web_server()
+            if variable.as_bool():
+                return redirect(url_for('logout'))
 
         if variable.name == 'lang':
             self._model_store.lang().set_lang(variable.value)

@@ -56,8 +56,8 @@ class UserManager(ModelManager):
     def get_one_by_username(self, username: str, enabled: bool = None) -> Optional[User]:
         return self.get_one_by(query=lambda v: v['username'] == username and (enabled is None or v['enabled'] == enabled))
 
-    def count_all(self):
-        return len(self.get_all())
+    def count_all_enabled(self):
+        return len(self.get_enabled_users())
 
     def get_all(self, sort: bool = False) -> List[User]:
         raw_users = self._db.get_all()
