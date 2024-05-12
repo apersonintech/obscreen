@@ -160,7 +160,7 @@ def get_ip_address() -> Optional[str]:
 
 
 def get_yt_video_id(url: str) -> str:
-    if url.startswith(('youtu', 'www')):
+    if not url.startswith('http'):
         url = 'http://' + url
 
     query = urlparse(url)
