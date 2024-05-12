@@ -106,7 +106,36 @@ header nav ul {
 
 header nav ul li {
     margin: 0 15px;
+}
 
+header nav ul li.user-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    border: 1px solid #0bc44e;
+    padding: 5px 15px;
+    border-radius: 4px;
+    background: rgba(14, 239, 95, .2);
+}
+
+header nav ul li.user-menu .logout {
+    color: rgb(255, 255, 255);
+}
+
+header nav ul li.user-menu .username {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    font-weight: bold;
+    color: #0bc44e;
+}
+
+header nav ul li.user-menu .username i {
+    margin-right: 5px;
+    font-size: 12px;
 }
 
 header nav ul li a {
@@ -656,4 +685,21 @@ footer .version {
     text-align: center;
     font-size: 36px;
     margin: 0 0 40px 0;
+}
+
+.badge {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, .1);
+    color: #ffffff;
+}
+
+.panel-inactive .badge {
+    background: rgba(200, 200, 200, .1);
+    color: #999999;
 }

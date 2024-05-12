@@ -2,9 +2,14 @@
     <thead>
     <tr>
         <th>{{ l.slideshow_slide_panel_th_name }}</th>
-        <th class="tac">{{ l.slideshow_slide_panel_th_duration }}</th>
+        {% if AUTH_ENABLED %}
+            <th class="tac">
+                <i class="fa fa-user"></i>
+            </th>
+        {% endif %}
         <th class="tac">{{ l.slideshow_slide_panel_th_enabled }}</th>
         <th class="">{{ l.slideshow_slide_panel_th_cron_scheduled }}</th>
+        <th class="tac">{{ l.slideshow_slide_panel_th_duration }}</th>
         <th class="tac">{{ l.slideshow_slide_panel_th_activity }}</th>
     </tr>
     </thead>
@@ -35,9 +40,13 @@
                     {{ slide.name }}
                 </div>
             </td>
-            <td class="tac">
-                {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
-            </td>
+            {% if AUTH_ENABLED %}
+                <td class="tac">
+                    <div class="badge">
+                        {{ track_updated(slide).username }}
+                    </div>
+                </td>
+            {% endif %}
             <td class="tac">
                 <label class="pure-material-switch">
                     <input type="checkbox" {% if slide.enabled %}checked="checked"{% endif %}><span></span>
@@ -58,6 +67,9 @@
                 {% else %}
                     🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
                 {% endif %}
+            </td>
+            <td class="tac">
+                {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
             </td>
             <td class="actions tac">
                 <a href="javascript:void(0);" class="item-edit slide-edit">

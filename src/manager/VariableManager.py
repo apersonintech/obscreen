@@ -4,6 +4,7 @@ from pysondb.errors import IdDoesNotExistError
 
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
+from src.manager.UserManager import UserManager
 from src.service.ModelManager import ModelManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
@@ -36,8 +37,8 @@ class VariableManager(ModelManager):
         "value"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager):
-        super().__init__(lang_manager, database_manager)
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
+        super().__init__(lang_manager, database_manager, user_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
         self._var_map = {}
         self.reload()
@@ -126,12 +127,12 @@ class VariableManager(ModelManager):
         for default_var in default_vars:
             self.set_variable(**default_var)
 
-        self._var_map = self.prepare_variable_map()
+        self._var_map = self.prepare_map()
 
     def map(self) -> dict:
         return self._var_map
 
-    def prepare_variable_map(self) -> Dict[str, Variable]:
+    def prepare_map(self) -> Dict[str, Variable]:
         return self.list_to_map(self.get_all())
 
     @staticmethod
@@ -143,8 +144,7 @@ class VariableManager(ModelManager):
 
         return var_map
 
-    @staticmethod
-    def hydrate_object(raw_variable: dict, id: Optional[str] = None) -> Variable:
+    def hydrate_object(self, raw_variable: dict, id: Optional[str] = None) -> Variable:
         if id:
             raw_variable['id'] = id
 
@@ -153,13 +153,11 @@ class VariableManager(ModelManager):
 
         return Variable(**raw_variable)
 
-    @staticmethod
-    def hydrate_dict(raw_variables: dict) -> List[Variable]:
-        return [VariableManager.hydrate_object(raw_variable, raw_id) for raw_id, raw_variable in raw_variables.items()]
+    def hydrate_dict(self, raw_variables: dict) -> List[Variable]:
+        return [self.hydrate_object(raw_variable, raw_id) for raw_id, raw_variable in raw_variables.items()]
 
-    @staticmethod
-    def hydrate_list(raw_variables: list) -> List[Variable]:
-        return [VariableManager.hydrate_object(raw_variable) for raw_variable in raw_variables]
+    def hydrate_list(self, raw_variables: list) -> List[Variable]:
+        return [self.hydrate_object(raw_variable) for raw_variable in raw_variables]
 
     def get(self, id: str) -> Optional[Variable]:
         try:
@@ -192,9 +190,9 @@ class VariableManager(ModelManager):
         raw_variables = self._db.get_all()
 
         if isinstance(raw_variables, dict):
-            return VariableManager.hydrate_dict(raw_variables)
+            return self.hydrate_dict(raw_variables)
 
-        return VariableManager.hydrate_list(raw_variables)
+        return self.hydrate_list(raw_variables)
 
     def get_editable_variables(self, plugin: bool = True, sort: Optional[str] = None) -> List[Variable]:
         query = lambda v: (not plugin and not isinstance(v['plugin'], str)) or (plugin and isinstance(v['plugin'], str))
