@@ -28,6 +28,7 @@ mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Run the Docker container
 # If you ARE NOT on a RaspberryPi ignore the line (-v /home/pi/....)
+# Else make sure that `AUTOCONFIGURE_LX_FILE` exists and is writeable !
 docker run --rm --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
@@ -103,7 +104,7 @@ sudo journalctl -u obscreen -f
     
 ## ✨ You are done now :)
 - If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (`views/player/default.jinja.html`) your slideshow shall start and loop endlessly.
-- Be sure that `AUTOCONFIGURE_LX_FILE` is writeable !
+- Make sure that `AUTOCONFIGURE_LX_FILE` exists and is writeable !
 
 ## 📎 Additional
 
