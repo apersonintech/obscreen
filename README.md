@@ -29,8 +29,10 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Run the Docker container
-# 🚨 If you ARE NOT on a RaspberryPi ignore the line (-v /home/pi/...)
-# 🚨 Else make sure that /home/pi/.config/lxsession/LXDE-pi/autostart file exists and is writeable !
+# 🚨 If you ARE NOT on a RaspberryPi 
+#    - replace '/home/pi/.config/lxsession/LXDE-pi/autostart' with '/dev/null'
+# 🚨 Else make sure that 
+#    - file '/home/pi/.config/lxsession/LXDE-pi/autostart' exists and is writeable
 docker run --rm --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
@@ -49,10 +51,10 @@ docker run --rm --name obscreen --pull=always \
 mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Download docker-compose.yml
+# 🚨 If you ARE NOT on a RaspberryPi 
+curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.norpi.yml > docker-compose.yml
+# 🚨 If you ARE on a RaspberryPi
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml > docker-compose.yml
-
-# If you ARE NOT on a RaspberryPi execute the line below
-uname | grep -q 'Darwin' && sed -i '' '/\/home\/pi/s/^/#/' docker-compose.yml || sed -i '/\/home\/pi/s/^/#/' docker-compose.yml
 
 # Run
 docker compose up

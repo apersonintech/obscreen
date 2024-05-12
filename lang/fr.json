@@ -74,6 +74,7 @@
     "auth_user_form_label_username": "Nom d'utilisateur",
     "auth_user_form_label_password": "Mot de passe",
     "auth_user_form_button_cancel": "Annuler",
+    "auth_user_delete_at_least_one_account": "Vous devez avoir au moins un utilisateur actif lorsque vous activez la gestion de l'authentification",
     "js_auth_user_delete_confirmation": "Êtes-vous sûr ?",
 
     "settings_page_title": "Paramètres",
