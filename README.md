@@ -2,6 +2,8 @@
 
 🧑‍🎄 Open to feature request and pull request
 
+**⭐️ You liked it ? Give this repository a star, it's free :)**
+
 ## About
 Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 
