@@ -42,9 +42,9 @@
             </td>
             {% if AUTH_ENABLED %}
                 <td class="tac">
-                    <div class="badge">
-                        {{ track_updated(slide).username }}
-                    </div>
+                    <a href="javascript:void(0);" class="badge item-utrack slide-utrack">
+                        {{ track_created(slide).username }}
+                    </a>
                 </td>
             {% endif %}
             <td class="tac">

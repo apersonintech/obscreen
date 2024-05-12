@@ -146,6 +146,12 @@
     "login_form_username": "Identifiant",
     "login_form_password": "Mot de passe",
     "login_form_submit": "Valider",
+    "utrack_title": "À propos des utilisateurs",
+    "created_at": "Création le",
+    "updated_at": "Modification le",
+    "created_by": "Création par",
+    "updated_by": "Dernière modification par",
+    "close": "Fermer",
 
     "enum_animation_speed_slower": "Très lent",
     "enum_animation_speed_slow": "Lent",

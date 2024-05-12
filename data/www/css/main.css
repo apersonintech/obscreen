@@ -687,6 +687,7 @@ footer .version {
     margin: 0 0 40px 0;
 }
 
+a.badge,
 .badge {
     display: flex;
     flex-direction: row;
@@ -696,10 +697,21 @@ footer .version {
     border-radius: 4px;
     font-size: 12px;
     background: rgba(255, 255, 255, .1);
+    border: 1px solid transparent;
     color: #ffffff;
+}
+
+a.badge:hover {
+    color: #FFFFFF;
+    border: 1px solid rgba(255,255,255,.4);
 }
 
 .panel-inactive .badge {
     background: rgba(200, 200, 200, .1);
     color: #999999;
+}
+
+.panel-inactive a.badge:hover {
+    color: #999999;
+    border: 1px solid rgba(180,180,180,.4);
 }
