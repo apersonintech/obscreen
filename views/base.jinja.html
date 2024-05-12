@@ -46,7 +46,8 @@
                         Obscreen
                     </a>
                 </h1>
-                {% if (current_user and current_user.is_authenticated) or not current_user %}
+
+                {% if not AUTH_ENABLED or (current_user and current_user.is_authenticated) %}
                 <nav>
                     <ul>
                         {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}

@@ -115,8 +115,11 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('change', '.modal-slide select.trigger', function () {
+        const $modal = $(this).parents('.modal-slide:eq(0)');
         const $target = $(this).parents('.widget:eq(0)').find('.target');
         const $datetimepicker = $(this).parents('.widget:eq(0)').find('.datetimepicker');
+        const $durationGroup = $modal.find('.slide-duration-group');
+        const $scheduleEndGroup = $modal.find('.slide-schedule-end-group');
 
         const isDateTime = $(this).val() === 'datetime';
         const isLoop = $(this).val() === 'loop';
@@ -126,7 +129,9 @@ jQuery(document).ready(function ($) {
         const hideDateTimeField = !isDateTime;
 
         $target.toggleClass('hidden', hideCronField);
-        $datetimepicker.toggleClass('hidden', hideDateTimeField)
+        $datetimepicker.toggleClass('hidden', hideDateTimeField);
+        // $durationGroup.toggleClass('hidden', !isLoop);
+        // $scheduleEndGroup.toggleClass('hidden', isLoop);
 
         if (flushValue) {
             $target.val('');
