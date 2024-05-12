@@ -469,6 +469,7 @@ button.purple:hover {
     min-width: 30%;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .modals-outer .modal-close {
@@ -479,7 +480,7 @@ button.purple:hover {
     justify-content: flex-end;
     align-items: center;
     margin-bottom: 20px;
-    margin-top: -100px;
+    margin-top: 0px;
 }
 
 .modals-inner {
@@ -494,6 +495,14 @@ button.purple:hover {
     margin: 0;
 }
 
+
+.modals-inner .modal h3 {
+    align-self: stretch;
+    border-bottom: 1px solid #DDD;
+    padding: 15px 15px;
+    margin: 0;
+}
+
 form {
     display: flex;
     flex-direction: column;
@@ -503,7 +512,7 @@ form {
 }
 
 form .form-group {
-    margin: 20px;
+    margin: 10px 20px 5px 20px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;

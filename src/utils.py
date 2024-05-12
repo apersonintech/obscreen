@@ -109,7 +109,6 @@ def get_keys(dict_or_object, key_list_name: str, key_attr_name: str = 'key') -> 
 
 def enum_to_str(enum: Optional[Enum]) -> Optional[str]:
     if enum:
-        print(enum)
         return str(enum.value)
 
     return None

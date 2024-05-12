@@ -42,6 +42,7 @@ class SlideshowController(ObController):
             type=str_to_enum(request.form['type'], SlideType),
             duration=request.form['duration'],
             cron_schedule=get_optional_string(request.form['cron_schedule']),
+            cron_schedule_end=get_optional_string(request.form['cron_schedule_end']),
         )
 
         if slide.has_file():
@@ -72,6 +73,7 @@ class SlideshowController(ObController):
             name=request.form['name'],
             duration=request.form['duration'],
             cron_schedule=request.form['cron_schedule'],
+            cron_schedule_end=request.form['cron_schedule_end'],
             location=request.form['location'] if 'location' in request.form else None
         )
         self._post_update()
