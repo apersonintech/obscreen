@@ -202,10 +202,15 @@ class VariableManager(ModelManager):
         return [variable for variable in self.get_all() if not variable.editable]
 
     def update_form(self, id: str, value: Union[int, bool, str]) -> None:
-        self._db.update_by_id(id, {"value": value})
+        var_dict = self._db.update_by_id(id, {"value": value})
+        var = self.hydrate_object(var_dict, id)
+        self._var_map[var.name] = var
 
     def update_by_name(self, name: str, value) -> Optional[Variable]:
-        return self._db.update_by_query(query=lambda v: v['name'] == name, new_data={"value": value})
+        [var_id] = self._db.update_by_query(query=lambda v: v['name'] == name, new_data={"value": value})
+        var_dict = self._db.get_by_id(var_id)
+        var = self.hydrate_object(var_dict, id)
+        self._var_map[name] = var
 
     def add_form(self, variable: Union[Variable, Dict]) -> None:
         form = variable
