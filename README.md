@@ -29,8 +29,8 @@ Use a RaspberryPi to show a full-screen slideshow (Kiosk-mode)
 mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Run the Docker container
-# 🚨 If you ARE NOT on a RaspberryPi ignore the line (-v /home/pi/....)
-# 🚨 Else make sure that `AUTOCONFIGURE_LX_FILE` exists and is writeable !
+# 🚨 If you ARE NOT on a RaspberryPi ignore the line (-v /home/pi/...)
+# 🚨 Else make sure that /home/pi/.config/lxsession/LXDE-pi/autostart file exists and is writeable !
 docker run --rm --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
