@@ -105,12 +105,8 @@ class WebServer:
         SlideshowController(self, self._app, auth_required, self._model_store, self._template_renderer)
         SettingsController(self, self._app, auth_required, self._model_store, self._template_renderer)
         SysinfoController(self, self._app, auth_required, self._model_store, self._template_renderer)
-
-        if self._model_store.variable().map().get('fleet_enabled').as_bool():
-            FleetController(self, self._app, auth_required, self._model_store, self._template_renderer)
-
-        if self._login_manager:
-            AuthController(self, self._app, auth_required, self._model_store, self._template_renderer)
+        FleetController(self, self._app, auth_required, self._model_store, self._template_renderer)
+        AuthController(self, self._app, auth_required, self._model_store, self._template_renderer)
 
     def _setup_web_globals(self) -> None:
         @self._app.context_processor

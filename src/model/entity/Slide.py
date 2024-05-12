@@ -7,7 +7,7 @@ from src.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None, cron_schedule: Optional[str] = None):
+    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None):
         self._id = id if id else None
         self._location = location
         self._duration = duration
@@ -16,6 +16,7 @@ class Slide:
         self._name = name
         self._position = position
         self._cron_schedule = cron_schedule
+        self._cron_schedule_end = cron_schedule_end
 
     @property
     def id(self) -> Optional[str]:
@@ -44,6 +45,14 @@ class Slide:
     @cron_schedule.setter
     def cron_schedule(self, value: Optional[str]):
         self._cron_schedule = value
+
+    @property
+    def cron_schedule_end(self) -> Optional[str]:
+        return self._cron_schedule_end
+
+    @cron_schedule_end.setter
+    def cron_schedule_end(self, value: Optional[str]):
+        self._cron_schedule_end = value
 
     @property
     def duration(self) -> int:
@@ -87,6 +96,7 @@ class Slide:
                f"position='{self.position}',\n" \
                f"location='{self.location}',\n" \
                f"cron_schedule='{self.cron_schedule}',\n" \
+               f"cron_schedule_end='{self.cron_schedule_end}',\n" \
                f")"
 
     def to_json(self) -> str:
@@ -102,6 +112,7 @@ class Slide:
             "duration": self.duration,
             "location": self.location,
             "cron_schedule": self.cron_schedule,
+            "cron_schedule_end": self.cron_schedule_end,
         }
 
         if with_virtual:
