@@ -200,6 +200,12 @@ button.purple:hover {
     border-radius: 4px;
 }
 
+.alert-info {
+    color: rgb(70, 70, 70);
+    border: 1px solid rgb(70, 70, 70);
+    background: rgba(70, 70, 70, .2);
+}
+
 .alert-success {
     color: rgb(14, 239, 95);
     border: 1px solid rgb(14, 239, 95);

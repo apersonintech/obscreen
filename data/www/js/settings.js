@@ -37,6 +37,7 @@ jQuery(document).ready(function ($) {
         $('.modal-variable-edit input:visible:eq(0)').focus().select();
         $('#variable-edit-name').val(variable.name);
         $('#variable-edit-description').html(variable.description);
+        $('#variable-edit-description-edition').html(variable.description_edition).toggleClass('hidden', variable.description_edition == '');
         $('#variable-edit-value').val(variable.value);
         $('#variable-edit-id').val(variable.id);
     });

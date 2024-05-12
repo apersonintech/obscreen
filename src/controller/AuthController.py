@@ -1,7 +1,7 @@
 import json
 
 from flask import Flask, render_template, redirect, request, url_for, jsonify
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from src.service.ModelStore import ModelStore
 from src.model.entity.User import User
 from src.interface.ObController import ObController
@@ -20,6 +20,9 @@ class AuthController(ObController):
 
     def login(self):
         login_error = None
+
+        if current_user.is_authenticated:
+            return redirect(url_for('slideshow_slide_list'))
 
         if len(request.form):
             user = self._model_store.user().get_one_by_username(request.form['username'], enabled=True)
