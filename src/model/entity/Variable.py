@@ -165,6 +165,9 @@ class Variable:
         return bool(int(self._value))
 
     def as_string(self) -> str:
+        if self._value is None:
+            return ''
+
         return str(self._value)
 
     def as_int(self) -> int:
