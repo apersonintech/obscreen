@@ -16,7 +16,8 @@ class ModelStore:
         self._database_manager = DatabaseManager()
 
         # Dynamics
-        self._variable_manager = VariableManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
+        self._user_manager = UserManager(lang_manager=self._lang_manager, database_manager=self._database_manager, on_user_delete=self.on_user_delete)
+        self._variable_manager = VariableManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
         self._lang_manager.set_lang(self.variable().map().get('lang').as_string())
 
         # Core
@@ -24,9 +25,8 @@ class ModelStore:
         self._logging_manager = LoggingManager(config_manager=self._config_manager)
 
         # Model
-        self._user_manager = UserManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
-        self._screen_manager = ScreenManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
-        self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager)
+        self._screen_manager = ScreenManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
+        self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
         self._variable_manager.reload()
 
     def logging(self) -> LoggingManager:
@@ -53,3 +53,5 @@ class ModelStore:
     def user(self) -> UserManager:
         return self._user_manager
 
+    def on_user_delete(self, user_id: str):
+        self._slide_manager.forget_user(user_id)

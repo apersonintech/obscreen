@@ -6,7 +6,7 @@
     </title>
     <meta name="robots" content="noindex, nofollow">
     <meta name="google" content="notranslate">
-    <link rel="shortcut icon" href="{{ STATIC_PREFIX }}/favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="57x57" href="{{ STATIC_PREFIX }}favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="{{ STATIC_PREFIX }}favicon/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_PREFIX }}favicon/apple-icon-72x72.png">
@@ -20,7 +20,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ STATIC_PREFIX }}favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ STATIC_PREFIX }}favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ STATIC_PREFIX }}favicon/favicon-16x16.png">
-    <link rel="manifest" href="{{ STATIC_PREFIX }}/manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="msapplication-TileColor" content="#692fbd">
     <meta name="msapplication-TileImage" content="{{ STATIC_PREFIX }}favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#692fbd">
@@ -81,8 +81,12 @@
                             </a>
                         </li>
                         {% if AUTH_ENABLED %}
-                        <li>
-                            <a href="{{ url_for('logout') }}" title="{{ l.logout }}">
+                        <li class="user-menu">
+                            <div class="username">
+                                <i class="fa fa-user"></i>
+                                {{ current_user.username }}
+                            </div>
+                            <a href="{{ url_for('logout') }}" title="{{ l.logout }}" class="logout">
                                 <i class="fa fa-right-from-bracket"></i>
                             </a>
                         </li>
