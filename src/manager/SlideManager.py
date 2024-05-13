@@ -8,6 +8,7 @@ from src.model.enum.SlideType import SlideType
 from src.utils import get_optional_string, get_yt_video_id
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
+from src.manager.UserManager import UserManager
 from src.service.ModelManager import ModelManager
 
 
@@ -22,27 +23,33 @@ class SlideManager(ModelManager):
         "position",
         "location",
         "cron_schedule",
-        "cron_schedule_end"
+        "cron_schedule_end",
+        "created_by",
+        "updated_by",
+        "created_at",
+        "updated_at"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager):
-        super().__init__(lang_manager, database_manager)
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
+        super().__init__(lang_manager, database_manager, user_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
-    @staticmethod
-    def hydrate_object(raw_slide: dict, id: str = None) -> Slide:
+    def hydrate_object(self, raw_slide: dict, id: str = None) -> Slide:
         if id:
             raw_slide['id'] = id
 
+        [raw_slide, user_tracker_edits] = self.user_manager.initialize_user_trackers(raw_slide)
+
+        if len(user_tracker_edits) > 0:
+            self._db.update_by_id(raw_slide['id'], user_tracker_edits)
+
         return Slide(**raw_slide)
 
-    @staticmethod
-    def hydrate_dict(raw_slides: dict) -> List[Slide]:
-        return [SlideManager.hydrate_object(raw_slide, raw_id) for raw_id, raw_slide in raw_slides.items()]
+    def hydrate_dict(self, raw_slides: dict) -> List[Slide]:
+        return [self.hydrate_object(raw_slide, raw_id) for raw_id, raw_slide in raw_slides.items()]
 
-    @staticmethod
-    def hydrate_list(raw_slides: list) -> List[Slide]:
-        return [SlideManager.hydrate_object(raw_slide) for raw_slide in raw_slides]
+    def hydrate_list(self, raw_slides: list) -> List[Slide]:
+        return [self.hydrate_object(raw_slide) for raw_slide in raw_slides]
 
     def get(self, id: str) -> Optional[Slide]:
         try:
@@ -66,10 +73,17 @@ class SlideManager(ModelManager):
 
         if isinstance(raw_slides, dict):
             if sort:
-                return sorted(SlideManager.hydrate_dict(raw_slides), key=lambda x: x.position)
-            return SlideManager.hydrate_dict(raw_slides)
+                return sorted(self.hydrate_dict(raw_slides), key=lambda x: x.position)
+            return self.hydrate_dict(raw_slides)
 
-        return SlideManager.hydrate_list(sorted(raw_slides, key=lambda x: x['position']) if sort else raw_slides)
+        return self.hydrate_list(sorted(raw_slides, key=lambda x: x['position']) if sort else raw_slides)
+
+    def forget_user(self, user_id: str):
+        slides = self.hydrate_dict(self._db.get_by_query(query=lambda s: s['created_by'] == user_id or s['updated_by'] == user_id))
+        edits_slides = self.user_manager.forget_user(slides, user_id)
+
+        for slide_id, edits in edits_slides.items():
+            self._db.update_by_id(slide_id, edits)
 
     def get_enabled_slides(self) -> List[Slide]:
         return [slide for slide in self.get_all(sort=True) if slide.enabled]
@@ -77,8 +91,33 @@ class SlideManager(ModelManager):
     def get_disabled_slides(self) -> List[Slide]:
         return [slide for slide in self.get_all(sort=True) if not slide.enabled]
 
+    def pre_add(self, slide: Dict) -> Dict:
+        self.user_manager.track_user_on_create(slide)
+        self.user_manager.track_user_on_update(slide)
+        return slide
+
+    def pre_update(self, slide: Dict) -> Dict:
+        self.user_manager.track_user_on_update(slide)
+        return slide
+
+    def pre_delete(self, slide_id: str) -> str:
+        return slide_id
+
+    def post_add(self, slide_id: str) -> str:
+        return slide_id
+
+    def post_update(self, slide_id: str) -> str:
+        return slide_id
+
+    def post_updates(self):
+        pass
+
+    def post_delete(self, slide_id: str) -> str:
+        return slide_id
+
     def update_enabled(self, id: str, enabled: bool) -> None:
-        self._db.update_by_id(id, {"enabled": enabled, "position": 999})
+        self._db.update_by_id(id, self.pre_update({"enabled": enabled, "position": 999}))
+        self.post_update(id)
         
     def update_positions(self, positions: list) -> None:
         for slide_id, slide_position in positions.items():
@@ -103,7 +142,8 @@ class SlideManager(ModelManager):
         if slide.type == SlideType.YOUTUBE:
             form['location'] = get_yt_video_id(form['location'])
 
-        self._db.update_by_id(id, form)
+        self._db.update_by_id(id, self.pre_update(form))
+        self.post_update(id)
 
     def add_form(self, slide: Union[Slide, Dict]) -> None:
         form = slide
@@ -115,7 +155,8 @@ class SlideManager(ModelManager):
         if form['type'] == SlideType.YOUTUBE:
             form['location'] = get_yt_video_id(form['location'])
 
-        self._db.add(form)
+        self._db.add(self.pre_add(form))
+        self.post_add(slide.id)
 
     def delete(self, id: str) -> None:
         slide = self.get(id)
@@ -127,7 +168,9 @@ class SlideManager(ModelManager):
                 except FileNotFoundError:
                     pass
 
+            self.pre_delete(id)
             self._db.delete_by_id(id)
+            self.post_delete(id)
 
     def to_dict(self, slides: List[Slide]) -> List[Dict]:
         return [slide.to_dict() for slide in slides]

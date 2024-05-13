@@ -27,6 +27,8 @@ class TemplateRenderer:
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
             FLEET_ENABLED=self._model_store.variable().map().get('fleet_enabled').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
+            track_created=self._model_store.user().track_user_created,
+            track_updated=self._model_store.user().track_user_updated,
             VERSION=self._model_store.config().map().get('version'),
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,
