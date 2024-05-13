@@ -5,6 +5,7 @@ from typing import Dict, Optional, List, Tuple, Union
 from flask_login import current_user
 
 from src.model.entity.User import User
+from src.model.entity.Slide import Slide
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 
@@ -18,7 +19,9 @@ class UserManager:
         "enabled"
     ]
 
-    def __init__(self, database_manager: DatabaseManager):
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, on_user_delete):
+        self._on_user_delete = on_user_delete
+        self._lang_manager = lang_manager
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
         self._user_map = {}
         self.reload()
@@ -92,7 +95,10 @@ class UserManager:
         if id_or_entity in user_map:
             return user_map[id_or_entity]
 
-        return User(username="")
+        if id_or_entity:
+            return User(username=id_or_entity, enabled=False)
+
+        return User(username=self._lang_manager.translate('anonymous'), enabled=False)
 
     def get_all(self, sort: bool = False) -> List[User]:
         raw_users = self._db.get_all()
@@ -117,6 +123,7 @@ class UserManager:
         return user
 
     def pre_delete(self, user_id: str) -> str:
+        self._on_user_delete(user_id)
         return user_id
 
     def post_add(self, user_id: str) -> str:
@@ -207,3 +214,19 @@ class UserManager:
             return current_user
 
         return None
+
+    def forget_user(self, objects: List, user_id: str) -> Dict:
+        user_map = self.map()
+        user_id = str(user_id)
+        edits = {}
+
+        for object in objects:
+            edits = {object.id: {}}
+
+            if str(object.created_by) == user_id and user_id in user_map:
+                edits[object.id]['created_by'] = user_map[user_id].username
+
+            if str(object.updated_by) == user_id and user_id in user_map:
+                edits[object.id]['updated_by'] = user_map[user_id].username
+
+        return edits

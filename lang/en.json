@@ -152,6 +152,7 @@
     "created_by": "Created by",
     "updated_by": "Last update by",
     "close": "Close",
+    "anonymous": "Anon",
 
     "enum_animation_speed_slower": "Slower",
     "enum_animation_speed_slow": "Slow",

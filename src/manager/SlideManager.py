@@ -78,6 +78,13 @@ class SlideManager(ModelManager):
 
         return self.hydrate_list(sorted(raw_slides, key=lambda x: x['position']) if sort else raw_slides)
 
+    def forget_user(self, user_id: str):
+        slides = self.hydrate_dict(self._db.get_by_query(query=lambda s: s['created_by'] == user_id or s['updated_by'] == user_id))
+        edits_slides = self.user_manager.forget_user(slides, user_id)
+
+        for slide_id, edits in edits_slides.items():
+            self._db.update_by_id(slide_id, edits)
+
     def get_enabled_slides(self) -> List[Slide]:
         return [slide for slide in self.get_all(sort=True) if slide.enabled]
 
