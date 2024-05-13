@@ -28,6 +28,9 @@ Use a RaspberryPi (with desktop) to show a full-screen slideshow (Kiosk-mode)
 # Prepare application data file tree
 mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
+# For RaspberryPi only - Prepare LXDE autostart file
+touch /home/pi/.config/lxsession/LXDE-pi/autostart
+
 # Run the Docker container
 # 🚨 If you ARE NOT on a RaspberryPi 
 #    - replace '/home/pi/.config/lxsession/LXDE-pi/autostart' with '/dev/null'
@@ -49,6 +52,9 @@ docker run --rm --name obscreen --pull=always \
 ```bash
 # Prepare application data file tree
 mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
+
+# For RaspberryPi only - Prepare LXDE autostart file
+touch /home/pi/.config/lxsession/LXDE-pi/autostart
 
 # Download docker-compose.yml
 # 🚨 If you ARE NOT on a RaspberryPi 
@@ -78,6 +84,9 @@ cp data/db/slideshow.json.dist data/db/slideshow.json
 
 # Customize server default values
 cp .env.dist .env
+
+# For RaspberryPi only - Prepare LXDE autostart file
+touch /home/pi/.config/lxsession/LXDE-pi/autostart
 ```
 
 ### Configure
