@@ -159,7 +159,10 @@ def get_ip_address() -> Optional[str]:
         return None
 
 
-def get_yt_video_id(url: str) -> str:
+def get_yt_video_id(url_or_id: str) -> str:
+    if len(url_or_id) == 14:
+        return url
+
     if not url.startswith('http'):
         url = 'http://' + url
 
