@@ -4,6 +4,7 @@ from typing import Dict, Optional, List, Tuple, Union
 from src.model.entity.Screen import Screen
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
+from src.manager.UserManager import UserManager
 from src.service.ModelManager import ModelManager
 
 
@@ -18,24 +19,21 @@ class ScreenManager(ModelManager):
         "port"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager):
-        super().__init__(lang_manager, database_manager)
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
+        super().__init__(lang_manager, database_manager, user_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
-    @staticmethod
-    def hydrate_object(raw_screen: dict, id: Optional[str] = None) -> Screen:
+    def hydrate_object(self, raw_screen: dict, id: Optional[str] = None) -> Screen:
         if id:
             raw_screen['id'] = id
 
         return Screen(**raw_screen)
 
-    @staticmethod
-    def hydrate_dict(raw_screens: dict) -> List[Screen]:
-        return [ScreenManager.hydrate_object(raw_screen, raw_id) for raw_id, raw_screen in raw_screens.items()]
+    def hydrate_dict(self, raw_screens: dict) -> List[Screen]:
+        return [self.hydrate_object(raw_screen, raw_id) for raw_id, raw_screen in raw_screens.items()]
 
-    @staticmethod
-    def hydrate_list(raw_screens: list) -> List[Screen]:
-        return [ScreenManager.hydrate_object(raw_screen) for raw_screen in raw_screens]
+    def hydrate_list(self, raw_screens: list) -> List[Screen]:
+        return [self.hydrate_object(raw_screen) for raw_screen in raw_screens]
 
     def get(self, id: str) -> Optional[Screen]:
         try:
@@ -59,10 +57,10 @@ class ScreenManager(ModelManager):
 
         if isinstance(raw_screens, dict):
             if sort:
-                return sorted(ScreenManager.hydrate_dict(raw_screens), key=lambda x: x.position)
-            return ScreenManager.hydrate_dict(raw_screens)
+                return sorted(self.hydrate_dict(raw_screens), key=lambda x: x.position)
+            return self.hydrate_dict(raw_screens)
 
-        return ScreenManager.hydrate_list(sorted(raw_screens, key=lambda x: x['position']) if sort else raw_screens)
+        return self.hydrate_list(sorted(raw_screens, key=lambda x: x['position']) if sort else raw_screens)
 
     def get_enabled_screens(self) -> List[Screen]:
         return [screen for screen in self.get_all(sort=True) if screen.enabled]
