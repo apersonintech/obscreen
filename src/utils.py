@@ -3,7 +3,6 @@ import re
 import subprocess
 import platform
 
-from urllib.parse import urlparse, parse_qs
 from typing import Optional, List, Dict
 from enum import Enum
 from cron_descriptor import ExpressionDescriptor
@@ -159,24 +158,40 @@ def get_ip_address() -> Optional[str]:
         return None
 
 
-def get_yt_video_id(url_or_id: str) -> str:
-    if len(url_or_id) == 14:
+def regex_search(pattern: str, string: str, group: int):
+    """Shortcut method to search a string for a given pattern.
+    :param str pattern:
+        A regular expression pattern.
+    :param str string:
+        A target string to search.
+    :param int group:
+        Index of group to return.
+    :rtype:
+        str or tuple
+    :returns:
+        Substring pattern matches.
+    """
+    regex = re.compile(pattern)
+    results = regex.search(string)
+    if not results:
+        return False
+
+    return results.group(group)
+
+
+def get_yt_video_id(url: str) -> str:
+    if len(url) <= 14:
         return url
 
-    if not url.startswith('http'):
-        url = 'http://' + url
-
-    query = urlparse(url)
-
-    try:
-        if 'youtube' in query.hostname:
-            if query.path == '/watch':
-                return parse_qs(query.query)['v'][0]
-            elif query.path.startswith(('/embed/', '/v/')):
-                return query.path.split('/')[2]
-        elif 'youtu.be' in query.hostname:
-            return query.path[1:]
-    except:
-        return ''
-
-    return ''
+    """Extract the ``video_id`` from a YouTube url.
+    This function supports the following patterns:
+    - :samp:`https://youtube.com/watch?v={video_id}`
+    - :samp:`https://youtube.com/embed/{video_id}`
+    - :samp:`https://youtu.be/{video_id}`
+    :param str url:
+        A YouTube url containing a video id.
+    :rtype: str
+    :returns:
+        YouTube video id.
+    """
+    return regex_search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", url, group=1)
