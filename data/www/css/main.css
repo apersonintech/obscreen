@@ -715,3 +715,7 @@ a.badge:hover {
     color: #999999;
     border: 1px solid rgba(180,180,180,.4);
 }
+
+.badge.anonymous {
+    opacity: .2;
+}

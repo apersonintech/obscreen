@@ -32,22 +32,29 @@ jQuery(document).ready(function ($) {
     };
 
     $(document).on('change', 'input[type=checkbox]', function () {
+        var $input = $(this);
+
         $.ajax({
             url: '/auth/user/toggle',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
             method: 'POST',
+            success: function(data) {
+                const $tr = $input.parents('tr:eq(0)').remove().clone();
+
+                if ($input.is(':checked')) {
+                    $tableActive.append($tr);
+                } else {
+                    $tableInactive.append($tr);
+                }
+
+                updateTable();
+            },
+            error: function(data) {
+                $input.prop('checked', true);
+                $('.alert-error').html(data.responseJSON.message).removeClass('hidden');
+            }
         });
-
-        const $tr = $(this).parents('tr:eq(0)').remove().clone();
-
-        if ($(this).is(':checked')) {
-            $tableActive.append($tr);
-        } else {
-            $tableInactive.append($tr);
-        }
-
-        updateTable();
     });
 
     $(document).on('change', '#user-add-type', function () {

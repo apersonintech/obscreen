@@ -18,8 +18,8 @@ class Slide:
         self._position = position
         self._cron_schedule = cron_schedule
         self._cron_schedule_end = cron_schedule_end
-        self._created_by = int(created_by if created_by else time.time())
-        self._updated_by = updated_by
+        self._created_by = created_by if created_by else None
+        self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
         self._updated_at = int(updated_at if updated_at else time.time())
 

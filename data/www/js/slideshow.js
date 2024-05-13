@@ -161,9 +161,8 @@ jQuery(document).ready(function ($) {
         showModal('modal-slide-utrack');
         $('#slide-utrack-created-by').val(slide.created_by);
         $('#slide-utrack-updated-by').val(slide.updated_by);
-        console.log(slide.created_at)
         $('#slide-utrack-created-at').val(prettyTimestamp(slide.created_at * 1000));
-        $('#slide-utrack-created-at').val(prettyTimestamp(slide.updated_at * 1000));
+        $('#slide-utrack-updated-at').val(prettyTimestamp(slide.updated_at * 1000));
     });
 
     $(document).on('click', '.slide-edit', function () {

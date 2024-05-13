@@ -45,8 +45,9 @@
             </td>
             {% if AUTH_ENABLED %}
                 <td class="tac">
-                    <a href="javascript:void(0);" class="badge item-utrack slide-utrack">
-                        {{ track_created(slide).username }}
+                    {% set creator = track_created(slide) %}
+                    <a href="javascript:void(0);" class="badge item-utrack slide-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                        {{ creator.username }}
                     </a>
                 </td>
             {% endif %}
