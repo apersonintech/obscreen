@@ -33,10 +33,12 @@
                         <i class="fa fa-sort icon-left"></i>
                     </a>
                     {% set icon_type = 'globe' %}
-                    {% if slide.type == 'video' %}
-                        {% set icon_type = 'video' %}
-                    {% elif slide.type == 'picture' %}
+                    {% if slide.type == enum_slide_type.VIDEO %}
+                        {% set icon_type = 'film' %}
+                    {% elif slide.type == enum_slide_type.PICTURE %}
                         {% set icon_type = 'image' %}
+                    {% elif slide.type == enum_slide_type.YOUTUBE %}
+                        {% set icon_type = 'video' %}
                     {% endif %}
 
                     <i class="fa fa-{{ icon_type }} icon-left"></i>
@@ -79,15 +81,21 @@
                 <a href="javascript:void(0);" class="item-edit slide-edit">
                     <i class="fa fa-pencil"></i>
                 </a>
-                {% if not fleet_mode or not slide.has_file() %}
-                    <a href="{{ slide.location }}" class="item-download slide-download" target="_blank">
-                        <i class="fa fa-eye"></i>
-                    </a>
-                {% elif var_external_url.value|length > 0 %}
-                    <a href="{{ var_external_url.value }}/{{ slide.location }}" class="item-download slide-download" target="_blank">
-                        <i class="fa fa-eye"></i>
-                    </a>
+
+                {% set location = slide.location %}
+
+                {% if var_external_url.as_string().strip()|length > 0 and slide.has_file() %}
+                    {% set location = var_external_url.value ~ '/' ~ slide.location %}
                 {% endif %}
+
+                {% if slide.type == enum_slide_type.YOUTUBE %}
+                    {% set location = 'https://www.youtube.com/watch?v=' ~ slide.location %}
+                {% endif %}
+
+                <a href="{{ location }}" class="item-download slide-download" target="_blank">
+                    <i class="fa fa-eye"></i>
+                </a>
+
                 <a href="javascript:void(0);" class="item-delete slide-delete">
                     <i class="fa fa-trash"></i>
                 </a>
