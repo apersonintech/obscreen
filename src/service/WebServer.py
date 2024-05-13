@@ -15,6 +15,7 @@ from src.controller.FleetController import FleetController
 from src.controller.AuthController import AuthController
 from src.controller.SysinfoController import SysinfoController
 from src.controller.SettingsController import SettingsController
+from src.controller.CoreController import CoreController
 from src.constant.WebDirConstant import WebDirConstant
 
 
@@ -50,17 +51,20 @@ class WebServer:
     def get_app(self):
         return self._app
 
-    def _get_template_folder(self) -> str:
+    def get_template_folder(self) -> str:
         return "{}/{}".format(self._project_dir, WebDirConstant.FOLDER_TEMPLATES)
 
-    def _get_static_folder(self) -> str:
+    def get_static_folder(self) -> str:
         return "{}/{}".format(self._project_dir, WebDirConstant.FOLDER_STATIC)
+
+    def get_web_folder(self) -> str:
+        return "{}/{}/{}".format(self._project_dir, WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS)
 
     def _setup_flask_app(self) -> None:
         self._app = Flask(
             __name__,
-            template_folder=self._get_template_folder(),
-            static_folder=self._get_static_folder(),
+            template_folder=self.get_template_folder(),
+            static_folder=self.get_static_folder(),
         )
 
         self._app.config['UPLOAD_FOLDER'] = "{}/{}".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_UPLOADS)
@@ -96,6 +100,7 @@ class WebServer:
 
             return decorated_function
 
+        CoreController(self, self._app, auth_required, self._model_store, self._template_renderer)
         PlayerController(self, self._app, auth_required, self._model_store, self._template_renderer)
         SlideshowController(self, self._app, auth_required, self._model_store, self._template_renderer)
         SettingsController(self, self._app, auth_required, self._model_store, self._template_renderer)
@@ -111,5 +116,5 @@ class WebServer:
     def _setup_web_errors(self) -> None:
         @self._app.errorhandler(404)
         def not_found(e):
-            return send_from_directory(self._get_template_folder(), 'core/error404.html'), 404
+            return send_from_directory(self.get_template_folder(), 'core/error404.html'), 404
 

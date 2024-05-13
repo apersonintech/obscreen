@@ -69,6 +69,10 @@ class AuthController(ObController):
 
     def auth_user_toggle(self):
         data = request.get_json()
+
+        if self._model_store.user().count_all_enabled() == 1 and not data.get('enabled'):
+            return jsonify({'status': 'error', 'message': self.t('auth_user_delete_at_least_one_account')}), 400
+
         self._model_store.user().update_enabled(data.get('id'), data.get('enabled'))
         return jsonify({'status': 'ok'})
 
