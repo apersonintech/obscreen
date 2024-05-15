@@ -1,5 +1,5 @@
 [Unit]
-Description=Obscreen
+Description=Obscreen Manager
 After=network.target
 
 [Service]
