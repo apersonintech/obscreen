@@ -1,6 +1,6 @@
 # <img src="https://github.com/jr-k/obscreen/blob/master/docs/img/obscreen.png" width="22"> Obscreen - Autorun on RaspberryPi
 
-> #### 👈 [back to readme](README.md)
+> #### 👈 [back to readme](/README.md)
 
 #### 🔴 You want to power RaspberryPi and automatically see your slideshow on a screen connected to it and manage your slideshow ? You're in the right place.
 
