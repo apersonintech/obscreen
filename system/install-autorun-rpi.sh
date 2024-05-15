@@ -14,7 +14,7 @@ grep -qxF "allowed_users=anybody" /etc/X11/Xwrapper.config || echo "allowed_user
 grep -qxF "needs_root_rights=yes" /etc/X11/Xwrapper.config || echo "needs_root_rights=yes" | tee -a /etc/X11/Xwrapper.config
 
 # Create the systemd service to start Chromium in kiosk mode
-curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/obscreen-player.yml > /etc/systemd/system/obscreen-player.service
+curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/obscreen-player.service > /etc/systemd/system/obscreen-player.service
 
 # Reload systemd, enable and start the service
 systemctl daemon-reload
