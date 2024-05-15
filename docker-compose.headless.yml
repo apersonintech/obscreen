@@ -6,10 +6,10 @@ services:
     environment:
       - DEBUG=false
       - PORT=5000
-      - AUTOCONFIGURE_LX_FILE=/app/var/run/lxfile
+      - PLAYER_AUTOSTART_FILE=/app/var/run/play
       - SECRET_KEY=ANY_SECRET_KEY_HERE
     volumes:
-      - /dev/null:/app/var/run/lxfile
+      - /dev/null:/app/var/run/play
       - ./data/db:/app/data/db
       - ./data/uploads:/app/data/uploads
     ports:
