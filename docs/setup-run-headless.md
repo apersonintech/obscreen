@@ -1,6 +1,6 @@
 # <img src="https://github.com/jr-k/obscreen/blob/master/docs/img/obscreen.png" width="22"> Obscreen - Headless run on any server
 
-> #### 👈 [back to readme](README.md)
+> #### 👈 [back to readme](/README.md)
 
 #### 🔵 You want to start browser and setup playlist url manually on your device and just want a slideshow manager ? You're in the right place.
 
