@@ -4,7 +4,7 @@
 
 #### 🔵 You want to start browser and setup playlist url manually on your device and just want a slideshow manager ? You're in the right place.
 
-
+---
 ## 🐳 Run with docker
 ### With docker (for test)
 ```bash
@@ -35,7 +35,7 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.headl
 # Run
 docker compose up --detach --pull always
 ```
-
+---
 ## 📠 Run system wide
 ### Install
 ```bash
@@ -75,9 +75,9 @@ sudo systemctl start obscreen-manager.service
 
 To troubleshoot you can check logs
 ```bash
-sudo journalctl -u obscreen -f 
+sudo journalctl -u obscreen-manager -f 
 ```
-
+---
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://localhost:5000`
 - Slideshow manager is reachable at `http://localhost:5000/manage`

@@ -56,14 +56,12 @@ docker compose up --detach --pull always
 ```bash
 # Install system dependencies
 sudo apt-get update
-sudo apt-get install -y git xinit xserver-xorg chromium-browser unclutter python3-venv python3-pip
+sudo apt-get install -y git
 
 # Get files
 git clone https://github.com/jr-k/obscreen.git && cd obscreen
 
 # Install application dependencies
-python3 -m venv venv
-source ./venv/bin/activate
 pip3 install -r requirements.txt
 
 # Add some sample data
@@ -75,11 +73,11 @@ cp .env.dist .env
 
 ### Configure
 - Server configuration is editable in `.env` file.
-- Application configuration will be available at `http://raspberrypi.local:5000/settings` page after run.
+- Application configuration will be available at `http://localhost:5000/settings` page after run.
 
 ### Start server (for test)
 ```bash
-python3 ./obscreen.py
+./obscreen.py
 ```
 
 ### Start server forever with systemctl
@@ -92,8 +90,12 @@ sudo systemctl start obscreen-manager.service
 
 To troubleshoot you can check logs
 ```bash
-sudo journalctl -u obscreen -f 
+sudo journalctl -u obscreen-manager -f 
 ```
+---
+## 🏁 Finally
+- Run `sudo systemctl restart obscreen-player` or `sudo reboot`
+
 ---
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://raspberrypi.local:5000`
