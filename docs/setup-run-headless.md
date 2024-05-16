@@ -56,8 +56,8 @@ git clone https://github.com/jr-k/obscreen.git && cd obscreen
 
 # Install application dependencies
 python3 -m venv venv
-source ./venv/bin/python
-pip3 install -r requirements.txt
+source ./venv/bin/activate
+pip install -r requirements.txt
 
 # Add some sample data
 cp data/db/slideshow.json.dist data/db/slideshow.json
