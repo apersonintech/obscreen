@@ -6,6 +6,14 @@
 
 ---
 ## 🐳 Run with docker
+### Install docker if needed
+```bash
+curl -sSL get.docker.com | sh
+sudo usermod -aG docker pi
+logout
+#then login again
+```
+
 ### With docker (for test)
 ```bash
 # Prepare application data file tree
@@ -41,12 +49,14 @@ docker compose up --detach --pull always
 ```bash
 # Install system dependencies
 sudo apt-get update
-sudo apt-get install -y git
+sudo apt-get install -y git python3-pip python3-venv
 
 # Get files
 git clone https://github.com/jr-k/obscreen.git && cd obscreen
 
 # Install application dependencies
+python3 -m venv venv
+source ./venv/bin/python
 pip3 install -r requirements.txt
 
 # Add some sample data
@@ -62,7 +72,7 @@ cp .env.dist .env
 
 ### Start server (for test)
 ```bash
-./obscreen.py
+python ./obscreen.py
 ```
 
 ### Start server forever with systemctl

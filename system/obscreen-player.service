@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/xinit /home/pi/obscreen/system/start-chromium.sh -- :0 -nolisten tcp vt7 -keeptty
+ExecStart=/usr/bin/xinit /home/pi/obscreen/var/run/play -- :0 -nolisten tcp vt7 -keeptty
 User=pi
 Group=pi
 Restart=on-failure

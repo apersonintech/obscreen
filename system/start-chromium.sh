@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 # Disable screensaver and DPMS
@@ -19,3 +20,4 @@ HEIGHT=$(echo $RESOLUTION | cut -d 'x' -f 2)
 
 # Start Chromium in kiosk mode
 chromium-browser --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=${WIDTH},${HEIGHT} --display=:0 http://localhost:5000
+        

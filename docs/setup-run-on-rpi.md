@@ -15,7 +15,7 @@
 ### Install docker if needed
 ```bash
 curl -sSL get.docker.com | sh
-sudo usermod -aG docker $(whoami)
+sudo usermod -aG docker pi
 logout
 #then login again
 ```
@@ -23,11 +23,14 @@ logout
 
 ### With docker (for test)
 ```bash
-# Prepare application data file tree and prepare player autostart file
-cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && touch system/start-chromium.sh && cd obscreen
+# Prepare application data file tree
+cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
+
+# Prepare player autostart file
+mkdir -p var/run && touch var/run/play && chmod +x var/run/play 
 
 # Run the Docker container
-ocker run --rm --name obscreen --pull=always \
+docker run --rm --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
   -e PLAYER_AUTOSTART_FILE=/app/var/run/play \
@@ -35,14 +38,17 @@ ocker run --rm --name obscreen --pull=always \
   -p 5000:5000 \
   -v ./data/db:/app/data/db \
   -v ./data/uploads:/app/data/uploads \
-  -v /home/pi/obscreen/system/start-chromium.sh:/app/var/run/play \
+  -v ./var/run/play:/app/var/run/play \
   jierka/obscreen:latest
 ```
 
 ### Or with docker-compose
 ```bash
 # Prepare application data file tree
-cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && touch system/start-chromium.sh && cd obscreen
+cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
+
+# Prepare player autostart file
+mkdir -p var/run && touch var/run/play && chmod +x var/run/play 
 
 # Download docker-compose.yml
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml > docker-compose.yml
@@ -56,12 +62,14 @@ docker compose up --detach --pull always
 ```bash
 # Install system dependencies
 sudo apt-get update
-sudo apt-get install -y git
+sudo apt-get install -y git python3-pip python3-venv
 
 # Get files
 git clone https://github.com/jr-k/obscreen.git && cd obscreen
 
 # Install application dependencies
+python3 -m venv venv
+source ./venv/bin/python
 pip3 install -r requirements.txt
 
 # Add some sample data
@@ -77,7 +85,7 @@ cp .env.dist .env
 
 ### Start server (for test)
 ```bash
-./obscreen.py
+python ./obscreen.py
 ```
 
 ### Start server forever with systemctl
