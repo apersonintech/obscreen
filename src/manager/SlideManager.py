@@ -152,7 +152,7 @@ class SlideManager(ModelManager):
             form = slide.to_dict()
             del form['id']
 
-        if form['type'] == SlideType.YOUTUBE:
+        if form['type'] == SlideType.YOUTUBE.value:
             form['location'] = get_yt_video_id(form['location'])
 
         self._db.add(self.pre_add(form))
