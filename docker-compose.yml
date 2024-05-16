@@ -9,7 +9,7 @@ services:
       - PLAYER_AUTOSTART_FILE=/app/var/run/play
       - SECRET_KEY=ANY_SECRET_KEY_HERE
     volumes:
-      - /home/pi/obscreen/system/start-chromium.sh:/app/var/run/play
+      - ./var/run/play:/app/var/run/play
       - ./data/db:/app/data/db
       - ./data/uploads:/app/data/uploads
     ports:

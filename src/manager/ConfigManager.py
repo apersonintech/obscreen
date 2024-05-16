@@ -12,7 +12,7 @@ load_dotenv()
 class ConfigManager:
 
     DEFAULT_PORT = 5000
-    DEFAULT_PLAYER_AUTOSTART_PATH = '/home/pi/obscreen/system/start-chromium.sh'
+    DEFAULT_PLAYER_AUTOSTART_PATH = './var/run/play'
     VERSION_FILE = 'version.txt'
 
     def __init__(self, variable_manager: VariableManager):
@@ -111,9 +111,8 @@ class ConfigManager:
 
         if os.path.isdir(path) or not os.path.exists(path):
             logging.error(
-                "Player autostart file {} doesn't exist on your server, please create it by executing follow command: \n'rm -rf ./var/run/play 2>/dev/null ; sudo touch {}'\n".format(
-                    player_autostart_path,
-                    self.DEFAULT_PLAYER_AUTOSTART_PATH
+                "Player autostart file {} doesn't exist on your server'\n".format(
+                    player_autostart_path
                 )
             )
             sys.exit(1)
@@ -122,8 +121,7 @@ class ConfigManager:
 
         player_url = self.map().get('player_url')
         os.makedirs(os.path.dirname(player_autostart_path), exist_ok=True)
-        xenv_presets = """
-#!/bin/bash
+        xenv_presets = """#!/bin/bash
 
 # Disable screensaver and DPMS
 xset s off
