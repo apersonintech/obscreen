@@ -56,12 +56,14 @@ docker compose up --detach --pull always
 ```bash
 # Install system dependencies
 sudo apt-get update
-sudo apt-get install -y git xinit xserver-xorg chromium-browser unclutter
+sudo apt-get install -y git xinit xserver-xorg chromium-browser unclutter python3-venv python3-pip
 
 # Get files
 git clone https://github.com/jr-k/obscreen.git && cd obscreen
 
 # Install application dependencies
+python3 -m venv venv
+source ./venv/bin/activate
 pip3 install -r requirements.txt
 
 # Add some sample data
@@ -77,7 +79,7 @@ cp .env.dist .env
 
 ### Start server (for test)
 ```bash
-./obscreen.py
+python3 ./obscreen.py
 ```
 
 ### Start server forever with systemctl
