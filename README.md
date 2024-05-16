@@ -6,7 +6,7 @@
 **⭐️ You liked it ? Give this repository a star, it's free :)**
 
 ## About
-Use a RaspberryPi (with desktop) to show a full-screen slideshow (Kiosk-mode)
+Use a RaspberryPi (Lite OS) to show a full-screen slideshow (Kiosk-mode)
 
 [![Docker Pulls](https://badgen.net/docker/pulls/jierka/obscreen?icon=docker&label=docker%20pulls)](https://hub.docker.com/r/jierka/obscreen/)
 
