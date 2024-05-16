@@ -110,12 +110,15 @@ class ConfigManager:
         player_autostart_path = self.DEFAULT_PLAYER_AUTOSTART_PATH if in_docker else path
 
         if os.path.isdir(path) or not os.path.exists(path):
-            logging.error(
-                "Player autostart file {} doesn't exist on your server'\n".format(
-                    player_autostart_path
+            if not in_docker:
+                open(player_autostart_path, 'a').close()
+            else:
+                logging.error(
+                    "Player autostart file {} doesn't exist on your server'\n".format(
+                        player_autostart_path
+                    )
                 )
-            )
-            sys.exit(1)
+                sys.exit(1)
         else:
             logging.info("Overriding player autostart file {}".format(player_autostart_path))
 
