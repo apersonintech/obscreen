@@ -8,21 +8,21 @@
 
 1. Download RaspberryPi Imager and setup an sdcard with `Raspberry Pi OS Lite` (🚨without desktop, only `Lite` version!). You'll find it under category `Raspberry PI OS (other)`
 2. Log into your pi user locally or via ssh (`ssh pi@raspberrypi.local`)
-3. Install player autorun by executing `curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash`
 
----
-## 🐳 Run with docker
-### Install docker if needed
+## 📺 Run the player
+Install player autorun by executing following script
 ```bash
-curl -sSL get.docker.com | sh
-sudo usermod -aG docker pi
-logout
-#then login again
+curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash
 ```
 
+---
+## 📡 Run the manager
 
-### With docker (for test)
+### with docker (for test)
 ```bash
+# (Optional) Install docker if needed
+curl -sSL get.docker.com | sh && sudo usermod -aG docker pi && logout # then login again
+
 # Prepare application data file tree
 cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
@@ -41,8 +41,8 @@ docker run --rm --name obscreen --pull=always \
   -v ./var/run/play:/app/var/run/play \
   jierka/obscreen:latest
 ```
-
-### Or with docker-compose
+---
+### or with docker-compose
 ```bash
 # Prepare application data file tree
 cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
@@ -57,8 +57,8 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml >
 docker compose up --detach --pull always
 ```
 ---
-## 📠 Run system wide
-### Install
+### or system wide
+#### Install
 ```bash
 # Install system dependencies
 sudo apt-get update
@@ -79,16 +79,16 @@ cp data/db/slideshow.json.dist data/db/slideshow.json
 cp .env.dist .env
 ```
 
-### Configure
+#### Configure
 - Server configuration is editable in `.env` file.
 - Application configuration will be available at `http://raspberrypi.local:5000/settings` page after run.
 
-### Start server (for test)
+#### Start server (for test)
 ```bash
 python ./obscreen.py
 ```
 
-### Start server forever with systemctl
+#### Start server forever with systemctl
 ```bash
 sudo ln -s "$(pwd)/system/obscreen-manager.service" /etc/systemd/system/obscreen-manager.service
 sudo systemctl daemon-reload
@@ -96,8 +96,9 @@ sudo systemctl enable obscreen-manager.service
 sudo systemctl start obscreen-manager.service
 ```
 
-To troubleshoot you can check logs
+#### Troubleshoot
 ```bash
+# Watch logs with following command
 sudo journalctl -u obscreen-manager -f 
 ```
 ---
