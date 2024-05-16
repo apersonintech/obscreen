@@ -81,7 +81,7 @@ cp .env.dist .env
 
 ### Configure
 - Server configuration is editable in `.env` file.
-- Application configuration will be available at `http://localhost:5000/settings` page after run.
+- Application configuration will be available at `http://raspberrypi.local:5000/settings` page after run.
 
 ### Start server (for test)
 ```bash
