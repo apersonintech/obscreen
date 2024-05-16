@@ -13,6 +13,7 @@ Restart=always
 RestartSec=5
 StandardOutput=inherit
 StandardError=inherit
+ExecStartPost=/usr/bin/sudo /bin/bash -c 'sudo systemctl restart obscreen-player.service 2>/dev/null || true'
 
 [Install]
 WantedBy=multi-user.target
