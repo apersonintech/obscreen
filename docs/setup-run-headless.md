@@ -10,10 +10,10 @@
 ### with docker (for test)
 ```bash
 # (Optional) Install docker if needed
-curl -sSL get.docker.com | sh && sudo usermod -aG docker pi && logout # then login again
+curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
 
 # Prepare application data file tree
-mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
+cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Run the Docker container
 docker run --rm --name obscreen --pull=always \
@@ -31,7 +31,7 @@ docker run --rm --name obscreen --pull=always \
 ### or with docker-compose
 ```bash
 # Prepare application data file tree
-mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
+cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Download docker-compose.yml
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.headless.yml > docker-compose.yml
@@ -73,7 +73,7 @@ python ./obscreen.py
 
 #### Start server forever with systemctl
 ```bash
-sudo ln -s "$(pwd)/system/obscreen-manager.service" /etc/systemd/system/obscreen-manager.service
+cat "$(pwd)/system/obscreen-manager.service" | sed "s#/home/pi#$HOME#g" | sed "s#=pi#=$USER#g" | sudo tee /etc/systemd/system/obscreen-manager.service
 sudo systemctl daemon-reload
 sudo systemctl enable obscreen-manager.service
 sudo systemctl start obscreen-manager.service

@@ -12,7 +12,7 @@
 ## 📺 Run the player
 Install player autorun by executing following script
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash
+curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
 ```
 
 ---
@@ -21,10 +21,10 @@ curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install
 ### with docker (for test)
 ```bash
 # (Optional) Install docker if needed
-curl -sSL get.docker.com | sh && sudo usermod -aG docker pi && logout # then login again
+curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
 
 # Prepare application data file tree
-cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
+cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Prepare player autostart file
 mkdir -p var/run && touch var/run/play && chmod +x var/run/play 
@@ -45,7 +45,7 @@ docker run --rm --name obscreen --pull=always \
 ### or with docker-compose
 ```bash
 # Prepare application data file tree
-cd /home/pi && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
+cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
 
 # Prepare player autostart file
 mkdir -p var/run && touch var/run/play && chmod +x var/run/play 
@@ -90,7 +90,7 @@ python ./obscreen.py
 
 #### Start server forever with systemctl
 ```bash
-sudo ln -s "$(pwd)/system/obscreen-manager.service" /etc/systemd/system/obscreen-manager.service
+cat "$(pwd)/system/obscreen-manager.service" | sed "s#/home/pi#$HOME#g" | sed "s#=pi#=$USER#g" | sudo tee /etc/systemd/system/obscreen-manager.service
 sudo systemctl daemon-reload
 sudo systemctl enable obscreen-manager.service
 sudo systemctl start obscreen-manager.service
