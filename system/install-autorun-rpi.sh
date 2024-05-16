@@ -20,6 +20,5 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/obscreen-play
 systemctl daemon-reload
 systemctl enable obscreen-player.service
 systemctl set-default graphical.target
+systemctl start obscreen-player.service
 
-# Reboot the system
-reboot
