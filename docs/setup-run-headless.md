@@ -32,7 +32,7 @@ docker run --rm --name obscreen --pull=always \
   jierka/obscreen:latest
 ```
 
-### With docker-compose
+### Or with docker-compose
 ```bash
 # Prepare application data file tree
 mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
