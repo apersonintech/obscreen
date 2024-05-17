@@ -7,7 +7,12 @@
     "name",
     "position",
     "type",
-    "cron_schedule"
+    "cron_schedule",
+    "cron_schedule_end",
+    "created_by",
+    "updated_by",
+    "created_at",
+    "updated_at"
   ],
   "data": {
     "0": {
