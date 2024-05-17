@@ -48,7 +48,7 @@ sudo apt-get update
 sudo apt-get install -y git python3-pip python3-venv
 
 # Get files
-git clone https://github.com/jr-k/obscreen.git && cd obscreen
+cd ~ && git clone https://github.com/jr-k/obscreen.git && cd obscreen
 
 # Install application dependencies
 python3 -m venv venv
