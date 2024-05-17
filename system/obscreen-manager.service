@@ -6,7 +6,6 @@ After=network.target
 User=pi
 Group=pi
 Environment=VIRTUAL_ENV="/home/pi/obscreen/venv"
-Environment=PATH="$VIRTUAL_ENV/bin:$PATH"
 WorkingDirectory=/home/pi/obscreen
 ExecStart=/home/pi/obscreen/venv/bin/python /home/pi/obscreen/obscreen.py
 Restart=always

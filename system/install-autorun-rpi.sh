@@ -4,7 +4,7 @@ OWNER=${1:-$USER}
 WORKING_DIR=${2:-$HOME}
 
 echo "### Installing Obscreen Player ###"
-echo "# Using user: $USER_ARG"
+echo "# Using user: $OWNER"
 echo "# Working Directory: $WORKING_DIR"
 echo "# ------------------------------ #"
 
