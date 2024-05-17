@@ -7,7 +7,7 @@
 ## 🎛️ Hardware installation
 
 1. Download RaspberryPi Imager and setup an sdcard with `Raspberry Pi OS Lite` (🚨without desktop, only `Lite` version!). You'll find it under category `Raspberry PI OS (other)`
-2. Log into your pi user locally or via ssh (`ssh pi@raspberrypi.local`)
+2. Log into your RaspberryPi locally or via ssh (by default it's `ssh pi@raspberrypi.local`)
 
 ## 📺 Run the player
 Install player autorun by executing following script
@@ -65,7 +65,7 @@ sudo apt-get update
 sudo apt-get install -y git python3-pip python3-venv
 
 # Get files
-git clone https://github.com/jr-k/obscreen.git && cd obscreen
+cd ~ && git clone https://github.com/jr-k/obscreen.git && cd obscreen
 
 # Install application dependencies
 python3 -m venv venv
