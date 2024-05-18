@@ -6,6 +6,7 @@ out/
 data/uploads/*
 !data/uploads/sample.jpg
 data/db/*
+!/data/db/.gitkeep
 /plugins/user/*
 !/plugins/user/.gitkeep
 *.lock
