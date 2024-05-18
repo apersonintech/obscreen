@@ -5,14 +5,14 @@ from typing import Optional, Union
 
 class User:
 
-    def __init__(self, username: str = '', password: str = '', enabled: bool = True, id: Optional[str] = None):
+    def __init__(self, username: str = '', password: str = '', enabled: bool = True, id: Optional[int] = None):
         self._id = id if id else None
         self._username = username
         self._password = password
         self._enabled = enabled
 
     @property
-    def id(self) -> Union[int, str]:
+    def id(self) -> Optional[int]:
         return self._id
 
     @property
@@ -33,11 +33,11 @@ class User:
 
     @property
     def enabled(self) -> bool:
-        return self._enabled
+        return bool(self._enabled)
 
     @enabled.setter
     def enabled(self, value: bool):
-        self._enabled = value
+        self._enabled = bool(value)
 
     def __str__(self) -> str:
         return f"User(" \
