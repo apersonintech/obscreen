@@ -1,6 +1,5 @@
 import hashlib
 import time
-from pysondb.errors import IdDoesNotExistError
 from typing import Dict, Optional, List, Tuple, Union
 from flask_login import current_user
 
@@ -14,9 +13,9 @@ class UserManager:
 
     TABLE_NAME = "user"
     TABLE_MODEL = [
-        "username",
-        "password",
-        "enabled"
+        "username CHAR(255)",
+        "password CHAR(255)",
+        "enabled INTEGER"
     ]
 
     def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, on_user_delete):
@@ -44,37 +43,32 @@ class UserManager:
 
         return user_map
 
-    def hydrate_object(self, raw_user: dict, id: Optional[str] = None) -> User:
+    def hydrate_object(self, raw_user: dict, id: Optional[int] = None) -> User:
         if id:
             raw_user['id'] = id
 
         return User(**raw_user)
 
-    def hydrate_dict(self, raw_users: dict) -> List[User]:
-        return [self.hydrate_object(raw_user, raw_id) for raw_id, raw_user in raw_users.items()]
-
     def hydrate_list(self, raw_users: list) -> List[User]:
         return [self.hydrate_object(raw_user) for raw_user in raw_users]
 
-    def get(self, id: str) -> Optional[User]:
-        try:
-            return self.hydrate_object(self._db.get_by_id(id), id)
-        except IdDoesNotExistError:
-            return None
+    def get(self, id: int) -> Optional[User]:
+        object = self._db.get_by_id(self.TABLE_NAME, id)
+        return self.hydrate_object(object, id) if object else None
 
-    def get_by(self, query) -> List[User]:
-        return self.hydrate_dict(self._db.get_by_query(query=query))
+    def get_by(self, query, sort: Optional[str] = None) -> List[User]:
+        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort))
 
     def get_one_by(self, query) -> Optional[User]:
-        users = self.hydrate_dict(self._db.get_by_query(query=query))
-        if len(users) == 1:
-            return users[0]
-        elif len(users) > 1:
-            raise Error("More than one result for query")
-        return None
+        object = self._db.get_one_by_query(self.TABLE_NAME, query=query)
+
+        if not object:
+            return None
+
+        return self.hydrate_object(object)
 
     def get_one_by_username(self, username: str, enabled: bool = None) -> Optional[User]:
-        return self.get_one_by(query=lambda v: v['username'] == username and (enabled is None or v['enabled'] == enabled))
+        return self.get_one_by("username = '{}' and (enabled is null or enabled = {})".format(username, int(enabled)))
 
     def count_all_enabled(self):
         return len(self.get_enabled_users())
@@ -85,12 +79,16 @@ class UserManager:
     def track_user_updated(self, id_or_entity: Optional[str]) -> User:
         return self.track_user_action(id_or_entity, 'updated_by')
 
-    def track_user_action(self, id_or_entity: Optional[str], attribute: Optional[str] = 'created_by') -> User:
-        if not isinstance(id_or_entity, str):
+    def track_user_action(self, id_or_entity: Optional[int], attribute: Optional[str] = 'created_by') -> User:
+        if not isinstance(id_or_entity, int):
             id_or_entity = getattr(id_or_entity, attribute)
-        id_or_entity = str(id_or_entity)
 
-        user_map = self.map()
+        try:
+            id_or_entity = int(id_or_entity)
+        except ValueError:
+            return User(username=id_or_entity, enabled=False)
+
+        user_map = self.prepare_map()
 
         if id_or_entity in user_map:
             return user_map[id_or_entity]
@@ -101,20 +99,13 @@ class UserManager:
         return User(username=self._lang_manager.translate('anonymous'), enabled=False)
 
     def get_all(self, sort: bool = False) -> List[User]:
-        raw_users = self._db.get_all()
-
-        if isinstance(raw_users, dict):
-            if sort:
-                return sorted(self.hydrate_dict(raw_users), key=lambda x: x.username)
-            return self.hydrate_dict(raw_users)
-
-        return self.hydrate_list(sorted(raw_users, key=lambda x: x['username']) if sort else raw_users)
+        return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "username" if sort else None))
 
     def get_enabled_users(self) -> List[User]:
-        return [user for user in self.get_all(sort=True) if user.enabled]
+        return self.get_by(query="enabled = 1", sort="username")
 
     def get_disabled_users(self) -> List[User]:
-        return [user for user in self.get_all(sort=True) if not user.enabled]
+        return self.get_by(query="enabled = 0", sort="username")
 
     def pre_add(self, user: Dict) -> Dict:
         return user
@@ -122,33 +113,33 @@ class UserManager:
     def pre_update(self, user: Dict) -> Dict:
         return user
 
-    def pre_delete(self, user_id: str) -> str:
+    def pre_delete(self, user_id: int) -> int:
         self._on_user_delete(user_id)
         return user_id
 
-    def post_add(self, user_id: str) -> str:
+    def post_add(self, user_id: int) -> int:
         self.reload()
         return user_id
 
-    def post_update(self, user_id: str) -> str:
+    def post_update(self, user_id: int) -> int:
         self.reload()
         return user_id
 
-    def post_delete(self, user_id: str) -> str:
+    def post_delete(self, user_id: int) -> int:
         self.reload()
         return user_id
 
-    def update_enabled(self, id: str, enabled: bool) -> None:
-        self._db.update_by_id(id, self.pre_update({"enabled": enabled}))
+    def update_enabled(self, id: int, enabled: bool) -> None:
+        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"enabled": enabled}))
         self.post_update(id)
 
-    def update_form(self, id: str, username: str, password: Optional[str]) -> None:
+    def update_form(self, id: int, username: str, password: Optional[str]) -> None:
         form = {"username": username}
 
         if password is not None and password:
             form['password'] = self.encode_password(password)
 
-        self._db.update_by_id(id, self.pre_update(form))
+        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
 
     def add_form(self, user: Union[User, Dict]) -> None:
@@ -160,12 +151,12 @@ class UserManager:
 
         form['password'] = self.encode_password(form['password'])
 
-        self._db.add(self.pre_add(form))
+        self._db.add(self.TABLE_NAME, self.pre_add(form))
         self.post_add(user.id)
 
-    def delete(self, id: str) -> None:
+    def delete(self, id: int) -> None:
         self.pre_delete(id)
-        self._db.delete_by_id(id)
+        self._db.delete_by_id(self.TABLE_NAME, id)
         self.post_delete(id)
 
     def to_dict(self, users: List[User]) -> List[Dict]:
@@ -215,18 +206,18 @@ class UserManager:
 
         return None
 
-    def forget_user(self, objects: List, user_id: str) -> Dict:
-        user_map = self.map()
-        user_id = str(user_id)
+    def forget_user(self, objects: List, user_id: int) -> Dict:
+        user_map = self.prepare_map()
+        user_id = int(user_id)
         edits = {}
 
         for object in objects:
-            edits = {object.id: {}}
+            edits[object.id] = {}
 
-            if str(object.created_by) == user_id and user_id in user_map:
+            if int(object.created_by) == user_id and user_id in user_map:
                 edits[object.id]['created_by'] = user_map[user_id].username
 
-            if str(object.updated_by) == user_id and user_id in user_map:
+            if int(object.updated_by) == user_id and user_id in user_map:
                 edits[object.id]['updated_by'] = user_map[user_id].username
 
         return edits
