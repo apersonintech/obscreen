@@ -2,21 +2,23 @@ import os
 import sys
 import platform
 import subprocess
+import threading
+import time
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request, url_for, redirect
 from src.manager.VariableManager import VariableManager
 from src.manager.ConfigManager import ConfigManager
 from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
-from src.utils import get_ip_address
+from src.utils import get_ip_address, am_i_in_docker
 
 
 class SysinfoController(ObController):
 
     def register(self):
         self._app.add_url_rule('/sysinfo', 'sysinfo_attribute_list', self._auth(self.sysinfo), methods=['GET'])
-        self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self._auth(self.sysinfo_restart), methods=['POST'])
+        self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self.sysinfo_restart, methods=['GET', 'POST'])
         self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self._auth(self.sysinfo_restart_needed), methods=['GET'])
 
     def sysinfo(self):
@@ -29,20 +31,13 @@ class SysinfoController(ObController):
         )
 
     def sysinfo_restart(self):
-        if platform.system().lower() == 'darwin':
-            if self._model_store.config().map().get('debug'):
-                python = sys.executable
-                os.execl(python, python, *sys.argv)
-        else:
-            try:
-                subprocess.run(["sudo", "systemctl", "restart", 'obscreen'], check=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                pass
-            except subprocess.TimeoutExpired:
-                pass
-            except subprocess.CalledProcessError:
-                pass
+        secret = self._model_store.config().map().get('secret_key')
+        challenge = request.args.get('secret_key')
+        thread = threading.Thread(target=self.restart, args=(secret, challenge))
+        thread.daemon = True
+        thread.start()
 
-        return jsonify({'status': 'ok'})
+        return redirect(url_for('manage'))
 
     def sysinfo_restart_needed(self):
         var_last_slide_update = self._model_store.variable().get_one_by_name('last_slide_update')
@@ -53,3 +48,24 @@ class SysinfoController(ObController):
 
         return jsonify({'status': True})
 
+    def restart(self, secret: str, challenge: str) -> None:
+        time.sleep(1)
+
+        if secret != challenge:
+            return jsonify({'status': 'error'})
+
+        if platform.system().lower() == 'darwin':
+            if self._model_store.config().map().get('debug'):
+                python = sys.executable
+                os.execl(python, python, *sys.argv)
+        elif am_i_in_docker:
+            python = sys.executable
+            os.execl(python, python, *sys.argv)
+        else:
+            try:
+                subprocess.run(["sudo", "systemctl", "restart", 'obscreen-manager'], check=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                pass
+            except subprocess.TimeoutExpired:
+                pass
+            except subprocess.CalledProcessError:
+                pass

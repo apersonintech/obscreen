@@ -53,10 +53,10 @@ cd ~ && git clone https://github.com/jr-k/obscreen.git && cd obscreen
 # Install application dependencies
 python3 -m venv venv
 source ./venv/bin/activate
-pip install -r requirements.txt
 
-# Add some sample data
-cp data/db/slideshow.json.dist data/db/slideshow.json
+# 🚨For MacOS users, requirements installation may cause an error but it's ok if only for pysqlite3 package
+#   you'll need to install brew and execute command `brew install sqlite3`
+pip install -r requirements.txt
 
 # Customize server default values
 cp .env.dist .env

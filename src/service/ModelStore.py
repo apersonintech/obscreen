@@ -53,5 +53,5 @@ class ModelStore:
     def user(self) -> UserManager:
         return self._user_manager
 
-    def on_user_delete(self, user_id: str):
+    def on_user_delete(self, user_id: int) -> None:
         self._slide_manager.forget_user(user_id)

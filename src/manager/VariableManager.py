@@ -1,6 +1,6 @@
+import json
 import time
 from typing import Dict, Optional, List, Tuple, Union
-from pysondb.errors import IdDoesNotExistError
 
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
@@ -24,17 +24,17 @@ class VariableManager(ModelManager):
 
     TABLE_NAME = "settings"
     TABLE_MODEL = [
-        "description",
-        "description_edition",
-        "editable",
-        "name",
-        "section",
-        "plugin",
-        "selectables",
-        "type",
-        "unit",
-        "refresh_player",
-        "value"
+        "description TEXT",
+        "description_edition TEXT",
+        "editable INTEGER",
+        "name CHAR(255)",
+        "section CHAR(255)",
+        "plugin CHAR(255)",
+        "selectables TEXT",
+        "type CHAR(255)",
+        "unit CHAR(255)",
+        "refresh_player INTEGER",
+        "value TEXT"
     ]
 
     def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
@@ -75,25 +75,25 @@ class VariableManager(ModelManager):
             same_selectables_label = get_keys(default_var, 'selectables', 'label') == get_keys(variable, 'selectables', 'label')
 
             if variable.description != default_var['description']:
-                self._db.update_by_id(variable.id, {"description": default_var['description']})
+                self._db.update_by_id(self.TABLE_NAME, variable.id, {"description": default_var['description']})
 
             if variable.description_edition != default_var['description_edition']:
-                self._db.update_by_id(variable.id, {"description_edition": default_var['description_edition']})
+                self._db.update_by_id(self.TABLE_NAME, variable.id, {"description_edition": default_var['description_edition']})
 
             if variable.unit != default_var['unit']:
-                self._db.update_by_id(variable.id, {"unit": default_var['unit']})
+                self._db.update_by_id(self.TABLE_NAME, variable.id, {"unit": default_var['unit']})
 
             if variable.section != default_var['section']:
-                self._db.update_by_id(variable.id, {"section": default_var['section']})
+                self._db.update_by_id(self.TABLE_NAME, variable.id, {"section": default_var['section']})
 
             if variable.refresh_player != default_var['refresh_player']:
-                self._db.update_by_id(variable.id, {"refresh_player": default_var['refresh_player']})
+                self._db.update_by_id(self.TABLE_NAME, variable.id, {"refresh_player": default_var['refresh_player']})
 
             if not same_selectables_keys or not same_selectables_label:
-                self._db.update_by_id(variable.id, {"selectables": default_var['selectables']})
+                self._db.update_by_id(self.TABLE_NAME, variable.id, {"selectables": default_var['selectables']})
 
         if variable.name == 'last_restart':
-            self._db.update_by_id(variable.id, {"value": time.time()})
+            self._db.update_by_id(self.TABLE_NAME, variable.id, {"value": time.time()})
 
         return variable
 
@@ -144,75 +144,60 @@ class VariableManager(ModelManager):
 
         return var_map
 
-    def hydrate_object(self, raw_variable: dict, id: Optional[str] = None) -> Variable:
+    def hydrate_object(self, raw_variable: dict, id: Optional[int] = None) -> Variable:
         if id:
             raw_variable['id'] = id
 
         if 'selectables' in raw_variable and raw_variable['selectables']:
-            raw_variable['selectables'] = [Selectable(**selectable) for selectable in raw_variable['selectables']]
+            raw_variable['selectables'] = [Selectable(**selectable) for selectable in json.loads(raw_variable['selectables'])]
 
         return Variable(**raw_variable)
-
-    def hydrate_dict(self, raw_variables: dict) -> List[Variable]:
-        return [self.hydrate_object(raw_variable, raw_id) for raw_id, raw_variable in raw_variables.items()]
 
     def hydrate_list(self, raw_variables: list) -> List[Variable]:
         return [self.hydrate_object(raw_variable) for raw_variable in raw_variables]
 
-    def get(self, id: str) -> Optional[Variable]:
-        try:
-            return self.hydrate_object(self._db.get_by_id(id), id)
-        except IdDoesNotExistError:
-            return None
+    def get(self, id: int) -> Optional[Variable]:
+        object = self._db.get_by_id(self.TABLE_NAME, id)
+        return self.hydrate_object(object, id) if object else None
 
-    def get_by(self, query) -> List[Variable]:
-        return self.hydrate_dict(self._db.get_by_query(query=query))
+    def get_by(self, query, sort: Optional[str] = None) -> List[Variable]:
+        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort))
 
     def get_by_prefix(self, prefix: str) -> List[Variable]:
-        return self.hydrate_dict(self._db.get_by_query(query=lambda v: v['name'].startswith(prefix)))
+        return self.get_by(query="name like '{}%'".format(prefix))
 
     def get_by_plugin(self, plugin: str) -> List[Variable]:
-        return self.hydrate_dict(self._db.get_by_query(query=lambda v: v['plugin'] == plugin))
+        return self.get_by(query="plugin = '{}'".format(plugin))
 
     def get_one_by_name(self, name: str) -> Optional[Variable]:
-        return self.get_one_by(query=lambda v: v['name'] == name)
+        return self.get_one_by("name = '{}'".format(name))
 
     def get_one_by(self, query) -> Optional[Variable]:
-        object = self._db.get_by_query(query=query)
-        variables = self.hydrate_dict(object)
-        if len(variables) == 1:
-            return variables[0]
-        elif len(variables) > 1:
-            raise Error("More than one result for query")
-        return None
+        object = self._db.get_one_by_query(self.TABLE_NAME, query=query)
+
+        if not object:
+            return None
+
+        return self.hydrate_object(object)
 
     def get_all(self) -> List[Variable]:
-        raw_variables = self._db.get_all()
-
-        if isinstance(raw_variables, dict):
-            return self.hydrate_dict(raw_variables)
-
-        return self.hydrate_list(raw_variables)
+        return self.hydrate_list(self._db.get_all(self.TABLE_NAME))
 
     def get_editable_variables(self, plugin: bool = True, sort: Optional[str] = None) -> List[Variable]:
-        query = lambda v: (not plugin and not isinstance(v['plugin'], str)) or (plugin and isinstance(v['plugin'], str))
-        variables = [variable for variable in self.get_by(query=query) if variable.editable]
-        if sort is not None and sort:
-            return sorted(variables, key=lambda x: getattr(x, sort))
-        return variables
+        query = "plugin is null and editable = 1" if not plugin else "plugin is not null and length(plugin) > 0 and editable = 1"
+        return self.get_by(query=query, sort=sort)
 
     def get_readonly_variables(self) -> List[Variable]:
-        return [variable for variable in self.get_all() if not variable.editable]
+        return self.get_by(query="editable = 0", sort="name")
 
-    def update_form(self, id: str, value: Union[int, bool, str]) -> None:
-        var_dict = self._db.update_by_id(id, {"value": value})
-        var = self.hydrate_object(var_dict, id)
+    def update_form(self, id: int, value: Union[int, bool, str]) -> None:
+        self._db.update_by_id(self.TABLE_NAME, id, {"value": value})
+        var = self.get_one_by("id = {}".format(id))
         self._var_map[var.name] = var
 
     def update_by_name(self, name: str, value) -> Optional[Variable]:
-        [var_id] = self._db.update_by_query(query=lambda v: v['name'] == name, new_data={"value": value})
-        var_dict = self._db.get_by_id(var_id)
-        var = self.hydrate_object(var_dict, id)
+        self._db.update_by_query(self.TABLE_NAME, query="name = '{}'".format(name), values={"value": value})
+        var = self.get_one_by_name(name)
         self._var_map[name] = var
 
     def add_form(self, variable: Union[Variable, Dict]) -> None:
@@ -222,10 +207,10 @@ class VariableManager(ModelManager):
             form = variable.to_dict()
             del form['id']
 
-        self._db.add(form)
+        self._db.add(self.TABLE_NAME, form)
 
-    def delete(self, id: str) -> None:
-        self._db.delete_by_id(id)
+    def delete(self, id: int) -> None:
+        self._db.delete_by_id(self.TABLE_NAME, id)
 
     def to_dict(self, variables: List[Variable]) -> List[Dict]:
         return [variable.to_dict() for variable in variables]
