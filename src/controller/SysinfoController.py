@@ -58,7 +58,7 @@ class SysinfoController(ObController):
             if self._model_store.config().map().get('debug'):
                 python = sys.executable
                 os.execl(python, python, *sys.argv)
-        elif am_i_in_docker:
+        elif am_i_in_docker():
             python = sys.executable
             os.execl(python, python, *sys.argv)
         else:
