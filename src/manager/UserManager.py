@@ -87,6 +87,8 @@ class UserManager:
             id_or_entity = int(id_or_entity)
         except ValueError:
             return User(username=id_or_entity, enabled=False)
+        except TypeError:
+            return User(username=id_or_entity, enabled=False)
 
         user_map = self.prepare_map()
 
