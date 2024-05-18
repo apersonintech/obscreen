@@ -1,7 +1,6 @@
 import os
 
 from typing import Dict, Optional, List, Tuple, Union
-from pysondb.errors import IdDoesNotExistError
 
 from src.model.entity.Slide import Slide
 from src.model.enum.SlideType import SlideType
@@ -16,80 +15,68 @@ class SlideManager(ModelManager):
 
     TABLE_NAME = "slideshow"
     TABLE_MODEL = [
-        "name",
-        "type",
-        "enabled",
-        "duration",
-        "position",
-        "location",
-        "cron_schedule",
-        "cron_schedule_end",
-        "created_by",
-        "updated_by",
-        "created_at",
-        "updated_at"
+        "name CHAR(255)",
+        "type CHAR(30)",
+        "enabled INTEGER",
+        "duration INTEGER",
+        "position INTEGER",
+        "location TEXT",
+        "cron_schedule CHAR(255)",
+        "cron_schedule_end CHAR(255)",
+        "created_by CHAR(255)",
+        "updated_by CHAR(255)",
+        "created_at INTEGER",
+        "updated_at INTEGER"
     ]
 
     def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
         super().__init__(lang_manager, database_manager, user_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
-    def hydrate_object(self, raw_slide: dict, id: str = None) -> Slide:
+    def hydrate_object(self, raw_slide: dict, id: int = None) -> Slide:
         if id:
             raw_slide['id'] = id
 
         [raw_slide, user_tracker_edits] = self.user_manager.initialize_user_trackers(raw_slide)
 
         if len(user_tracker_edits) > 0:
-            self._db.update_by_id(raw_slide['id'], user_tracker_edits)
+            self._db.update_by_id(self.TABLE_NAME, raw_slide['id'], user_tracker_edits)
 
         return Slide(**raw_slide)
-
-    def hydrate_dict(self, raw_slides: dict) -> List[Slide]:
-        return [self.hydrate_object(raw_slide, raw_id) for raw_id, raw_slide in raw_slides.items()]
 
     def hydrate_list(self, raw_slides: list) -> List[Slide]:
         return [self.hydrate_object(raw_slide) for raw_slide in raw_slides]
 
-    def get(self, id: str) -> Optional[Slide]:
-        try:
-            return self.hydrate_object(self._db.get_by_id(id), id)
-        except IdDoesNotExistError:
-            return None
+    def get(self, id: int) -> Optional[Slide]:
+        object = self._db.get_by_id(self.TABLE_NAME, id)
+        return self.hydrate_object(object, id) if object else None
 
-    def get_by(self, query) -> List[Slide]:
-        return self.hydrate_dict(self._db.get_by_query(query=query))
+    def get_by(self, query, sort: Optional[str] = None) -> List[Slide]:
+        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort))
 
     def get_one_by(self, query) -> Optional[Slide]:
-        slides = self.hydrate_dict(self._db.get_by_query(query=query))
-        if len(slides) == 1:
-            return slides[0]
-        elif len(slides) > 1:
-            raise Error("More than one result for query")
-        return None
+        object = self._db.get_one_by_query(self.TABLE_NAME, query=query)
+
+        if not object:
+            return None
+
+        return self.hydrate_object(object)
 
     def get_all(self, sort: bool = False) -> List[Slide]:
-        raw_slides = self._db.get_all()
+        return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort="position" if sort else None))
 
-        if isinstance(raw_slides, dict):
-            if sort:
-                return sorted(self.hydrate_dict(raw_slides), key=lambda x: x.position)
-            return self.hydrate_dict(raw_slides)
-
-        return self.hydrate_list(sorted(raw_slides, key=lambda x: x['position']) if sort else raw_slides)
-
-    def forget_user(self, user_id: str):
-        slides = self.hydrate_dict(self._db.get_by_query(query=lambda s: s['created_by'] == user_id or s['updated_by'] == user_id))
+    def forget_user(self, user_id: int):
+        slides = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
         edits_slides = self.user_manager.forget_user(slides, user_id)
 
         for slide_id, edits in edits_slides.items():
-            self._db.update_by_id(slide_id, edits)
+            self._db.update_by_id(self.TABLE_NAME, slide_id, edits)
 
     def get_enabled_slides(self) -> List[Slide]:
-        return [slide for slide in self.get_all(sort=True) if slide.enabled]
+        return self.get_by(query="enabled = 1", sort="position")
 
     def get_disabled_slides(self) -> List[Slide]:
-        return [slide for slide in self.get_all(sort=True) if not slide.enabled]
+        return self.get_by(query="enabled = 0", sort="position")
 
     def pre_add(self, slide: Dict) -> Dict:
         self.user_manager.track_user_on_create(slide)
@@ -115,15 +102,15 @@ class SlideManager(ModelManager):
     def post_delete(self, slide_id: str) -> str:
         return slide_id
 
-    def update_enabled(self, id: str, enabled: bool) -> None:
-        self._db.update_by_id(id, self.pre_update({"enabled": enabled, "position": 999}))
+    def update_enabled(self, id: int, enabled: bool) -> None:
+        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"enabled": enabled, "position": 999}))
         self.post_update(id)
         
     def update_positions(self, positions: list) -> None:
         for slide_id, slide_position in positions.items():
-            self._db.update_by_id(slide_id, {"position": slide_position})
+            self._db.update_by_id(self.TABLE_NAME, slide_id, {"position": slide_position})
 
-    def update_form(self, id: str, name: str, duration: int, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', location: Optional[str] = None) -> None:
+    def update_form(self, id: int, name: str, duration: int, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', location: Optional[str] = None) -> None:
         slide = self.get(id)
 
         if not slide:
@@ -142,7 +129,7 @@ class SlideManager(ModelManager):
         if slide.type == SlideType.YOUTUBE:
             form['location'] = get_yt_video_id(form['location'])
 
-        self._db.update_by_id(id, self.pre_update(form))
+        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
 
     def add_form(self, slide: Union[Slide, Dict]) -> None:
@@ -155,10 +142,10 @@ class SlideManager(ModelManager):
         if form['type'] == SlideType.YOUTUBE.value:
             form['location'] = get_yt_video_id(form['location'])
 
-        self._db.add(self.pre_add(form))
+        self._db.add(self.TABLE_NAME, self.pre_add(form))
         self.post_add(slide.id)
 
-    def delete(self, id: str) -> None:
+    def delete(self, id: int) -> None:
         slide = self.get(id)
 
         if slide:
@@ -169,7 +156,7 @@ class SlideManager(ModelManager):
                     pass
 
             self.pre_delete(id)
-            self._db.delete_by_id(id)
+            self._db.delete_by_id(self.TABLE_NAME, id)
             self.post_delete(id)
 
     def to_dict(self, slides: List[Slide]) -> List[Dict]:

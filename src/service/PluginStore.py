@@ -156,6 +156,9 @@ class PluginStore:
 
     def is_plugin_enabled(self, plugin: ObPlugin) -> bool:
         var = self._model_store.variable().get_one_by_name(plugin.get_plugin_variable_name(self.DEFAULT_PLUGIN_ENABLED_VARIABLE))
+        if var.as_bool:
+            logging.info("[Plugin] {} enabled".format(plugin.use_title()))
+
         return var.as_bool() if var else False
 
 

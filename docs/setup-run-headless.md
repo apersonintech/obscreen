@@ -53,6 +53,9 @@ cd ~ && git clone https://github.com/jr-k/obscreen.git && cd obscreen
 # Install application dependencies
 python3 -m venv venv
 source ./venv/bin/activate
+
+# 🚨For MacOS users, requirements installation may cause an error but it's ok if only for pysqlite3 package
+#   you'll need to install brew and execute command `brew install sqlite3`
 pip install -r requirements.txt
 
 # Add some sample data

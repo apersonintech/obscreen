@@ -11,7 +11,7 @@ from src.utils import str_to_enum
 class Variable:
 
     def __init__(self, name: str = '', section: str = '', description: str = '', description_edition: str = '', type: Union[VariableType, str] = VariableType.STRING,
-                 value: Union[int, bool, str] = '', editable: bool = True, id: Optional[str] = None,
+                 value: Union[int, bool, str] = '', editable: bool = True, id: Optional[int] = None,
                  plugin: Optional[str] = None, selectables: Optional[List[Selectable]] = None, unit: Optional[VariableUnit] = None,
                  refresh_player: bool = False):
         self._id = id if id else None
@@ -32,7 +32,7 @@ class Variable:
             self._unit = None
 
     @property
-    def id(self) -> Union[int, str]:
+    def id(self) -> Optional[int]:
         return self._id
 
     @property
@@ -96,19 +96,19 @@ class Variable:
 
     @property
     def editable(self) -> bool:
-        return self._editable
+        return bool(self._editable)
 
     @editable.setter
     def editable(self, value: bool):
-        self._editable = value
+        self._editable = bool(value)
 
     @property
     def refresh_player(self) -> bool:
-        return self._refresh_player
+        return bool(self._refresh_player)
 
     @refresh_player.setter
     def refresh_player(self, value: bool):
-        self._refresh_player = value
+        self._refresh_player = bool(value)
 
     @property
     def value(self) -> Union[int, bool, str]:
@@ -171,10 +171,10 @@ class Variable:
         return str(self._value)
 
     def as_int(self) -> int:
-        return int(self._value)
+        return int(float(self._value))
 
     def as_ctime(self) -> int:
-        return time.ctime(self._value)
+        return time.ctime(int(float(self._value)))
 
     def display(self) -> Union[int, bool, str]:
         value = self.eval()

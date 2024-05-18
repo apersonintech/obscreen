@@ -8,7 +8,7 @@ from src.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._location = location
         self._duration = duration
@@ -24,7 +24,7 @@ class Slide:
         self._updated_at = int(updated_at if updated_at else time.time())
 
     @property
-    def id(self) -> Optional[str]:
+    def id(self) -> Optional[int]:
         return self._id
 
     @property
@@ -101,11 +101,11 @@ class Slide:
 
     @property
     def enabled(self) -> bool:
-        return self._enabled
+        return bool(self._enabled)
 
     @enabled.setter
     def enabled(self, value: bool):
-        self._enabled = value
+        self._enabled = bool(value)
 
     @property
     def name(self) -> str:

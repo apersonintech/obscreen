@@ -5,7 +5,7 @@ from typing import Optional, Union
 
 class Screen:
 
-    def __init__(self, host: str = '', port: int = 5000, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[str] = None):
+    def __init__(self, host: str = '', port: int = 5000, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None):
         self._id = id if id else None
         self._host = host
         self._port = port
@@ -14,7 +14,7 @@ class Screen:
         self._position = position
 
     @property
-    def id(self) -> Union[int, str]:
+    def id(self) -> Optional[int]:
         return self._id
 
     @property
@@ -35,11 +35,11 @@ class Screen:
 
     @property
     def enabled(self) -> bool:
-        return self._enabled
+        return bool(self._enabled)
 
     @enabled.setter
     def enabled(self, value: bool):
-        self._enabled = value
+        self._enabled = bool(value)
 
     @property
     def name(self) -> str:
