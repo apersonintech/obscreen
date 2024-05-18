@@ -13,6 +13,20 @@ from cron_descriptor.Exception import FormatException, WrongArgumentException, M
 CAMEL_CASE_TO_SNAKE_CASE_PATTERN = re.compile(r'(?<!^)(?=[A-Z])')
 
 
+def is_wrapped_by(s: str, head: str = '', tail: str = '') -> bool:
+    return s[0] == head and s[-1] == tail if len(s) > 0 else None
+
+
+def wrap_if(s: str, condition: bool = True, quote_type: str = "'") -> str:
+    if not condition or is_wrapped_by(s, quote_type, quote_type):
+        return s
+    return "{}{}{}".format(
+        quote_type,
+        s,
+        quote_type
+    )
+
+
 def am_i_in_docker():
     docker_env = os.path.exists('/.dockerenv')
     docker_cgroup = False

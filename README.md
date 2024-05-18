@@ -15,7 +15,7 @@ Use a RaspberryPi (with desktop) to show a full-screen slideshow (Kiosk-mode)
 - Clear GUI
 - Fleet view to manage many devices easily
 - Very few dependencies
-- JSON database files
+- SQLite database
 - Plugin system
 - No stupid pricing plan
 - No cloud
