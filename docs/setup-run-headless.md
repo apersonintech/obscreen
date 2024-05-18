@@ -58,9 +58,6 @@ source ./venv/bin/activate
 #   you'll need to install brew and execute command `brew install sqlite3`
 pip install -r requirements.txt
 
-# Add some sample data
-cp data/db/slideshow.json.dist data/db/slideshow.json
-
 # Customize server default values
 cp .env.dist .env
 ```
