@@ -72,9 +72,6 @@ python3 -m venv venv
 source ./venv/bin/activate
 pip install -r requirements.txt
 
-# Add some sample data
-cp data/db/slideshow.json.dist data/db/slideshow.json
-
 # Customize server default values
 cp .env.dist .env
 ```

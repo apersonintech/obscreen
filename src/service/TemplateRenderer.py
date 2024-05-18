@@ -25,6 +25,7 @@ class TemplateRenderer:
     def get_view_globals(self) -> dict:
         globals = dict(
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
+            SECRET_KEY=self._model_store.config().map().get('secret_key'),
             FLEET_ENABLED=self._model_store.variable().map().get('fleet_enabled').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
             track_created=self._model_store.user().track_user_created,

@@ -24,7 +24,7 @@ class SettingsController(ObController):
         forward = self._post_update(request.form['id'])
         return forward if forward is not None else redirect(url_for('settings_variable_list'))
 
-    def _post_update(self, id: str):
+    def _post_update(self, id: int):
         variable = self._model_store.variable().get(id)
 
         if variable.refresh_player:
@@ -39,7 +39,10 @@ class SettingsController(ObController):
         if variable.name == 'auth_enabled':
             self.reload_web_server()
             if variable.as_bool():
-                return redirect(url_for('logout'))
+                return redirect(url_for(
+                    'logout',
+                    restart=1
+                ))
 
         if variable.name == 'lang':
             self._model_store.lang().set_lang(variable.value)

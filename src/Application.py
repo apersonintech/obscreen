@@ -18,8 +18,9 @@ class Application:
         self._model_store = ModelStore()
         self._template_renderer = TemplateRenderer(project_dir=project_dir, model_store=self._model_store, render_hook=self.render_hook)
         self._web_server = WebServer(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer)
-        self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
 
+        logging.info("[Obscreen] Starting...")
+        self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
         signal.signal(signal.SIGINT, self.signal_handler)
 
     def start(self) -> None:
@@ -27,6 +28,7 @@ class Application:
 
     def signal_handler(self, signal, frame) -> None:
         logging.info("Shutting down...")
+        self._model_store.database().close()
         self._stop_event.set()
         sys.exit(0)
 

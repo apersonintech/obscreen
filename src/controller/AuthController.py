@@ -24,6 +24,9 @@ class AuthController(ObController):
         if current_user.is_authenticated:
             return redirect(url_for('slideshow_slide_list'))
 
+        if not self._model_store.variable().map().get('auth_enabled').as_bool():
+            return redirect(url_for('slideshow_slide_list'))
+
         if len(request.form):
             user = self._model_store.user().get_one_by_username(request.form['username'], enabled=True)
             if user:
@@ -42,6 +45,13 @@ class AuthController(ObController):
 
     def logout(self):
         logout_user()
+
+        if request.args.get('restart'):
+            return redirect(url_for(
+                'sysinfo_restart',
+                secret_key=self._model_store.config().map().get('secret_key')
+            ))
+
         return redirect(url_for('login'))
 
     def auth_user_list(self):
