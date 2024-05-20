@@ -23,7 +23,7 @@ Use a RaspberryPi (Lite OS) to show a full-screen slideshow (Kiosk-mode)
 
 ![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
 
-# Two setups available
+# Cookbooks
 
 ### 🔴 [I want to power RaspberryPi and automatically see my slideshow on a screen connected to it and manage the slideshow](docs/setup-run-on-rpi.md)
 ### 🔵 [I want to start browser and setup playlist url manually on my device and just want a slideshow manager](docs/setup-run-headless.md)
