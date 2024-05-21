@@ -6,7 +6,7 @@
     <meta name="google" content="notranslate">
     <link rel="shortcut icon" href="{{ STATIC_PREFIX }}/favicon.ico">
     {% if slide_animation_enabled.eval() %}
-        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/animate.min.css" />
+        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/animate.min.css" />
     {% endif %}
     <style>
         html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: white; display: flex; flex-direction: row; justify-content: center; align-items: center; }
@@ -15,7 +15,7 @@
         .slide iframe { background: white; }
         .slide img { height: 100%; }
     </style>
-    <script type="application/javascript" src="{{ STATIC_PREFIX }}js/is-cron-now.js"></script>
+    <script type="application/javascript" src="{{ STATIC_PREFIX }}js/lib/is-cron-now.js"></script>
 </head>
 <body>
 <div id="FirstSlide" class="slide" style="z-index: 1000;">
@@ -69,12 +69,13 @@
     };
 
     var cronTick = function() {
+
+
+
         if ((new Date()).getSeconds() != 0) {
             return;
         }
 
-        // console.log('Cron Tick');
-        
         for (var i = 0; i < items.cron.length; i++) {
             var item = items.cron[i];
 
@@ -98,11 +99,54 @@
                 loadContent(curSlide, callbackReady, item);
             }
         }
-    }
+    };
 
     function main() {
         preloadSlide('SecondSlide', items.loop[curItemIndex])
         cronState.interval = setInterval(cronTick, 1000);
+    }
+
+    function preloadSlide(slide, item) {
+        var element = document.getElementById(slide);
+        var callbackReady = function (onSlideStart) {
+            var move = function () {
+                if (nextReady && !cronState.active) {
+                    moveToSlide(slide, item);
+                    onSlideStart();
+                } else {
+                    setTimeout(move, 1000);
+                }
+            }
+
+            setTimeout(move, duration);
+        };
+
+        loadContent(element, callbackReady, item);
+    }
+
+    function moveToSlide(slide, item) {
+        curSlide = document.getElementById(slide);
+        previousSlide = curSlide == firstSlide ? secondSlide : firstSlide;
+
+        duration = item.duration * 1000;
+        curItemIndex = (curItemIndex + 1) === items.loop.length ? 0 : curItemIndex + 1;
+
+        curSlide.style.zIndex = 1000;
+        previousSlide.style.zIndex = 500;
+
+        if (animate) {
+            curSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
+            curSlide.onanimationend = () => {
+                curSlide.classList.remove(animate_transitions[0], animate_speed);
+                preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
+            };
+            previousSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
+            previousSlide.onanimationend = () => {
+                previousSlide.classList.remove(animate_transitions[1], animate_speed);
+            };
+        } else {
+            preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
+        }
     }
 
     function loadContent(element, callbackReady, item) {
@@ -162,49 +206,6 @@
             }, Math.ceil(item.duration * 1.5));
         };
         callbackReady(onSlideStart);
-    }
-
-    function preloadSlide(slide, item) {
-        var element = document.getElementById(slide);
-        var callbackReady = function (onSlideStart) {
-            var move = function () {
-                if (nextReady && !cronState.active) {
-                    moveToSlide(slide, item);
-                    onSlideStart();
-                } else {
-                    setTimeout(move, 1000);
-                }
-            }
-
-            setTimeout(move, duration);
-        };
-
-        loadContent(element, callbackReady, item);
-    }
-
-    function moveToSlide(slide, item) {
-        curSlide = document.getElementById(slide);
-        previousSlide = curSlide == firstSlide ? secondSlide : firstSlide;
-
-        duration = item.duration * 1000;
-        curItemIndex = (curItemIndex + 1) === items.loop.length ? 0 : curItemIndex + 1;
-
-        curSlide.style.zIndex = 1000;
-        previousSlide.style.zIndex = 500;
-
-        if (animate) {
-            curSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
-            curSlide.onanimationend = () => {
-                curSlide.classList.remove(animate_transitions[0], animate_speed);
-                preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
-            };
-            previousSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
-            previousSlide.onanimationend = () => {
-                previousSlide.classList.remove(animate_transitions[1], animate_speed);
-            };
-        } else {
-            preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
-        }
     }
 
     main();

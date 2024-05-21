@@ -1,4 +1,5 @@
 import os
+import re
 import json
 import sqlite3
 import logging
@@ -6,6 +7,7 @@ import logging
 from sqlite3 import Cursor
 from src.utils import wrap_if, is_wrapped_by
 from typing import Optional, Dict
+
 
 class DatabaseManager:
 
@@ -28,10 +30,19 @@ class DatabaseManager:
         self._conn.row_factory = sqlite3.Row
 
     def open(self, table_name: str, table_model: list):
-        self.execute_write_query('''CREATE TABLE IF NOT EXISTS {} (
+        new_table_definition = '''CREATE TABLE IF NOT EXISTS {} (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
             {}
-        )'''.format(table_name, ", ".join(table_model)))
+        )'''.format(table_name, ", ".join(table_model))
+        self.execute_write_query(new_table_definition)
+
+        old_table_definition = self.execute_read_query("select sql from sqlite_master where tbl_name = ?", (table_name,))
+        old_table_definition = old_table_definition[0]['sql']
+
+        delta_queries = self.generate_delta_queries(old_table_definition, new_table_definition)
+
+        for delta_query in delta_queries:
+            self.execute_write_query(delta_query)
 
         return self
 
@@ -95,18 +106,19 @@ class DatabaseManager:
             query="select * from {} {}".format(table_name, "ORDER BY {} ASC".format(sort) if sort else "")
         )
 
-    def get_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None) -> list:
+    def get_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, values: dict = {}) -> list:
         return self.execute_read_query(
             query="select * from {} where {} {}".format(
                 table_name,
                 query,
                 "ORDER BY {} ASC".format(sort) if sort else ""
-            )
+            ),
+            params=tuple(v for v in values.values())
         )
 
-    def get_one_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None) -> list:
+    def get_one_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, values: dict = {}) -> list:
         query = "select * from {} where {} {}".format(table_name, query, "ORDER BY {} ASC".format(sort) if sort else "")
-        lines = self.execute_read_query(query=query)
+        lines = self.execute_read_query(query=query, params=tuple(v for v in values.values()))
         count = len(lines)
 
         if count > 1:
@@ -142,3 +154,55 @@ class DatabaseManager:
 
     def delete_by_id(self, table_name: str, id: int) -> None:
         self.execute_write_query("DELETE FROM {} WHERE id = ?".format(table_name), params=(id,))
+
+    @staticmethod
+    def parse_create_table_query(query: str):
+        table_name_pattern = re.compile(r'CREATE TABLE\s+(IF NOT EXISTS\s+)?["]?(\w+)["]?', re.IGNORECASE)
+        columns_pattern = re.compile(r'\((.*)\)', re.DOTALL)
+
+        table_name_match = table_name_pattern.search(query)
+        columns_match = columns_pattern.search(query)
+
+        if not table_name_match or not columns_match:
+            raise ValueError("Invalid CREATE TABLE query.")
+
+        table_name = table_name_match.group(2)
+        columns_part = columns_match.group(1)
+
+        # Split columns_part by commas but ignore commas inside parentheses
+        columns = re.split(r',\s*(?![^()]*\))', columns_part)
+
+        # Extract column names and their definitions
+        column_definitions = {}
+        for column in columns:
+            column_parts = column.strip().split(maxsplit=1)
+            column_name = column_parts[0]
+            column_definition = column.strip()
+            column_definitions[column_name] = column_definition
+
+        return table_name, column_definitions
+
+
+    @staticmethod
+    def generate_delta_queries(old_query: str, new_query: str) -> list:
+        old_table_name, old_columns = DatabaseManager.parse_create_table_query(old_query)
+        new_table_name, new_columns = DatabaseManager.parse_create_table_query(new_query)
+
+        if old_table_name != new_table_name:
+            raise ValueError("Table names do not match.")
+
+        old_column_names = set(old_columns.keys())
+        new_column_names = set(new_columns.keys())
+
+        columns_to_add = new_column_names - old_column_names
+        columns_to_remove = old_column_names - new_column_names
+
+        delta_queries = []
+
+        for column in columns_to_add:
+            delta_queries.append(f'ALTER TABLE {old_table_name} ADD COLUMN {new_columns[column]}')
+
+        for column in columns_to_remove:
+            delta_queries.append(f'ALTER TABLE {old_table_name} DROP COLUMN {column}')
+
+        return delta_queries

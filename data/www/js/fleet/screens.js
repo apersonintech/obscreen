@@ -16,7 +16,7 @@ jQuery(document).ready(function ($) {
             }
         }).tableDnDUpdate();
         updatePositions();
-    }
+    };
 
     const showModal = function (modalClass) {
         $modalsRoot.removeClass('hidden').find('form').trigger('reset');

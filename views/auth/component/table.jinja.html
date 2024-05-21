@@ -19,7 +19,9 @@
         <tr class="user-item" data-level="{{ user.id }}" data-entity="{{ user.to_json() }}">
             <td class="infos">
                 <div class="inner">
+                    <div class="badge"><i class="fa fa-key icon-left"></i> {{ user.id }}</div>
                     <i class="fa fa-user icon-left"></i>
+
                     {{ user.username }}
                 </div>
             </td>

@@ -9,6 +9,10 @@
             {{ l.slideshow_slide_form_section_content }}
         </h3>
 
+        {% if current_playlist %}
+            <input name="playlist" type="text" id="slide-add-playlist" value="{{ current_playlist.id }}">
+        {% endif %}
+
         <div class="form-group">
             <label for="slide-add-name">{{ l.slideshow_slide_form_label_name }}</label>
             <div class="widget">

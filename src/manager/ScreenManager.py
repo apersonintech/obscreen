@@ -12,7 +12,7 @@ class ScreenManager(ModelManager):
     TABLE_NAME = "fleet"
     TABLE_MODEL = [
         "name CHAR(255)",
-        "enabled INTEGER",
+        "enabled INTEGER DEFAULT 0",
         "position INTEGER",
         "host CHAR(255)",
         "port INTEGER"

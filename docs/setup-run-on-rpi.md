@@ -87,16 +87,16 @@ python ./obscreen.py
 
 #### Start server forever with systemctl
 ```bash
-cat "$(pwd)/system/obscreen-manager.service" | sed "s#/home/pi#$HOME#g" | sed "s#=pi#=$USER#g" | sudo tee /etc/systemd/system/obscreen-manager.service
+cat "$(pwd)/system/obscreen-composer.service" | sed "s#/home/pi#$HOME#g" | sed "s#=pi#=$USER#g" | sudo tee /etc/systemd/system/obscreen-composer.service
 sudo systemctl daemon-reload
-sudo systemctl enable obscreen-manager.service
-sudo systemctl start obscreen-manager.service
+sudo systemctl enable obscreen-composer.service
+sudo systemctl start obscreen-composer.service
 ```
 
 #### Troubleshoot
 ```bash
 # Watch logs with following command
-sudo journalctl -u obscreen-manager -f 
+sudo journalctl -u obscreen-composer -f 
 ```
 ---
 ## 🏁 Finally

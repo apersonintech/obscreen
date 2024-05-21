@@ -1,3 +1,4 @@
+from src.manager.PlaylistManager import PlaylistManager
 from src.manager.SlideManager import SlideManager
 from src.manager.ScreenManager import ScreenManager
 from src.manager.UserManager import UserManager
@@ -26,6 +27,7 @@ class ModelStore:
 
         # Model
         self._screen_manager = ScreenManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
+        self._playlist_manager = PlaylistManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
         self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
         self._variable_manager.reload()
 
@@ -43,6 +45,9 @@ class ModelStore:
 
     def slide(self) -> SlideManager:
         return self._slide_manager
+
+    def playlist(self) -> PlaylistManager:
+        return self._playlist_manager
 
     def screen(self) -> ScreenManager:
         return self._screen_manager
