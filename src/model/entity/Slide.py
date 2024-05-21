@@ -8,9 +8,10 @@ from src.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, location: str = '', duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, location: str = '', playlist: Optional[int] = None, duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._location = location
+        self._playlist = playlist
         self._duration = duration
         self._type = str_to_enum(type, SlideType) if isinstance(type, str) else type
         self._enabled = enabled
@@ -76,6 +77,14 @@ class Slide:
         self._type = value
 
     @property
+    def playlist(self) -> Optional[int]:
+        return self._playlist
+
+    @playlist.setter
+    def playlist(self, value: Optional[int]):
+        self._playlist = value
+
+    @property
     def cron_schedule(self) -> Optional[str]:
         return self._cron_schedule
 
@@ -136,6 +145,7 @@ class Slide:
                f"updated_by='{self.updated_by}',\n" \
                f"created_at='{self.created_at}',\n" \
                f"updated_at='{self.updated_at}',\n" \
+               f"playlist='{self.playlist}',\n" \
                f"cron_schedule='{self.cron_schedule}',\n" \
                f"cron_schedule_end='{self.cron_schedule_end}',\n" \
                f")"
@@ -161,6 +171,7 @@ class Slide:
             "updated_by": self.updated_by,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
+            "playlist": self.playlist,
             "cron_schedule": self.cron_schedule,
             "cron_schedule_end": self.cron_schedule_end,
         }

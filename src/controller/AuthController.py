@@ -9,14 +9,22 @@ from src.interface.ObController import ObController
 
 class AuthController(ObController):
 
+    def guard_auth(self, f):
+        def decorated_function(*args, **kwargs):
+            if not self._model_store.variable().map().get('auth_enabled').as_bool():
+                return redirect(url_for('manage'))
+            return f(*args, **kwargs)
+
+        return decorated_function
+
     def register(self):
         self._app.add_url_rule('/login', 'login', self.login, methods=['GET', 'POST'])
         self._app.add_url_rule('/logout', 'logout', self.logout, methods=['GET'])
-        self._app.add_url_rule('/auth/user/list', 'auth_user_list', self._auth(self.auth_user_list), methods=['GET'])
-        self._app.add_url_rule('/auth/user/add', 'auth_user_add', self._auth(self.auth_user_add), methods=['POST'])
-        self._app.add_url_rule('/auth/user/edit', 'auth_user_edit', self._auth(self.auth_user_edit), methods=['POST'])
-        self._app.add_url_rule('/auth/user/toggle', 'auth_user_toggle', self._auth(self.auth_user_toggle), methods=['POST'])
-        self._app.add_url_rule('/auth/user/delete', 'auth_user_delete', self._auth(self.auth_user_delete), methods=['DELETE'])
+        self._app.add_url_rule('/auth/user/list', 'auth_user_list', self.guard_auth(self._auth(self.auth_user_list)), methods=['GET'])
+        self._app.add_url_rule('/auth/user/add', 'auth_user_add', self.guard_auth(self._auth(self.auth_user_add)), methods=['POST'])
+        self._app.add_url_rule('/auth/user/edit', 'auth_user_edit', self.guard_auth(self._auth(self.auth_user_edit)), methods=['POST'])
+        self._app.add_url_rule('/auth/user/toggle', 'auth_user_toggle', self.guard_auth(self._auth(self.auth_user_toggle)), methods=['POST'])
+        self._app.add_url_rule('/auth/user/delete', 'auth_user_delete', self.guard_auth(self._auth(self.auth_user_delete)), methods=['DELETE'])
 
     def login(self):
         login_error = None

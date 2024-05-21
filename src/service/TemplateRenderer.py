@@ -9,7 +9,7 @@ from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
 from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.constant.WebDirConstant import WebDirConstant
-from src.utils import get_safe_cron_descriptor, is_validate_cron_date_time
+from src.utils import get_safe_cron_descriptor, is_validate_cron_date_time, seconds_to_hhmmss
 
 
 class TemplateRenderer:
@@ -26,14 +26,16 @@ class TemplateRenderer:
         globals = dict(
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
             SECRET_KEY=self._model_store.config().map().get('secret_key'),
-            FLEET_ENABLED=self._model_store.variable().map().get('fleet_enabled').as_bool(),
+            FLEET_COMPOSER_ENABLED=self._model_store.variable().map().get('fleet_composer_enabled').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
+            PLAYLIST_ENABLED=self._model_store.variable().map().get('playlist_enabled').as_bool(),
             track_created=self._model_store.user().track_user_created,
             track_updated=self._model_store.user().track_user_updated,
             VERSION=self._model_store.config().map().get('version'),
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,
             cron_descriptor=self.cron_descriptor,
+            seconds_to_hhmmss=seconds_to_hhmmss,
             is_validate_cron_date_time=is_validate_cron_date_time,
             l=self._model_store.lang().map(),
             t=self._model_store.lang().translate,

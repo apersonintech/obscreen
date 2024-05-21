@@ -15,7 +15,7 @@ class UserManager:
     TABLE_MODEL = [
         "username CHAR(255)",
         "password CHAR(255)",
-        "enabled INTEGER"
+        "enabled INTEGER DEFAULT 1"
     ]
 
     def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, on_user_delete):

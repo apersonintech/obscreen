@@ -15,6 +15,11 @@ class HookType(Enum):
     H_FLEET_CSS = 'h_fleet_css'
     H_FLEET_JAVASCRIPT = 'h_fleet_javascript'
 
+    H_PLAYLIST_TOOLBAR_ACTIONS_START = 'h_playlist_toolbar_actions_start'
+    H_PLAYLIST_TOOLBAR_ACTIONS_END = 'h_playlist_toolbar_actions_end'
+    H_PLAYLIST_CSS = 'h_playlist_css'
+    H_PLAYLIST_JAVASCRIPT = 'h_playlist_javascript'
+
     H_AUTH_TOOLBAR_ACTIONS_START = 'h_auth_toolbar_actions_start'
     H_AUTH_TOOLBAR_ACTIONS_END = 'h_auth_toolbar_actions_end'
     H_AUTH_CSS = 'h_auth_css'

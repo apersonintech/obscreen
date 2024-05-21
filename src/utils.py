@@ -1,7 +1,9 @@
 import os
 import re
+import uuid
 import logging
 import subprocess
+import unicodedata
 import platform
 
 
@@ -200,3 +202,22 @@ def get_yt_video_id(url: str) -> str:
         YouTube video id.
     """
     return regex_search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", url, group=1)
+
+
+def slugify(value):
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+    value = re.sub('[^\w\s-]', '', value).strip().lower()
+    return re.sub('[-\s]+', '-', value)
+
+
+def seconds_to_hhmmss(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    secs = seconds % 60
+    return f"{hours:02}:{minutes:02}:{secs:02}"
+
+
+def randomize_filename(old_filename: str) -> str:
+    new_uuid = str(uuid.uuid4())
+    _, extension = os.path.splitext(old_filename)
+    return f"{new_uuid}{extension}"

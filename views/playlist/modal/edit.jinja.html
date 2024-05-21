@@ -1,0 +1,27 @@
+<div class="modal modal-playlist-edit modal-playlist hidden">
+    <h2>
+        {{ l.playlist_form_edit_title }}
+    </h2>
+
+
+    <form action="/playlist/edit" method="POST">
+
+        <input type="hidden" name="id" id="playlist-edit-id" />
+
+        <div class="form-group">
+            <label for="playlist-edit-name">{{ l.playlist_form_label_name }}</label>
+            <div class="widget">
+                <input type="text" name="name" id="playlist-edit-name" required="required" />
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button type="button" class="btn-normal modal-close">
+                {{ l.playlist_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-save icon-left"></i>{{ l.playlist_form_edit_submit }}
+            </button>
+        </div>
+    </form>
+</div>

@@ -8,14 +8,22 @@ from src.interface.ObController import ObController
 
 class FleetController(ObController):
 
+    def guard_fleet(self, f):
+        def decorated_function(*args, **kwargs):
+            if not self._model_store.variable().map().get('fleet_composer_enabled').as_bool():
+                return redirect(url_for('manage'))
+            return f(*args, **kwargs)
+
+        return decorated_function
+
     def register(self):
-        self._app.add_url_rule('/fleet', 'fleet', self._auth(self.fleet), methods=['GET'])
-        self._app.add_url_rule('/fleet/screen/list', 'fleet_screen_list', self._auth(self.fleet_screen_list), methods=['GET'])
-        self._app.add_url_rule('/fleet/screen/add', 'fleet_screen_add', self._auth(self.fleet_screen_add), methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/edit', 'fleet_screen_edit', self._auth(self.fleet_screen_edit), methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/toggle', 'fleet_screen_toggle', self._auth(self.fleet_screen_toggle), methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/delete', 'fleet_screen_delete', self._auth(self.fleet_screen_delete), methods=['DELETE'])
-        self._app.add_url_rule('/fleet/screen/position', 'fleet_screen_position', self._auth(self.fleet_screen_position), methods=['POST'])
+        self._app.add_url_rule('/fleet', 'fleet', self.guard_fleet(self._auth(self.fleet)), methods=['GET'])
+        self._app.add_url_rule('/fleet/screen/list', 'fleet_screen_list', self.guard_fleet(self._auth(self.fleet_screen_list)), methods=['GET'])
+        self._app.add_url_rule('/fleet/screen/add', 'fleet_screen_add', self.guard_fleet(self._auth(self.fleet_screen_add)), methods=['POST'])
+        self._app.add_url_rule('/fleet/screen/edit', 'fleet_screen_edit', self.guard_fleet(self._auth(self.fleet_screen_edit)), methods=['POST'])
+        self._app.add_url_rule('/fleet/screen/toggle', 'fleet_screen_toggle', self.guard_fleet(self._auth(self.fleet_screen_toggle)), methods=['POST'])
+        self._app.add_url_rule('/fleet/screen/delete', 'fleet_screen_delete', self.guard_fleet(self._auth(self.fleet_screen_delete)), methods=['DELETE'])
+        self._app.add_url_rule('/fleet/screen/position', 'fleet_screen_position', self.guard_fleet(self._auth(self.fleet_screen_position)), methods=['POST'])
 
     def fleet(self):
         return render_template(
