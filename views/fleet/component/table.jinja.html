@@ -1,55 +1,55 @@
-<table class="{{ tclass }}-screens">
+<table class="{{ tclass }}-studios">
     <thead>
     <tr>
-        <th>{{ l.fleet_screen_panel_th_name }}</th>
-        <th class="tac">{{ l.fleet_screen_panel_th_host }}</th>
-        <th class="tac">{{ l.fleet_screen_panel_th_port }}</th>
-        <th class="tac">{{ l.fleet_screen_panel_th_enabled }}</th>
-        <th class="tac">{{ l.fleet_screen_panel_th_activity }}</th>
+        <th>{{ l.fleet_studio_panel_th_name }}</th>
+        <th class="tac">{{ l.fleet_studio_panel_th_host }}</th>
+        <th class="tac">{{ l.fleet_studio_panel_th_port }}</th>
+        <th class="tac">{{ l.fleet_studio_panel_th_enabled }}</th>
+        <th class="tac">{{ l.fleet_studio_panel_th_activity }}</th>
     </tr>
     </thead>
     <tbody>
-    <tr class="empty-tr {% if screens|length != 0 %}hidden{% endif %}">
+    <tr class="empty-tr {% if studios|length != 0 %}hidden{% endif %}">
         <td colspan="4">
-            {{ l.fleet_screen_panel_empty|replace(
+            {{ l.fleet_studio_panel_empty|replace(
                 '%link%',
-                ('<a href="javascript:void(0);" class="item-add screen-add">'~l.fleet_screen_button_add~'</a>')|safe
+                ('<a href="javascript:void(0);" class="item-add studio-add">'~l.fleet_studio_button_add~'</a>')|safe
             ) }}
         </td>
     </tr>
-    {% for screen in screens %}
-        <tr class="screen-item" data-level="{{ screen.id }}" data-entity="{{ screen.to_json() }}">
+    {% for studio in studios %}
+        <tr class="studio-item" data-level="{{ studio.id }}" data-entity="{{ studio.to_json() }}">
             <td class="infos">
                 <div class="inner">
-                    <a href="javascript:void(0);" class="item-sort screen-sort">
+                    <a href="javascript:void(0);" class="item-sort studio-sort">
                         <i class="fa fa-sort icon-left"></i>
                     </a>
 
-                    <div class="badge"><i class="fa fa-key icon-left"></i> {{ screen.id }}</div>
+                    <div class="badge"><i class="fa fa-key icon-left"></i> {{ studio.id }}</div>
 
-                    <i class="fa fa-tv icon-left"></i>
-                    {{ screen.name }}
+                    <i class="fa fa-server icon-left"></i>
+                    {{ studio.name }}
                 </div>
             </td>
             <td class="tac">
-                {{ screen.host }}
+                {{ studio.host }}
             </td>
             <td class="tac">
-                {{ screen.port }}
+                {{ studio.port }}
             </td>
             <td class="tac">
                 <label class="pure-material-switch">
-                    <input type="checkbox" {% if screen.enabled %}checked="checked"{% endif %}><span></span>
+                    <input type="checkbox" {% if studio.enabled %}checked="checked"{% endif %}><span></span>
                 </label>
             </td>
             <td class="actions tac">
-                <a href="javascript:void(0);" class="item-edit screen-edit">
+                <a href="javascript:void(0);" class="item-edit studio-edit">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <a href="http://{{ screen.host }}:{{ screen.port }}" class="item-download screen-download" target="_blank">
+                <a href="http://{{ studio.host }}:{{ studio.port }}" class="item-download studio-download" target="_blank">
                     <i class="fa fa-eye"></i>
                 </a>
-                <a href="javascript:void(0);" class="item-delete screen-delete">
+                <a href="javascript:void(0);" class="item-delete studio-delete">
                     <i class="fa fa-trash"></i>
                 </a>
             </td>

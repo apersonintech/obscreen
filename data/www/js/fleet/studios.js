@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
-    const $tableActive = $('table.active-screens');
-    const $tableInactive = $('table.inactive-screens');
+    const $tableActive = $('table.active-studios');
+    const $tableInactive = $('table.inactive-studios');
     const $modalsRoot = $('.modals');
 
     const getId = function ($el) {
@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
 
     const updateTable = function () {
         $('table').each(function () {
-            if ($(this).find('tbody tr.screen-item:visible').length === 0) {
+            if ($(this).find('tbody tr.studio-item:visible').length === 0) {
                 $(this).find('tr.empty-tr').removeClass('hidden');
             } else {
                 $(this).find('tr.empty-tr').addClass('hidden');
@@ -30,13 +30,13 @@ jQuery(document).ready(function ($) {
 
     const updatePositions = function (table, row) {
         const positions = {};
-        $('.screen-item').each(function (index) {
+        $('.studio-item').each(function (index) {
             positions[getId($(this))] = index;
         });
 
         $.ajax({
             method: 'POST',
-            url: '/fleet/screen/position',
+            url: '/fleet/studio/position',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify(positions),
         });
@@ -44,14 +44,14 @@ jQuery(document).ready(function ($) {
 
     const main = function () {
         $("table").tableDnD({
-            dragHandle: 'td a.screen-sort',
+            dragHandle: 'td a.studio-sort',
             onDrop: updatePositions
         });
     };
 
     $(document).on('change', 'input[type=checkbox]', function () {
         $.ajax({
-            url: '/fleet/screen/toggle',
+            url: '/fleet/studio/toggle',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
             method: 'POST',
@@ -68,16 +68,16 @@ jQuery(document).ready(function ($) {
         updateTable();
     });
 
-    $(document).on('change', '#screen-add-type', function () {
+    $(document).on('change', '#studio-add-type', function () {
         const value = $(this).val();
         const inputType = $(this).find('option').filter(function (i, el) {
             return $(el).val() === value;
         }).data('input');
 
-        $('.screen-add-object-input')
+        $('.studio-add-object-input')
             .addClass('hidden')
             .prop('disabled', true)
-            .filter('#screen-add-object-input-' + inputType)
+            .filter('#studio-add-object-input-' + inputType)
             .removeClass('hidden')
             .prop('disabled', false)
         ;
@@ -87,29 +87,29 @@ jQuery(document).ready(function ($) {
         hideModal();
     });
 
-    $(document).on('click', '.screen-add', function () {
-        showModal('modal-screen-add');
-        $('.modal-screen-add input:eq(0)').focus().select();
+    $(document).on('click', '.studio-add', function () {
+        showModal('modal-studio-add');
+        $('.modal-studio-add input:eq(0)').focus().select();
     });
 
-    $(document).on('click', '.screen-edit', function () {
-        const screen = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        showModal('modal-screen-edit');
-        $('.modal-screen-edit input:visible:eq(0)').focus().select();
-        $('#screen-edit-name').val(screen.name);
-        $('#screen-edit-host').val(screen.host);
-        $('#screen-edit-port').val(screen.port);
-        $('#screen-edit-id').val(screen.id);
+    $(document).on('click', '.studio-edit', function () {
+        const studio = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        showModal('modal-studio-edit');
+        $('.modal-studio-edit input:visible:eq(0)').focus().select();
+        $('#studio-edit-name').val(studio.name);
+        $('#studio-edit-host').val(studio.host);
+        $('#studio-edit-port').val(studio.port);
+        $('#studio-edit-id').val(studio.id);
     });
 
-    $(document).on('click', '.screen-delete', function () {
-        if (confirm(l.js_fleet_screen_delete_confirmation)) {
+    $(document).on('click', '.studio-delete', function () {
+        if (confirm(l.js_fleet_studio_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();
             $.ajax({
                 method: 'DELETE',
-                url: '/fleet/screen/delete',
+                url: '/fleet/studio/delete',
                 headers: {'Content-Type': 'application/json'},
                 data: JSON.stringify({id: getId($(this))}),
             });

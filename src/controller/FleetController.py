@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, render_template, redirect, request, url_for, jsonify
 from src.service.ModelStore import ModelStore
-from src.model.entity.Screen import Screen
+from src.model.entity.Studio import Studio
 from src.interface.ObController import ObController
 
 
@@ -10,7 +10,7 @@ class FleetController(ObController):
 
     def guard_fleet(self, f):
         def decorated_function(*args, **kwargs):
-            if not self._model_store.variable().map().get('fleet_composer_enabled').as_bool():
+            if not self._model_store.variable().map().get('fleet_studio_enabled').as_bool():
                 return redirect(url_for('manage'))
             return f(*args, **kwargs)
 
@@ -18,49 +18,49 @@ class FleetController(ObController):
 
     def register(self):
         self._app.add_url_rule('/fleet', 'fleet', self.guard_fleet(self._auth(self.fleet)), methods=['GET'])
-        self._app.add_url_rule('/fleet/screen/list', 'fleet_screen_list', self.guard_fleet(self._auth(self.fleet_screen_list)), methods=['GET'])
-        self._app.add_url_rule('/fleet/screen/add', 'fleet_screen_add', self.guard_fleet(self._auth(self.fleet_screen_add)), methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/edit', 'fleet_screen_edit', self.guard_fleet(self._auth(self.fleet_screen_edit)), methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/toggle', 'fleet_screen_toggle', self.guard_fleet(self._auth(self.fleet_screen_toggle)), methods=['POST'])
-        self._app.add_url_rule('/fleet/screen/delete', 'fleet_screen_delete', self.guard_fleet(self._auth(self.fleet_screen_delete)), methods=['DELETE'])
-        self._app.add_url_rule('/fleet/screen/position', 'fleet_screen_position', self.guard_fleet(self._auth(self.fleet_screen_position)), methods=['POST'])
+        self._app.add_url_rule('/fleet/studio/list', 'fleet_studio_list', self.guard_fleet(self._auth(self.fleet_studio_list)), methods=['GET'])
+        self._app.add_url_rule('/fleet/studio/add', 'fleet_studio_add', self.guard_fleet(self._auth(self.fleet_studio_add)), methods=['POST'])
+        self._app.add_url_rule('/fleet/studio/edit', 'fleet_studio_edit', self.guard_fleet(self._auth(self.fleet_studio_edit)), methods=['POST'])
+        self._app.add_url_rule('/fleet/studio/toggle', 'fleet_studio_toggle', self.guard_fleet(self._auth(self.fleet_studio_toggle)), methods=['POST'])
+        self._app.add_url_rule('/fleet/studio/delete', 'fleet_studio_delete', self.guard_fleet(self._auth(self.fleet_studio_delete)), methods=['DELETE'])
+        self._app.add_url_rule('/fleet/studio/position', 'fleet_studio_position', self.guard_fleet(self._auth(self.fleet_studio_position)), methods=['POST'])
 
     def fleet(self):
         return render_template(
             'fleet/fleet.jinja.html',
-            screens=self._model_store.screen().get_enabled_screens(),
+            studios=self._model_store.studio().get_enabled_studios(),
         )
 
-    def fleet_screen_list(self):
+    def fleet_studio_list(self):
         return render_template(
             'fleet/list.jinja.html',
-            enabled_screens=self._model_store.screen().get_enabled_screens(),
-            disabled_screens=self._model_store.screen().get_disabled_screens(),
+            enabled_studios=self._model_store.studio().get_enabled_studios(),
+            disabled_studios=self._model_store.studio().get_disabled_studios(),
         )
 
-    def fleet_screen_add(self):
-        self._model_store.screen().add_form(Screen(
+    def fleet_studio_add(self):
+        self._model_store.studio().add_form(Studio(
             name=request.form['name'],
             host=request.form['host'],
             port=request.form['port'],
         ))
-        return redirect(url_for('fleet_screen_list'))
+        return redirect(url_for('fleet_studio_list'))
 
-    def fleet_screen_edit(self):
-        self._model_store.screen().update_form(request.form['id'], request.form['name'], request.form['host'], request.form['port'])
-        return redirect(url_for('fleet_screen_list'))
+    def fleet_studio_edit(self):
+        self._model_store.studio().update_form(request.form['id'], request.form['name'], request.form['host'], request.form['port'])
+        return redirect(url_for('fleet_studio_list'))
 
-    def fleet_screen_toggle(self):
+    def fleet_studio_toggle(self):
         data = request.get_json()
-        self._model_store.screen().update_enabled(data.get('id'), data.get('enabled'))
+        self._model_store.studio().update_enabled(data.get('id'), data.get('enabled'))
         return jsonify({'status': 'ok'})
 
-    def fleet_screen_delete(self):
+    def fleet_studio_delete(self):
         data = request.get_json()
-        self._model_store.screen().delete(data.get('id'))
+        self._model_store.studio().delete(data.get('id'))
         return jsonify({'status': 'ok'})
 
-    def fleet_screen_position(self):
+    def fleet_studio_position(self):
         data = request.get_json()
-        self._model_store.screen().update_positions(data)
+        self._model_store.studio().update_positions(data)
         return jsonify({'status': 'ok'})

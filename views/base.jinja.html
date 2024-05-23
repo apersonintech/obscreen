@@ -63,10 +63,10 @@
                             </a>
                         </li>
                         {% endif %}
-                        {% if FLEET_COMPOSER_ENABLED %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_screen_list' }}">
-                            <a href="{{ url_for('fleet_screen_list') }}">
-                                <i class="fa fa-tv"></i> {{ l.fleet_page_title }}
+                        {% if FLEET_STUDIO_ENABLED %}
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_studio_list' }}">
+                            <a href="{{ url_for('fleet_studio_list') }}">
+                                <i class="fa fa-server"></i> {{ l.fleet_page_title }}
                             </a>
                         </li>
                         {% endif %}
@@ -124,7 +124,7 @@
     var l = {
         'js_playlist_delete_confirmation': '{{ l.js_playlist_delete_confirmation }}',
         'js_slideshow_slide_delete_confirmation': '{{ l.js_slideshow_slide_delete_confirmation }}',
-        'js_fleet_screen_delete_confirmation': '{{ l.js_fleet_screen_delete_confirmation }}',
+        'js_fleet_studio_delete_confirmation': '{{ l.js_fleet_studio_delete_confirmation }}',
         'js_auth_user_delete_confirmation': '{{ l.js_auth_user_delete_confirmation }}',
         'js_sysinfo_restart_confirmation': '{{ l.js_sysinfo_restart_confirmation }}',
         'js_sysinfo_restart_loading': '{{ l.js_sysinfo_restart_loading }}'

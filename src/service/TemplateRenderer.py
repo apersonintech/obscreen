@@ -26,7 +26,7 @@ class TemplateRenderer:
         globals = dict(
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
             SECRET_KEY=self._model_store.config().map().get('secret_key'),
-            FLEET_COMPOSER_ENABLED=self._model_store.variable().map().get('fleet_composer_enabled').as_bool(),
+            FLEET_STUDIO_ENABLED=self._model_store.variable().map().get('fleet_studio_enabled').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
             PLAYLIST_ENABLED=self._model_store.variable().map().get('playlist_enabled').as_bool(),
             track_created=self._model_store.user().track_user_created,
