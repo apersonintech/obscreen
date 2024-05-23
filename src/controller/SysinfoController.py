@@ -63,7 +63,7 @@ class SysinfoController(ObController):
             os.execl(python, python, *sys.argv)
         else:
             try:
-                subprocess.run(["sudo", "systemctl", "restart", 'obscreen-composer'], check=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                subprocess.run(["sudo", "systemctl", "restart", 'obscreen-studio'], check=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 pass
             except subprocess.TimeoutExpired:
                 pass

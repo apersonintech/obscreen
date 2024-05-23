@@ -1,5 +1,5 @@
 [Unit]
-Description=Obscreen Composer
+Description=Obscreen Studio
 After=network.target
 
 [Service]

@@ -10,7 +10,7 @@
 
 {% block add_js %}
     <script src="{{ STATIC_PREFIX }}js/lib/tablednd-fixed.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/fleet/screens.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/fleet/studios.js"></script>
     {{ HOOK(H_FLEET_JAVASCRIPT) }}
 {% endblock %}
 
@@ -20,25 +20,25 @@
 
         <div class="toolbar-actions">
             {{ HOOK(H_FLEET_TOOLBAR_ACTIONS_START) }}
-            <a class="btn normal" href="{{ url_for('fleet') }}" target="_blank"><i class="fa fa-table icon-left"></i>{{ l.fleet_screen_button_fleetview }}</a>
-            <button class="purple screen-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.fleet_screen_button_add }}</button>
+            <a class="btn normal" href="{{ url_for('fleet') }}" target="_blank"><i class="fa fa-table icon-left"></i>{{ l.fleet_studio_button_fleetview }}</a>
+            <button class="purple studio-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.fleet_studio_button_add }}</button>
             {{ HOOK(H_FLEET_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
     <div class="panel">
         <div class="panel-body">
-            <h3>{{ l.fleet_screen_panel_active }}</h3>
+            <h3>{{ l.fleet_studio_panel_active }}</h3>
 
-            {% with tclass='active', screens=enabled_screens %}
+            {% with tclass='active', studios=enabled_studios %}
                 {% include 'fleet/component/table.jinja.html' %}
             {% endwith %}
         </div>
     </div>
     <div class="panel panel-inactive">
         <div class="panel-body">
-            <h3>{{ l.fleet_screen_panel_inactive }}</h3>
+            <h3>{{ l.fleet_studio_panel_inactive }}</h3>
 
-            {% with tclass='inactive', screens=disabled_screens %}
+            {% with tclass='inactive', studios=disabled_studios %}
                 {% include 'fleet/component/table.jinja.html' %}
             {% endwith %}
         </div>
