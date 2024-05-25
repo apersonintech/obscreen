@@ -43,11 +43,12 @@
     var needHardRefresh = null;
 
     // Frontend config
-    var syncedWithTime = false;
-    var tickRefreshResolutionMs = 250;
+    var syncedWithTime = true;
+    var tickRefreshResolutionMs = 100;
 
     // Frontend flag updates
     var hasMoveOnce = false;
+    var forcePreload = false;
 
     // Player states infos
     var PLAY_STATE_PLAYING = 0, PLAY_STATE_PAUSE = 1;
@@ -126,6 +127,10 @@
     };
 
     var seek = function(timeInSeconds) {
+        if (forcePreload) {
+            return;
+        }
+
         if (syncedWithTime) {
             return console.warn('You can\'t call seek with synced playlists');
         }
@@ -133,8 +138,8 @@
         var maxDuration = getLoopDuration();
 
         if (timeInSeconds > maxDuration) {
-            timeInSeconds = maxDuration;
-            console.warn('Max duration is ' + maxDuration + ' seconds');
+            timeInSeconds = maxDuration - 1;
+            console.warn('Max duration is ' + timeInSeconds + ' seconds');
         }
 
         if (timeInSeconds < 0) {
@@ -142,6 +147,8 @@
         }
 
         clockValue = timeInSeconds * 1000;
+        forcePreload = true;
+        pause();
     };
 
     var lookupPreviousItem = function() {
@@ -167,6 +174,7 @@
         nextSlide = Array.from(document.getElementsByClassName('slide')).filter(function(slide) {
             return getComputedStyle(slide).zIndex === SLIDE_BOTTOM_Z;
         })[0];
+        console.log("top is", SLIDE_TOP_Z, curSlide, "bottom is", SLIDE_BOTTOM_Z, nextSlide)
     };
 
     var safe_duration = function(item) {
@@ -187,9 +195,7 @@
     var preloadSlide = function(slide, item) {
         console.log('Preload', slide, item.name)
         var element = document.getElementById(slide);
-        var callbackReady = function(onSlideStart) {
-            onSlideStart();
-        };
+        var callbackReady = function() {};
         loadContent(element, callbackReady, item);
     };
 
@@ -222,8 +228,15 @@
                     console.log('change to ', i , item.name)
                     curItemIndex = i;
                     var emptySlide = getEmptySlide();
-                    if (emptySlide && !hasMoveOnce) {
-                        preloadSlide(emptySlide.attributes['id'].value, item);
+                    if ((emptySlide && !hasMoveOnce) || forcePreload) {
+                        if (!hasMoveOnce) {
+                            if (secondsBeforeNext < 1) {
+                                continue;
+                            }
+                        }
+                        console.log('init preload');
+                        var slide = emptySlide ? emptySlide : nextSlide;
+                        preloadSlide(slide.attributes['id'].value, item);
                         hasMoveOnce = true;
                     }
                     moveToNextSlide();
@@ -239,39 +252,47 @@
         nextSlide.style.zIndex = SLIDE_TOP_Z; // first
         curSlide.style.zIndex = SLIDE_BOTTOM_Z; // second
 
-        console.log(curSlide.attributes['id'].value, "to", nextSlide.attributes['id'].value)
+        console.log("curSlide", curSlide.attributes['id'].value, curSlide.style.zIndex, "to", "next", nextSlide.attributes['id'].value, nextSlide.style.zIndex);
+        console.log("====");
 
         if (animate) {
             nextSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
             var loadingNextSlide = function () {
-                if (isPaused()) {
+                if (forcePreload) {
+                    forcePreload = false;
+                    play();
+                }
+
+                if (isPaused() && !syncedWithTime) {
                     return setTimeout(loadingNextSlide, 500);
                 }
-                if (secondsBeforeNext * 1000 > 1000) {
-                    return setTimeout(loadingNextSlide, 500);
-                }
-                console.log('pursuing... loading')
-                nextSlide.classList.remove(animate_transitions[0], animate_speed);
-                preloadSlide(curSlide.attributes['id'].value, lookupNextItem());
+
                 refreshSlidesOrder();
+                preloadSlide(nextSlide.attributes['id'].value, lookupNextItem());
             };
-            nextSlide.onanimationend = function() { loadingNextSlide(); };
+            nextSlide.onanimationend = function() {
+                nextSlide.classList.remove(animate_transitions[0], animate_speed);
+                loadingNextSlide();
+            };
 
             curSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
-            var unloadingNextSlide = function () {
-                if (isPaused()) {
-                    return setTimeout(unloadingNextSlide, 500);
-                }
-                if (secondsBeforeNext * 1000 > 1000) {
-                    return setTimeout(unloadingNextSlide, 500);
-                }
-                console.log('pursuing... unloading')
+            curSlide.onanimationend = function() {
                 curSlide.classList.remove(animate_transitions[1], animate_speed);
             };
-            curSlide.onanimationend = function() { unloadingNextSlide(); };
         } else {
-            preloadSlide(curSlide.attributes['id'].value, lookupNextItem());
-            refreshSlidesOrder();
+            var loadingNextSlide = function () {
+                if (forcePreload) {
+                    forcePreload = false;
+                    play();
+                }
+
+                if (isPaused() && !syncedWithTime) {
+                    return setTimeout(loadingNextSlide, 500);
+                }
+                refreshSlidesOrder();
+                preloadSlide(nextSlide.attributes['id'].value, lookupNextItem());
+            };
+            loadingNextSlide();
         }
     }
 
@@ -314,10 +335,6 @@
         delayNoisyContentJIT = lookupCurrentItem().id !== item.id ? delayNoisyContentJIT : 0;
 
         var autoplayLoader = function() {
-            if (isPaused()) {
-                return setTimeout(autoplayLoader, 500);
-            }
-
             if (secondsBeforeNext * 1000 > loadingDelayMs) {
                 return setTimeout(autoplayLoader, 500);
             }
@@ -332,21 +349,28 @@
     function loadVideo(element, callbackReady, item) {
         element.innerHTML = `<video><source src=${item.location} type="video/mp4" /></video>`;
         var video = element.querySelector('video');
+        callbackReady(function () {});
+
+        var loadingDelayMs = 0;
+        var delayNoisyContentJIT = Math.max(100, (lookupCurrentItem().duration * 1000) - loadingDelayMs);
+        delayNoisyContentJIT = lookupCurrentItem().id !== item.id ? delayNoisyContentJIT : 0;
+
         video.addEventListener('loadedmetadata', function () {
-            item.duration = Math.ceil(video.duration);
+            if (item.duration !== video.duration) {
+                console.warn('Given duration ' + item.duration + 's is different from video file ' + Math.ceil(video.duration) + 's');
+            }
         });
 
-        var onSlideStart = function () {
-            nextReady = false;
-            video.play();
-            video.addEventListener('ended', function () {
-                nextReady = true;
-            });
-            setTimeout(function () {
-                nextReady = true;
-            }, Math.ceil(item.duration * 1.5));
-        };
-        callbackReady(onSlideStart);
+        var autoplayLoader = function() {
+            if (secondsBeforeNext * 1000 > loadingDelayMs) {
+                return setTimeout(autoplayLoader, 500);
+            }
+
+            if (element.innerHTML.match('<video>')) {
+                video.play();
+            }
+        }
+        setTimeout(autoplayLoader, delayNoisyContentJIT);
     }
 
     var cronTick = function() {
@@ -370,30 +394,16 @@
         var savedSlide = curSlide.innerHTML;
         cronItemIndex = cronSlideIndex;
         pause();
-        var callbackReady = function(onSlideStart) {
-            onSlideStart();
+        var callbackReady = function() {
+            cronSlide.style.zIndex = '2000';
             setTimeout(function() {
-                console.log('STOOOP')
                 cronItemIndex = null;
-                {#curSlide.innerHTML = savedSlide;#}
-
-                refreshSlidesOrder()
-                SLIDE_TOP_Z = (parseInt(SLIDE_TOP_Z) * 5).toString();
-                SLIDE_BOTTOM_Z = (parseInt(SLIDE_BOTTOM_Z) * 5).toString();
-                curSlide.style.zIndex = SLIDE_BOTTOM_Z;
-                cronSlide.style.zIndex = SLIDE_TOP_Z;
-                moveToNextSlide();
-
+                curSlide.innerHTML = savedSlide;
+                cronSlide.style.zIndex = '0';
                 play();
             }, safe_duration(item) * 1000);
         };
 
-        refreshSlidesOrder()
-        SLIDE_TOP_Z = (parseInt(SLIDE_TOP_Z) * 5).toString();
-        SLIDE_BOTTOM_Z = (parseInt(SLIDE_BOTTOM_Z) * 5).toString();
-        cronSlide.style.zIndex = SLIDE_BOTTOM_Z;
-        curSlide.style.zIndex = SLIDE_TOP_Z;
-        moveToNextSlide();
         loadContent(cronSlide, callbackReady, item);
     }
 
