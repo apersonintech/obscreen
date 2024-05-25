@@ -32,6 +32,8 @@
     "slideshow_slide_form_label_cron_scheduled": "Start",
     "slideshow_slide_form_label_cron_scheduled_end": "End",
     "slideshow_slide_form_label_cron_scheduled_loop": "In the loop",
+    "slideshow_slide_form_label_cron_scheduled_duration": "Duration",
+    "slideshow_slide_form_label_cron_scheduled_duration_unit": "seconds",
     "slideshow_slide_form_label_cron_scheduled_datetime": "Date & Time",
     "slideshow_slide_form_label_cron_scheduled_datetime_placeholder": "Set a date and time",
     "slideshow_slide_form_label_cron_scheduled_cron": "Cron",

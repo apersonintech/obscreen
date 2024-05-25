@@ -32,6 +32,8 @@
     "slideshow_slide_form_label_cron_scheduled": "Début",
     "slideshow_slide_form_label_cron_scheduled_end": "Fin",
     "slideshow_slide_form_label_cron_scheduled_loop": "Dans la boucle",
+    "slideshow_slide_form_label_cron_scheduled_duration": "Durée",
+    "slideshow_slide_form_label_cron_scheduled_duration_unit": "secondes",
     "slideshow_slide_form_label_cron_scheduled_datetime": "Date & Heure",
     "slideshow_slide_form_label_cron_scheduled_datetime_placeholder": "Choisir une date et une heure",
     "slideshow_slide_form_label_cron_scheduled_cron": "Cron",
