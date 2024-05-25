@@ -55,6 +55,7 @@
     "playlist_form_edit_title": "Modification d'une liste de lecture",
     "playlist_form_edit_submit": "Enregistrer",
     "playlist_form_label_name": "Nom",
+    "playlist_form_label_time_sync": "Synchroniser les slides des lecteurs",
     "playlist_form_button_cancel": "Annuler",
     "js_playlist_delete_confirmation": "Êtes-vous sûr ?",
     "playlist_delete_has_slides": "La liste de lecture contient des sldies, supprimez-les avant et réessayez",

@@ -41,6 +41,7 @@ class PlaylistController(ObController):
     def playlist_add(self):
         playlist = Playlist(
             name=request.form['name'],
+            time_sync=request.form['time_sync'],
         )
 
         self._model_store.playlist().add_form(playlist)
@@ -51,6 +52,7 @@ class PlaylistController(ObController):
         self._model_store.playlist().update_form(
             id=request.form['id'],
             name=request.form['name'],
+            time_sync=request.form['time_sync'],
         )
         return redirect(url_for('playlist_list'))
 

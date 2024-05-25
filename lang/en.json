@@ -55,6 +55,7 @@
     "playlist_form_edit_title": "Edit Slide",
     "playlist_form_edit_submit": "Save",
     "playlist_form_label_name": "Name",
+    "playlist_form_label_time_sync": "Sync slides across players",
     "playlist_form_button_cancel": "Cancel",
     "js_playlist_delete_confirmation": "Are you sure?",
     "playlist_delete_has_slides": "Playlist has slides, please remove them before and retry",

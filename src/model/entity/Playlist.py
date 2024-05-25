@@ -6,11 +6,12 @@ from typing import Optional, Union
 
 class Playlist:
 
-    def __init__(self, name: str = 'Untitled', slug: str = 'untitled', id: Optional[int] = None, enabled: bool = False, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, name: str = 'Untitled', slug: str = 'untitled', id: Optional[int] = None, enabled: bool = False, time_sync: bool = True, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._name = name
         self._slug = slug
         self._enabled = enabled
+        self._time_sync = time_sync
         self._created_by = created_by if created_by else None
         self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
@@ -27,6 +28,14 @@ class Playlist:
     @enabled.setter
     def enabled(self, value: bool):
         self._enabled = bool(value)
+
+    @property
+    def time_sync(self) -> bool:
+        return bool(self._time_sync)
+
+    @time_sync.setter
+    def time_sync(self, value: bool):
+        self._time_sync = bool(value)
 
     @property
     def created_by(self) -> str:
@@ -82,6 +91,7 @@ class Playlist:
                f"name='{self.name}',\n" \
                f"nameslug='{self.slug}',\n" \
                f"enabled='{self.enabled}',\n" \
+               f"time_sync='{self.time_sync}',\n" \
                f"created_by='{self.created_by}',\n" \
                f"updated_by='{self.updated_by}',\n" \
                f"created_at='{self.created_at}',\n" \
@@ -102,6 +112,7 @@ class Playlist:
             "name": self.name,
             "slug": self.slug,
             "enabled": self.enabled,
+            "time_sync": self.time_sync,
             "created_by": self.created_by,
             "updated_by": self.updated_by,
             "created_at": self.created_at,

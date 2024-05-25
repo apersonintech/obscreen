@@ -2,6 +2,7 @@
     <thead>
     <tr>
         <th>{{ l.playlist_panel_th_name }}</th>
+        <th class="tac"><i class="fa fa-compass"></i></th>
         <th class="tac">{{ l.playlist_panel_th_enabled }}</th>
         <th class="tac">{{ l.playlist_panel_th_duration }}</th>
         <th class="tac">{{ l.playlist_panel_th_activity }}</th>
@@ -31,6 +32,13 @@
                 </div>
             </td>
             <td class="tac">
+                {% if playlist.time_sync %}
+                    ✅
+                {% else %}
+                    ❌
+                {% endif %}
+            </td>
+            <td class="tac">
                 {% if playlist.id %}
                     <label class="pure-material-switch">
                         <input type="checkbox" {% if playlist.enabled %}checked="checked"{% endif %}><span></span>
@@ -38,7 +46,12 @@
                 {% endif %}
             </td>
             <td class="tac">
-                {{ seconds_to_hhmmss(durations[playlist.id]) }}
+                {% set total_duration = seconds_to_hhmmss(durations[playlist.id]) %}
+                {% if total_duration %}
+                    {{ total_duration }}
+                {% else %}
+                    {{ l.common_empty }}
+                {% endif %}
             </td>
             <td class="actions tac">
                 {% if playlist.id %}

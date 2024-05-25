@@ -211,6 +211,8 @@ def slugify(value):
 
 
 def seconds_to_hhmmss(seconds):
+    if not seconds:
+        return ""
     hours = seconds // 3600
     minutes = (seconds % 3600) // 60
     secs = seconds % 60

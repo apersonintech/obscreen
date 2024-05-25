@@ -64,6 +64,7 @@ jQuery(document).ready(function ($) {
         showModal('modal-playlist-edit');
         $('.modal-playlist-edit input:visible:eq(0)').focus().select();
         $('#playlist-edit-name').val(playlist.name);
+        $('#playlist-edit-time-sync').val(playlist.time_sync ? '1' : '0');
         $('#playlist-edit-id').val(playlist.id);
     });
 
