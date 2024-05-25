@@ -131,8 +131,6 @@ xset s off
 xset -dpms
 xset s noblank
 
-# xscreensaver -no-splash
-
 # Start unclutter to hide the mouse cursor
 unclutter -display :0 -noevents -grab &
 
