@@ -1,38 +1,38 @@
-<div class="modal modal-screen-edit hidden">
+<div class="modal modal-studio-edit hidden">
     <h2>
-        {{ l.fleet_screen_form_edit_title }}
+        {{ l.fleet_studio_form_edit_title }}
     </h2>
 
-    <form action="/fleet/screen/edit" method="POST">
-        <input type="hidden" name="id" id="screen-edit-id" />
+    <form action="/fleet/studio/edit" method="POST">
+        <input type="hidden" name="id" id="studio-edit-id" />
 
         <div class="form-group">
-            <label for="screen-edit-name">{{ l.fleet_screen_form_label_name }}</label>
+            <label for="studio-edit-name">{{ l.fleet_studio_form_label_name }}</label>
             <div class="widget">
-                <input type="text" name="name" id="screen-edit-name" required="required" />
+                <input type="text" name="name" id="studio-edit-name" required="required" />
             </div>
         </div>
 
         <div class="form-group">
-            <label for="screen-edit-host">{{ l.fleet_screen_form_label_host }}</label>
+            <label for="studio-edit-host">{{ l.fleet_studio_form_label_host }}</label>
             <div class="widget">
-                <input type="text" name="host" id="screen-edit-host" required="required" />
+                <input type="text" name="host" id="studio-edit-host" required="required" />
             </div>
         </div>
 
         <div class="form-group">
-            <label for="screen-edit-port">{{ l.fleet_screen_form_label_port }}</label>
+            <label for="studio-edit-port">{{ l.fleet_studio_form_label_port }}</label>
             <div class="widget">
-                <input type="number" name="port" id="screen-edit-port" required="required" />
+                <input type="number" name="port" id="studio-edit-port" required="required" />
             </div>
         </div>
 
         <div class="actions">
             <button type="button" class="btn-normal modal-close">
-                {{ l.fleet_screen_form_button_cancel }}
+                {{ l.fleet_studio_form_button_cancel }}
             </button>
             <button type="submit" class="green">
-                <i class="fa fa-save icon-left"></i>{{ l.fleet_screen_form_edit_submit }}
+                <i class="fa fa-save icon-left"></i>{{ l.fleet_studio_form_edit_submit }}
             </button>
         </div>
     </form>

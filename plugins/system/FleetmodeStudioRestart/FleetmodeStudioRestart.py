@@ -7,13 +7,13 @@ from src.model.enum.HookType import HookType
 from src.model.hook.HookRegistration import HookRegistration
 
 
-class FleetmodeScreenRestart(ObPlugin):
+class FleetmodeStudioRestart(ObPlugin):
 
     def use_id(self):
-        return 'fleetmode_screen_restart'
+        return 'fleetmode_studio_restart'
 
     def use_title(self):
-        return 'Fleetmode Screen Restart'
+        return 'Fleetmode Studio Restart'
 
     def use_variables(self) -> List[Variable]:
         return [
