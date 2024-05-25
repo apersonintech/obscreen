@@ -391,9 +391,11 @@
         pause();
         var callbackReady = function() {
             cronSlide.style.zIndex = '2000';
-            setTimeout(function() {
-                stopCronSlide();
-            }, safe_duration(item) * 1000);
+            if (!item.cron_schedule_end) {
+                setTimeout(function () {
+                    stopCronSlide();
+                }, safe_duration(item) * 1000);
+            }
         };
         loadContent(cronSlide, callbackReady, item);
     }
