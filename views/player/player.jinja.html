@@ -174,7 +174,7 @@
         nextSlide = Array.from(document.getElementsByClassName('slide')).filter(function(slide) {
             return getComputedStyle(slide).zIndex === SLIDE_BOTTOM_Z;
         })[0];
-        console.log("top is", SLIDE_TOP_Z, curSlide, "bottom is", SLIDE_BOTTOM_Z, nextSlide)
+        //console.log("top is", SLIDE_TOP_Z, curSlide, "bottom is", SLIDE_BOTTOM_Z, nextSlide)
     };
 
     var safe_duration = function(item) {
@@ -193,7 +193,7 @@
     };
 
     var preloadSlide = function(slide, item) {
-        console.log('Preload', slide, item.name)
+        //console.log('Preload', slide, item.name)
         var element = document.getElementById(slide);
         var callbackReady = function() {};
         loadContent(element, callbackReady, item);
@@ -220,23 +220,28 @@
 
             if (i === curItemIndex) {
                 secondsBeforeNext = accumulatedTime + safe_duration(item) - timeInCurrentLoop;
-                console.log("remaining:", secondsBeforeNext, "clock:",clockValue, curItemIndex);
+                //console.log("remaining:", secondsBeforeNext, "clock:",clockValue, curItemIndex);
             }
 
             if (timeInCurrentLoop < accumulatedTime + safe_duration(item)) {
+
                 if (curItemIndex !== i) {
-                    console.log('change to ', i , item.name)
+                    //console.log('change to ', i , item.name)
                     curItemIndex = i;
+
                     var emptySlide = getEmptySlide();
                     if ((emptySlide && !hasMoveOnce) || forcePreload) {
-                        if (!hasMoveOnce) {
-                            if (secondsBeforeNext < 1) {
+                        //console.log('init preload');
+                        var slide = emptySlide ? emptySlide : nextSlide;
+                        preloadSlide(slide.attributes['id'].value, item);
+
+                        if (!hasMoveOnce && syncedWithTime) {
+                            if (accumulatedTime + safe_duration(item) - timeInCurrentLoop < 1) {
+                                // Prevent glitch when syncedWithTime for first init
                                 continue;
                             }
                         }
-                        console.log('init preload');
-                        var slide = emptySlide ? emptySlide : nextSlide;
-                        preloadSlide(slide.attributes['id'].value, item);
+
                         hasMoveOnce = true;
                     }
                     moveToNextSlide();
@@ -252,8 +257,8 @@
         nextSlide.style.zIndex = SLIDE_TOP_Z; // first
         curSlide.style.zIndex = SLIDE_BOTTOM_Z; // second
 
-        console.log("curSlide", curSlide.attributes['id'].value, curSlide.style.zIndex, "to", "next", nextSlide.attributes['id'].value, nextSlide.style.zIndex);
-        console.log("====");
+        //console.log("curSlide", curSlide.attributes['id'].value, curSlide.style.zIndex, "to", "next", nextSlide.attributes['id'].value, nextSlide.style.zIndex);
+        //console.log("###");
 
         if (animate) {
             nextSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
