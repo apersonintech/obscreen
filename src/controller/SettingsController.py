@@ -33,7 +33,7 @@ class SettingsController(ObController):
         if variable.name == 'slide_upload_limit':
             self.reload_web_server()
 
-        if variable.name == 'fleet_enabled':
+        if variable.name == 'fleet_studio_enabled':
             self.reload_web_server()
 
         if variable.name == 'auth_enabled':

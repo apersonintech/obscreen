@@ -8,7 +8,7 @@ from src.service.ModelStore import ModelStore
 from src.model.entity.Slide import Slide
 from src.model.enum.SlideType import SlideType
 from src.interface.ObController import ObController
-from src.utils import str_to_enum, get_optional_string
+from src.utils import str_to_enum, get_optional_string, randomize_filename
 
 
 class SlideshowController(ObController):
@@ -16,6 +16,7 @@ class SlideshowController(ObController):
     def register(self):
         self._app.add_url_rule('/manage', 'manage', self.manage, methods=['GET'])
         self._app.add_url_rule('/slideshow', 'slideshow_slide_list', self._auth(self.slideshow), methods=['GET'])
+        self._app.add_url_rule('/slideshow/playlist/set/<playlist_id>', 'slideshow_slide_list_playlist_use', self._auth(self.slideshow), methods=['GET'])
         self._app.add_url_rule('/slideshow/slide/add', 'slideshow_slide_add', self._auth(self.slideshow_slide_add), methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/edit', 'slideshow_slide_edit', self._auth(self.slideshow_slide_edit), methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/toggle', 'slideshow_slide_toggle', self._auth(self.slideshow_slide_toggle), methods=['POST'])
@@ -26,11 +27,15 @@ class SlideshowController(ObController):
     def manage(self):
         return redirect(url_for('slideshow_slide_list'))
 
-    def slideshow(self):
+    def slideshow(self, playlist_id: int = 0):
+        current_playlist = self._model_store.playlist().get(playlist_id)
+        playlist_id = current_playlist.id if current_playlist else None
         return render_template(
             'slideshow/list.jinja.html',
-            enabled_slides=self._model_store.slide().get_enabled_slides(),
-            disabled_slides=self._model_store.slide().get_disabled_slides(),
+            current_playlist=current_playlist,
+            playlists=self._model_store.playlist().get_enabled_playlists(),
+            enabled_slides=self._model_store.slide().get_slides(playlist_id=playlist_id, enabled=True),
+            disabled_slides=self._model_store.slide().get_slides(playlist_id=playlist_id, enabled=False),
             var_last_restart=self._model_store.variable().get_one_by_name('last_restart'),
             var_external_url=self._model_store.variable().get_one_by_name('external_url'),
             enum_slide_type=SlideType
@@ -41,6 +46,7 @@ class SlideshowController(ObController):
             name=request.form['name'],
             type=str_to_enum(request.form['type'], SlideType),
             duration=request.form['duration'],
+            playlist=request.form['playlist'] if 'playlist' in request.form else None,
             cron_schedule=get_optional_string(request.form['cron_schedule']),
             cron_schedule_end=get_optional_string(request.form['cron_schedule_end']),
         )
@@ -55,7 +61,7 @@ class SlideshowController(ObController):
                 return redirect(request.url)
 
             if object:
-                object_name = secure_filename(object.filename)
+                object_name = randomize_filename(object.filename)
                 object_path = os.path.join(self._app.config['UPLOAD_FOLDER'], object_name)
                 object.save(object_path)
                 slide.location = object_path
@@ -65,10 +71,13 @@ class SlideshowController(ObController):
         self._model_store.slide().add_form(slide)
         self._post_update()
 
+        if slide.playlist:
+            return redirect(url_for('slideshow_slide_list_playlist_use', playlist_id=slide.playlist))
+
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_edit(self):
-        self._model_store.slide().update_form(
+        slide = self._model_store.slide().update_form(
             id=request.form['id'],
             name=request.form['name'],
             duration=request.form['duration'],
@@ -77,6 +86,10 @@ class SlideshowController(ObController):
             location=request.form['location'] if 'location' in request.form else None
         )
         self._post_update()
+
+        if slide.playlist:
+            return redirect(url_for('slideshow_slide_list_playlist_use', playlist_id=slide.playlist))
+
         return redirect(url_for('slideshow_slide_list'))
 
     def slideshow_slide_toggle(self):
