@@ -1,0 +1,56 @@
+<table class="{{ tclass }}-playlists">
+    <thead>
+    <tr>
+        <th>{{ l.playlist_panel_th_name }}</th>
+        <th class="tac">{{ l.playlist_panel_th_enabled }}</th>
+        <th class="tac">{{ l.playlist_panel_th_duration }}</th>
+        <th class="tac">{{ l.playlist_panel_th_activity }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="empty-tr {% if playlists|length != 0 %}hidden{% endif %}">
+        <td colspan="4">
+            {{ l.playlist_panel_empty|replace(
+                '%link%',
+                ('<a href="javascript:void(0);" class="item-add playlist-add">'~l.playlist_button_add~'</a>')|safe
+            ) }}
+        </td>
+    </tr>
+    {% for playlist in playlists %}
+        <tr class="playlist-item" data-level="{{ playlist.id }}" data-entity="{{ playlist.to_json() }}">
+            <td class="infos">
+                <div class="inner">
+                    {% if playlist.id %}
+                        <div class="badge"><i class="fa fa-key icon-left"></i> {{ playlist.id }}</div>
+                    {% else %}
+                        <div class="badge"><i class="fa fa-lock"></i></div>
+                    {% endif %}
+                    <i class="fa fa-bars-staggered icon-left"></i>
+
+                    {{ playlist.name }}
+                </div>
+            </td>
+            <td class="tac">
+                {% if playlist.id %}
+                    <label class="pure-material-switch">
+                        <input type="checkbox" {% if playlist.enabled %}checked="checked"{% endif %}><span></span>
+                    </label>
+                {% endif %}
+            </td>
+            <td class="tac">
+                {{ seconds_to_hhmmss(durations[playlist.id]) }}
+            </td>
+            <td class="actions tac">
+                {% if playlist.id %}
+                <a href="javascript:void(0);" class="item-edit playlist-edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a href="javascript:void(0);" class="item-delete playlist-delete">
+                    <i class="fa fa-trash"></i>
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

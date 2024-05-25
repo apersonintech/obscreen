@@ -12,6 +12,7 @@ from src.service.TemplateRenderer import TemplateRenderer
 from src.controller.PlayerController import PlayerController
 from src.controller.SlideshowController import SlideshowController
 from src.controller.FleetController import FleetController
+from src.controller.PlaylistController import PlaylistController
 from src.controller.AuthController import AuthController
 from src.controller.SysinfoController import SysinfoController
 from src.controller.SettingsController import SettingsController
@@ -106,6 +107,7 @@ class WebServer:
         SettingsController(self, self._app, auth_required, self._model_store, self._template_renderer)
         SysinfoController(self, self._app, auth_required, self._model_store, self._template_renderer)
         FleetController(self, self._app, auth_required, self._model_store, self._template_renderer)
+        PlaylistController(self, self._app, auth_required, self._model_store, self._template_renderer)
         AuthController(self, self._app, auth_required, self._model_store, self._template_renderer)
 
     def _setup_web_globals(self) -> None:

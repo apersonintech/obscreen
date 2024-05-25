@@ -1,36 +1,36 @@
-<div class="modal modal-screen-add">
+<div class="modal modal-studio-add">
     <h2>
-        {{ l.fleet_screen_form_add_title }}
+        {{ l.fleet_studio_form_add_title }}
     </h2>
 
-    <form action="/fleet/screen/add" method="POST" enctype="multipart/form-data">
+    <form action="/fleet/studio/add" method="POST" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="screen-add-name">{{ l.fleet_screen_form_label_name }}</label>
+            <label for="studio-add-name">{{ l.fleet_studio_form_label_name }}</label>
             <div class="widget">
-                <input name="name" type="text" id="screen-add-name" required="required" />
+                <input name="name" type="text" id="studio-add-name" required="required" />
             </div>
         </div>
 
         <div class="form-group">
-            <label for="screen-add-host">{{ l.fleet_screen_form_label_host }}</label>
+            <label for="studio-add-host">{{ l.fleet_studio_form_label_host }}</label>
             <div class="widget">
-                <input type="text" name="host" id="screen-add-host" required="required" />
+                <input type="text" name="host" id="studio-add-host" required="required" />
             </div>
         </div>
 
         <div class="form-group">
-            <label for="screen-add-port">{{ l.fleet_screen_form_label_port }}</label>
+            <label for="studio-add-port">{{ l.fleet_studio_form_label_port }}</label>
             <div class="widget">
-                <input type="number" name="port" id="screen-add-port" required="required" />
+                <input type="number" name="port" id="studio-add-port" required="required" />
             </div>
         </div>
 
         <div class="actions">
             <button type="button" class="btn-normal modal-close">
-                {{ l.fleet_screen_form_button_cancel }}
+                {{ l.fleet_studio_form_button_cancel }}
             </button>
             <button type="submit" class="green">
-                <i class="fa fa-plus icon-left"></i> {{ l.fleet_screen_form_add_submit }}
+                <i class="fa fa-plus icon-left"></i> {{ l.fleet_studio_form_add_submit }}
             </button>
         </div>
     </form>
