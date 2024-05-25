@@ -26,9 +26,9 @@ class ModelStore:
         self._logging_manager = LoggingManager(config_manager=self._config_manager)
 
         # Model
-        self._studio_manager = StudioManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
-        self._playlist_manager = PlaylistManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
-        self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
+        self._studio_manager = StudioManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
+        self._playlist_manager = PlaylistManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
+        self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._variable_manager.reload()
 
     def logging(self) -> LoggingManager:

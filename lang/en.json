@@ -120,6 +120,7 @@
     "settings_variable_desc_slide_upload_limit": "Slide upload limit (in megabytes)",
     "settings_variable_desc_default_slide_duration": "Intro slide duration (in seconds)",
     "settings_variable_desc_polling_interval": "Refresh interval applied for settings to the player (in seconds)",
+    "settings_variable_desc_playlist_default_time_sync": "Sync slides across players for default playlist",
 
     "settings_variable_desc_slide_animation_enabled": "Enable animation effect between slides",
     "settings_variable_desc_slide_animation_entrance_effect": "Slide animation entrance effect",
@@ -186,6 +187,9 @@
     "enum_variable_section_general": "1. General",
     "enum_variable_section_player_options": "2. Player options",
     "enum_variable_section_player_animation": "3. Player animation",
+    "enum_variable_section_playlist": "4. Playlists",
+    "enum_variable_section_fleet": "5. Fleet management",
+    "enum_variable_section_security": "6. Security",
     "enum_application_language_english": "English",
     "enum_application_language_french": "French",
     "enum_slide_type_url": "URL",

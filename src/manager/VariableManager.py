@@ -5,7 +5,6 @@ from typing import Dict, Optional, List, Tuple, Union
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
-from src.service.ModelManager import ModelManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
 from src.model.enum.ApplicationLanguage import ApplicationLanguage
@@ -20,7 +19,7 @@ from src.utils import get_keys, enum_to_str, enum_to_dict
 SELECTABLE_BOOLEAN = {"1": "✅", "0": "❌"}
 
 
-class VariableManager(ModelManager):
+class VariableManager:
 
     TABLE_NAME = "settings"
     TABLE_MODEL = [
@@ -38,10 +37,14 @@ class VariableManager(ModelManager):
     ]
 
     def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
-        super().__init__(lang_manager, database_manager, user_manager)
+        self._lang_manager = lang_manager
+        self._user_manager = user_manager
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
         self._var_map = {}
         self.reload()
+
+    def t(self, token) -> Union[Dict, str]:
+        return self._lang_manager.translate(token)
 
     def set_variable(self, name: str, value, type: VariableType, editable: bool, description: str, description_edition: str = '', plugin: Optional[None] = None, selectables: Optional[Dict[str, str]] = None, unit: Optional[VariableUnit] = None, section: str = '', refresh_player: bool = False) -> Variable:
         if isinstance(value, bool) and value:
@@ -103,9 +106,6 @@ class VariableManager(ModelManager):
 
             ### General
             {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": self.t(ApplicationLanguage), "refresh_player": False},
-            {"name": "auth_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled'), "refresh_player": False},
-            {"name": "fleet_studio_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_studio_enabled'), "refresh_player": False},
-            {"name": "playlist_enabled", "section": self.t(VariableSection.GENERAL), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_enabled'), "refresh_player": False},
             {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": True, "description": self.t('settings_variable_desc_external_url'), "refresh_player": False},
             {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32, "unit": VariableUnit.MEGABYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
 
@@ -113,11 +113,21 @@ class VariableManager(ModelManager):
             {"name": "default_slide_duration", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 3, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_default_slide_duration'), "refresh_player": False},
             {"name": "polling_interval", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 5, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_polling_interval'), "refresh_player": True},
 
-             ### Player Animation
+            ### Player Animation
             {"name": "slide_animation_enabled", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_slide_animation_enabled'), "refresh_player": True},
             {"name": "slide_animation_entrance_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_entrance_effect'), "selectables": enum_to_dict(AnimationEntranceEffect), "refresh_player": True},
             {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect), "refresh_player": True},
             {"name": "slide_animation_speed", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_speed'), "selectables": self.t(AnimationSpeed), "refresh_player": True},
+
+            ### Playlists
+            {"name": "playlist_enabled", "section": self.t(VariableSection.PLAYLIST), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_enabled'), "refresh_player": False},
+            {"name": "playlist_default_time_sync", "section": self.t(VariableSection.PLAYLIST), "value": True, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_default_time_sync'), "refresh_player": True},
+
+            ### Fleet Management
+            {"name": "fleet_studio_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_studio_enabled'), "refresh_player": False},
+
+            ### Security
+            {"name": "auth_enabled", "section": self.t(VariableSection.SECURITY), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled'), "refresh_player": False},
 
             # Not editable (System information)
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},
