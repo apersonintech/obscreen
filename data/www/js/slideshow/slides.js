@@ -18,23 +18,26 @@ jQuery(document).ready(function ($) {
         return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')} `
     }
 
-    const loadDateTimePicker = function($el) {
-        $el.val('');
-        const pickr = $el.flatpickr({
-            enableTime: true,
-            time_24hr: true,
-            allowInput: false,
-            allowInvalidPreload: false,
-            dateFormat: 'Y-m-d H:i',
-            onChange: function(selectedDates, dateStr, instance) {
-                const d = selectedDates[0];
-                const $target = $el.parents('.widget:eq(0)').find('.target');
-                $target.val(
-                    d ? `${d.getMinutes()} ${d.getHours()} ${d.getDate()} ${(d.getMonth() + 1)} * ${d.getFullYear()}` : ''
-                );
-            }
-        });
-        $el.addClass('hidden');
+    const loadDateTimePicker = function($els) {
+        $els.each(function() {
+            var $el = $(this);
+            $el.val('');
+            const pickr = $el.flatpickr({
+                enableTime: true,
+                time_24hr: true,
+                allowInput: false,
+                allowInvalidPreload: false,
+                dateFormat: 'Y-m-d H:i',
+                onChange: function(selectedDates, dateStr, instance) {
+                    const d = selectedDates[0];
+                    const $target = $el.parents('.widget:eq(0)').find('.target');
+                    $target.val(
+                        d ? `${d.getMinutes()} ${d.getHours()} ${d.getDate()} ${(d.getMonth() + 1)} * ${d.getFullYear()}` : ''
+                    );
+                }
+            });
+            $el.addClass('hidden');
+        })
     };
 
     const getId = function ($el) {
@@ -90,7 +93,51 @@ jQuery(document).ready(function ($) {
             .removeClass('hidden')
             .prop('disabled', false)
         ;
-    }
+    };
+
+    const inputSchedulerUpdate = function() {
+        const $modal = $('.modal-slide:visible');
+        const $scheduleStartGroup = $modal.find('.slide-schedule-group');
+        const $scheduleEndGroup = $modal.find('.slide-schedule-end-group');
+        const $durationGroup = $modal.find('.slide-duration-group');
+
+        const $triggerStart = $scheduleStartGroup.find('.trigger');
+        const $triggerEnd = $scheduleEndGroup.find('.trigger');
+        const $targetCronFieldStart = $scheduleStartGroup.find('.target');
+        const $targetCronFieldEnd = $scheduleEndGroup.find('.target');
+
+        const $datetimepickerStart = $scheduleStartGroup.find('.datetimepicker');
+        const $datetimepickerEnd = $scheduleEndGroup.find('.datetimepicker');
+
+        const isCronStart = $triggerStart.val() === 'cron';
+        const isCronEnd = $triggerEnd.val() === 'cron';
+        const isDatetimeStart = $triggerStart.val() === 'datetime';
+        const isDatetimeEnd = $triggerEnd.val() === 'datetime';
+        const isLoopStart = $triggerStart.val() === 'loop';
+        const isDurationEnd = $triggerEnd.val() === 'duration';
+        const flushValueStart = isLoopStart;
+        const flushValueEnd = isDurationEnd;
+
+        $targetCronFieldStart.toggleClass('hidden', !isCronStart);
+        $targetCronFieldEnd.toggleClass('hidden', !isCronEnd);
+        $datetimepickerStart.toggleClass('hidden', !isDatetimeStart);
+        $datetimepickerEnd.toggleClass('hidden', !isDatetimeEnd);
+
+        $durationGroup.toggleClass('hidden', !isLoopStart && !isDurationEnd);
+        $scheduleEndGroup.toggleClass('hidden', isLoopStart);
+
+        $durationGroup.find('.widget input').prop('required', $durationGroup.is(':visible'));
+
+        if (flushValueStart) {
+            $targetCronFieldStart.val('');
+            $datetimepickerStart.val('');
+        }
+
+        if (flushValueEnd) {
+            $targetCronFieldEnd.val('');
+            $datetimepickerEnd.val('');
+        }
+    };
 
     const main = function () {
         $("table").tableDnD({
@@ -119,28 +166,7 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('change', '.modal-slide select.trigger', function () {
-        const $modal = $(this).parents('.modal-slide:eq(0)');
-        const $target = $(this).parents('.widget:eq(0)').find('.target');
-        const $datetimepicker = $(this).parents('.widget:eq(0)').find('.datetimepicker');
-        const $durationGroup = $modal.find('.slide-duration-group');
-        const $scheduleEndGroup = $modal.find('.slide-schedule-end-group');
-
-        const isDateTime = $(this).val() === 'datetime';
-        const isLoop = $(this).val() === 'loop';
-        const flushValue = isLoop;
-
-        const hideCronField = isLoop || isDateTime;
-        const hideDateTimeField = !isDateTime;
-
-        $target.toggleClass('hidden', hideCronField);
-        $datetimepicker.toggleClass('hidden', hideDateTimeField);
-        // $durationGroup.toggleClass('hidden', !isLoop);
-        // $scheduleEndGroup.toggleClass('hidden', isLoop);
-
-        if (flushValue) {
-            $target.val('');
-            $datetimepicker.val('');
-        }
+        inputSchedulerUpdate();
     });
 
     $(document).on('change', '#slide-add-type', inputTypeUpdate);
@@ -153,6 +179,7 @@ jQuery(document).ready(function ($) {
         showModal('modal-slide-add');
         loadDateTimePicker($('.modal-slide-add .datetimepicker'))
         inputTypeUpdate();
+        inputSchedulerUpdate();
         $('.modal-slide-add input:eq(0)').focus().select();
     });
 
@@ -192,7 +219,7 @@ jQuery(document).ready(function ($) {
         $('#slide-edit-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
 
         $('#slide-edit-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || hasDateTimeEnd);
-        $('#slide-edit-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : 'loop'));
+        $('#slide-edit-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : 'duration'));
 
         $('#slide-edit-cron-schedule-datetimepicker').toggleClass('hidden', !hasDateTime).val(
             hasDateTime ? getCronDateTime(slide.cron_schedule) : ''
@@ -202,6 +229,7 @@ jQuery(document).ready(function ($) {
             hasDateTimeEnd ? getCronDateTime(slide.cron_schedule_end) : ''
         );
         $('#slide-edit-id').val(slide.id);
+        inputSchedulerUpdate();
     });
 
     $(document).on('click', '.slide-delete', function () {

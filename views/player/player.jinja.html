@@ -6,7 +6,7 @@
     <meta name="google" content="notranslate">
     <link rel="shortcut icon" href="{{ STATIC_PREFIX }}/favicon.ico">
     {% if slide_animation_enabled.eval() %}
-        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/animate.min.css" />
+        <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/animate.min.css" />
     {% endif %}
     <style>
         html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: white; display: flex; flex-direction: row; justify-content: center; align-items: center; }
@@ -15,26 +15,73 @@
         .slide iframe { background: white; }
         .slide img { height: 100%; }
     </style>
-    <script type="application/javascript" src="{{ STATIC_PREFIX }}js/is-cron-now.js"></script>
+    <script type="application/javascript" src="{{ STATIC_PREFIX }}js/lib/is-cron-now.js"></script>
 </head>
 <body>
-<div id="FirstSlide" class="slide" style="z-index: 1000;">
+<div id="IntroSlide" class="slide" style="z-index: 10000;">
     {% if default_slide_duration.eval() > 0 %}
         <iframe src="/player/default"></iframe>
     {% endif %}
 </div>
-<div id="SecondSlide" class="slide" style="z-index: 500;">
-    {% if default_slide_duration.eval() > 0 %}
-        <iframe src="/player/default"></iframe>
-    {% endif %}
+<div id="CronSlide" class="slide" style="z-index: 0;">
+
 </div>
+<div id="FirstSlide" class="slide slide-loop" style="z-index: 500;">
+
+</div>
+<div id="SecondSlide" class="slide slide-loop" style="z-index: 1000;">
+
+</div>
+
 <script type="text/javascript">
+    // Backend config
     var items = {{items | safe}};
-    var duration = {{ default_slide_duration.eval() * 1000 }};
-    var playlistCheck = {{ polling_interval.eval() * 1000 }};
-    var curItemIndex = 0;
+    var introDuration = {{ default_slide_duration.eval() * 1000 }};
+    var playlistCheckResolutionMs = {{ polling_interval.eval() * 1000 }};
+
+    // Backend flag updates
     var needHardRefresh = null;
+
+    // Frontend config
+    var syncedWithTime = false;
+    var tickRefreshResolutionMs = 100;
+
+    // Frontend flag updates
+    var hasMoveOnce = false;
+    var forcePreload = false;
+
+    // Player states infos
+    var PLAY_STATE_PLAYING = 0, PLAY_STATE_PAUSE = 1;
+    var playState = PLAY_STATE_PLAYING;
+    var isPlaying = function() {return playState === PLAY_STATE_PLAYING;};
+    var isPaused = function() {return playState === PLAY_STATE_PAUSE;};
+    var pauseClockValue = null;
+
+    // Animations
+    var animate = {{ 'true' if slide_animation_enabled.eval() else 'false' }};
+    var animate_speed = "animate__{{ slide_animation_speed.eval()|default("normal") }}";
+    var animation_speed_duration = {{ animation_speed_duration[slide_animation_speed.eval()] if slide_animation_enabled.eval() else 0 }};
+    var animate_transitions = [
+        "animate__{{ slide_animation_entrance_effect.eval()|default("fadeIn") }}",
+        "animate__{{ slide_animation_exit_effect.eval()|default("none") }}"
+    ];
+
+    // Slide flow management
+    var SLIDE_TOP_Z = '1000';
+    var SLIDE_BOTTOM_Z = '500';
+    var clockValue = 0;
+    var curItemIndex = -1;
+    var secondsBeforeNext = 0;
     var nextReady = true;
+    var introSlide = document.getElementById('IntroSlide');
+    var cronSlide = document.getElementById('CronSlide');
+    var firstSlide = document.getElementById('FirstSlide');
+    var secondSlide = document.getElementById('SecondSlide');
+    var curSlide = secondSlide;
+    var nextSlide = firstSlide;
+    var cronItemIndex = null;
+
+    // Functions
     var itemCheck = setInterval(function () {
         fetch('player/playlist').then(function(response) {
             if (response.ok) {
@@ -51,58 +98,196 @@
         }).catch(function(err) {
             console.error(err);
         });
-    }, playlistCheck);
-    var animate = {{ 'true' if slide_animation_enabled.eval() else 'false' }};
-    var animate_transitions = [
-        "animate__{{ slide_animation_entrance_effect.eval()|default("fadeIn") }}",
-        "animate__{{ slide_animation_exit_effect.eval()|default("none") }}"
-    ];
-    var animate_speed = "animate__{{ slide_animation_speed.eval()|default("normal") }}";
-    var firstSlide = document.getElementById('FirstSlide');
-    var secondSlide = document.getElementById('SecondSlide');
-    var previousSlide = secondSlide;
-    var curSlide = firstSlide;
-    var cronState = {
-        active: false,
-        itemIndex: null,
-        interval: null
+    }, playlistCheckResolutionMs);
+
+    var getLoopDuration = function() {
+        let totalDuration = 0;
+        for (var i = 0; i < items.loop.length; i++) {
+            var item = items.loop[i];
+            totalDuration += safe_duration(item);
+        }
+        return totalDuration;
     };
 
-    var cronTick = function() {
-        if ((new Date()).getSeconds() != 0) {
+    var resume = function() {
+        playState = PLAY_STATE_PLAYING;
+    };
+
+    var play = function() {
+        resume();
+    };
+
+    var pause = function() {
+        pauseClockValue = clockValue;
+        playState = PLAY_STATE_PAUSE;
+    };
+
+    var stop = function() {
+        pause();
+    };
+
+    var seek = function(timeInSeconds) {
+        if (forcePreload) {
             return;
         }
 
-        // console.log('Cron Tick');
-        
-        for (var i = 0; i < items.cron.length; i++) {
-            var item = items.cron[i];
+        if (syncedWithTime) {
+            return console.warn('You can\'t seek with synced playlists');
+        }
 
-            if (cron.isActive(item.cron_schedule) && cronState.itemIndex != i) {
-                cronState.active = true;
-                cronState.itemIndex = i;
-                var callbackReady = function (onSlideStart) {
-                    onSlideStart();
-                    moveToSlide(curSlide.attributes['id'].value, item);
-                    var move = function () {
-                        if (nextReady) {
-                            curItemIndex = (curItemIndex + 1) === items.loop.length ? 0 : curItemIndex + 1;
-                            cronState.active = false;
-                            cronState.itemIndex = null;
-                        } else {
-                            setTimeout(move, 1000);
-                        }
-                    }
-                    setTimeout(move, item.duration * 1000);
-                };
-                loadContent(curSlide, callbackReady, item);
+        var maxDuration = getLoopDuration();
+
+        if (timeInSeconds > maxDuration) {
+            timeInSeconds = maxDuration - 1;
+            console.warn('Max duration is ' + timeInSeconds + ' seconds');
+        }
+
+        if (timeInSeconds < 0) {
+            timeInSeconds = 0;
+        }
+
+        clockValue = timeInSeconds * 1000;
+        forcePreload = true;
+        pause();
+    };
+
+    var lookupPreviousItem = function() {
+        return (curItemIndex - 1 < 0) ? items.loop[items.loop.length - 1] : items.loop[curItemIndex - 1];
+    };
+
+    var lookupNextItem = function() {
+        return (curItemIndex + 1 >= items.loop.length) ? items.loop[0] : items.loop[curItemIndex + 1];
+    };
+
+    var lookupCurrentItem = function() {
+        return items.loop[curItemIndex];
+    }
+
+    var getEmptySlide = function() {
+        return Array.from(document.getElementsByClassName('slide-loop')).filter(slide => slide.innerHTML.replaceAll(/\s/g,'') === '')[0];
+    };
+
+    var refreshSlidesOrder = function() {
+        curSlide = Array.from(document.getElementsByClassName('slide')).filter(function(slide) {
+            return getComputedStyle(slide).zIndex === SLIDE_TOP_Z;
+        })[0];
+        nextSlide = Array.from(document.getElementsByClassName('slide')).filter(function(slide) {
+            return getComputedStyle(slide).zIndex === SLIDE_BOTTOM_Z;
+        })[0];
+        //console.log("top is", SLIDE_TOP_Z, curSlide, "bottom is", SLIDE_BOTTOM_Z, nextSlide)
+    };
+
+    var safe_duration = function(item) {
+        if (!item) {
+            return tickRefreshResolutionMs/1000;
+        }
+        return item.duration + Math.ceil(animation_speed_duration/1000);
+    };
+
+    var main = function() {
+        setTimeout(function() {
+            introSlide.remove();
+            setInterval(checkAndMoveSlide, tickRefreshResolutionMs);
+            setInterval(checkAndMoveCron, 1000);
+        }, introDuration);
+    };
+
+    var preloadSlide = function(slide, item) {
+        //console.log('Preload', slide, item.name)
+        var element = document.getElementById(slide);
+        var callbackReady = function() {};
+        loadContent(element, callbackReady, item);
+    };
+
+    var tickClockValue = function() {
+        if (isPaused()) {
+            return pauseClockValue;
+        }
+        if (syncedWithTime) {
+            clockValue = Date.now();
+        } else {
+            clockValue += tickRefreshResolutionMs;
+        }
+    };
+
+    function checkAndMoveSlide() {
+        tickClockValue();
+        var timeInCurrentLoop = (clockValue/1000) % getLoopDuration();
+        var accumulatedTime = 0;
+
+        for (var i = 0; i < items.loop.length; i++) {
+            var item = items.loop[i];
+
+            if (i === curItemIndex) {
+                secondsBeforeNext = accumulatedTime + safe_duration(item) - timeInCurrentLoop;
+                //console.log("remaining:", secondsBeforeNext, "clock:",clockValue, curItemIndex);
             }
+
+            if (timeInCurrentLoop < accumulatedTime + safe_duration(item)) {
+
+                if (curItemIndex !== i) {
+                    //console.log('change to ', i , item.name)
+                    curItemIndex = i;
+
+                    var emptySlide = getEmptySlide();
+                    if ((emptySlide && !hasMoveOnce) || forcePreload) {
+                        //console.log('init preload');
+                        var slide = emptySlide ? emptySlide : nextSlide;
+                        preloadSlide(slide.attributes['id'].value, item);
+
+                        if (!hasMoveOnce && syncedWithTime) {
+                            if (accumulatedTime + safe_duration(item) - timeInCurrentLoop < 1) {
+                                // Prevent glitch when syncedWithTime for first init
+                                continue;
+                            }
+                        }
+
+                        hasMoveOnce = true;
+                    }
+                    moveToNextSlide();
+                }
+                break;
+            }
+            accumulatedTime += safe_duration(item);
         }
     }
 
-    function main() {
-        preloadSlide('SecondSlide', items.loop[curItemIndex])
-        cronState.interval = setInterval(cronTick, 1000);
+    function moveToNextSlide() {
+        refreshSlidesOrder();
+        nextSlide.style.zIndex = SLIDE_TOP_Z; // first
+        curSlide.style.zIndex = SLIDE_BOTTOM_Z; // second
+
+        //console.log("curSlide", curSlide.attributes['id'].value, curSlide.style.zIndex, "to", "next", nextSlide.attributes['id'].value, nextSlide.style.zIndex);
+        //console.log("###");
+
+         var loadingNextSlide = function () {
+            if (forcePreload) {
+                forcePreload = false;
+                play();
+            }
+
+            if (isPaused() && !syncedWithTime) {
+                return setTimeout(loadingNextSlide, 500);
+            }
+
+            refreshSlidesOrder();
+            preloadSlide(nextSlide.attributes['id'].value, lookupNextItem());
+        };
+
+        if (animate) {
+            nextSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
+            nextSlide.onanimationend = function() {
+                nextSlide.classList.remove(animate_transitions[0], animate_speed);
+                loadingNextSlide();
+            };
+
+            curSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
+            curSlide.onanimationend = function() {
+                curSlide.classList.remove(animate_transitions[1], animate_speed);
+            };
+        } else {
+            loadingNextSlide();
+        }
     }
 
     function loadContent(element, callbackReady, item) {
@@ -136,75 +321,89 @@
     }
 
     function loadYoutube(element, callbackReady, item) {
-        element.innerHTML = ``;
+        element.innerHTML = `youtube`;
         callbackReady(function () {});
 
-        setTimeout(function() {
-            element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
-        }, Math.max(100, duration - 2000));
+        var loadingDelayMs = 1000;
+        var delayNoisyContentJIT = Math.max(100, (lookupCurrentItem().duration * 1000) - loadingDelayMs);
+        delayNoisyContentJIT = lookupCurrentItem().id !== item.id ? delayNoisyContentJIT : 0;
+
+        var autoplayLoader = function() {
+            if (secondsBeforeNext * 1000 > loadingDelayMs) {
+                return setTimeout(autoplayLoader, 500);
+            }
+
+            if (element.innerHTML === 'youtube') {
+                element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+            }
+        }
+        setTimeout(autoplayLoader, delayNoisyContentJIT);
     }
 
     function loadVideo(element, callbackReady, item) {
         element.innerHTML = `<video><source src=${item.location} type="video/mp4" /></video>`;
         var video = element.querySelector('video');
+        callbackReady(function () {});
+
+        var loadingDelayMs = 0;
+        var delayNoisyContentJIT = Math.max(100, (lookupCurrentItem().duration * 1000) - loadingDelayMs);
+        delayNoisyContentJIT = lookupCurrentItem().id !== item.id ? delayNoisyContentJIT : 0;
+
         video.addEventListener('loadedmetadata', function () {
-            item.duration = Math.ceil(video.duration);
+            if (item.duration !== video.duration) {
+                console.warn('Given duration ' + item.duration + 's is different from video file ' + Math.ceil(video.duration) + 's');
+            }
         });
 
-        var onSlideStart = function () {
-            nextReady = false;
-            video.play();
-            video.addEventListener('ended', function () {
-                nextReady = true;
-            });
-            setTimeout(function () {
-                nextReady = true;
-            }, Math.ceil(item.duration * 1.5));
-        };
-        callbackReady(onSlideStart);
-    }
-
-    function preloadSlide(slide, item) {
-        var element = document.getElementById(slide);
-        var callbackReady = function (onSlideStart) {
-            var move = function () {
-                if (nextReady && !cronState.active) {
-                    moveToSlide(slide, item);
-                    onSlideStart();
-                } else {
-                    setTimeout(move, 1000);
-                }
+        var autoplayLoader = function() {
+            if (secondsBeforeNext * 1000 > loadingDelayMs) {
+                return setTimeout(autoplayLoader, 500);
             }
 
-            setTimeout(move, duration);
-        };
-
-        loadContent(element, callbackReady, item);
+            if (element.innerHTML.match('<video>')) {
+                video.play();
+            }
+        }
+        setTimeout(autoplayLoader, delayNoisyContentJIT);
     }
 
-    function moveToSlide(slide, item) {
-        curSlide = document.getElementById(slide);
-        previousSlide = curSlide == firstSlide ? secondSlide : firstSlide;
-
-        duration = item.duration * 1000;
-        curItemIndex = (curItemIndex + 1) === items.loop.length ? 0 : curItemIndex + 1;
-
-        curSlide.style.zIndex = 1000;
-        previousSlide.style.zIndex = 500;
-
-        if (animate) {
-            curSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
-            curSlide.onanimationend = () => {
-                curSlide.classList.remove(animate_transitions[0], animate_speed);
-                preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
-            };
-            previousSlide.classList.add('animate__animated', animate_transitions[1], animate_speed);
-            previousSlide.onanimationend = () => {
-                previousSlide.classList.remove(animate_transitions[1], animate_speed);
-            };
-        } else {
-            preloadSlide(previousSlide.attributes['id'].value, items.loop[curItemIndex]);
+    var checkAndMoveCron = function() {
+        if ((new Date()).getSeconds() != 0) {
+            return;
         }
+
+        for (var i = 0; i < items.cron.length; i++) {
+            var item = items.cron[i];
+
+            if (cron.isActive(item.cron_schedule) && cronItemIndex !== i) {
+                moveToCronSlide(i);
+            }
+
+            if (cron.isActive(item.cron_schedule_end) && cronItemIndex === i) {
+                stopCronSlide();
+            }
+        }
+    };
+
+    function moveToCronSlide(cronSlideIndex) {
+        var item = items.cron[cronSlideIndex];
+        cronItemIndex = cronSlideIndex;
+        pause();
+        var callbackReady = function() {
+            cronSlide.style.zIndex = '2000';
+            if (!item.cron_schedule_end) {
+                setTimeout(function () {
+                    stopCronSlide();
+                }, safe_duration(item) * 1000);
+            }
+        };
+        loadContent(cronSlide, callbackReady, item);
+    }
+
+    function stopCronSlide() {
+        cronItemIndex = null;
+        cronSlide.style.zIndex = '0';
+        play();
     }
 
     main();

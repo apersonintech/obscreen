@@ -9,39 +9,39 @@
         ul li a {flex:1;display: flex;flex-direction: row;justify-content: center;align-items: center;padding: 20px 5px;color:#0eef5f;font-weight: bold;text-decoration: none;}
         ul li.active a { background: #0eef5f;color:white; }
         main {display: flex;flex:1;}
-        main .screen-frame {display: flex; flex:1;}
-        main .screen-frame iframe {display: flex; flex: 1;}
+        main .studio-frame {display: flex; flex:1;}
+        main .studio-frame iframe {display: flex; flex: 1;}
         .hidden {display: none !important;}
     </style>
 </head>
 <body>
 <ul>
-    {% for screen in screens %}
+    {% for studio in studios %}
     <li class="{% if loop.first %}active{% endif %}">
-        <a href="javascript:void(0);" class="screen-switch" data-id="{{ screen.id }}" onclick="tab('{{ screen.id }}')">
-            {{ screen.name }}
+        <a href="javascript:void(0);" class="studio-switch" data-id="{{ studio.id }}" onclick="tab('{{ studio.id }}')">
+            {{ studio.name }}
         </a>
     </li>
     {% endfor %}
 </ul>
 <main>
-    {% for screen in screens %}
-        <div class="screen-frame {% if not loop.first %}hidden{% endif %}" data-id="{{ screen.id }}">
-            <iframe src="http://{{ screen.host }}:{{ screen.port }}/slideshow?fleet_mode=1" frameborder="0" allowtransparency=""></iframe>
+    {% for studio in studios %}
+        <div class="studio-frame {% if not loop.first %}hidden{% endif %}" data-id="{{ studio.id }}">
+            <iframe src="http://{{ studio.host }}:{{ studio.port }}/slideshow?fleet_mode=1" frameborder="0" allowtransparency=""></iframe>
         </div>
     {% endfor %}
 </main>
 <script type="text/javascript">
     const tab = function(id) {
-        const $switches = document.getElementsByClassName('screen-switch');
-        const $frames = document.getElementsByClassName('screen-frame');
+        const $switches = document.getElementsByClassName('studio-switch');
+        const $frames = document.getElementsByClassName('studio-frame');
         for (let i = 0; i < $switches.length; i++) {
             const $switch = $switches[i];
             $switch.parentElement.className = $switch.dataset.id === id ? 'active' : '';
         }
         for (let j = 0; j < $frames.length; j++) {
             const $frame = $frames[j];
-            $frame.className = $frame.dataset.id === id ? 'screen-frame' : 'screen-frame hidden';
+            $frame.className = $frame.dataset.id === id ? 'studio-frame' : 'studio-frame hidden';
         }
         document.location.hash = id;
     };

@@ -3,6 +3,7 @@ import os
 from typing import Dict, Optional, List, Tuple, Union
 
 from src.model.entity.Slide import Slide
+from src.model.entity.Playlist import Playlist
 from src.model.enum.SlideType import SlideType
 from src.utils import get_optional_string, get_yt_video_id
 from src.manager.DatabaseManager import DatabaseManager
@@ -17,7 +18,8 @@ class SlideManager(ModelManager):
     TABLE_MODEL = [
         "name CHAR(255)",
         "type CHAR(30)",
-        "enabled INTEGER",
+        "enabled INTEGER DEFAULT 0",
+        "playlist INTEGER",
         "duration INTEGER",
         "position INTEGER",
         "location TEXT",
@@ -72,11 +74,14 @@ class SlideManager(ModelManager):
         for slide_id, edits in edits_slides.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, edits)
 
-    def get_enabled_slides(self) -> List[Slide]:
-        return self.get_by(query="enabled = 1", sort="position")
+    def get_slides(self, playlist_id: Optional[int] = None, enabled: bool = True) -> List[Slide]:
+        query = "enabled = {}".format("1" if enabled else "0")
+        if playlist_id:
+            query = "{} {}".format(query, "AND playlist = {}".format(playlist_id))
+        else:
+            query = "{} {}".format(query, "AND playlist is NULL")
 
-    def get_disabled_slides(self) -> List[Slide]:
-        return self.get_by(query="enabled = 0", sort="position")
+        return self.get_by(query=query, sort="position")
 
     def pre_add(self, slide: Dict) -> Dict:
         self.user_manager.track_user_on_create(slide)
@@ -110,7 +115,7 @@ class SlideManager(ModelManager):
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, {"position": slide_position})
 
-    def update_form(self, id: int, name: str, duration: int, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', location: Optional[str] = None) -> None:
+    def update_form(self, id: int, name: str, duration: int, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', location: Optional[str] = None) -> Slide:
         slide = self.get(id)
 
         if not slide:
@@ -131,6 +136,7 @@ class SlideManager(ModelManager):
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
+        return self.get(id)
 
     def add_form(self, slide: Union[Slide, Dict]) -> None:
         form = slide
@@ -162,3 +168,5 @@ class SlideManager(ModelManager):
     def to_dict(self, slides: List[Slide]) -> List[Dict]:
         return [slide.to_dict() for slide in slides]
 
+    def count_slides_for_playlist(self, id: int) -> int:
+        return len(self.get_slides(playlist_id=id))
