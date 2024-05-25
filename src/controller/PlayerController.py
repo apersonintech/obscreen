@@ -6,6 +6,7 @@ from flask import Flask, render_template, redirect, request, url_for, send_from_
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
 from src.utils import get_ip_address, get_safe_cron_descriptor
+from src.model.enum.AnimationSpeed import animation_speed_duration
 
 
 class PlayerController(ObController):
@@ -54,7 +55,8 @@ class PlayerController(ObController):
             slide_animation_enabled=self._model_store.variable().get_one_by_name('slide_animation_enabled'),
             slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
             slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
-            slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed')
+            slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed'),
+            animation_speed_duration=animation_speed_duration
         )
 
     def player_default(self):
