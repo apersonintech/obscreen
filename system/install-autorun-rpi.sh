@@ -10,7 +10,7 @@ echo "# ------------------------------ #"
 
 # Update and install necessary packages
 apt update
-apt install -y xinit xserver-xorg chromium-browser unclutter xscreensaver x11-xserver-utils
+apt install -y xinit xserver-xorg chromium-browser unclutter
 
 # Add user to tty and video groups
 usermod -aG tty $OWNER
