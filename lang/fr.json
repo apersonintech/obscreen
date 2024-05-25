@@ -58,7 +58,7 @@
     "playlist_form_label_time_sync": "Synchroniser les slides des lecteurs",
     "playlist_form_button_cancel": "Annuler",
     "js_playlist_delete_confirmation": "Êtes-vous sûr ?",
-    "playlist_delete_has_slides": "La liste de lecture contient des sldies, supprimez-les avant et réessayez",
+    "playlist_delete_has_slides": "La liste de lecture contient des slides, supprimez-les avant et réessayez",
 
     "fleet_page_title": "Studios",
     "fleet_studio_button_add": "Ajouter un studio",
@@ -120,6 +120,7 @@
     "settings_variable_desc_slide_upload_limit": "Limite d'upload du fichier d'une slide (en mégaoctets)",
     "settings_variable_desc_default_slide_duration": "Durée de la slide d'introduction (en secondes)",
     "settings_variable_desc_polling_interval": "Intervalle de rafraîchissement des paramètres à appliquer au lecteur (en secondes)",
+    "settings_variable_desc_playlist_default_time_sync": "Synchroniser les slides des lecteurs pour la liste de lecture par défaut",
 
     "settings_variable_desc_slide_animation_enabled": "Activer les effets d'animation entre les slides",
     "settings_variable_desc_slide_animation_entrance_effect": "Effet d'animation d'arrivée de la slide",
@@ -186,6 +187,9 @@
     "enum_variable_section_general": "1. Général",
     "enum_variable_section_player_options": "2. Options du lecteur",
     "enum_variable_section_player_animation": "3. Animation du lecteur",
+    "enum_variable_section_playlist": "4. Playlists",
+    "enum_variable_section_fleet": "5. Gestion de flotte",
+    "enum_variable_section_security": "6. Sécurité",
     "enum_application_language_english": "Anglais",
     "enum_application_language_french": "Français",
     "enum_slide_type_url": "URL",

@@ -28,7 +28,7 @@ class PlayerController(ObController):
 
         playlists = {
             'playlist_id': playlist.id if playlist else None,
-            'time_sync': playlist.time_sync if playlist else None,
+            'time_sync': playlist.time_sync if playlist else self._model_store.variable().get_one_by_name("playlist_default_time_sync").as_bool(),
             'loop': playlist_loop,
             'cron': playlist_cron,
             'hard_refresh_request': self._model_store.variable().get_one_by_name("refresh_player_request").as_int()

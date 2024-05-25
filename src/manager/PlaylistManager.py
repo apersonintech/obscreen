@@ -7,6 +7,7 @@ from src.utils import get_optional_string, get_yt_video_id, slugify
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
+from src.manager.VariableManager import VariableManager
 from src.service.ModelManager import ModelManager
 
 
@@ -24,8 +25,8 @@ class PlaylistManager(ModelManager):
         "updated_at INTEGER"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
-        super().__init__(lang_manager, database_manager, user_manager)
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager):
+        super().__init__(lang_manager, database_manager, user_manager, variable_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     def hydrate_object(self, raw_playlist: dict, id: int = None) -> Playlist:
@@ -76,7 +77,11 @@ class PlaylistManager(ModelManager):
         if not with_default:
             return playlists
 
-        return [Playlist(id=None, time_sync=True, name=self.t('slideshow_playlist_panel_item_default'))] + playlists
+        return [Playlist(
+            id=None,
+            time_sync=self.variable_manager.map().get('playlist_default_time_sync').as_bool(),
+            name=self.t('slideshow_playlist_panel_item_default'))
+        ] + playlists
 
     def get_disabled_playlists(self) -> List[Playlist]:
         return self.get_by(query="enabled = 0")

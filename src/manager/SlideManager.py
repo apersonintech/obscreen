@@ -9,6 +9,7 @@ from src.utils import get_optional_string, get_yt_video_id
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
+from src.manager.VariableManager import VariableManager
 from src.service.ModelManager import ModelManager
 
 
@@ -31,8 +32,8 @@ class SlideManager(ModelManager):
         "updated_at INTEGER"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
-        super().__init__(lang_manager, database_manager, user_manager)
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager):
+        super().__init__(lang_manager, database_manager, user_manager, variable_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     def hydrate_object(self, raw_slide: dict, id: int = None) -> Slide:
