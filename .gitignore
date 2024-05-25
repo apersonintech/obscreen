@@ -4,7 +4,7 @@
 *.ipr
 out/
 data/uploads/*
-!data/uploads/sample.jpg
+!data/uploads/.gitkeep
 data/db/*
 !/data/db/.gitkeep
 /plugins/user/*
