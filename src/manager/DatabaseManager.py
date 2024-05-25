@@ -78,6 +78,8 @@ class DatabaseManager:
         except sqlite3.Error as e:
             logging.error("SQL query execution error while writing '{}': {}".format(query, e))
             self._conn.rollback()
+        except sqlite3.OperationalError:
+            pass
         finally:
             if cur is not None:
                 cur.close()

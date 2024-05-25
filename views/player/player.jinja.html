@@ -43,7 +43,7 @@
     var needHardRefresh = null;
 
     // Frontend config
-    var syncedWithTime = true;
+    var syncedWithTime = false;
     var tickRefreshResolutionMs = 100;
 
     // Frontend flag updates
@@ -132,7 +132,7 @@
         }
 
         if (syncedWithTime) {
-            return console.warn('You can\'t call seek with synced playlists');
+            return console.warn('You can\'t seek with synced playlists');
         }
 
         var maxDuration = getLoopDuration();
@@ -188,7 +188,7 @@
         setTimeout(function() {
             introSlide.remove();
             setInterval(checkAndMoveSlide, tickRefreshResolutionMs);
-            setInterval(cronTick, 1000);
+            setInterval(checkAndMoveCron, 1000);
         }, introDuration);
     };
 
@@ -260,21 +260,22 @@
         //console.log("curSlide", curSlide.attributes['id'].value, curSlide.style.zIndex, "to", "next", nextSlide.attributes['id'].value, nextSlide.style.zIndex);
         //console.log("###");
 
+         var loadingNextSlide = function () {
+            if (forcePreload) {
+                forcePreload = false;
+                play();
+            }
+
+            if (isPaused() && !syncedWithTime) {
+                return setTimeout(loadingNextSlide, 500);
+            }
+
+            refreshSlidesOrder();
+            preloadSlide(nextSlide.attributes['id'].value, lookupNextItem());
+        };
+
         if (animate) {
             nextSlide.classList.add('animate__animated', animate_transitions[0], animate_speed);
-            var loadingNextSlide = function () {
-                if (forcePreload) {
-                    forcePreload = false;
-                    play();
-                }
-
-                if (isPaused() && !syncedWithTime) {
-                    return setTimeout(loadingNextSlide, 500);
-                }
-
-                refreshSlidesOrder();
-                preloadSlide(nextSlide.attributes['id'].value, lookupNextItem());
-            };
             nextSlide.onanimationend = function() {
                 nextSlide.classList.remove(animate_transitions[0], animate_speed);
                 loadingNextSlide();
@@ -285,18 +286,6 @@
                 curSlide.classList.remove(animate_transitions[1], animate_speed);
             };
         } else {
-            var loadingNextSlide = function () {
-                if (forcePreload) {
-                    forcePreload = false;
-                    play();
-                }
-
-                if (isPaused() && !syncedWithTime) {
-                    return setTimeout(loadingNextSlide, 500);
-                }
-                refreshSlidesOrder();
-                preloadSlide(nextSlide.attributes['id'].value, lookupNextItem());
-            };
             loadingNextSlide();
         }
     }
@@ -378,7 +367,7 @@
         setTimeout(autoplayLoader, delayNoisyContentJIT);
     }
 
-    var cronTick = function() {
+    var checkAndMoveCron = function() {
         if ((new Date()).getSeconds() != 0) {
             return;
         }
@@ -387,29 +376,32 @@
             var item = items.cron[i];
 
             if (cron.isActive(item.cron_schedule) && cronItemIndex !== i) {
-                setTimeout(function() {
-                    moveToCronSlide(i);
-                }, 100);
+                moveToCronSlide(i);
+            }
+
+            if (cron.isActive(item.cron_schedule_end) && cronItemIndex === i) {
+                stopCronSlide();
             }
         }
     };
 
     function moveToCronSlide(cronSlideIndex) {
         var item = items.cron[cronSlideIndex];
-        var savedSlide = curSlide.innerHTML;
         cronItemIndex = cronSlideIndex;
         pause();
         var callbackReady = function() {
             cronSlide.style.zIndex = '2000';
             setTimeout(function() {
-                cronItemIndex = null;
-                curSlide.innerHTML = savedSlide;
-                cronSlide.style.zIndex = '0';
-                play();
+                stopCronSlide();
             }, safe_duration(item) * 1000);
         };
-
         loadContent(cronSlide, callbackReady, item);
+    }
+
+    function stopCronSlide() {
+        cronItemIndex = null;
+        cronSlide.style.zIndex = '0';
+        play();
     }
 
     main();
