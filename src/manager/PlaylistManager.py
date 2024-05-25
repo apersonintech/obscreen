@@ -17,6 +17,7 @@ class PlaylistManager(ModelManager):
         "name CHAR(255)",
         "slug CHAR(255)",
         "enabled INTEGER DEFAULT 0",
+        "time_sync INTEGER DEFAULT 1",
         "created_by CHAR(255)",
         "updated_by CHAR(255)",
         "created_at INTEGER",
@@ -75,7 +76,7 @@ class PlaylistManager(ModelManager):
         if not with_default:
             return playlists
 
-        return [Playlist(id=None, name=self.t('slideshow_playlist_panel_item_default'))] + playlists
+        return [Playlist(id=None, time_sync=True, name=self.t('slideshow_playlist_panel_item_default'))] + playlists
 
     def get_disabled_playlists(self) -> List[Playlist]:
         return self.get_by(query="enabled = 0")
@@ -116,14 +117,15 @@ class PlaylistManager(ModelManager):
     def post_delete(self, playlist_id: str) -> str:
         return playlist_id
 
-    def update_form(self, id: int, name: str) -> None:
+    def update_form(self, id: int, name: str, time_sync: bool) -> None:
         playlist = self.get(id)
 
         if not playlist:
             return
 
         form = {
-            "name": name
+            "name": name,
+            "time_sync": time_sync
         }
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))

@@ -14,6 +14,7 @@ class PlayerController(ObController):
     def _get_playlist(self, playlist_id: Optional[int] = 0) -> dict:
         enabled_slides = self._model_store.slide().get_slides(enabled=True, playlist_id=playlist_id)
         slides = self._model_store.slide().to_dict(enabled_slides)
+        playlist = self._model_store.playlist().get(playlist_id)
 
         playlist_loop = []
         playlist_cron = []
@@ -26,6 +27,8 @@ class PlayerController(ObController):
                 playlist_loop.append(slide)
 
         playlists = {
+            'playlist_id': playlist.id if playlist else None,
+            'time_sync': playlist.time_sync if playlist else None,
             'loop': playlist_loop,
             'cron': playlist_cron,
             'hard_refresh_request': self._model_store.variable().get_one_by_name("refresh_player_request").as_int()

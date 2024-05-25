@@ -14,6 +14,16 @@
                 <input type="text" name="name" id="playlist-edit-name" required="required" />
             </div>
         </div>
+
+        <div class="form-group">
+            <label for="playlist-edit-time-sync">{{ l.playlist_form_label_time_sync }}</label>
+            <div class="widget">
+                <select name="time_sync" type="text" id="playlist-edit-time-sync" required="required">
+                    <option value="1">✅</option>
+                    <option value="0">❌</option>
+                </select>
+            </div>
+        </div>
         
         <div class="actions">
             <button type="button" class="btn-normal modal-close">

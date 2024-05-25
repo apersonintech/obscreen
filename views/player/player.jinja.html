@@ -43,7 +43,7 @@
     var needHardRefresh = null;
 
     // Frontend config
-    var syncedWithTime = false;
+    var syncWithTime = items['time_sync'];
     var tickRefreshResolutionMs = 100;
 
     // Frontend flag updates
@@ -83,7 +83,7 @@
 
     // Functions
     var itemCheck = setInterval(function () {
-        fetch('player/playlist').then(function(response) {
+        fetch('/player/playlist' + (items['playlist_id'] ? '/use/'+items['playlist_id'] : '')).then(function(response) {
             if (response.ok) {
                 return response.json();
             }
@@ -131,7 +131,7 @@
             return;
         }
 
-        if (syncedWithTime) {
+        if (syncWithTime) {
             return console.warn('You can\'t seek with synced playlists');
         }
 
@@ -203,7 +203,7 @@
         if (isPaused()) {
             return pauseClockValue;
         }
-        if (syncedWithTime) {
+        if (syncWithTime) {
             clockValue = Date.now();
         } else {
             clockValue += tickRefreshResolutionMs;
@@ -235,9 +235,9 @@
                         var slide = emptySlide ? emptySlide : nextSlide;
                         preloadSlide(slide.attributes['id'].value, item);
 
-                        if (!hasMoveOnce && syncedWithTime) {
+                        if (!hasMoveOnce && syncWithTime) {
                             if (accumulatedTime + safe_duration(item) - timeInCurrentLoop < 1) {
-                                // Prevent glitch when syncedWithTime for first init
+                                // Prevent glitch when syncWithTime for first init
                                 continue;
                             }
                         }
@@ -266,7 +266,7 @@
                 play();
             }
 
-            if (isPaused() && !syncedWithTime) {
+            if (isPaused() && !syncWithTime) {
                 return setTimeout(loadingNextSlide, 500);
             }
 

@@ -4,10 +4,14 @@
 
 #### 🔴 You want to power RaspberryPi and automatically see your slideshow on a screen connected to it and manage your slideshow ? You're in the right place.
 
+---
+
 ## 🎛️ Hardware installation
 
 1. Download RaspberryPi Imager and setup an sdcard with `Raspberry Pi OS Lite` (🚨without desktop, only `Lite` version!). You'll find it under category `Raspberry PI OS (other)`
 2. Log into your RaspberryPi locally or via ssh (by default it's `ssh pi@raspberrypi.local`)
+
+---
 
 ## 📺 Run the player
 Install player autorun by executing following script
