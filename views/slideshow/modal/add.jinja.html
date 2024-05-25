@@ -10,7 +10,7 @@
         </h3>
 
         {% if current_playlist %}
-            <input name="playlist" type="text" id="slide-add-playlist" value="{{ current_playlist.id }}">
+            <input name="playlist" type="hidden" id="slide-add-playlist" value="{{ current_playlist.id }}">
         {% endif %}
 
         <div class="form-group">

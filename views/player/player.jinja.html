@@ -13,7 +13,7 @@
         .slide { display: flex; flex-direction: row; justify-content: center; align-items: center; background: black; }
         .slide, iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; padding-top: 0; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; }
         .slide iframe { background: white; }
-        .slide img { height: 100%; }
+        .slide img, .slide video { height: 100%; }
     </style>
     <script type="application/javascript" src="{{ STATIC_PREFIX }}js/lib/is-cron-now.js"></script>
 </head>
@@ -316,7 +316,7 @@
     }
 
     function loadPicture(element, callbackReady, item) {
-        element.innerHTML = `<img src="${item.location}" alt="" />`;
+        element.innerHTML = `<img src="/${item.location}" alt="" />`;
         callbackReady(function () {});
     }
 
@@ -341,7 +341,7 @@
     }
 
     function loadVideo(element, callbackReady, item) {
-        element.innerHTML = `<video><source src=${item.location} type="video/mp4" /></video>`;
+        element.innerHTML = `<video><source src=/${item.location} type="video/mp4" /></video>`;
         var video = element.querySelector('video');
         callbackReady(function () {});
 

@@ -68,9 +68,10 @@
                             </a>
                         </li>
                         {% for playlist in playlists %}
-                            <li class="{% if current_playlist %}active{% endif %}">
+                            {% set is_active_playlist = str(current_playlist.id) == str(playlist.id) %}
+                            <li class="{% if is_active_playlist %}active{% endif %}">
                                 <a href="{{ url_for('slideshow_slide_list_playlist_use', playlist_id=playlist.id) }}" class="select-playlist">
-                                    {% if current_playlist %}
+                                    {% if is_active_playlist %}
                                         <i class="fa fa-play icon-left"></i>
                                     {% endif %}
                                     {{ playlist.name }}

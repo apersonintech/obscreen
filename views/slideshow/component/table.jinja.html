@@ -86,6 +86,8 @@
 
                 {% if var_external_url.as_string().strip()|length > 0 and slide.has_file() %}
                     {% set location = var_external_url.value ~ '/' ~ slide.location %}
+                {% elif slide.has_file() %}
+                    {% set location ='/' ~ slide.location %}
                 {% endif %}
 
                 {% if slide.type == enum_slide_type.YOUTUBE %}
