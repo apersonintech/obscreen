@@ -193,7 +193,7 @@
     "enum_application_language_english": "Anglais",
     "enum_application_language_french": "Français",
     "enum_slide_type_url": "URL",
-    "enum_slide_type_video": "Vidéo",
+    "enum_slide_type_video": "Vidéo (MP4 seulement)",
     "enum_slide_type_picture": "Image",
     "enum_slide_type_youtube": "Youtube"
 }

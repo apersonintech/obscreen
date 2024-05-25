@@ -35,6 +35,7 @@ class TemplateRenderer:
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,
             cron_descriptor=self.cron_descriptor,
+            str=str,
             seconds_to_hhmmss=seconds_to_hhmmss,
             is_validate_cron_date_time=is_validate_cron_date_time,
             l=self._model_store.lang().map(),
