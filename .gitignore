@@ -16,3 +16,4 @@ var/run/*
 !var/run/.gitkeep
 *.swp
 .env
+venv/
