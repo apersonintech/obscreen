@@ -139,7 +139,7 @@
     "sysinfo_panel_th_attribute": "Attribute",
     "sysinfo_panel_th_value": "Value",
     "sysinfo_panel_td_ipaddr": "IP Address",
-    "sysinfo_panel_last_logs": "Logs",
+    "sysinfo_panel_last_logs": "Logs (100 last lines)",
     "js_sysinfo_restart_confirmation": "Are you sure?",
     "js_sysinfo_restart_loading": "Restarting, please wait...",
 
