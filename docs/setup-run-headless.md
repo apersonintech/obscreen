@@ -9,8 +9,8 @@
 When you run the browser yourself don't forget to use these flags for chromium browser:
 ```bash
 # chromium or chromium-browser
-# replace https://duckduckgo.com with valid playlist url
-chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 https://duckduckgo.com
+# replace http://localhost:5000 with your playlist url
+chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
 ```
 
 ---
