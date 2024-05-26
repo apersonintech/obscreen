@@ -345,7 +345,7 @@
         var video = element.querySelector('video');
         callbackReady(function () {});
 
-        var loadingDelayMs = 0;
+        var loadingDelayMs = 1000;
         var delayNoisyContentJIT = Math.max(100, (lookupCurrentItem().duration * 1000) - loadingDelayMs);
         delayNoisyContentJIT = lookupCurrentItem().id !== item.id ? delayNoisyContentJIT : 0;
 
