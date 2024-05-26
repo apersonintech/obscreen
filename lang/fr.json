@@ -139,6 +139,7 @@
     "sysinfo_panel_th_attribute": "Attribut",
     "sysinfo_panel_th_value": "Valeur",
     "sysinfo_panel_td_ipaddr": "Adresse IP",
+    "sysinfo_panel_last_logs": "Journaux",
     "js_sysinfo_restart_confirmation": "Êtes-vous sûr ?",
     "js_sysinfo_restart_loading": "Redémarrage en cours, veuillez patienter...",
 
@@ -195,5 +196,14 @@
     "enum_slide_type_url": "URL",
     "enum_slide_type_video": "Vidéo (MP4 seulement)",
     "enum_slide_type_picture": "Image",
-    "enum_slide_type_youtube": "Youtube"
+    "enum_slide_type_youtube": "Youtube",
+
+    "sysinfo_rpi_model": "Modèle du Raspberry Pi",
+    "sysinfo_storage_free_space": "Stockage Disponible",
+    "sysinfo_memory_usage": "Utilisation Mémoire",
+    "sysinfo_os_version": "Version SE",
+    "sysinfo_install_directory": "Dossier Racine",
+    "sysinfo_network_interface": "Interface Réseau",
+    "sysinfo_mac_address": "Addresse MAC",
+    "sysinfo_ip_address": "Addresse IP"
 }

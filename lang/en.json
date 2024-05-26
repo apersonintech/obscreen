@@ -139,6 +139,7 @@
     "sysinfo_panel_th_attribute": "Attribute",
     "sysinfo_panel_th_value": "Value",
     "sysinfo_panel_td_ipaddr": "IP Address",
+    "sysinfo_panel_last_logs": "Logs",
     "js_sysinfo_restart_confirmation": "Are you sure?",
     "js_sysinfo_restart_loading": "Restarting, please wait...",
 
@@ -195,5 +196,14 @@
     "enum_slide_type_url": "URL",
     "enum_slide_type_video": "Video (MP4 only)",
     "enum_slide_type_picture": "Picture",
-    "enum_slide_type_youtube": "Youtube"
+    "enum_slide_type_youtube": "Youtube",
+
+    "sysinfo_rpi_model": "Raspberry Pi Model",
+    "sysinfo_storage_free_space": "Storage Free Space",
+    "sysinfo_memory_usage": "Memory Usage",
+    "sysinfo_os_version": "OS Version",
+    "sysinfo_install_directory": "Install Directory",
+    "sysinfo_network_interface": "Network Interface",
+    "sysinfo_mac_address": "MAC Address",
+    "sysinfo_ip_address": "IP Address"
 }

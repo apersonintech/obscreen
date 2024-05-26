@@ -831,3 +831,19 @@ a.badge:hover {
 .explorer .panel.panel-active th {
     border-bottom: 1px solid #ddd;
 }
+
+.panel-logs {
+    padding-bottom: 20px;
+}
+
+.panel-logs pre {
+    background: rgba(0,0,0,0.9);
+    border: 1px solid #555;
+    border-radius: 4px;
+    font-family: monospace;
+    color: #BBB;
+    padding: 20px;
+    min-height: 200px;
+    max-height: 500px;
+    overflow: auto;
+}

@@ -94,19 +94,21 @@ def get_default_log_file():
         return None
 
 
-def get_all():
-    infos = {}
+def get_all_sysinfos():
+    infos = {
+        "sysinfo_rpi_model": get_rpi_model(),
+        "sysinfo_storage_free_space": get_free_space(),
+        "sysinfo_memory_usage": "{}{}".format(get_memory_usage()['percent'], "%"),
+        "sysinfo_os_version": get_os_version(),
+        "sysinfo_install_directory": os.getcwd()
+    }
     network_info = get_network_info()
 
     if isinstance(network_info, dict):
-        infos["Network Interface"] = network_info['interface']
-        infos["MAC Address"] = network_info['mac_address']
-        infos["IP Address"] = network_info['ip_address']
+        infos["sysinfo_network_interface"] = network_info['interface']
+        infos["sysinfo_mac_address"] = network_info['mac_address']
+        infos["sysinfo_ip_address"] = network_info['ip_address']
+    else:
+        infos["sysinfo_ip_address"] = 'common_unknown_ipaddr'
 
-    return {
-        "Raspberry Pi Model": get_rpi_model(),
-        "Storage Free Space": get_free_space(),
-        "Memory Usage": get_memory_usage(),
-        "OS Version": get_os_version(),
-        "Install Directory": os.getcwd()
-    }
+    return infos
