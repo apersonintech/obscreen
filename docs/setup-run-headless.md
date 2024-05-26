@@ -4,14 +4,6 @@
 
 #### 🔵 You just want a slideshow manager and you'll deal with screen and browser yourself ? You're in the right place.
 
----
-## 📺 Run the player
-When you run the browser yourself don't forget to use these flags for chromium browser:
-```bash
-# chromium or chromium-browser
-# replace http://localhost:5000 with your playlist url
-chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
-```
 
 ---
 ## 📡 Run the manager
@@ -94,9 +86,21 @@ sudo systemctl start obscreen-studio.service
 sudo journalctl -u obscreen-studio -f 
 ```
 ---
+
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://localhost:5000`
 - Slideshow manager is reachable at `http://localhost:5000/manage`
+
+
+---
+## 📺 Run the player
+When you run the browser yourself don't forget to use these flags for chromium browser:
+```bash
+# chromium or chromium-browser
+# replace http://localhost:5000 with your playlist url
+chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
+```
+---
 
 ## 📎 Additional
 
