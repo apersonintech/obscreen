@@ -26,7 +26,7 @@ class SysinfoController(ObController):
         return render_template(
             'sysinfo/list.jinja.html',
             sysinfos=get_all_sysinfos(),
-            last_logs=self._model_store.logging().get_last_lines_of_stdout(20),
+            last_logs=self._model_store.logging().get_last_lines_of_stdout(100),
             ro_variables=self._model_store.variable().get_readonly_variables(),
             env_variables=self._model_store.config().map()
         )
