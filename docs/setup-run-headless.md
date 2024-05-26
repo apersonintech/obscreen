@@ -16,7 +16,7 @@ chromium --disable-features=Translate --ignore-certificate-errors --disable-web-
 ---
 ## 📡 Run the manager
 
-### with docker (for test)
+### with docker run (for test)
 ```bash
 # (Optional) Install docker if needed
 curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
@@ -37,7 +37,7 @@ docker run --rm --name obscreen --pull=always \
   jierka/obscreen:latest
 ```
 ---
-### or with docker-compose
+### or with docker compose
 ```bash
 # Prepare application data file tree
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
@@ -46,7 +46,7 @@ cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.headless.yml > docker-compose.yml
 
 # Run
-docker compose up --detach --pull always
+docker compose up --detach --pull=always
 ```
 ---
 ### or system wide
@@ -97,3 +97,20 @@ sudo journalctl -u obscreen-studio -f
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://localhost:5000`
 - Slideshow manager is reachable at `http://localhost:5000/manage`
+
+## 📎 Additional
+
+
+### How to upgrade
+>#### with docker run
+- Just add `--pull=always` to your `docker run ...` command, you'll get latest version automatically.
+>#### or with docker compose
+- Just add `--pull=always` to your `docker compose up ...` command, , you'll get latest version automatically.
+>#### or system wide
+- Execute following script
+```bash
+cd ~/obscreen
+source ./venv/bin/activate
+pip install -r requirements.txt
+sudo systemctl restart obscreen-studio.service
+```

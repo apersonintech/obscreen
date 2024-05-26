@@ -108,4 +108,5 @@ def get_all():
         "Storage Free Space": get_free_space(),
         "Memory Usage": get_memory_usage(),
         "OS Version": get_os_version(),
+        "Install Directory": os.getcwd()
     }
