@@ -12,7 +12,7 @@ from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
 from src.utils import get_ip_address, am_i_in_docker
-from src.service.OsInfos import get_all
+from src.service.Sysinfos import get_all_sysinfos
 
 
 class SysinfoController(ObController):
@@ -23,14 +23,10 @@ class SysinfoController(ObController):
         self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self._auth(self.sysinfo_restart_needed), methods=['GET'])
 
     def sysinfo(self):
-        ipaddr = get_ip_address()
-
-        # print(self._model_store.logging().get_last_lines_of_stdout(10))
-        # print(get_all())
-
         return render_template(
             'sysinfo/list.jinja.html',
-            ipaddr=ipaddr if ipaddr else self._model_store.lang().map().get('common_unknown_ipaddr'),
+            sysinfos=get_all_sysinfos(),
+            last_logs=self._model_store.logging().get_last_lines_of_stdout(20),
             ro_variables=self._model_store.variable().get_readonly_variables(),
             env_variables=self._model_store.config().map()
         )

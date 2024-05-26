@@ -34,10 +34,15 @@
                             </h3>
                         </td>
                     </tr>
-                    <tr>
-                        <td>{{ l.sysinfo_panel_td_ipaddr }}</td>
-                        <td>{{ ipaddr }}</td>
-                    </tr>
+
+                    {% for sysinfo_label, sysinfo in sysinfos.items() %}
+                        <tr>
+                            <td>{{ l[sysinfo_label] }}</td>
+                            <td>{{ t(sysinfo) }}</td>
+                        </tr>
+                    {% endfor %}
+
+
                     {% for ro_variable in ro_variables %}
                         <tr>
                             <td>{{ ro_variable.description }}</td>
@@ -84,6 +89,13 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="panel panel-inactive panel-logs">
+        <div class="panel-body">
+            <h3>{{ l.sysinfo_panel_last_logs }}</h3>
+            <pre style="">{%- for log_line in last_logs.split("\n") %}{{ log_line ~ "\n" }}{%- endfor %}</pre>
         </div>
     </div>
 {% endblock %}
