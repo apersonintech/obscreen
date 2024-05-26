@@ -12,6 +12,7 @@ from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
 from src.utils import get_ip_address, am_i_in_docker
+from src.service.OsInfos import get_all
 
 
 class SysinfoController(ObController):
@@ -23,6 +24,10 @@ class SysinfoController(ObController):
 
     def sysinfo(self):
         ipaddr = get_ip_address()
+
+        print(self._model_store.logging().get_last_lines_of_stdout(10))
+        print(get_all())
+
         return render_template(
             'sysinfo/list.jinja.html',
             ipaddr=ipaddr if ipaddr else self._model_store.lang().map().get('common_unknown_ipaddr'),
