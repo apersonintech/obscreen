@@ -25,8 +25,8 @@ class SysinfoController(ObController):
     def sysinfo(self):
         ipaddr = get_ip_address()
 
-        print(self._model_store.logging().get_last_lines_of_stdout(10))
-        print(get_all())
+        # print(self._model_store.logging().get_last_lines_of_stdout(10))
+        # print(get_all())
 
         return render_template(
             'sysinfo/list.jinja.html',
