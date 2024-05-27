@@ -14,31 +14,33 @@ class GitUpdaterController(ObController):
         self._app.add_url_rule('/git-updater/update/now', 'git_updater_update_now', self._auth(self.update_now), methods=['GET'])
 
     def update_now(self):
-        if am_i_in_docker:
+        if am_i_in_docker():
             logging.warn('You are using Docker, you can\'t use Git Updater plugin')
-        else:
-            os_name = platform.system().lower()
+            return redirect(url_for('sysinfo_attribute_list'))
 
-            if os_name == "linux":
-                logging.warn('Git Updater supports linux dependency manager, using apt...')
-                sudo_run_system_command(['apt', 'install'] + 'git python3-pip python3-venv libsqlite3-dev'.split(' '))
-            elif os_name == "windows":
-                logging.warn('Git Updater doesn\'t supports windows dependency manager, install system dependencies manually')
-            elif os_name == "darwin":
-                logging.warn('Git Updater doesn\'t supports macos dependency manager, install system dependencies manually with homebrew')
+        os_name = platform.system().lower()
 
-            run_system_command(['git', '-C', get_working_directory(), 'stash'])
-            run_system_command(['git', '-C', get_working_directory(), 'checkout', 'tags/v{}'.format(Application.get_version())])
-            run_system_command(['git', '-C', get_working_directory(), 'pull'])
-            run_system_command(['pip3', 'install', '-r', 'requirements.txt'])
+        if os_name == "linux":
+            logging.warn('Git Updater supports linux dependency manager, using apt...')
+            sudo_run_system_command(['apt', 'install'] + 'git python3-pip python3-venv libsqlite3-dev'.split(' '))
+        elif os_name == "windows":
+            logging.warn('Git Updater doesn\'t supports windows dependency manager, install system dependencies manually')
+        elif os_name == "darwin":
+            logging.warn('Git Updater doesn\'t supports macos dependency manager, install system dependencies manually with homebrew')
 
-            if os_name == "linux":
-                logging.warn('Git Updater supports linux process manager, using apt...')
-                sudo_run_system_command(['systemctl', 'restart', Application.get_name()])
-            elif os_name == "windows":
-                logging.warn('Git Updater doesn\'t fully supports windows process manager, you may need to restart application manually')
-            elif os_name == "darwin":
-                logging.warn('Git Updater doesn\'t fully supports macos process manager, you may need to restart application manually')
+        print(Application.get_version())
+        print(run_system_command(['git', '-C', get_working_directory(), 'stash']))
+        print(run_system_command(['git', '-C', get_working_directory(), 'checkout', 'tags/v{}'.format(Application.get_version())]))
+        run_system_command(['git', '-C', get_working_directory(), 'pull'])
+        run_system_command(['pip3', 'install', '-r', 'requirements.txt'])
+
+        if os_name == "linux":
+            logging.warn('Git Updater supports linux process manager, using apt...')
+            sudo_run_system_command(['systemctl', 'restart', Application.get_name()])
+        elif os_name == "windows":
+            logging.warn('Git Updater doesn\'t fully supports windows process manager, you may need to restart application manually')
+        elif os_name == "darwin":
+            logging.warn('Git Updater doesn\'t fully supports macos process manager, you may need to restart application manually')
 
         return redirect(url_for(
             'sysinfo_restart',
