@@ -372,21 +372,36 @@
         for (let i = 0; i < items.cron.length; i++) {
             const item = items.cron[i];
 
+            const now = new Date();
             const isFullyElapsedMinute = (new Date()).getSeconds() === 0;
             const hasCron = item.cron_schedule && item.cron_schedule.length > 0;
             const hasCronEnd = item.cron_schedule_end && item.cron_schedule_end.length > 0;
             const hasDateTime = hasCron && validateCronDateTime(item.cron_schedule);
             const hasDateTimeEnd = hasCronEnd && validateCronDateTime(item.cron_schedule_end);
-            console.log(hasDateTime)
 
-            if (hasDateTime && cronItemIndex !== i) {
-                console.log('coo')
+            if (cronItemIndex !== i && hasDateTime) {
+                const startDate = cronToDateTimeObject(item.cron_schedule);
+                const endDate = hasDateTimeEnd ? cronToDateTimeObject(item.cron_schedule_end) : modifyDate(startDate, item.duration);
 
-            } else if (isFullyElapsedMinute && cron.isActive(item.cron_schedule) && cronItemIndex !== i) {
+                if (now >= startDate && now < endDate) {
+                    moveToCronSlide(i);
+                }
+            }
+
+            if (cronItemIndex === i && hasDateTime) {
+                const startDate = cronToDateTimeObject(item.cron_schedule);
+                const endDate = hasDateTimeEnd ? cronToDateTimeObject(item.cron_schedule_end) : modifyDate(startDate, item.duration);
+
+                if (now >= endDate) {
+                    stopCronSlide();
+                }
+            }
+
+            if (cronItemIndex !== i && isFullyElapsedMinute && hasCron && cron.isActive(item.cron_schedule)) {
                 moveToCronSlide(i);
             }
 
-            if (isFullyElapsedMinute && cron.isActive(item.cron_schedule_end) && cronItemIndex === i) {
+            if (cronItemIndex === i && isFullyElapsedMinute && hasCronEnd && cron.isActive(item.cron_schedule_end)) {
                 stopCronSlide();
             }
         }
