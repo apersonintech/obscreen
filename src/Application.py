@@ -12,7 +12,6 @@ from src.model.enum.HookType import HookType
 
 class Application:
 
-
     def __init__(self, project_dir: str):
         self._project_dir = project_dir
         self._stop_event = threading.Event()

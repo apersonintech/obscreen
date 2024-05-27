@@ -13,7 +13,7 @@ class GitUpdater(ObPlugin):
         return 'git_updater'
 
     def use_title(self):
-        return 'Git Updater'
+        return 'Git Updater (for system wide installations)'
 
     def use_variables(self) -> List[Variable]:
         return []
