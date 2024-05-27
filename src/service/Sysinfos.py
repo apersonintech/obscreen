@@ -13,9 +13,9 @@ def get_rpi_model():
                 model = file.read().strip()
             return model
         else:
-            return "Not a Raspberry Pi or model information not available."
+            return ''
     except Exception as e:
-        return f"Error retrieving RPi model: {e}"
+        return ''
 
 
 def get_free_space():
@@ -23,7 +23,7 @@ def get_free_space():
         usage = psutil.disk_usage('/')
         return convert_size(usage.free)
     except Exception as e:
-        return f"Error retrieving free space: {e}"
+        return ''
 
 
 def get_memory_usage():
@@ -37,7 +37,7 @@ def get_memory_usage():
             'free': convert_size(memory_info.free)
         }
     except Exception as e:
-        return f"Error retrieving memory usage: {e}"
+        return ''
 
 
 def get_network_info():
@@ -59,27 +59,27 @@ def get_network_info():
                         'mac_address': mac_address,
                         'ip_address': ip_address
                     }
-        return "No active network interface found."
+        return ''
     except Exception as e:
-        return f"Error retrieving network information: {e}"
+        return ''
 
 
 def get_os_version():
     try:
         return platform.platform()
     except Exception as e:
-        return f"Error retrieving OS version: {e}"
+        return ''
 
 
 def get_last_lines_of_logs(logfile, lines):
     try:
         if not os.path.exists(logfile):
-            return f"Log file {logfile} does not exist."
+            return ''
         with open(logfile, 'r') as file:
             logs = file.readlines()
             return ''.join(logs[-lines:])
     except Exception as e:
-        return f"Error retrieving log lines: {e}"
+        return ''
 
 
 def get_default_log_file():
@@ -95,8 +95,9 @@ def get_default_log_file():
 
 
 def get_all_sysinfos():
+    rpi_model = get_rpi_model()
     infos = {
-        "sysinfo_rpi_model": get_rpi_model(),
+        "sysinfo_rpi_model": rpi_model if rpi_model else 'sysinfo_rpi_model_unknown',
         "sysinfo_storage_free_space": get_free_space(),
         "sysinfo_memory_usage": "{}{}".format(get_memory_usage()['percent'], "%"),
         "sysinfo_os_version": get_os_version(),
