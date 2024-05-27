@@ -9,7 +9,7 @@
         {% endif %}
         <th class="tac">{{ l.slideshow_slide_panel_th_enabled }}</th>
         <th class="">{{ l.slideshow_slide_panel_th_cron_scheduled }}</th>
-        <th class="tac">{{ l.slideshow_slide_panel_th_duration }}</th>
+        <th class="">{{ l.slideshow_slide_panel_th_duration }}</th>
         <th class="tac">{{ l.slideshow_slide_panel_th_activity }}</th>
     </tr>
     </thead>
@@ -74,8 +74,21 @@
                     🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
                 {% endif %}
             </td>
-            <td class="tac">
-                {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
+            <td class="">
+                {% if slide.cron_schedule_end %}
+                    {% set cron_desc_end = cron_descriptor(slide.cron_schedule_end)  %}
+                    {% if cron_desc_end %}
+                        {% if is_validate_cron_date_time(slide.cron_schedule_end) %}
+                        📆 {{ cron_desc_end }}
+                        {% else %}
+                        ⏳ {{ cron_desc_end }}
+                        {% endif %}
+                    {% else %}
+                        <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
+                    {% endif %}
+                {% else %}
+                    ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
+                {% endif %}
             </td>
             <td class="actions tac">
                 <a href="javascript:void(0);" class="item-edit slide-edit">

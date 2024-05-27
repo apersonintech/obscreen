@@ -21,8 +21,10 @@ jQuery(document).ready(function ($) {
     const loadDateTimePicker = function($els) {
         $els.each(function() {
             var $el = $(this);
-            $el.val('');
-            const pickr = $el.flatpickr({
+            if (!$el.val()) {
+                $el.val(prettyTimestamp(Date.now()).slice(0, -4));
+            }
+            $el.flatpickr({
                 enableTime: true,
                 time_24hr: true,
                 allowInput: false,
@@ -199,7 +201,6 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.slide-edit', function () {
         const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
         showModal('modal-slide-edit');
-        loadDateTimePicker($('.modal-slide-edit .datetimepicker'))
 
         const hasCron = slide.cron_schedule && slide.cron_schedule.length > 0;
         const hasDateTime = hasCron && validateCronDateTime(slide.cron_schedule);
@@ -233,6 +234,8 @@ jQuery(document).ready(function ($) {
             hasDateTimeEnd ? getCronDateTime(slide.cron_schedule_end) : ''
         );
         $('#slide-edit-id').val(slide.id);
+        loadDateTimePicker($('.modal-slide-edit .datetimepicker'));
+
         inputSchedulerUpdate();
     });
 
