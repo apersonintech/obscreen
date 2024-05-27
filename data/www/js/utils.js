@@ -4,14 +4,23 @@ const validateCronDateTime = function(cronExpression) {
 };
 
 const cronToDateTimeObject = function(cronExpression) {
-    const parts = cronExpression.split(' ');
+    if (!validateCronDateTime(cronExpression)) {
+        return null;
+    }
 
-    [minutes, hours, day, month, _, year] = expression.split(' ')
-        return "{}-{}-{} at {}:{}".format(
-            year,
-            month.zfill(2),
-            day.zfill(2),
-            hours.zfill(2),
-            minutes.zfill(2)
-        )
-}
+    let [minutes, hours, day, month, _, year] = cronExpression.split(' ');
+
+    minutes = parseInt(minutes, 10);
+    hours = parseInt(hours, 10);
+    day = parseInt(day, 10);
+    month = parseInt(month, 10) - 1;
+    year = parseInt(year, 10);
+
+    return new Date(year, month, day, hours, minutes);
+};
+
+const modifyDate = function(date, seconds) {
+    const clone = new Date(date.getTime());
+    clone.setSeconds(clone.getSeconds() + seconds);
+    return clone;
+};
