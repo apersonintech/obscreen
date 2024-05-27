@@ -31,6 +31,7 @@ class TemplateRenderer:
             PLAYLIST_ENABLED=self._model_store.variable().map().get('playlist_enabled').as_bool(),
             track_created=self._model_store.user().track_user_created,
             track_updated=self._model_store.user().track_user_updated,
+            PORT=self._model_store.config().map().get('port'),
             VERSION=self._model_store.config().map().get('version'),
             LANG=self._model_store.variable().map().get('lang').as_string(),
             HOOK=self._render_hook,

@@ -3,11 +3,6 @@ jQuery(document).ready(function ($) {
     const $tableInactive = $('table.inactive-slides');
     const $modalsRoot = $('.modals');
 
-    const validateCronDateTime = function(cronExpression) {
-        const pattern = /^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$/;
-        return pattern.test(cronExpression);
-    };
-
     const getCronDateTime = function(cronExpression) {
         const [minutes, hours, day, month, _, year] = cronExpression.split(' ');
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;

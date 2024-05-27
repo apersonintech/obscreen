@@ -38,7 +38,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        padding: 20px 0;
+        padding: 50px 0;
       }
       #time {
         font-size: 10em;
@@ -47,7 +47,13 @@
         font-size: 3em;
       }
       #ipaddr {
-        font-size: 1em;
+        font-size: 1.25em;
+        color: #888888;
+      }
+      #ipaddr a {
+        color: #FFFFFF;
+        text-decoration: none;
+        font-weight: bold;
       }
     </style>
   </head>
@@ -55,10 +61,15 @@
     <div id="time"></div>
     <div id="date"></div>
     <div id="bottom">
-      <div id="ipaddr"></div>
+      <div id="ipaddr">
+          {% set link = 'http://' ~ ipaddr ~ ':' ~ PORT ~ url_for('manage') %}
+          {{
+            (l.player_default_welcome_message|safe)|replace(
+                '%link%',
+                ('<a href="' ~ url_for('manage') ~ '" target="_blank">' ~ link ~ '</a>')|safe
+            )
+          }}
+      </div>
     </div>
-    <script>
-      document.getElementById('ipaddr').innerText = '{{ ipaddr|safe }}';
-    </script>
   </body>
 </html>
