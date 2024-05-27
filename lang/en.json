@@ -2,7 +2,7 @@
     "slideshow_page_title": "Schedule Overview",
     "slideshow_goto_player": "Go to player",
     "slideshow_refresh_player": "Refresh player",
-    "slideshow_refresh_player_success": "A player refresh has been schedueld, it should happen soon enough (%time% seconds maximum)",
+    "slideshow_refresh_player_success": "Player refresh signal has been sent, it should happen soon enough (%time% seconds maximum)",
     "slideshow_playlist_panel_title": "Playlists",
     "slideshow_playlist_panel_item_default": "Default Playlist",
     "slideshow_slide_button_add": "Add a slide",
