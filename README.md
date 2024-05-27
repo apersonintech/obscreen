@@ -28,3 +28,12 @@ Use a RaspberryPi (Lite OS) to show a fullscreen slideshow (Kiosk-mode)
 ### 🔴 [I want to power a RaspberryPi and automatically see my slideshow on a screen connected to it and manage the slideshow](docs/setup-run-on-rpi.md)
 ### 🔵 [I just want a slideshow manager and I'll deal with screen and browser myself](docs/setup-run-headless.md)
  
+# Discussion
+
+### Join our Discord
+[<img src="https://github.com/jr-k/obscreen/blob/master/docs/img/discord.png" width="64">](https://discord.obscreen.io)
+
+### Open an Issue or a Pull Request on Github
+[<img src="https://github.com/jr-k/obscreen/blob/master/docs/img/github.png" width="64">](https://github.com/jr-k/obscreen/issues)
+
+
