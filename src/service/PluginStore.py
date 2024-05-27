@@ -31,10 +31,17 @@ class PluginStore:
         self._hooks = self.pre_load_hooks()
         self._dead_variables_candidates = VariableManager.list_to_map(self._model_store.variable().get_by_prefix(ObPlugin.PLUGIN_PREFIX))
         self._system_plugins = self.find_plugins_in_directory(self.FOLDER_PLUGINS_SYSTEM)
-        self._system_plugins = self.find_plugins_in_directory(self.FOLDER_PLUGINS_USER)
+        self._user_plugins = self.find_plugins_in_directory(self.FOLDER_PLUGINS_USER)
         self.post_load_hooks()
         self.clean_dead_variables()
 
+    def map_plugins(self) -> Dict[str, ObPlugin]:
+        plugins = {}
+
+        for plugin in self._system_plugins:
+            plugins[plugin.use_id()] = plugin
+
+        return plugins
 
     def map_hooks(self) -> Dict[HookType, List[HookRegistration]]:
         return self._hooks
@@ -150,7 +157,6 @@ class PluginStore:
         # WEB CONTROLLERS
         self.load_controllers(plugin)
 
-
     def clean_dead_variables(self) -> None:
         for variable_name, variable in self._dead_variables_candidates.items():
             logging.info("Removing dead plugin variable {}".format(variable_name))
@@ -161,5 +167,3 @@ class PluginStore:
         logging.info("[plugin] {} {}".format("🟢" if var.as_bool() else "⚫️", plugin.use_title()))
 
         return var.as_bool() if var else False
-
-

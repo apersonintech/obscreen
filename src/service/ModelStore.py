@@ -1,3 +1,5 @@
+from typing import Dict
+
 from src.manager.PlaylistManager import PlaylistManager
 from src.manager.SlideManager import SlideManager
 from src.manager.StudioManager import StudioManager
@@ -11,7 +13,9 @@ from src.manager.LoggingManager import LoggingManager
 
 class ModelStore:
 
-    def __init__(self):
+    def __init__(self, get_plugins: Dict):
+        self._get_plugins = get_plugins
+
         # Pure
         self._lang_manager = LangManager()
         self._database_manager = DatabaseManager()
@@ -57,6 +61,9 @@ class ModelStore:
 
     def user(self) -> UserManager:
         return self._user_manager
+
+    def plugins(self) -> Dict:
+        return self._get_plugins()
 
     def on_user_delete(self, user_id: int) -> None:
         self._slide_manager.forget_user(user_id)

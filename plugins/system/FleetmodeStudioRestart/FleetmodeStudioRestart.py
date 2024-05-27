@@ -15,6 +15,9 @@ class FleetmodeStudioRestart(ObPlugin):
     def use_title(self):
         return 'Fleetmode Studio Restart'
 
+    def use_description(self):
+        return 'Adds a restart button to fleet studio management view'
+
     def use_variables(self) -> List[Variable]:
         return [
     #         self.add_variable(

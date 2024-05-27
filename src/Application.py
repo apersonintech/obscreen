@@ -15,11 +15,11 @@ class Application:
     def __init__(self, project_dir: str):
         self._project_dir = project_dir
         self._stop_event = threading.Event()
-        self._model_store = ModelStore()
+        self._model_store = ModelStore(self.get_plugins)
         self._template_renderer = TemplateRenderer(project_dir=project_dir, model_store=self._model_store, render_hook=self.render_hook)
         self._web_server = WebServer(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer)
 
-        logging.info("[obscreen] Starting...")
+        logging.info("[obscreen] Starting application v{}...".format(self.get_version()))
         self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
         signal.signal(signal.SIGINT, self.signal_handler)
 
@@ -34,6 +34,9 @@ class Application:
 
     def render_hook(self, hook: HookType) -> str:
         return self._template_renderer.render_hooks(self._plugin_store.map_hooks()[hook])
+
+    def get_plugins(self):
+        return self._plugin_store.map_plugins()
 
     @staticmethod
     def get_name() -> str:

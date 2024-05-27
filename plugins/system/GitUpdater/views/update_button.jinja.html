@@ -1,0 +1,4 @@
+{% if not am_i_in_docker() %}
+    <a href="{{ url_for('git_updater_update_now') }}" class="btn sysinfo-update protected"><i class="fa fa-cloud-arrow-down icon-left"></i>{{ l.git_updater_button_update }}</a>
+{% endif %}
+
