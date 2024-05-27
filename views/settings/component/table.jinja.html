@@ -9,15 +9,18 @@
     <tbody>
     {% set ns = namespace(last_section='') %}
     {% for variable in variables %}
-        {% if
-            variable.plugin and ns.last_section != variable.plugin
-            or variable.section and ns.last_section != variable.section
-        %}
+        {% set section_change = variable.plugin and ns.last_section != variable.plugin or variable.section and ns.last_section != variable.section %}
+
+        {% if section_change %}
         <tr>
-            <td colspan="2">
+            <td colspan="3">
                 <h3>
                     {% if variable.is_from_plugin() %}
-                        <i class="fa fa-puzzle-piece icon-left"></i> {{ variable.plugin.replace('_',' ')|capitalize }}
+                        {% set plugin = plugins[variable.plugin] %}
+                        <i class="fa fa-puzzle-piece icon-left"></i> {{ plugin.use_title() }}
+                        {% if plugin.use_description() %}
+                            <div class="plugin-description">{{ plugin.use_description() }}</div>
+                        {% endif %}
                     {% else %}
                         <i class="fa fa-cog icon-left"></i> {{ variable.section }}
                     {% endif %}
@@ -52,6 +55,7 @@
                 </a>
             </td>
         </tr>
+
         {% if variable.is_from_plugin() %}
             {% set ns.last_section = variable.plugin %}
         {% else %}

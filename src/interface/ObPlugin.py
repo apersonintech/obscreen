@@ -37,6 +37,10 @@ class ObPlugin(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def use_description(self) -> str:
+        pass
+
+    @abc.abstractmethod
     def use_variables(self) -> List[Variable]:
         pass
 

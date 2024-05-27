@@ -751,3 +751,10 @@ a.badge:hover {
     max-height: 500px;
     overflow: auto;
 }
+
+.plugin-description {
+    font-size: 14px;
+    margin-left: 34px;
+    color: #999;
+
+}

@@ -15,16 +15,17 @@ class SettingsController(ObController):
     def settings_variable_list(self):
         return render_template(
             'settings/list.jinja.html',
+            plugins=self._model_store.plugins(),
             system_variables=self._model_store.variable().get_editable_variables(plugin=False, sort='section'),
             plugin_variables=self._model_store.variable().get_editable_variables(plugin=True, sort='plugin'),
         )
 
     def settings_variable_edit(self):
         self._model_store.variable().update_form(request.form['id'], request.form['value'])
-        forward = self._post_update(request.form['id'])
-        return forward if forward is not None else redirect(url_for('settings_variable_list'))
+        self._post_update(request.form['id'])
+        return redirect(url_for('settings_variable_list'))
 
-    def _post_update(self, id: int):
+    def _post_update(self, id: int) -> None:
         variable = self._model_store.variable().get(id)
 
         if variable.refresh_player:
@@ -42,4 +43,3 @@ class SettingsController(ObController):
         if variable.name == 'lang':
             self._model_store.lang().set_lang(variable.value)
             self._model_store.variable().reload()
-
