@@ -14,6 +14,9 @@ class GitUpdaterController(ObController):
         self._app.add_url_rule('/git-updater/update/now', 'git_updater_update_now', self._auth(self.update_now), methods=['GET'])
 
     def update_now(self):
+        old_version = Application.get_version()
+        logging.info("🚧 Application update from {} to master...".format(old_version))
+
         if am_i_in_docker():
             logging.warn('You are using Docker, you can\'t use Git Updater plugin')
             return redirect(url_for('sysinfo_attribute_list'))
@@ -28,9 +31,8 @@ class GitUpdaterController(ObController):
         elif os_name == "darwin":
             logging.warn('Git Updater doesn\'t supports macos dependency manager, install system dependencies manually with homebrew')
 
-        print(Application.get_version())
-        print(run_system_command(['git', '-C', get_working_directory(), 'stash']))
-        print(run_system_command(['git', '-C', get_working_directory(), 'checkout', 'tags/v{}'.format(Application.get_version())]))
+        run_system_command(['git', '-C', get_working_directory(), 'stash'])
+        run_system_command(['git', '-C', get_working_directory(), 'checkout', 'tags/v{}'.format(Application.get_version())])
         run_system_command(['git', '-C', get_working_directory(), 'pull'])
         run_system_command(['pip3', 'install', '-r', 'requirements.txt'])
 
@@ -41,6 +43,13 @@ class GitUpdaterController(ObController):
             logging.warn('Git Updater doesn\'t fully supports windows process manager, you may need to restart application manually')
         elif os_name == "darwin":
             logging.warn('Git Updater doesn\'t fully supports macos process manager, you may need to restart application manually')
+
+        new_version = Application.get_version()
+
+        if old_version != new_version:
+            logging.info("Application update succeeded to version {}".format(new_version))
+        else:
+            logging.info("Application already up to date with version {}".format(new_version))
 
         return redirect(url_for(
             'sysinfo_restart',
