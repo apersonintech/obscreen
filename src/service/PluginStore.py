@@ -74,7 +74,9 @@ class PluginStore:
                     for name, obj in inspect.getmembers(module):
                         if inspect.isclass(obj) and issubclass(obj, ObController) and obj is not ObController:
                             obj(
+                                web_server=self._web_server,
                                 app=self._web_server.get_app(),
+                                auth_required=self._web_server.auth_required,
                                 model_store=self._model_store,
                                 template_renderer=self._template_renderer,
                                 plugin=plugin
@@ -156,8 +158,7 @@ class PluginStore:
 
     def is_plugin_enabled(self, plugin: ObPlugin) -> bool:
         var = self._model_store.variable().get_one_by_name(plugin.get_plugin_variable_name(self.DEFAULT_PLUGIN_ENABLED_VARIABLE))
-        if var.as_bool:
-            logging.info("[Plugin] {} enabled".format(plugin.use_title()))
+        logging.info("[plugin] {} {}".format("🟢" if var.as_bool() else "⚫️", plugin.use_title()))
 
         return var.as_bool() if var else False
 

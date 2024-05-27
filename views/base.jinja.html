@@ -122,6 +122,7 @@
 <script>
     var secret_key = '{{ SECRET_KEY }}';
     var l = {
+        'js_common_are_you_sure': '{{ l.common_are_you_sure }}',
         'js_playlist_delete_confirmation': '{{ l.js_playlist_delete_confirmation }}',
         'js_slideshow_slide_delete_confirmation': '{{ l.js_slideshow_slide_delete_confirmation }}',
         'js_fleet_studio_delete_confirmation': '{{ l.js_fleet_studio_delete_confirmation }}',
@@ -131,6 +132,7 @@
     };
 </script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="{{ STATIC_PREFIX }}js/global.js"></script>
 {{ HOOK(H_ROOT_JAVASCRIPT) }}
 {% block add_js %}{% endblock %}
 </body>

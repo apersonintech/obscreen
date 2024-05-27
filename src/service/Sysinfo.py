@@ -3,7 +3,7 @@ import platform
 import psutil
 import socket
 
-from src.utils import convert_size
+from src.utils import convert_size, get_working_directory
 
 
 def get_rpi_model():
@@ -94,14 +94,14 @@ def get_default_log_file():
         return None
 
 
-def get_all_sysinfos():
+def get_all_sysinfo():
     rpi_model = get_rpi_model()
     infos = {
         "sysinfo_rpi_model": rpi_model if rpi_model else 'sysinfo_rpi_model_unknown',
         "sysinfo_storage_free_space": get_free_space(),
         "sysinfo_memory_usage": "{}{}".format(get_memory_usage()['percent'], "%"),
         "sysinfo_os_version": get_os_version(),
-        "sysinfo_install_directory": os.getcwd()
+        "sysinfo_install_directory": get_working_directory()
     }
     network_info = get_network_info()
 

@@ -13,7 +13,9 @@
     <div class="toolbar">
         <h2>{{ l.sysinfo_page_title }}</h2>
         <div class="toolbar-actions">
+            {{ HOOK(H_SYSINFO_TOOLBAR_ACTIONS_START) }}
             <button class="purple sysinfo-restart"><i class="fa fa-refresh icon-left"></i>{{ l.sysinfo_panel_button_restart }}</button>
+            {{ HOOK(H_SYSINFO_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
     <div class="panel">
@@ -35,10 +37,10 @@
                         </td>
                     </tr>
 
-                    {% for sysinfo_label, sysinfo in sysinfos.items() %}
+                    {% for sysinfo_label, sysinfo_value in sysinfo.items() %}
                         <tr>
                             <td>{{ l[sysinfo_label] }}</td>
-                            <td>{{ t(sysinfo) }}</td>
+                            <td>{{ t(sysinfo_value) }}</td>
                         </tr>
                     {% endfor %}
 

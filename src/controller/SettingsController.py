@@ -38,11 +38,6 @@ class SettingsController(ObController):
 
         if variable.name == 'auth_enabled':
             self.reload_web_server()
-            if variable.as_bool():
-                return redirect(url_for(
-                    'logout',
-                    restart=1
-                ))
 
         if variable.name == 'lang':
             self._model_store.lang().set_lang(variable.value)

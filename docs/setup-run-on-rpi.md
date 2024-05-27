@@ -137,6 +137,7 @@ However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
 - Execute following script
 ```bash
 cd ~/obscreen
+git pull
 source ./venv/bin/activate
 pip install -r requirements.txt
 sudo systemctl restart obscreen-studio.service

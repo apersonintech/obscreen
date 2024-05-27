@@ -165,6 +165,7 @@
 
     "common_unknown_ipaddr": "Unknown IP address",
     "common_empty": "[Empty]",
+    "common_are_you_sure": "Are you sure?",
     "logout": "Logout",
     "login_error_not_found": "Bad credentials",
     "login_error_bad_credentials": "Bad credentials",

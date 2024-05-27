@@ -12,6 +12,7 @@ from src.model.enum.HookType import HookType
 
 class Application:
 
+
     def __init__(self, project_dir: str):
         self._project_dir = project_dir
         self._stop_event = threading.Event()
@@ -19,7 +20,7 @@ class Application:
         self._template_renderer = TemplateRenderer(project_dir=project_dir, model_store=self._model_store, render_hook=self.render_hook)
         self._web_server = WebServer(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer)
 
-        logging.info("[Obscreen] Starting...")
+        logging.info("[obscreen] Starting...")
         self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
         signal.signal(signal.SIGINT, self.signal_handler)
 
@@ -35,3 +36,11 @@ class Application:
     def render_hook(self, hook: HookType) -> str:
         return self._template_renderer.render_hooks(self._plugin_store.map_hooks()[hook])
 
+    @staticmethod
+    def get_name() -> str:
+        return 'obscreen-studio'
+
+    @staticmethod
+    def get_version() -> str:
+        with open("version.txt", 'r') as file:
+            return file.read()

@@ -1,6 +1,7 @@
 import os
 import re
 import uuid
+import inspect
 import logging
 import subprocess
 import unicodedata
@@ -234,3 +235,26 @@ def convert_size(size_bytes):
     p = math.pow(1024, i)
     s = round(size_bytes / p, 2)
     return f"{s} {size_name[i]}"
+
+
+def get_working_directory():
+    return os.getcwd()
+
+
+def run_system_command(commands: list, shell: bool = False, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+    return subprocess.run(commands, shell=shell, stdout=stdout, stderr=stderr)
+
+
+def sudo_run_system_command(commands: list, shell: bool = False, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
+    if commands[0] != 'sudo':
+        commands.insert(0, 'sudo')
+    return run_system_command(commands, shell=shell, stdout=stdout, stderr=stderr)
+
+
+def get_function_caller(depth: int = 3) -> str:
+    return inspect.getmodulename(inspect.stack()[depth][1])
+
+
+def clamp(x: float, minimum: float, maximum: float) -> float:
+    return max(minimum, min(x, maximum))
+

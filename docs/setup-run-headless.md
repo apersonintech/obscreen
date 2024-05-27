@@ -114,6 +114,7 @@ chromium --disable-features=Translate --ignore-certificate-errors --disable-web-
 - Execute following script
 ```bash
 cd ~/obscreen
+git pull
 source ./venv/bin/activate
 pip install -r requirements.txt
 sudo systemctl restart obscreen-studio.service
