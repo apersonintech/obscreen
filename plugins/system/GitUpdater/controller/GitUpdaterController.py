@@ -32,7 +32,7 @@ class GitUpdaterController(ObController):
             logging.warn('Git Updater doesn\'t supports macos dependency manager, install system dependencies manually with homebrew')
 
         run_system_command(['git', '-C', get_working_directory(), 'stash'])
-        run_system_command(['git', '-C', get_working_directory(), 'checkout', 'tags/v{}'.format(Application.get_version())])
+        run_system_command(['git', '-C', get_working_directory(), 'checkout', 'master'])
         run_system_command(['git', '-C', get_working_directory(), 'pull'])
         run_system_command(['pip3', 'install', '-r', 'requirements.txt'])
 
