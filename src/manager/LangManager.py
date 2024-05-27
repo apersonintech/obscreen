@@ -61,4 +61,6 @@ class LangManager:
 
         map = self.map()
 
-        return map[translation_key] if translation_key in map else translation_key
+        translation = map[translation_key] if translation_key in map else translation_key
+
+        return translation

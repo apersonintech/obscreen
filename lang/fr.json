@@ -199,6 +199,7 @@
     "enum_slide_type_youtube": "Youtube",
 
     "sysinfo_rpi_model": "Modèle du Raspberry Pi",
+    "sysinfo_rpi_model_unknown": "Le modèle n'est pas un Raspberry Pi",
     "sysinfo_storage_free_space": "Stockage Disponible",
     "sysinfo_memory_usage": "Utilisation Mémoire",
     "sysinfo_os_version": "Version SE",

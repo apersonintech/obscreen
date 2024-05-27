@@ -175,6 +175,7 @@ header nav ul li.active a {
     align-items: center;
 }
 
+select.playlist-picker,
 a.btn,
 button {
     background-color: #fff;
@@ -199,6 +200,7 @@ button:hover {
     color: #bc48ff;
 }
 
+select.playlist-picker,
 button.purple {
     font-weight: bold;
     border: 1px solid #692fbd;

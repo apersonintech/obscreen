@@ -146,6 +146,10 @@ jQuery(document).ready(function ($) {
         });
     };
 
+    $(document).on('change', 'select.playlist-picker', function () {
+        document.location.href = $(this).val();
+    });
+
     $(document).on('change', '.slide-item input[type=checkbox]', function () {
         $.ajax({
             url: '/slideshow/slide/toggle',

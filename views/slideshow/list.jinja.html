@@ -17,8 +17,6 @@
     {{ HOOK(H_SLIDESHOW_JAVASCRIPT) }}
 {% endblock %}
 
-{% block container_class %}{% if PLAYLIST_ENABLED %}expand{% endif %}{% endblock %}
-
 {% block page %}
     <div class="toolbar">
         <h2>{{ l.slideshow_page_title }}</h2>
@@ -39,6 +37,21 @@
 
             <button class="purple slide-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_slide_button_add }}</button>
 
+
+            {% if PLAYLIST_ENABLED %}
+            <select class="playlist-picker">
+                <option value="{{ url_for('slideshow_slide_list') }}" {% if not current_playlist %}selected="selected"{% endif %}>
+                    {{ l.slideshow_playlist_panel_item_default }}
+                </option>
+                {% for playlist in playlists %}
+                    {% set is_active_playlist = str(current_playlist.id) == str(playlist.id) %}
+                    <option value="{{ url_for('slideshow_slide_list_playlist_use', playlist_id=playlist.id) }}" {% if is_active_playlist %}selected="selected"{% endif %}>
+                        {{ playlist.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            {% endif %}
+
             {{ HOOK(H_SLIDESHOW_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
@@ -50,60 +63,25 @@
         </div>
     {% endif %}
 
-    <div class="explorer">
-        {% if PLAYLIST_ENABLED %}
-        <div class="left">
-            <div class="panel panel-menu">
-                <div class="panel-body">
-                    <h3>
-                        {{ l.slideshow_playlist_panel_title }}
-                    </h3>
-                    <ul>
-                        <li class="{% if not current_playlist %}active{% endif %}">
-                            <a href="{{ url_for('slideshow_slide_list') }}" class="select-playlist">
-                                {% if not current_playlist %}
-                                    <i class="fa fa-play icon-left"></i>
-                                {% endif %}
-                                {{ l.slideshow_playlist_panel_item_default }}
-                            </a>
-                        </li>
-                        {% for playlist in playlists %}
-                            {% set is_active_playlist = str(current_playlist.id) == str(playlist.id) %}
-                            <li class="{% if is_active_playlist %}active{% endif %}">
-                                <a href="{{ url_for('slideshow_slide_list_playlist_use', playlist_id=playlist.id) }}" class="select-playlist">
-                                    {% if is_active_playlist %}
-                                        <i class="fa fa-play icon-left"></i>
-                                    {% endif %}
-                                    {{ playlist.name }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-        <div class="right">
-            <div class="panel {% if PLAYLIST_ENABLED %}panel-active{% endif %}">
-                <div class="panel-body">
-                    <h3>{{ l.slideshow_slide_panel_active }}</h3>
+    <div class="panel {% if PLAYLIST_ENABLED %}panel-active{% endif %}">
+        <div class="panel-body">
+            <h3>{{ l.slideshow_slide_panel_active }}</h3>
 
-                    {% with tclass='active', slides=enabled_slides %}
-                        {% include 'slideshow/component/table.jinja.html' %}
-                    {% endwith %}
-                </div>
-            </div>
-            <div class="panel panel-inactive">
-                <div class="panel-body">
-                    <h3>{{ l.slideshow_slide_panel_inactive }}</h3>
-
-                    {% with tclass='inactive', slides=disabled_slides %}
-                        {% include 'slideshow/component/table.jinja.html' %}
-                    {% endwith %}
-                </div>
-            </div>
+            {% with tclass='active', slides=enabled_slides %}
+                {% include 'slideshow/component/table.jinja.html' %}
+            {% endwith %}
         </div>
     </div>
+    <div class="panel panel-inactive">
+        <div class="panel-body">
+            <h3>{{ l.slideshow_slide_panel_inactive }}</h3>
+
+            {% with tclass='inactive', slides=disabled_slides %}
+                {% include 'slideshow/component/table.jinja.html' %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
 
     <div class="modals hidden">
         <div class="modals-outer">
