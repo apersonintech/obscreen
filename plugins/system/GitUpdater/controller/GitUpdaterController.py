@@ -47,9 +47,9 @@ class GitUpdaterController(ObController):
         new_version = Application.get_version()
 
         if old_version != new_version:
-            logging.info("Application update succeeded to version {}".format(new_version))
+            logging.info("✅ Application update succeeded to version {}".format(new_version))
         else:
-            logging.info("Application already up to date with version {}".format(new_version))
+            logging.info("🧊 Application already up to date with version {}".format(new_version))
 
         return redirect(url_for(
             'sysinfo_restart',
