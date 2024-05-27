@@ -89,7 +89,7 @@ class PluginStore:
                                 plugin=plugin
                             )
 
-                            logging.info("[plugin:{}] Controller {} loaded".format(
+                            logging.debug("[plugin:{}] Controller {} loaded".format(
                                 plugin.use_id(),
                                 obj.__name__
                             ))
@@ -138,13 +138,13 @@ class PluginStore:
 
             self._hooks[hook_registration.hook].append(hook_registration)
 
-        logging.info("[plugin:{}] {} variable{} loaded".format(
+        logging.debug("[plugin:{}] {} variable{} loaded".format(
             plugin.use_id(),
             len(variables),
             "s" if len(variables) > 1 else "",
         ))
 
-        logging.info("[plugin:{}] {} hook{} loaded".format(
+        logging.debug("[plugin:{}] {} hook{} loaded".format(
             plugin.use_id(),
             len(hooks_registrations),
             "s" if len(hooks_registrations) > 1 else "",
@@ -159,7 +159,7 @@ class PluginStore:
 
     def clean_dead_variables(self) -> None:
         for variable_name, variable in self._dead_variables_candidates.items():
-            logging.info("Removing dead plugin variable {}".format(variable_name))
+            logging.debug("Removing dead plugin variable {}".format(variable_name))
             self._model_store.variable().delete(variable.id)
 
     def is_plugin_enabled(self, plugin: ObPlugin) -> bool:
