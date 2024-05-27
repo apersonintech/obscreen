@@ -43,4 +43,4 @@ class Application:
     @staticmethod
     def get_version() -> str:
         with open("version.txt", 'r') as file:
-            return file.read()
+            return file.read().strip()
