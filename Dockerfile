@@ -6,6 +6,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install -r requirements.txt && apk del .build-deps gcc musl-dev sqlite-dev
+RUN pip install -r requirements.txt && apk del .build-deps gcc musl-dev sqlite-dev build-base linux-headers
 
 ENTRYPOINT ["python", "/app/obscreen.py"]
