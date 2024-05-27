@@ -19,7 +19,7 @@ class Application:
         self._template_renderer = TemplateRenderer(project_dir=project_dir, model_store=self._model_store, render_hook=self.render_hook)
         self._web_server = WebServer(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer)
 
-        logging.info("[obscreen] Starting application v{}...".format(self.get_version()))
+        logging.info("[{}] Starting application v{}...".format(self.get_name(), self.get_version()))
         self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
         signal.signal(signal.SIGINT, self.signal_handler)
 
@@ -27,7 +27,7 @@ class Application:
         self._web_server.run()
 
     def signal_handler(self, signal, frame) -> None:
-        logging.info("Shutting down...")
+        logging.info("[{}] Shutting down...".format(self.get_name()))
         self._model_store.database().close()
         self._stop_event.set()
         sys.exit(0)
