@@ -23,14 +23,24 @@ class GitUpdaterController(ObController):
                 logging.warn('Git Updater supports linux dependency manager, using apt...')
                 sudo_run_system_command(['apt', 'install'] + 'git python3-pip python3-venv libsqlite3-dev'.split(' '))
             elif os_name == "windows":
-                logging.warn('Git Updater doesn\'t support windows dependency manager, install system dependencies manually')
+                logging.warn('Git Updater doesn\'t supports windows dependency manager, install system dependencies manually')
             elif os_name == "darwin":
-                logging.warn('Git Updater doesn\'t support macos dependency manager, install system dependencies manually with homebrew')
+                logging.warn('Git Updater doesn\'t supports macos dependency manager, install system dependencies manually with homebrew')
 
             run_system_command(['git', '-C', get_working_directory(), 'stash'])
             run_system_command(['git', '-C', get_working_directory(), 'checkout', 'tags/v{}'.format(Application.get_version())])
             run_system_command(['git', '-C', get_working_directory(), 'pull'])
             run_system_command(['pip3', 'install', '-r', 'requirements.txt'])
-            sudo_run_system_command(['systemctl', 'restart', Application.get_name()])
 
-        return redirect(url_for('sysinfo_attribute_list'))
+            if os_name == "linux":
+                logging.warn('Git Updater supports linux process manager, using apt...')
+                sudo_run_system_command(['systemctl', 'restart', Application.get_name()])
+            elif os_name == "windows":
+                logging.warn('Git Updater doesn\'t fully supports windows process manager, you may need to restart application manually')
+            elif os_name == "darwin":
+                logging.warn('Git Updater doesn\'t fully supports macos process manager, you may need to restart application manually')
+
+        return redirect(url_for(
+            'sysinfo_restart',
+            secret_key=self._model_store.config().map().get('secret_key')
+        ))
