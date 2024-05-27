@@ -12,7 +12,7 @@ from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
 from src.utils import get_ip_address, am_i_in_docker
-from src.service.Sysinfos import get_all_sysinfos
+from src.service.Sysinfo import get_all_sysinfo
 
 
 class SysinfoController(ObController):
@@ -25,7 +25,7 @@ class SysinfoController(ObController):
     def sysinfo(self):
         return render_template(
             'sysinfo/list.jinja.html',
-            sysinfos=get_all_sysinfos(),
+            sysinfo=get_all_sysinfo(),
             last_logs=self._model_store.logging().get_last_lines_of_stdout(100),
             ro_variables=self._model_store.variable().get_readonly_variables(),
             env_variables=self._model_store.config().map()

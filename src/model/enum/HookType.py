@@ -4,11 +4,13 @@ from enum import Enum
 class HookType(Enum):
 
     H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS = 'h_fleetmode_slideshow_toolbar_actions'
-
     H_SLIDESHOW_TOOLBAR_ACTIONS_START = 'h_slideshow_toolbar_actions_start'
     H_SLIDESHOW_TOOLBAR_ACTIONS_END = 'h_slideshow_toolbar_actions_end'
     H_SLIDESHOW_CSS = 'h_slideshow_css'
     H_SLIDESHOW_JAVASCRIPT = 'h_slideshow_javascript'
+
+    H_SYSINFO_TOOLBAR_ACTIONS_START = 'h_sysinfo_toolbar_actions_start'
+    H_SYSINFO_TOOLBAR_ACTIONS_END = 'h_sysinfo_toolbar_actions_end'
 
     H_FLEET_TOOLBAR_ACTIONS_START = 'h_fleet_toolbar_actions_start'
     H_FLEET_TOOLBAR_ACTIONS_END = 'h_fleet_toolbar_actions_end'

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, send_from_directory, Markup
+from flask import Flask, send_from_directory, Markup, url_for
 from typing import List
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from src.service.ModelStore import ModelStore
@@ -57,7 +57,8 @@ class TemplateRenderer:
                     os.path.basename(hook_registration.template)
                 ))
                 content.append(template.render(
-                    **self.get_view_globals()
+                    **self.get_view_globals(),
+                    url_for=url_for
                 ))
             elif isinstance(hook_registration, FunctionalHookRegistration):
                 content.append(hook_registration.function())

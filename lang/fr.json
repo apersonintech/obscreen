@@ -165,6 +165,7 @@
 
     "common_unknown_ipaddr": "Adresse IP inconnue",
     "common_empty": "[Vide]",
+    "common_are_you_sure": "Êtes-vous sûr ?",
     "logout": "Déconnexion",
     "login_error_not_found": "Identifiants invalides",
     "login_error_bad_credentials": "Identifiants invalides",

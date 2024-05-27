@@ -43,7 +43,6 @@ class WebServer:
         self.setup()
 
     def setup(self) -> None:
-        self._auth_enabled = self._model_store.variable().map().get('auth_enabled').as_bool()
         self._setup_flask_app()
         self._setup_web_globals()
         self._setup_web_errors()
@@ -82,33 +81,37 @@ class WebServer:
         self._login_manager.init_app(self._app)
         self._login_manager.login_view = 'login'
 
-        if self._auth_enabled and self._model_store.user().count_all_enabled() == 0:
+        if self._model_store.variable().map().get('auth_enabled').as_bool() and self._model_store.user().count_all_enabled() == 0:
             self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
 
         @self._login_manager.user_loader
         def load_user(user_id):
             return self._model_store.user().get(user_id)
 
-    def _setup_web_controllers(self) -> None:
-        def auth_required(f):
-            if not self._auth_enabled:
-                return f
+    def auth_required(self, f):
+        if not self._model_store.variable().map().get('auth_enabled').as_bool():
+            return f
 
-            def decorated_function(*args, **kwargs):
-                if not current_user.is_authenticated:
-                    return redirect(url_for('login'))
+        def decorated_function(*args, **kwargs):
+            if not self._model_store.variable().map().get('auth_enabled').as_bool():
                 return f(*args, **kwargs)
 
-            return decorated_function
+            if not current_user.is_authenticated:
+                return redirect(url_for('login'))
+            return f(*args, **kwargs)
 
-        CoreController(self, self._app, auth_required, self._model_store, self._template_renderer)
-        PlayerController(self, self._app, auth_required, self._model_store, self._template_renderer)
-        SlideshowController(self, self._app, auth_required, self._model_store, self._template_renderer)
-        SettingsController(self, self._app, auth_required, self._model_store, self._template_renderer)
-        SysinfoController(self, self._app, auth_required, self._model_store, self._template_renderer)
-        FleetController(self, self._app, auth_required, self._model_store, self._template_renderer)
-        PlaylistController(self, self._app, auth_required, self._model_store, self._template_renderer)
-        AuthController(self, self._app, auth_required, self._model_store, self._template_renderer)
+        return decorated_function
+
+    def _setup_web_controllers(self) -> None:
+
+        CoreController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        PlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        SlideshowController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        SettingsController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        SysinfoController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        FleetController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        PlaylistController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        AuthController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
 
     def _setup_web_globals(self) -> None:
         @self._app.context_processor
