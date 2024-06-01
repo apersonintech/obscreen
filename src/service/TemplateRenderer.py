@@ -9,7 +9,7 @@ from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
 from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.constant.WebDirConstant import WebDirConstant
-from src.utils import get_safe_cron_descriptor, is_validate_cron_date_time, seconds_to_hhmmss, am_i_in_docker
+from src.util.utils import get_safe_cron_descriptor, is_validate_cron_date_time, seconds_to_hhmmss, am_i_in_docker
 
 
 class TemplateRenderer:

@@ -5,7 +5,7 @@ from typing import Dict, Optional, List, Tuple, Union
 from src.model.entity.Slide import Slide
 from src.model.entity.Playlist import Playlist
 from src.model.enum.SlideType import SlideType
-from src.utils import get_optional_string, get_yt_video_id
+from src.util.utils import get_optional_string, get_yt_video_id
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager

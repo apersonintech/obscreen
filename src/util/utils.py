@@ -1,12 +1,8 @@
 import os
 import re
-import uuid
 import inspect
-import logging
 import subprocess
 import unicodedata
-import platform
-import math
 
 
 from typing import Optional, List, Dict
@@ -139,34 +135,6 @@ def str_to_enum(str_val: str, enum_class) -> Enum:
             return enum_item
     raise ValueError(f"{str_val} is not a valid {enum_class.__name__} item")
 
-
-def get_ip_address() -> Optional[str]:
-    try:
-        os_name = platform.system().lower()
-        if os_name == "linux":
-            result = subprocess.run(["ip", "-4", "route", "get", "8.8.8.8"], capture_output=True, text=True)
-            ip_address = result.stdout.split()[6]
-        elif os_name == "darwin":
-            result = subprocess.run(
-                ["ipconfig", "getifaddr", "en0"], capture_output=True, text=True)
-            ip_address = result.stdout.strip()
-        elif os_name == "windows":
-            result = subprocess.run(["ipconfig"], capture_output=True, text=True)
-            lines = result.stdout.split('\n')
-            ip_address = None
-            for line in lines:
-                if "ipv4 address" in line.lower():
-                    ip_address = line.split(': ')[1].strip()
-                    break
-        else:
-            logging.warn(f"Unsupported OS: {os_name}")
-            return None
-        return ip_address
-    except Exception as e:
-        logging.error(f"Error obtaining IP address: {e}")
-        return None
-
-
 def regex_search(pattern: str, string: str, group: int):
     """Shortcut method to search a string for a given pattern.
     :param str pattern:
@@ -219,22 +187,6 @@ def seconds_to_hhmmss(seconds):
     minutes = (seconds % 3600) // 60
     secs = seconds % 60
     return f"{hours:02}:{minutes:02}:{secs:02}"
-
-
-def randomize_filename(old_filename: str) -> str:
-    new_uuid = str(uuid.uuid4())
-    _, extension = os.path.splitext(old_filename)
-    return f"{new_uuid}{extension}"
-
-
-def convert_size(size_bytes):
-    if size_bytes == 0:
-        return "0B"
-    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-    i = int(math.floor(math.log(size_bytes, 1024)))
-    p = math.pow(1024, i)
-    s = round(size_bytes / p, 2)
-    return f"{s} {size_name[i]}"
 
 
 def get_working_directory():
