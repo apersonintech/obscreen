@@ -4,7 +4,7 @@ import platform
 from flask import Flask, redirect, url_for
 
 from src.interface.ObController import ObController
-from src.utils import run_system_command, sudo_run_system_command, get_working_directory, am_i_in_docker
+from src.util.utils import run_system_command, sudo_run_system_command, get_working_directory, am_i_in_docker
 from src.Application import Application
 
 

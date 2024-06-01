@@ -8,7 +8,8 @@ from src.service.ModelStore import ModelStore
 from src.model.entity.Slide import Slide
 from src.model.enum.SlideType import SlideType
 from src.interface.ObController import ObController
-from src.utils import str_to_enum, get_optional_string, randomize_filename
+from src.util.utils import str_to_enum, get_optional_string
+from src.util.UtilFile import randomize_filename
 
 
 class SlideshowController(ObController):

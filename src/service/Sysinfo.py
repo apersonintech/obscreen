@@ -3,7 +3,8 @@ import platform
 import psutil
 import socket
 
-from src.utils import convert_size, get_working_directory
+from src.util.utils import get_working_directory
+from src.util.UtilFile import convert_size
 
 
 def get_rpi_model():
@@ -92,6 +93,14 @@ def get_default_log_file():
         return 'C:\\Windows\\System32\\LogFiles\\WMI\\SysEvent.evt'
     else:
         return None
+
+
+def get_network_ipaddr():
+    network_info = get_network_info()
+
+    if isinstance(network_info, dict):
+        return network_info['ip_address']
+    return None
 
 
 def get_all_sysinfo():

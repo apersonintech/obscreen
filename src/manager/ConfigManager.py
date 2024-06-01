@@ -5,7 +5,7 @@ import logging
 import argparse
 
 from src.manager.VariableManager import VariableManager
-from src.utils import am_i_in_docker
+from src.util.utils import am_i_in_docker
 from dotenv import load_dotenv
 load_dotenv()
 
