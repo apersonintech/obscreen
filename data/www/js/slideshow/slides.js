@@ -102,6 +102,7 @@ jQuery(document).ready(function ($) {
         const $triggerEnd = $scheduleEndGroup.find('.trigger');
         const $targetCronFieldStart = $scheduleStartGroup.find('.target');
         const $targetCronFieldEnd = $scheduleEndGroup.find('.target');
+        const $targetDuration = $durationGroup.find('input');
 
         const $datetimepickerStart = $scheduleStartGroup.find('.datetimepicker');
         const $datetimepickerEnd = $scheduleEndGroup.find('.datetimepicker');
@@ -113,7 +114,8 @@ jQuery(document).ready(function ($) {
         const isLoopStart = $triggerStart.val() === 'loop';
         const isDurationEnd = $triggerEnd.val() === 'duration';
         const flushValueStart = isLoopStart;
-        const flushValueEnd = isDurationEnd;
+        const flushValueEnd = isLoopStart || isDurationEnd;
+        const flushDuration = !isLoopStart && !isDurationEnd;
 
         $targetCronFieldStart.toggleClass('hidden', !isCronStart);
         $targetCronFieldEnd.toggleClass('hidden', !isCronEnd);
@@ -133,6 +135,10 @@ jQuery(document).ready(function ($) {
         if (flushValueEnd) {
             $targetCronFieldEnd.val('');
             $datetimepickerEnd.val('');
+        }
+
+        if (flushDuration) {
+            $targetDuration.val('0');
         }
     };
 
