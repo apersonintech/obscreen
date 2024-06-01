@@ -5,7 +5,8 @@ from flask import Flask, render_template, redirect, request, url_for, send_from_
 
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
-from src.utils import get_ip_address, get_safe_cron_descriptor
+from src.util.utils import get_safe_cron_descriptor
+from src.util.UtilNetwork import get_ip_address
 from src.model.enum.AnimationSpeed import animation_speed_duration
 
 
@@ -63,10 +64,10 @@ class PlayerController(ObController):
         )
 
     def player_default(self):
-        ipaddr = get_ip_address()
         return render_template(
             'player/default.jinja.html',
-            ipaddr=ipaddr if ipaddr else self._model_store.lang().map().get('common_unknown_ipaddr')
+            ipaddr=get_ip_address(),
+            time_with_seconds=self._model_store.variable().get_one_by_name('default_slide_time_with_seconds')
         )
 
     def player_playlist(self, playlist_slug_or_id: str = ''):

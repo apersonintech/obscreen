@@ -11,7 +11,8 @@ from src.manager.ConfigManager import ConfigManager
 from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
-from src.utils import get_ip_address, am_i_in_docker
+from src.util.utils import am_i_in_docker
+from src.util.UtilNetwork import get_ip_address
 from src.service.Sysinfo import get_all_sysinfo
 
 
@@ -21,6 +22,7 @@ class SysinfoController(ObController):
         self._app.add_url_rule('/sysinfo', 'sysinfo_attribute_list', self._auth(self.sysinfo), methods=['GET'])
         self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self.sysinfo_restart, methods=['GET', 'POST'])
         self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self._auth(self.sysinfo_restart_needed), methods=['GET'])
+        self._app.add_url_rule('/sysinfo/get/ipaddr', 'sysinfo_get_ipaddr', self._auth(self.sysinfo_get_ipaddr), methods=['GET'])
 
     def sysinfo(self):
         return render_template(
@@ -70,3 +72,7 @@ class SysinfoController(ObController):
                 pass
             except subprocess.CalledProcessError:
                 pass
+
+    def sysinfo_get_ipaddr(self):
+        ipaddr = get_ip_address()
+        return ipaddr if ipaddr else ''

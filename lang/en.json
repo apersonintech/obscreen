@@ -118,7 +118,8 @@
     "settings_variable_desc_edition_auth_enabled": "Default user credentials will be admin/admin",
     "settings_variable_desc_external_url": "External url (i.e: https://studio-01.company.com or http://10.10.3.100)",
     "settings_variable_desc_slide_upload_limit": "Slide upload limit (in megabytes)",
-    "settings_variable_desc_default_slide_duration": "Intro slide duration (in seconds)",
+    "settings_variable_desc_default_slide_duration": "Introduction slide duration (in seconds)",
+    "settings_variable_desc_default_slide_time_with_seconds": "Show the seconds on the clock in the introduction slide",
     "settings_variable_desc_polling_interval": "Refresh interval applied for settings to the player (in seconds)",
     "settings_variable_desc_playlist_default_time_sync": "Sync slides across players for default playlist",
 

@@ -3,7 +3,7 @@ import time
 
 from typing import Optional, Union
 from src.model.enum.SlideType import SlideType, SlideInputType
-from src.utils import str_to_enum
+from src.util.utils import str_to_enum
 
 
 class Slide:
