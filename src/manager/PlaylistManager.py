@@ -3,7 +3,7 @@ import os
 from typing import Dict, Optional, List, Tuple, Union
 
 from src.model.entity.Playlist import Playlist
-from src.utils import get_optional_string, get_yt_video_id, slugify
+from src.util.utils import get_optional_string, get_yt_video_id, slugify
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager

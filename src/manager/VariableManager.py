@@ -14,7 +14,7 @@ from src.model.enum.VariableSection import VariableSection
 from src.model.enum.AnimationEntranceEffect import AnimationEntranceEffect
 from src.model.enum.AnimationExitEffect import AnimationExitEffect
 from src.model.enum.AnimationSpeed import AnimationSpeed
-from src.utils import get_keys, enum_to_str, enum_to_dict
+from src.util.utils import get_keys, enum_to_str, enum_to_dict
 
 SELECTABLE_BOOLEAN = {"1": "✅", "0": "❌"}
 
@@ -111,6 +111,7 @@ class VariableManager:
 
             ### Player Options
             {"name": "default_slide_duration", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 3, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_default_slide_duration'), "refresh_player": False},
+            {"name": "default_slide_time_with_seconds", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_default_slide_time_with_seconds'), "refresh_player": False},
             {"name": "polling_interval", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 5, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_polling_interval'), "refresh_player": True},
 
             ### Player Animation

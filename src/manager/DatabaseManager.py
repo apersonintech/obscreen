@@ -5,7 +5,7 @@ import sqlite3
 import logging
 
 from sqlite3 import Cursor
-from src.utils import wrap_if, is_wrapped_by
+from src.util.utils import wrap_if, is_wrapped_by
 from typing import Optional, Dict
 
 

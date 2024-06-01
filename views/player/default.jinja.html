@@ -1,75 +1,76 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script type="text/javascript">
-      function updateTime() {
-        var date = new Date();
-        var hours = (date.getHours() < 10 ? '0' : '') + date.getHours();
-        var minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
-        var seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
-        var dayInMonth = date.getDate();
-        var month = date.getMonth();
-        var year = date.getFullYear();
-        var day = date.getDay();
-        var dayLabels = ["{{l.basic_day_7}}", "{{l.basic_day_1}}", "{{l.basic_day_2}}", "{{l.basic_day_3}}", "{{l.basic_day_4}}", "{{l.basic_day_5}}", "{{l.basic_day_6}}"];
-        var monthLabels = ["{{l.basic_month_1}}", "{{l.basic_month_2}}", "{{l.basic_month_3}}", "{{l.basic_month_4}}", "{{l.basic_month_5}}", "{{l.basic_month_6}}", "{{l.basic_month_7}}", "{{l.basic_month_8}}", "{{l.basic_month_9}}", "{{l.basic_month_10}}", "{{l.basic_month_11}}", "{{l.basic_month_12}}"];
+    <head>
+        <script type="text/javascript">
+            const time_with_seconds = {{ 'true' if time_with_seconds.as_bool() else 'false' }};
 
-        var timeLabel = hours + ":" + minutes;
-        var dateLabel = dayLabels[day] + " " + dayInMonth + " " + monthLabels[month] + " " + year;
+            function updateTime() {
+                const date = new Date();
+                const hours = (date.getHours() < 10 ? '0' : '') + date.getHours();
+                const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+                const seconds = (date.getSeconds() < 10 ? '0' : '') + date.getSeconds();
+                const dayInMonth = date.getDate();
+                const month = date.getMonth();
+                const year = date.getFullYear();
+                const day = date.getDay();
+                const dayLabels = ["{{l.basic_day_7}}", "{{l.basic_day_1}}", "{{l.basic_day_2}}", "{{l.basic_day_3}}", "{{l.basic_day_4}}", "{{l.basic_day_5}}", "{{l.basic_day_6}}"];
+                const monthLabels = ["{{l.basic_month_1}}", "{{l.basic_month_2}}", "{{l.basic_month_3}}", "{{l.basic_month_4}}", "{{l.basic_month_5}}", "{{l.basic_month_6}}", "{{l.basic_month_7}}", "{{l.basic_month_8}}", "{{l.basic_month_9}}", "{{l.basic_month_10}}", "{{l.basic_month_11}}", "{{l.basic_month_12}}"];
 
-        document.getElementById('time').innerHTML = timeLabel;
-        document.getElementById('date').innerHTML = dateLabel;
-        setTimeout(updateTime, 1000);
-      }
+                const timeLabel = hours + ":" + minutes + (time_with_seconds ? ':' + seconds : '');
+                const dateLabel = dayLabels[day] + " " + dayInMonth + " " + monthLabels[month] + " " + year;
 
-      window.addEventListener("load", updateTime);
-      const urlParams = new URLSearchParams(window.location.search);
-    </script>
-    <style>
-      body {
-        text-align: center;
-        font-family: 'Arial', 'sans-serif';
-        color: white;
-        background-color: black
-      }
-      #bottom {
-        background: #111;
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 50px 0;
-      }
-      #time {
-        font-size: 10em;
-      }
-      #date {
-        font-size: 3em;
-      }
-      #ipaddr {
-        font-size: 1.25em;
-        color: #888888;
-      }
-      #ipaddr a {
-        color: #FFFFFF;
-        text-decoration: none;
-        font-weight: bold;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="time"></div>
-    <div id="date"></div>
-    <div id="bottom">
-      <div id="ipaddr">
-          {% set link = 'http://' ~ ipaddr ~ ':' ~ PORT ~ url_for('manage') %}
-          {{
-            (l.player_default_welcome_message|safe)|replace(
-                '%link%',
-                ('<a href="' ~ url_for('manage') ~ '" target="_blank">' ~ link ~ '</a>')|safe
-            )
-          }}
-      </div>
-    </div>
-  </body>
+                document.getElementById('time').innerHTML = timeLabel;
+                document.getElementById('date').innerHTML = dateLabel;
+                setTimeout(updateTime, 1000);
+            }
+
+            window.addEventListener("load", updateTime);
+            const urlParams = new URLSearchParams(window.location.search);
+
+            setInterval(function(){
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "{{ url_for('sysinfo_get_ipaddr') }}", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                         setIp(xhr.responseText);
+                    }
+                };
+                xhr.send();
+            }, 5000);
+        </script>
+        <style>
+            body { text-align: center; font-family: 'Arial', 'sans-serif'; color: white;  background-color: black; }
+            #bottom { display: flex; justify-content: center; align-items: center; background: #111; position: fixed; left: 0; right: 0; bottom: 0; padding: 50px 0; min-height: 50px; }
+            #time { font-size: 10em; }
+            #date { font-size: 3em; }
+            #ipaddr { font-size: 1.25em; color: #888888; }
+            #ipaddr a { color: #FFFFFF; text-decoration: none; font-weight: bold; }
+            #hidden-container { display: none; }
+        </style>
+    </head>
+    <body>
+        <div id="hidden-container"></div>
+        <div id="time"></div>
+        <div id="date"></div>
+        <div id="bottom">
+            <div id="ipaddr"> </div>
+        </div>
+        <script>
+            const js_l_common_unknown_ipaddr = '{{ l.common_unknown_ipaddr }}';
+            const js_l_player_default_welcome_message = '{{ l.player_default_welcome_message }}';
+            const manage_url_template = '{{ 'http://%ipaddr%:' ~ PORT ~ url_for('manage') }}';
+
+            const setIp = function(ipaddr) {
+                const $container = document.getElementById('ipaddr');
+
+                if (ipaddr) {
+                    const link = manage_url_template.replace('%ipaddr%', ipaddr);
+                    $container.innerHTML = js_l_player_default_welcome_message.replace('%link%', '<a href="'+link+'" target="_blank">'+link+'</a>')
+                } else {
+                    $container.innerHTML = js_l_common_unknown_ipaddr;
+                }
+            };
+            setIp('{{ ipaddr if ipaddr else '' }}')
+        </script>
+    </body>
 </html>
