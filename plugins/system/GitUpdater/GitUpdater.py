@@ -5,7 +5,7 @@ from src.model.entity.Variable import Variable
 from src.model.enum.VariableType import VariableType
 from src.model.enum.HookType import HookType
 from src.model.hook.HookRegistration import HookRegistration
-from src.utils import am_i_in_docker
+from src.util.utils import am_i_in_docker
 
 
 class GitUpdater(ObPlugin):
