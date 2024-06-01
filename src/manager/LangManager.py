@@ -4,7 +4,7 @@ import logging
 from typing import Union, Dict
 from enum import Enum
 
-from src.utils import camel_to_snake
+from src.util.utils import camel_to_snake
 
 
 class LangManager:

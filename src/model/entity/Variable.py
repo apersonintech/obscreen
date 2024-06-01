@@ -5,7 +5,7 @@ from typing import Optional, Union, Dict, List
 from src.model.enum.VariableType import VariableType
 from src.model.enum.VariableUnit import VariableUnit
 from src.model.entity.Selectable import Selectable
-from src.utils import str_to_enum
+from src.util.utils import str_to_enum
 
 
 class Variable:
