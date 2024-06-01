@@ -17,7 +17,7 @@ class GitUpdater(ObPlugin):
         return 'Git Updater'
 
     def use_description(self):
-        return 'Adds a update button (only for system wide installations)'
+        return 'Adds an update button (only for system wide installations)'
 
     def use_variables(self) -> List[Variable]:
         return []
