@@ -51,6 +51,25 @@ class NodePlayerGroupManager(ModelManager):
     def get_all(self, sort: bool = False) -> List[NodePlayerGroup]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "name" if sort else None))
 
+    def get_all_labels_indexed(self, with_default: bool = False) -> Dict:
+        index = {}
+
+        for item in self.get_groups(with_default=with_default):
+            index[item.id] = item.name
+
+        return index
+
+    def get_groups(self, with_default: bool = False):
+        node_player_groups = self.get_all(sort=True)
+
+        if not with_default:
+            return node_player_groups
+
+        return [NodePlayerGroup(
+            id=None,
+            name=self.t('common_default_node_player_group'))
+        ] + node_player_groups
+
     def get_node_players_groups(self, playlist_id: Optional[int] = None) -> List[NodePlayerGroup]:
         query = " 1=1 "
         if playlist_id:
@@ -89,7 +108,7 @@ class NodePlayerGroupManager(ModelManager):
         return node_player_group_id
 
     def update_form(self, id: int, name: str, playlist_id: Optional[int]) -> None:
-        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"name": name, "playlist_id": playlist_id}))
+        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"name": name, "playlist_id": playlist_id if playlist_id else None}))
         self.post_update(id)
 
     def add_form(self, node_player_group: Union[NodePlayerGroup, Dict]) -> None:

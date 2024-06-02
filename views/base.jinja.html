@@ -71,14 +71,14 @@
                         </li>
                         {% endif %}
                         {% if FLEET_PLAYER_ENABLED %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_list' }}">
-                            <a href="{{ url_for('fleet_node_player_list') }}">
-                                <i class="fa fa-tv"></i> {{ l.fleet_node_player_page_title }}
-                            </a>
-                        </li>
                         <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_group_list' }}">
                             <a href="{{ url_for('fleet_node_player_group_list') }}">
                                 <i class="fa fa-layer-group"></i> {{ l.fleet_node_player_group_page_title }}
+                            </a>
+                        </li>
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_list' }}">
+                            <a href="{{ url_for('fleet_node_player_list') }}">
+                                <i class="fa fa-tv"></i> {{ l.fleet_node_player_page_title }}
                             </a>
                         </li>
                         {% endif %}

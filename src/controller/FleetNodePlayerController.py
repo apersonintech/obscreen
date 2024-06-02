@@ -18,28 +18,48 @@ class FleetNodePlayerController(ObController):
 
     def register(self):
         self._app.add_url_rule('/fleet/node-player/list', 'fleet_node_player_list', self.guard_fleet(self._auth(self.fleet_node_player_list)), methods=['GET'])
+        self._app.add_url_rule('/fleet/node-player/group/set/<group_id>', 'fleet_node_player_list_group_use', self._auth(self.fleet_node_player_list), methods=['GET'])
         self._app.add_url_rule('/fleet/node-player/add', 'fleet_node_player_add', self.guard_fleet(self._auth(self.fleet_node_player_add)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player/edit', 'fleet_node_player_edit', self.guard_fleet(self._auth(self.fleet_node_player_edit)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player/toggle', 'fleet_node_player_toggle', self.guard_fleet(self._auth(self.fleet_node_player_toggle)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player/delete', 'fleet_node_player_delete', self.guard_fleet(self._auth(self.fleet_node_player_delete)), methods=['DELETE'])
         self._app.add_url_rule('/fleet/node-player/position', 'fleet_node_player_position', self.guard_fleet(self._auth(self.fleet_node_player_position)), methods=['POST'])
 
-    def fleet_node_player_list(self):
+    def fleet_node_player_list(self, group_id: int = 0):
+        current_group = self._model_store.node_player_group().get(group_id)
+        group_id = current_group.id if current_group else None
         return render_template(
             'fleet/player/list.jinja.html',
-            enabled_node_players=self._model_store.node_player().get_enabled_node_players(),
-            disabled_node_players=self._model_store.node_player().get_disabled_node_players(),
+            current_group=current_group,
+            groups=self._model_store.node_player_group().get_all_labels_indexed(),
+            enabled_node_players=self._model_store.node_player().get_node_players(group_id=group_id, enabled=True),
+            disabled_node_players=self._model_store.node_player().get_node_players(group_id=group_id, enabled=False)
         )
 
     def fleet_node_player_add(self):
-        self._model_store.node_player().add_form(NodePlayer(
+        node_player = NodePlayer(
             name=request.form['name'],
             host=request.form['host'],
-        ))
+            group_id=request.form['group_id'] if 'group_id' in request.form and request.form['group_id'] else None,
+        )
+        self._model_store.node_player().add_form(node_player)
+
+        if node_player.group_id:
+            return redirect(url_for('fleet_node_player_list_group_use', group_id=node_player.group_id))
+
         return redirect(url_for('fleet_node_player_list'))
 
     def fleet_node_player_edit(self):
-        self._model_store.node_player().update_form(request.form['id'], request.form['name'], request.form['host'])
+        node_player = self._model_store.node_player().update_form(
+            request.form['id'],
+            request.form['name'],
+            request.form['host'],
+            request.form['group_id']
+        )
+
+        if node_player.group_id:
+            return redirect(url_for('fleet_node_player_list_group_use', group_id=node_player.group_id))
+
         return redirect(url_for('fleet_node_player_list'))
 
     def fleet_node_player_toggle(self):
