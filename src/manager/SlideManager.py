@@ -70,7 +70,7 @@ class SlideManager(ModelManager):
 
     def forget_user(self, user_id: int):
         slides = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
-        edits_slides = self.user_manager.forget_user(slides, user_id)
+        edits_slides = self.user_manager.forget_user_for_entity(slides, user_id)
 
         for slide_id, edits in edits_slides.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, edits)

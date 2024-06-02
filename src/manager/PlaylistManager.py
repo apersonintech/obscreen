@@ -91,7 +91,7 @@ class PlaylistManager(ModelManager):
 
     def forget_user(self, user_id: int):
         playlists = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
-        edits_playlists = self.user_manager.forget_user(playlists, user_id)
+        edits_playlists = self.user_manager.forget_user_for_entity(playlists, user_id)
 
         for playlist_id, edits in edits_playlists.items():
             self._db.update_by_id(self.TABLE_NAME, playlist_id, edits)

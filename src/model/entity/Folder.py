@@ -1,16 +1,18 @@
 import json
-import time
 
 from typing import Optional, Union
 
+from src.model.enum.FolderEntity import FolderEntity
+from src.util.utils import str_to_enum
 
-class User:
 
-    def __init__(self, username: str = '', password: str = '', enabled: bool = True, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+class Folder:
+
+    def __init__(self, entity: Union[FolderEntity, str] = FolderEntity.NODE_PLAYER, name: str = 'Untitled', parent_id: Optional[int] = None, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
-        self._username = username
-        self._password = password
-        self._enabled = enabled
+        self._parent_id = parent_id
+        self._entity = str_to_enum(entity, FolderEntity) if isinstance(entity, str) else entity
+        self._name = name
         self._created_by = created_by if created_by else None
         self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
@@ -21,28 +23,28 @@ class User:
         return self._id
 
     @property
-    def username(self) -> str:
-        return self._username
+    def parent_id(self) -> Optional[int]:
+        return self._parent_id
 
-    @username.setter
-    def username(self, value: str):
-        self._username = value
-
-    @property
-    def password(self) -> str:
-        return self._password
-
-    @password.setter
-    def password(self, value: str):
-        self._password = value
+    @parent_id.setter
+    def parent_id(self, value: Optional[int]):
+        self._parent_id = value
 
     @property
-    def enabled(self) -> bool:
-        return bool(self._enabled)
+    def name(self) -> str:
+        return self._name
 
-    @enabled.setter
-    def enabled(self, value: bool):
-        self._enabled = bool(value)
+    @name.setter
+    def name(self, value: str):
+        self._name = value
+
+    @property
+    def entity(self) -> FolderEntity:
+        return self._entity
+
+    @entity.setter
+    def entity(self, value: FolderEntity):
+        self._entity = value
 
     @property
     def created_by(self) -> str:
@@ -77,10 +79,11 @@ class User:
         self._updated_at = value
 
     def __str__(self) -> str:
-        return f"User(" \
+        return f"NodePlayer(" \
                f"id='{self.id}',\n" \
-               f"username='{self.username}',\n" \
-               f"enabled='{self.enabled}',\n" \
+               f"name='{self.name}',\n" \
+               f"parent_id='{self.parent_id}',\n" \
+               f"entity='{self.entity}',\n" \
                f"created_by='{self.created_by}',\n" \
                f"updated_by='{self.updated_by}',\n" \
                f"created_at='{self.created_at}',\n" \
@@ -93,23 +96,14 @@ class User:
     def to_dict(self) -> dict:
         return {
             "id": self.id,
-            "username": self.username,
-            "password": self.password,
-            "enabled": self.enabled,
+            "name": self.name,
+            "parent_id": self.parent_id,
+            "entity": self.entity.value,
             "created_by": self.created_by,
             "updated_by": self.updated_by,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }
 
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return self.enabled
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.id
+    def is_root(self) -> bool:
+        return not self._parent_id
