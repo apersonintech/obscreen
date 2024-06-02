@@ -38,6 +38,10 @@ jQuery(document).ready(function ($) {
         });
     };
 
+    $(document).on('change', 'select.group-picker', function () {
+        document.location.href = $(this).val();
+    });
+
     $(document).on('change', 'input[type=checkbox]', function () {
         $.ajax({
             url: '/fleet/node-player/toggle',
@@ -83,6 +87,7 @@ jQuery(document).ready(function ($) {
         showModal('modal-node-player-edit');
         $('.modal-node-player-edit input:visible:eq(0)').focus().select();
         $('#node-player-edit-name').val(nodePlayer.name);
+        $('#node-player-edit-group-id').val(nodePlayer.group_id);
         $('#node-player-edit-host').val(nodePlayer.host);
         $('#node-player-edit-id').val(nodePlayer.id);
     });

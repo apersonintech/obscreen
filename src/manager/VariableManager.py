@@ -125,7 +125,7 @@ class VariableManager:
             {"name": "playlist_default_time_sync", "section": self.t(VariableSection.PLAYLIST), "value": True, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_default_time_sync'), "refresh_player": True},
 
             ### Fleet Management
-            {"name": "fleet_player_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_player_enabled'), "refresh_player": False},
+            {"name": "fleet_player_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_player_enabled'), "description_edition": self.t('settings_variable_desc_edition_fleet_player_enabled'), "refresh_player": False},
             {"name": "fleet_studio_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_studio_enabled'), "refresh_player": False},
 
             ### Security

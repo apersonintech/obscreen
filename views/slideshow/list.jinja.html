@@ -39,7 +39,7 @@
 
 
             {% if PLAYLIST_ENABLED %}
-            <select class="playlist-picker">
+            <select class="select-item-picker playlist-picker">
                 <option value="{{ url_for('slideshow_slide_list') }}" {% if not current_playlist %}selected="selected"{% endif %}>
                     {{ l.common_default_playlist }}
                 </option>

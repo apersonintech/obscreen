@@ -25,7 +25,7 @@ class FleetNodePlayerGroupController(ObController):
     def fleet_node_player_group_list(self):
         return render_template(
             'fleet/player-group/list.jinja.html',
-            node_player_groups=self._model_store.node_player_group().get_all(),
+            node_player_groups=self._model_store.node_player_group().get_groups(with_default=True),
             playlists=self._model_store.playlist().get_all_labels_indexed()
         )
 

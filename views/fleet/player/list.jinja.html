@@ -21,6 +21,19 @@
         <div class="toolbar-actions">
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START) }}
             <button class="purple node-player-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.fleet_node_player_button_add }}</button>
+
+            <select class="select-item-picker group-picker">
+                <option value="{{ url_for('fleet_node_player_list') }}" {% if not current_group %}selected="selected"{% endif %}>
+                    {{ l.common_default_node_player_group }}
+                </option>
+                {% for group_id, group_name in groups.items() %}
+                    {% set is_active_group = str(current_group.id) == str(group_id) %}
+                    <option value="{{ url_for('fleet_node_player_list_group_use', group_id=group_id) }}" {% if is_active_group %}selected="selected"{% endif %}>
+                        {{ group_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>

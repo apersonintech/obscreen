@@ -105,9 +105,21 @@ class NodePlayerManager(ModelManager):
         for node_player_id, node_player_position in positions.items():
             self._db.update_by_id(self.TABLE_NAME, node_player_id, {"position": node_player_position})
 
-    def update_form(self, id: int, name: str, host: str) -> None:
-        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"name": name, "host": host}))
+    def update_form(self, id: int, name: str, host: str, group_id: Optional[int]) -> NodePlayer:
+        node_player = self.get(id)
+
+        if not node_player:
+            return
+
+        form = {
+            "name": name,
+            "host": host,
+            "group_id": group_id if group_id else None
+        }
+
+        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
+        return self.get(id)
 
     def add_form(self, node_player: Union[NodePlayer, Dict]) -> None:
         form = node_player
