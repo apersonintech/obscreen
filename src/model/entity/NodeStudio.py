@@ -3,7 +3,7 @@ import json
 from typing import Optional, Union
 
 
-class Studio:
+class NodeStudio:
 
     def __init__(self, host: str = '', port: int = 5000, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None):
         self._id = id if id else None
@@ -58,7 +58,7 @@ class Studio:
         self._position = value
 
     def __str__(self) -> str:
-        return f"Studio(" \
+        return f"NodeStudio(" \
                f"id='{self.id}',\n" \
                f"name='{self.name}',\n" \
                f"enabled='{self.enabled}',\n" \

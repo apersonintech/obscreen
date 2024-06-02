@@ -2,8 +2,10 @@ import time
 import json
 
 from flask import Flask, render_template, redirect, request, url_for
+
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
+from src.model.entity.User import User
 
 
 class SettingsController(ObController):
@@ -37,7 +39,16 @@ class SettingsController(ObController):
         if variable.name == 'fleet_studio_enabled':
             self.reload_web_server()
 
+        # if variable.name == 'fleet_player_enabled':
+        #     if variable.as_bool() and self._model_store.node_player_group().count_all_enabled() == 0:
+        #         self._model_store.user().add_form(NodePlayerGroup(name="default", enabled=True))
+        #
+        #     self.reload_web_server()
+
         if variable.name == 'auth_enabled':
+            if variable.as_bool() and self._model_store.user().count_all_enabled() == 0:
+                self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
+
             self.reload_web_server()
 
         if variable.name == 'lang':
