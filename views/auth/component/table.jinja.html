@@ -33,9 +33,11 @@
             {% if AUTH_ENABLED %}
                 <td class="tac">
                     {% set creator = track_created(user) %}
-                    <a href="javascript:void(0);" class="badge item-utrack user-utrack {% if not creator.enabled %}anonymous{% endif %}">
-                        {{ creator.username }}
-                    </a>
+                    {% if creator.username %}
+                        <a href="javascript:void(0);" class="badge item-utrack user-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                            {{ creator.username }}
+                        </a>
+                    {% endif %}
                 </td>
             {% endif %}
             <td class="tac">
