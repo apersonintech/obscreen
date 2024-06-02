@@ -1,0 +1,39 @@
+<div class="modal modal-node-studio-edit hidden">
+    <h2>
+        {{ l.fleet_node_studio_form_edit_title }}
+    </h2>
+
+    <form action="/fleet/node-studio/edit" method="POST">
+        <input type="hidden" name="id" id="node-studio-edit-id" />
+
+        <div class="form-group">
+            <label for="node-studio-edit-name">{{ l.fleet_node_studio_form_label_name }}</label>
+            <div class="widget">
+                <input type="text" name="name" id="node-studio-edit-name" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-studio-edit-host">{{ l.fleet_node_studio_form_label_host }}</label>
+            <div class="widget">
+                <input type="text" name="host" id="node-studio-edit-host" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-studio-edit-port">{{ l.fleet_node_studio_form_label_port }}</label>
+            <div class="widget">
+                <input type="number" name="port" id="node-studio-edit-port" required="required" />
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn-normal modal-close">
+                {{ l.fleet_node_studio_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-save icon-left"></i>{{ l.fleet_node_studio_form_edit_submit }}
+            </button>
+        </div>
+    </form>
+</div>
