@@ -40,9 +40,11 @@
                 <td class="tac">
                     {% if playlist.id %}
                         {% set creator = track_created(playlist) %}
-                        <a href="javascript:void(0);" class="badge item-utrack playlist-utrack {% if not creator.enabled %}anonymous{% endif %}">
-                            {{ creator.username }}
-                        </a>
+                        {% if creator.username %}
+                            <a href="javascript:void(0);" class="badge item-utrack playlist-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                                {{ creator.username }}
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </td>
             {% endif %}
