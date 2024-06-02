@@ -2,6 +2,11 @@
     <thead>
     <tr>
         <th>{{ l.fleet_node_player_panel_th_name }}</th>
+        {% if AUTH_ENABLED %}
+            <th class="tac">
+                <i class="fa fa-user"></i>
+            </th>
+        {% endif %}
         <th class="tac">{{ l.fleet_node_player_panel_th_host }}</th>
         <th class="tac">{{ l.fleet_node_player_panel_th_enabled }}</th>
         <th class="tac">{{ l.fleet_node_player_panel_th_activity }}</th>
@@ -17,7 +22,7 @@
         </td>
     </tr>
     {% for node_player in node_players %}
-        <tr class="node-player-item" data-level="{{ node_player.id }}" data-entity="{{ node_player.to_json() }}">
+        <tr class="node-player-item" data-level="{{ node_player.id }}" data-entity="{{ node_player.to_json({"created_by": track_created(node_player).username, "updated_by": track_updated(node_player).username}) }}">
             <td class="infos">
                 <div class="inner">
                     <a href="javascript:void(0);" class="item-sort node-player-sort">
@@ -30,6 +35,14 @@
                     {{ node_player.name }}
                 </div>
             </td>
+            {% if AUTH_ENABLED %}
+                <td class="tac">
+                    {% set creator = track_created(node_player) %}
+                    <a href="javascript:void(0);" class="badge item-utrack node-player-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                        {{ creator.username }}
+                    </a>
+                </td>
+            {% endif %}
             <td class="tac">
                 {{ node_player.host }}
             </td>

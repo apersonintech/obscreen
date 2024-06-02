@@ -14,6 +14,7 @@ class NodePlayerManager(ModelManager):
     TABLE_MODEL = [
         "name CHAR(255)",
         "enabled INTEGER DEFAULT 0",
+        "group_id INTEGER",
         "position INTEGER",
         "host CHAR(255)",
         "created_by CHAR(255)",
@@ -52,6 +53,15 @@ class NodePlayerManager(ModelManager):
 
     def get_all(self, sort: bool = False) -> List[NodePlayer]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "position" if sort else None))
+
+    def get_node_players(self, group_id: Optional[int] = None) -> List[NodePlayer]:
+        query = "enabled = {}".format("1" if enabled else "0")
+        if group_id:
+            query = "{} {}".format(query, "AND group_id = {}".format(group_id))
+        else:
+            query = "{} {}".format(query, "AND group_id is NULL")
+
+        return self.get_by(query=query, sort="position")
 
     def forget_user(self, user_id: int):
         node_players = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
@@ -113,3 +123,6 @@ class NodePlayerManager(ModelManager):
 
     def to_dict(self, node_players: List[NodePlayer]) -> List[Dict]:
         return [node_player.to_dict() for node_player in node_players]
+
+    def count_node_players_for_group(self, id: int) -> int:
+        return len(self.get_node_players(group_id=id))

@@ -1,35 +1,35 @@
-<div class="modal modal-slide-utrack modal-slide">
+<div class="modal modal-entity-utrack modal-entity">
     <h2>
         {{ l.utrack_title }}
     </h2>
 
-    <form action="/slideshow/slide/add" method="POST" enctype="multipart/form-data">
+    <div class="form">
 
         <div class="form-group">
             <label>{{ l.created_by }}</label>
             <div class="widget">
-                <input name="name" type="text" id="slide-utrack-created-by" disabled="disabled" />
+                <input name="name" type="text" id="entity-utrack-created-by" disabled="disabled" />
             </div>
         </div>
 
         <div class="form-group">
             <label>{{ l.updated_by }}</label>
             <div class="widget">
-                <input name="name" type="text" id="slide-utrack-updated-by" disabled="disabled" />
+                <input name="name" type="text" id="entity-utrack-updated-by" disabled="disabled" />
             </div>
         </div>
 
         <div class="form-group">
             <label>{{ l.created_at }}</label>
             <div class="widget">
-                <input name="name" type="text" id="slide-utrack-created-at" disabled="disabled" />
+                <input name="name" type="text" id="entity-utrack-created-at" disabled="disabled" />
             </div>
         </div>
 
         <div class="form-group">
             <label>{{ l.updated_at }}</label>
             <div class="widget">
-                <input name="name" type="text" id="slide-utrack-updated-at" disabled="disabled" />
+                <input name="name" type="text" id="entity-utrack-updated-at" disabled="disabled" />
             </div>
         </div>
 
@@ -39,5 +39,5 @@
                 {{ l.close }}
             </button>
         </div>
-    </form>
+    </div>
 </div>

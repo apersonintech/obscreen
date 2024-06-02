@@ -2,6 +2,11 @@
     <thead>
     <tr>
         <th>{{ l.auth_user_panel_th_username }}</th>
+        {% if AUTH_ENABLED %}
+            <th class="tac">
+                <i class="fa fa-user"></i>
+            </th>
+        {% endif %}
         <th class="tac">{{ l.auth_user_panel_th_enabled }}</th>
         <th class="tac">{{ l.auth_user_panel_th_activity }}</th>
     </tr>
@@ -16,7 +21,7 @@
         </td>
     </tr>
     {% for user in users %}
-        <tr class="user-item" data-level="{{ user.id }}" data-entity="{{ user.to_json() }}">
+        <tr class="user-item" data-level="{{ user.id }}" data-entity="{{ user.to_json({"created_by": track_created(user).username, "updated_by": track_updated(user).username}) }}">
             <td class="infos">
                 <div class="inner">
                     <div class="badge"><i class="fa fa-key icon-left"></i> {{ user.id }}</div>
@@ -25,6 +30,14 @@
                     {{ user.username }}
                 </div>
             </td>
+            {% if AUTH_ENABLED %}
+                <td class="tac">
+                    {% set creator = track_created(user) %}
+                    <a href="javascript:void(0);" class="badge item-utrack user-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                        {{ creator.username }}
+                    </a>
+                </td>
+            {% endif %}
             <td class="tac">
                 <label class="pure-material-switch">
                     <input type="checkbox" {% if user.enabled %}checked="checked"{% endif %}><span></span>

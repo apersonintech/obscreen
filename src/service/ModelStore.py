@@ -5,6 +5,7 @@ from src.manager.SlideManager import SlideManager
 from src.manager.FolderManager import FolderManager
 from src.manager.NodeStudioManager import NodeStudioManager
 from src.manager.NodePlayerManager import NodePlayerManager
+from src.manager.NodePlayerGroupManager import NodePlayerGroupManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
 from src.manager.LangManager import LangManager
@@ -35,6 +36,7 @@ class ModelStore:
         self._folder_manager = FolderManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._node_studio_manager = NodeStudioManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._node_player_manager = NodePlayerManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
+        self._node_player_group_manager = NodePlayerGroupManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._playlist_manager = PlaylistManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._variable_manager.reload()
@@ -63,6 +65,9 @@ class ModelStore:
     def node_player(self) -> NodePlayerManager:
         return self._node_player_manager
 
+    def node_player_group(self) -> NodePlayerGroupManager:
+        return self._node_player_group_manager
+
     def folder_manager(self) -> FolderManager:
         return self._folder_manager
 
@@ -78,6 +83,7 @@ class ModelStore:
     def on_user_delete(self, user_id: int) -> None:
         self._playlist_manager.forget_user(user_id)
         self._folder_manager.forget_user(user_id)
+        self._node_player_group_manager.forget_user(user_id)
         self._node_player_manager.forget_user(user_id)
         self._node_studio_manager.forget_user(user_id)
         self._slide_manager.forget_user(user_id)

@@ -16,7 +16,7 @@
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.fleet_node_player_page_title }}</h2>
+        <h2><i class="fa fa-tv icon-left"></i>{{ l.fleet_node_player_page_title }}</h2>
 
         <div class="toolbar-actions">
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START) }}
@@ -24,7 +24,9 @@
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
-    <div class="panel">
+
+
+     <div class="panel">
         <div class="panel-body">
             <h3>{{ l.fleet_node_player_panel_active }}</h3>
 
@@ -43,7 +45,6 @@
         </div>
     </div>
 
-
     <div class="modals hidden">
         <div class="modals-outer">
             <a href="javascript:void(0);" class="modal-close">
@@ -52,6 +53,7 @@
             <div class="modals-inner">
                 {% include 'fleet/player/modal/add.jinja.html' %}
                 {% include 'fleet/player/modal/edit.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
             </div>
         </div>
     </div>

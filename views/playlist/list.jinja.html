@@ -16,7 +16,7 @@
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.playlist_page_title }}</h2>
+        <h2><i class="fa fa-bars-staggered icon-left"></i>{{ l.playlist_page_title }}</h2>
 
         <div class="toolbar-actions">
             {{ HOOK(H_PLAYLIST_TOOLBAR_ACTIONS_START) }}
@@ -55,6 +55,7 @@
             <div class="modals-inner">
                 {% include 'playlist/modal/add.jinja.html' %}
                 {% include 'playlist/modal/edit.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
             </div>
         </div>
     </div>

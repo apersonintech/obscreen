@@ -16,7 +16,7 @@
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.fleet_node_studio_page_title }}</h2>
+        <h2><i class="fa fa-server icon-left"></i>{{ l.fleet_node_studio_page_title }}</h2>
 
         <div class="toolbar-actions">
             {{ HOOK(H_FLEET_NODE_STUDIO_TOOLBAR_ACTIONS_START) }}
@@ -53,6 +53,7 @@
             <div class="modals-inner">
                 {% include 'fleet/studio/modal/add.jinja.html' %}
                 {% include 'fleet/studio/modal/edit.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
             </div>
         </div>
     </div>
