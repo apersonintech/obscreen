@@ -13,6 +13,17 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="node-player-group-edit-playlist-id">{{ l.fleet_node_player_group_form_label_playlist_id }}</label>
+            <div class="widget">
+                <select name="playlist_id" id="node-player-group-edit-playlist-id">
+                    <option value="">{{ l.common_default_playlist }}</option>
+                    {% for playlist_id, playlist_name in playlists.items() %}
+                        <option value="{{ playlist_id }}">{{ playlist_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
         <div class="actions">
             <button type="button" class="btn-normal modal-close">

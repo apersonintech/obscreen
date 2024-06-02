@@ -7,6 +7,7 @@
                 <i class="fa fa-user"></i>
             </th>
         {% endif %}
+        <th class="tac">{{ l.fleet_node_player_group_panel_th_playlist }}</th>
         <th class="tac">{{ l.fleet_node_player_group_panel_th_activity }}</th>
     </tr>
     </thead>
@@ -19,6 +20,7 @@
             ) }}
         </td>
     </tr>
+
     {% for node_player_group in node_player_groups %}
         <tr class="node-player-group-item" data-level="{{ node_player_group.id }}" data-entity="{{ node_player_group.to_json({"created_by": track_created(node_player_group).username, "updated_by": track_updated(node_player_group).username}) }}">
             <td class="infos">
@@ -29,7 +31,7 @@
 
                     <div class="badge"><i class="fa fa-key icon-left"></i> {{ node_player_group.id }}</div>
 
-                    <i class="fa fa-server icon-left"></i>
+                    <i class="fa fa-group icon-left"></i>
                     {{ node_player_group.name }}
                 </div>
             </td>
@@ -41,6 +43,13 @@
                     </a>
                 </td>
             {% endif %}
+            <td class="tac">
+                {% if node_player_group.playlist_id and playlists[node_player_group.playlist_id] %}
+                    {{ playlists[node_player_group.playlist_id] }}
+                {% else %}
+                    {{ l.common_default_playlist }}
+                {% endif %}
+            </td>
             <td class="actions tac">
                 <a href="javascript:void(0);" class="item-edit node-player-group-edit">
                     <i class="fa fa-pencil"></i>
