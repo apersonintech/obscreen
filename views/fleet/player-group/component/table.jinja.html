@@ -1,0 +1,55 @@
+<table class="{{ tclass }}-node-players">
+    <thead>
+    <tr>
+        <th>{{ l.fleet_node_player_group_panel_th_name }}</th>
+        {% if AUTH_ENABLED %}
+            <th class="tac">
+                <i class="fa fa-user"></i>
+            </th>
+        {% endif %}
+        <th class="tac">{{ l.fleet_node_player_group_panel_th_activity }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="empty-tr {% if node_player_groups|length != 0 %}hidden{% endif %}">
+        <td colspan="4">
+            {{ l.fleet_node_player_group_panel_empty|replace(
+                '%link%',
+                ('<a href="javascript:void(0);" class="item-add node-player-group-add">'~l.fleet_node_player_group_button_add~'</a>')|safe
+            ) }}
+        </td>
+    </tr>
+    {% for node_player_group in node_player_groups %}
+        <tr class="node-player-group-item" data-level="{{ node_player_group.id }}" data-entity="{{ node_player_group.to_json({"created_by": track_created(node_player_group).username, "updated_by": track_updated(node_player_group).username}) }}">
+            <td class="infos">
+                <div class="inner">
+                    <a href="javascript:void(0);" class="item-sort node-player-group-sort">
+                        <i class="fa fa-sort icon-left"></i>
+                    </a>
+
+                    <div class="badge"><i class="fa fa-key icon-left"></i> {{ node_player_group.id }}</div>
+
+                    <i class="fa fa-server icon-left"></i>
+                    {{ node_player_group.name }}
+                </div>
+            </td>
+            {% if AUTH_ENABLED %}
+                <td class="tac">
+                    {% set creator = track_created(node_player_group) %}
+                    <a href="javascript:void(0);" class="badge item-utrack node-player-group-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                        {{ creator.username }}
+                    </a>
+                </td>
+            {% endif %}
+            <td class="actions tac">
+                <a href="javascript:void(0);" class="item-edit node-player-group-edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a href="javascript:void(0);" class="item-delete node-player-group-delete">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

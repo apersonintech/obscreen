@@ -1,23 +1,7 @@
 jQuery(document).ready(function ($) {
-    const $modalsRoot = $('.modals');
-
-    const showModal = function (modalClass) {
-        $modalsRoot.removeClass('hidden').find('form').trigger('reset');
-        $modalsRoot.find('.modal').addClass('hidden');
-        $modalsRoot.find('.modal.' + modalClass).removeClass('hidden');
-    };
-
-    const hideModal = function () {
-        $modalsRoot.addClass('hidden').find('form').trigger('reset');
-    };
-
     const main = function () {
 
     };
-
-    $(document).on('click', '.modal-close', function () {
-        hideModal();
-    });
 
     $(document).on('click', '.variable-edit', function () {
         const variable = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
@@ -40,12 +24,6 @@ jQuery(document).ready(function ($) {
         $('#variable-edit-description-edition').html(variable.description_edition).toggleClass('hidden', variable.description_edition == '');
         $('#variable-edit-value').val(variable.value);
         $('#variable-edit-id').val(variable.id);
-    });
-
-    $(document).keyup(function (e) {
-        if (e.key === "Escape") {
-            hideModal();
-        }
     });
 
     main();

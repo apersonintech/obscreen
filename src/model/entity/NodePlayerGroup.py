@@ -4,15 +4,12 @@ import time
 from typing import Optional, Union
 
 
-class NodePlayer:
+class NodePlayerGroup:
 
-    def __init__(self, host: str = '', enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None, group_id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, name: str = 'Untitled', playlist_id: Optional[int] = None, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
-        self._group_id = group_id
-        self._host = host
-        self._enabled = enabled
+        self._playlist_id = playlist_id
         self._name = name
-        self._position = position
         self._created_by = created_by if created_by else None
         self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
@@ -23,28 +20,12 @@ class NodePlayer:
         return self._id
 
     @property
-    def group_id(self) -> Optional[int]:
-        return self._group_id
+    def playlist_id(self) -> Optional[int]:
+        return self._playlist_id
 
-    @group_id.setter
-    def group_id(self, value: Optional[int]):
-        self._group_id = value
-
-    @property
-    def host(self) -> str:
-        return self._host
-
-    @host.setter
-    def host(self, value: str):
-        self._host = value
-
-    @property
-    def enabled(self) -> bool:
-        return bool(self._enabled)
-
-    @enabled.setter
-    def enabled(self, value: bool):
-        self._enabled = bool(value)
+    @playlist_id.setter
+    def playlist_id(self, value: Optional[int]):
+        self._playlist_id = value
 
     @property
     def name(self) -> str:
@@ -53,14 +34,6 @@ class NodePlayer:
     @name.setter
     def name(self, value: str):
         self._name = value
-
-    @property
-    def position(self) -> int:
-        return self._position
-
-    @position.setter
-    def position(self, value: int):
-        self._position = value
 
     @property
     def created_by(self) -> str:
@@ -97,11 +70,8 @@ class NodePlayer:
     def __str__(self) -> str:
         return f"NodePlayer(" \
                f"id='{self.id}',\n" \
-               f"group_id='{self.group_id}',\n" \
                f"name='{self.name}',\n" \
-               f"enabled='{self.enabled}',\n" \
-               f"position='{self.position}',\n" \
-               f"host='{self.host}',\n" \
+               f"playlist_id='{self.playlist_id}',\n" \
                f"created_by='{self.created_by}',\n" \
                f"updated_by='{self.updated_by}',\n" \
                f"created_at='{self.created_at}',\n" \
@@ -119,13 +89,13 @@ class NodePlayer:
     def to_dict(self) -> dict:
         return {
             "id": self.id,
-            "group_id": self.group_id,
             "name": self.name,
-            "enabled": self.enabled,
-            "position": self.position,
-            "host": self.host,
+            "playlist_id": self.playlist_id,
             "created_by": self.created_by,
             "updated_by": self.updated_by,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }
+
+    def is_root(self) -> bool:
+        return not self._playlist_id

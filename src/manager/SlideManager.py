@@ -20,7 +20,7 @@ class SlideManager(ModelManager):
         "name CHAR(255)",
         "type CHAR(30)",
         "enabled INTEGER DEFAULT 0",
-        "playlist INTEGER",
+        "playlist_id INTEGER",
         "duration INTEGER",
         "position INTEGER",
         "location TEXT",
@@ -78,9 +78,9 @@ class SlideManager(ModelManager):
     def get_slides(self, playlist_id: Optional[int] = None, enabled: bool = True) -> List[Slide]:
         query = "enabled = {}".format("1" if enabled else "0")
         if playlist_id:
-            query = "{} {}".format(query, "AND playlist = {}".format(playlist_id))
+            query = "{} {}".format(query, "AND playlist_id = {}".format(playlist_id))
         else:
-            query = "{} {}".format(query, "AND playlist is NULL")
+            query = "{} {}".format(query, "AND playlist_id is NULL")
 
         return self.get_by(query=query, sort="position")
 

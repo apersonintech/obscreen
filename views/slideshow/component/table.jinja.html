@@ -23,10 +23,7 @@
         </td>
     </tr>
     {% for slide in slides %}
-        <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json({
-                "created_by": track_created(slide).username,
-                "updated_by": track_updated(slide).username
-            }) }}">
+        <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json({"created_by": track_created(slide).username, "updated_by": track_updated(slide).username}) }}">
             <td class="infos">
                 <div class="inner">
                     <a href="javascript:void(0);" class="item-sort slide-sort">

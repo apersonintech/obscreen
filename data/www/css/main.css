@@ -267,6 +267,10 @@ button.purple:hover {
     align-self: stretch;
 }
 
+.panel.no-border {
+    border: none;
+}
+
 .panel h3 {
     color: #fff;
 }
@@ -554,7 +558,7 @@ button.purple:hover {
     margin: 0;
 }
 
-form {
+.form {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -562,7 +566,7 @@ form {
     padding: 20px;
 }
 
-form .form-group {
+.form .form-group {
     margin: 10px 20px 5px 20px;
     display: flex;
     flex-direction: row;
@@ -572,14 +576,14 @@ form .form-group {
     flex: 1;
 }
 
-form .form-group label {
+.form .form-group label {
     flex: 1;
     padding: 10px;
     text-align: right;
     margin-right: 20px;
 }
 
-form .form-group .widget {
+.form .form-group .widget {
     flex: 3;
     display: flex;
     flex-direction: row;
@@ -588,9 +592,9 @@ form .form-group .widget {
     align-self: stretch;
 }
 
-form .form-group input,
-form .form-group select,
-form .form-group textarea {
+.form .form-group input,
+.form .form-group select,
+.form .form-group textarea {
     flex: 1;
     padding: 10px 5px 10px 5px;
     border: 1px solid #EEE;
@@ -598,23 +602,23 @@ form .form-group textarea {
     width: auto;
 }
 
-form .form-group input[type=checkbox] {
+.form .form-group input[type=checkbox] {
     flex: 0;
 }
 
-form .form-group .trigger {
+.form .form-group .trigger {
     margin-right: 10px;
 }
 
-form .form-group select.trigger {
+.form .form-group select.trigger {
     max-width: 120px;
 }
 
-form .form-group span {
+.form .form-group span {
     margin-left: 10px;
 }
 
-form .actions {
+.form .actions {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -623,25 +627,25 @@ form .actions {
     align-self: stretch;
 }
 
-form .actions button.green,
-form .actions button {
+.form .actions button.green,
+.form .actions button {
     font-size: 18px;
 }
 
-form .actions button.green:hover {
+.form .actions button.green:hover {
     background: white;
     color: rgb(14, 239, 95);
     border-color: rgb(14, 239, 95);
 }
 
-form .actions button.btn-normal {
+.form .actions button.btn-normal {
     color: #999;
     border-color: #999;
     font-size: 18px;
     margin: 0;
 }
 
-form .actions button.btn-normal:hover {
+.form .actions button.btn-normal:hover {
     color: #555;
     border-color: #555;
 }
@@ -677,19 +681,19 @@ footer .version {
     color: #333;
 }
 
-.card form {
+.card .form {
     padding: 0;
 }
 
-.card form .form-group  {
+.card .form .form-group  {
     margin: 0 0 30px 0;
     padding: 0;
 }
-.card form .form-group .widget {
+.card .form .form-group .widget {
     flex: 1;
 }
 
-.card form .form-group label {
+.card .form .form-group label {
     text-align: left;
 }
 
@@ -757,4 +761,97 @@ a.badge:hover {
     margin-left: 34px;
     color: #999;
 
+}
+
+.explorer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-self: stretch;
+}
+
+
+.explorer .left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-self: stretch;
+    flex: 1;
+}
+
+.explorer .right {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.panel.panel-menu {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-self: stretch;
+    margin-right: 0;
+    border-color: #692fbd;
+}
+
+.panel.panel-menu ul {
+    flex: 1;
+    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.panel.panel-menu ul li {
+    margin: 3px 0;
+}
+
+.panel.panel-menu ul li a {
+    padding: 5px 15px 5px 15px;
+    color: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex: 1;
+}
+
+
+
+.panel.panel-menu ul li:hover {
+    color: #555;
+    font-weight: bold;
+}
+
+.panel.panel-menu ul li.active {
+    color: #692fbd;
+    background: #692fbd22;
+    border-radius: 4px;
+    font-weight: bold;
+    border: 1px solid #692fbd;
+}
+
+
+
+.explorer .panel-active {
+    background: white;
+    color: #AAA;
+    border-color: #BBB;
+}
+.explorer .panel-active h3 {
+    color: #0bc44e;
+}
+
+
+.explorer .panel-inactive {
+    background: white;
+    color: #AAA;
+    border-color: #BBB;
 }

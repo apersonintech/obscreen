@@ -87,8 +87,13 @@ class User:
                f"updated_at='{self.updated_at}',\n" \
                f")"
 
-    def to_json(self) -> str:
-        return json.dumps(self.to_dict())
+    def to_json(self, edits: dict = {}) -> str:
+        obj = self.to_dict()
+
+        for k, v in edits.items():
+            obj[k] = v
+
+        return json.dumps(obj)
 
     def to_dict(self) -> dict:
         return {

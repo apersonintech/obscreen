@@ -1,0 +1,24 @@
+<div class="modal modal-node-player-group-add">
+    <h2>
+        {{ l.fleet_node_player_group_form_add_title }}
+    </h2>
+
+    <form class="form" action="/fleet/node-player-group/add" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="node-player-group-add-name">{{ l.fleet_node_player_group_form_label_name }}</label>
+            <div class="widget">
+                <input name="name" type="text" id="node-player-group-add-name" required="required" />
+            </div>
+        </div>
+
+
+        <div class="actions">
+            <button type="button" class="btn-normal modal-close">
+                {{ l.fleet_node_player_group_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-plus icon-left"></i> {{ l.fleet_node_player_group_form_add_submit }}
+            </button>
+        </div>
+    </form>
+</div>

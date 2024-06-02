@@ -19,7 +19,7 @@
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.slideshow_page_title }}</h2>
+        <h2><i class="fa-regular fa-clock icon-left"></i>{{ l.slideshow_page_title }}</h2>
 
         <div class="toolbar-actions">
             {{ HOOK(H_SLIDESHOW_TOOLBAR_ACTIONS_START) }}
@@ -91,7 +91,7 @@
             <div class="modals-inner">
                 {% include 'slideshow/modal/add.jinja.html' %}
                 {% include 'slideshow/modal/edit.jinja.html' %}
-                {% include 'slideshow/modal/utrack.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
             </div>
         </div>
     </div>

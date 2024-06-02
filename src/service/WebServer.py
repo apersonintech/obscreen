@@ -12,6 +12,7 @@ from src.controller.PlayerController import PlayerController
 from src.controller.SlideshowController import SlideshowController
 from src.controller.FleetNodeStudioController import FleetNodeStudioController
 from src.controller.FleetNodePlayerController import FleetNodePlayerController
+from src.controller.FleetNodePlayerGroupController import FleetNodePlayerGroupController
 from src.controller.PlaylistController import PlaylistController
 from src.controller.AuthController import AuthController
 from src.controller.SysinfoController import SysinfoController
@@ -108,6 +109,7 @@ class WebServer:
         SysinfoController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         FleetNodeStudioController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         FleetNodePlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        FleetNodePlayerGroupController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         PlaylistController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         AuthController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
 
