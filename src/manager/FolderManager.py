@@ -77,6 +77,9 @@ class FolderManager(ModelManager):
     def post_update(self, folder_id: str) -> str:
         return folder_id
 
+    def post_delete(self, folder_id: str) -> str:
+        return folder_id
+
     def update_form(self, id: int, name: str) -> None:
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"name": name}))
         self.post_update(id)

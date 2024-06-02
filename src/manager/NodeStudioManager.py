@@ -79,6 +79,9 @@ class NodeStudioManager(ModelManager):
     def post_update(self, node_studio_id: str) -> str:
         return node_studio_id
 
+    def post_delete(self, node_studio_id: str) -> str:
+        return node_studio_id
+
     def get_enabled_node_studios(self) -> List[NodeStudio]:
         return self.get_by(query="enabled = 1", sort="position")
 

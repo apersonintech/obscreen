@@ -54,7 +54,7 @@ class NodePlayerManager(ModelManager):
     def get_all(self, sort: bool = False) -> List[NodePlayer]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "position" if sort else None))
 
-    def get_node_players(self, group_id: Optional[int] = None) -> List[NodePlayer]:
+    def get_node_players(self, group_id: Optional[int] = None, enabled: bool = True) -> List[NodePlayer]:
         query = "enabled = {}".format("1" if enabled else "0")
         if group_id:
             query = "{} {}".format(query, "AND group_id = {}".format(group_id))
@@ -86,6 +86,9 @@ class NodePlayerManager(ModelManager):
         return node_player_id
 
     def post_update(self, node_player_id: str) -> str:
+        return node_player_id
+
+    def post_delete(self, node_player_id: str) -> str:
         return node_player_id
 
     def get_enabled_node_players(self) -> List[NodePlayer]:

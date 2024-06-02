@@ -26,17 +26,20 @@ class FleetNodePlayerGroupController(ObController):
         return render_template(
             'fleet/player-group/list.jinja.html',
             node_player_groups=self._model_store.node_player_group().get_all(),
+            playlists=self._model_store.playlist().get_all_labels_indexed()
         )
 
     def fleet_node_player_group_add(self):
+        playlist_id = request.form['playlist_id'] if 'playlist_id' in request.form and request.form['playlist_id'] else None
         self._model_store.node_player_group().add_form(NodePlayerGroup(
             name=request.form['name'],
-            playlist_id=request.form['playlist_id'],
+            playlist_id=playlist_id,
         ))
         return redirect(url_for('fleet_node_player_group_list'))
 
     def fleet_node_player_group_edit(self):
-        self._model_store.node_player_group().update_form(request.form['id'], request.form['name'], request.form['playlist_id'])
+        playlist_id = request.form['playlist_id'] if 'playlist_id' in request.form and request.form['playlist_id'] else None
+        self._model_store.node_player_group().update_form(request.form['id'], request.form['name'], playlist_id)
         return redirect(url_for('fleet_node_player_group_list'))
 
     def fleet_node_player_group_delete(self):
@@ -46,5 +49,5 @@ class FleetNodePlayerGroupController(ObController):
         if self._model_store.node_player().count_node_players_for_group(id) > 0:
             return jsonify({'status': 'error', 'message': self.t('node_player_group_delete_has_node_player')}), 400
 
-        self._model_store.playlist().delete(id)
+        self._model_store.node_player_group().delete(id)
         return jsonify({'status': 'ok'})

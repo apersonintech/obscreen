@@ -52,7 +52,7 @@ class NodePlayerGroupManager(ModelManager):
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "name" if sort else None))
 
     def get_node_players_groups(self, playlist_id: Optional[int] = None) -> List[NodePlayerGroup]:
-        query = ""
+        query = " 1=1 "
         if playlist_id:
             query = "{} {}".format(query, "AND playlist_id = {}".format(playlist_id))
         else:
@@ -83,6 +83,9 @@ class NodePlayerGroupManager(ModelManager):
         return node_player_group_id
 
     def post_update(self, node_player_group_id: str) -> str:
+        return node_player_group_id
+
+    def post_delete(self, node_player_group_id: str) -> str:
         return node_player_group_id
 
     def update_form(self, id: int, name: str, playlist_id: Optional[int]) -> None:

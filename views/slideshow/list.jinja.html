@@ -41,7 +41,7 @@
             {% if PLAYLIST_ENABLED %}
             <select class="playlist-picker">
                 <option value="{{ url_for('slideshow_slide_list') }}" {% if not current_playlist %}selected="selected"{% endif %}>
-                    {{ l.slideshow_playlist_panel_item_default }}
+                    {{ l.common_default_playlist }}
                 </option>
                 {% for playlist in playlists %}
                     {% set is_active_playlist = str(current_playlist.id) == str(playlist.id) %}
