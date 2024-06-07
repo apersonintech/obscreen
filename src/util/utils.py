@@ -135,6 +135,7 @@ def str_to_enum(str_val: str, enum_class) -> Enum:
             return enum_item
     raise ValueError(f"{str_val} is not a valid {enum_class.__name__} item")
 
+
 def regex_search(pattern: str, string: str, group: int):
     """Shortcut method to search a string for a given pattern.
     :param str pattern:
@@ -209,4 +210,3 @@ def get_function_caller(depth: int = 3) -> str:
 
 def clamp(x: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(x, maximum))
-
