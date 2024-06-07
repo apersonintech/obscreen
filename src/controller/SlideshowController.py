@@ -47,7 +47,7 @@ class SlideshowController(ObController):
             name=request.form['name'],
             type=str_to_enum(request.form['type'], SlideType),
             duration=request.form['duration'],
-            playlist=request.form['playlist'] if 'playlist' in request.form else None,
+            playlist_id=request.form['playlist_id'] if 'playlist_id' in request.form and request.form['playlist_id'] else None,
             cron_schedule=get_optional_string(request.form['cron_schedule']),
             cron_schedule_end=get_optional_string(request.form['cron_schedule_end']),
         )
@@ -72,8 +72,8 @@ class SlideshowController(ObController):
         self._model_store.slide().add_form(slide)
         self._post_update()
 
-        if slide.playlist:
-            return redirect(url_for('slideshow_slide_list_playlist_use', playlist_id=slide.playlist))
+        if slide.playlist_id:
+            return redirect(url_for('slideshow_slide_list_playlist_use', playlist_id=slide.playlist_id))
 
         return redirect(url_for('slideshow_slide_list'))
 
@@ -84,12 +84,12 @@ class SlideshowController(ObController):
             duration=request.form['duration'],
             cron_schedule=request.form['cron_schedule'],
             cron_schedule_end=request.form['cron_schedule_end'],
-            location=request.form['location'] if 'location' in request.form else None
+            location=request.form['location'] if 'location' in request.form and request.form['location'] else None
         )
         self._post_update()
 
-        if slide.playlist:
-            return redirect(url_for('slideshow_slide_list_playlist_use', playlist_id=slide.playlist))
+        if slide.playlist_id:
+            return redirect(url_for('slideshow_slide_list_playlist_use', playlist_id=slide.playlist_id))
 
         return redirect(url_for('slideshow_slide_list'))
 

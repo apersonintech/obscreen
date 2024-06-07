@@ -15,7 +15,11 @@ class UserManager:
     TABLE_MODEL = [
         "username CHAR(255)",
         "password CHAR(255)",
-        "enabled INTEGER DEFAULT 1"
+        "enabled INTEGER DEFAULT 1",
+        "created_by CHAR(255)",
+        "updated_by CHAR(255)",
+        "created_at INTEGER",
+        "updated_at INTEGER"
     ]
 
     def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, on_user_delete):
@@ -103,6 +107,13 @@ class UserManager:
     def get_all(self, sort: bool = False) -> List[User]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "username" if sort else None))
 
+    def forget_user(self, user_id: int):
+        users = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
+        edits_users = self.user_manager.forget_user_for_entity(users, user_id)
+
+        for user_id, edits in edits_users.items():
+            self._db.update_by_id(self.TABLE_NAME, user_id, edits)
+
     def get_enabled_users(self) -> List[User]:
         return self.get_by(query="enabled = 1", sort="username")
 
@@ -110,9 +121,12 @@ class UserManager:
         return self.get_by(query="enabled = 0", sort="username")
 
     def pre_add(self, user: Dict) -> Dict:
+        self.track_user_on_create(user)
+        self.track_user_on_update(user)
         return user
 
     def pre_update(self, user: Dict) -> Dict:
+        self.track_user_on_update(user)
         return user
 
     def pre_delete(self, user_id: int) -> int:
@@ -208,7 +222,7 @@ class UserManager:
 
         return None
 
-    def forget_user(self, objects: List, user_id: int) -> Dict:
+    def forget_user_for_entity(self, objects: List, user_id: int) -> Dict:
         user_map = self.prepare_map()
         user_id = int(user_id)
         edits = {}

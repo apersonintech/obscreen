@@ -23,10 +23,7 @@
         </td>
     </tr>
     {% for slide in slides %}
-        <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json({
-                "created_by": track_created(slide).username,
-                "updated_by": track_updated(slide).username
-            }) }}">
+        <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json({"created_by": track_created(slide).username, "updated_by": track_updated(slide).username}) }}">
             <td class="infos">
                 <div class="inner">
                     <a href="javascript:void(0);" class="item-sort slide-sort">
@@ -48,9 +45,11 @@
             {% if AUTH_ENABLED %}
                 <td class="tac">
                     {% set creator = track_created(slide) %}
-                    <a href="javascript:void(0);" class="badge item-utrack slide-utrack {% if not creator.enabled %}anonymous{% endif %}">
-                        {{ creator.username }}
-                    </a>
+                    {% if creator.username %}
+                        <a href="javascript:void(0);" class="badge item-utrack slide-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                            {{ creator.username }}
+                        </a>
+                    {% endif %}
                 </td>
             {% endif %}
             <td class="tac">
