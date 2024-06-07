@@ -12,10 +12,20 @@ class HookType(Enum):
     H_SYSINFO_TOOLBAR_ACTIONS_START = 'h_sysinfo_toolbar_actions_start'
     H_SYSINFO_TOOLBAR_ACTIONS_END = 'h_sysinfo_toolbar_actions_end'
 
-    H_FLEET_TOOLBAR_ACTIONS_START = 'h_fleet_toolbar_actions_start'
-    H_FLEET_TOOLBAR_ACTIONS_END = 'h_fleet_toolbar_actions_end'
-    H_FLEET_CSS = 'h_fleet_css'
-    H_FLEET_JAVASCRIPT = 'h_fleet_javascript'
+    H_FLEET_NODE_STUDIO_TOOLBAR_ACTIONS_START = 'h_fleet_node_studio_toolbar_actions_start'
+    H_FLEET_NODE_STUDIO_TOOLBAR_ACTIONS_END = 'h_fleet_node_studio_toolbar_actions_end'
+    H_FLEET_NODE_STUDIO_CSS = 'h_fleet_node_studio_css'
+    H_FLEET_NODE_STUDIO_JAVASCRIPT = 'h_fleet_node_studio_javascript'
+
+    H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START = 'h_fleet_node_player_toolbar_actions_start'
+    H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_END = 'h_fleet_node_player_toolbar_actions_end'
+    H_FLEET_NODE_PLAYER_CSS = 'h_fleet_node_player_css'
+    H_FLEET_NODE_PLAYER_JAVASCRIPT = 'h_fleet_node_player_javascript'
+
+    H_FLEET_NODE_PLAYER_GROUP_TOOLBAR_ACTIONS_START = 'h_fleet_node_player_group_toolbar_actions_start'
+    H_FLEET_NODE_PLAYER_GROUP_TOOLBAR_ACTIONS_END = 'h_fleet_node_player_group_toolbar_actions_end'
+    H_FLEET_NODE_PLAYER_GROUP_CSS = 'h_fleet_node_player_group_css'
+    H_FLEET_NODE_PLAYER_GROUP_JAVASCRIPT = 'h_fleet_node_player_group_javascript'
 
     H_PLAYLIST_TOOLBAR_ACTIONS_START = 'h_playlist_toolbar_actions_start'
     H_PLAYLIST_TOOLBAR_ACTIONS_END = 'h_playlist_toolbar_actions_end'

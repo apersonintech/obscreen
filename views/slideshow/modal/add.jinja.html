@@ -3,14 +3,14 @@
         {{ l.slideshow_slide_form_add_title }}
     </h2>
 
-    <form action="/slideshow/slide/add" method="POST" enctype="multipart/form-data">
+    <form class="form" action="/slideshow/slide/add" method="POST" enctype="multipart/form-data">
 
         <h3>
             {{ l.slideshow_slide_form_section_content }}
         </h3>
 
         {% if current_playlist %}
-            <input name="playlist" type="hidden" id="slide-add-playlist" value="{{ current_playlist.id }}">
+            <input name="playlist_id" type="hidden" id="slide-add-playlist-id" value="{{ current_playlist.id }}">
         {% endif %}
 
         <div class="form-group">

@@ -81,7 +81,7 @@ class AuthController(ObController):
         self._model_store.user().update_form(
             id=request.form['id'],
             username=request.form['username'],
-            password=request.form['password'] if 'password' in request.form else None
+            password=request.form['password'] if 'password' in request.form and request.form['password'] else None
         )
         return redirect(url_for('auth_user_list'))
 

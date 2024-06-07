@@ -64,7 +64,12 @@ class PlaylistController(ObController):
     def playlist_delete(self):
         data = request.get_json()
         id = data.get('id')
+
         if self._model_store.slide().count_slides_for_playlist(id) > 0:
             return jsonify({'status': 'error', 'message': self.t('playlist_delete_has_slides')}), 400
+
+        if self._model_store.node_player_group().count_node_player_groups_for_playlist(id) > 0:
+            return jsonify({'status': 'error', 'message': self.t('playlist_delete_has_node_player_groups')}), 400
+
         self._model_store.playlist().delete(id)
         return jsonify({'status': 'ok'})

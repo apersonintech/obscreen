@@ -1,17 +1,11 @@
 jQuery(document).ready(function ($) {
     const $tableActive = $('table.active-slides');
     const $tableInactive = $('table.inactive-slides');
-    const $modalsRoot = $('.modals');
 
     const getCronDateTime = function(cronExpression) {
         const [minutes, hours, day, month, _, year] = cronExpression.split(' ');
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
     };
-
-    const prettyTimestamp = function(timestamp) {
-        const d = new Date(timestamp);
-        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')} `
-    }
 
     const loadDateTimePicker = function($els) {
         $els.each(function() {
@@ -50,16 +44,6 @@ jQuery(document).ready(function ($) {
             }
         }).tableDnDUpdate();
         updatePositions();
-    }
-
-    const showModal = function (modalClass) {
-        $modalsRoot.removeClass('hidden').find('form').trigger('reset');
-        $modalsRoot.find('.modal').addClass('hidden');
-        $modalsRoot.find('.modal.' + modalClass).removeClass('hidden');
-    };
-
-    const hideModal = function () {
-        $modalsRoot.addClass('hidden').find('form').trigger('reset');
     };
 
     const updatePositions = function (table, row) {
@@ -178,25 +162,12 @@ jQuery(document).ready(function ($) {
 
     $(document).on('change', '#slide-add-type', inputTypeUpdate);
 
-    $(document).on('click', '.modal-close', function () {
-        hideModal();
-    });
-
     $(document).on('click', '.slide-add', function () {
         showModal('modal-slide-add');
         loadDateTimePicker($('.modal-slide-add .datetimepicker'))
         inputTypeUpdate();
         inputSchedulerUpdate();
         $('.modal-slide-add input:eq(0)').focus().select();
-    });
-
-    $(document).on('click', '.slide-utrack', function () {
-        const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        showModal('modal-slide-utrack');
-        $('#slide-utrack-created-by').val(slide.created_by);
-        $('#slide-utrack-updated-by').val(slide.updated_by);
-        $('#slide-utrack-created-at').val(prettyTimestamp(slide.created_at * 1000));
-        $('#slide-utrack-updated-at').val(prettyTimestamp(slide.updated_at * 1000));
     });
 
     $(document).on('click', '.slide-edit', function () {
@@ -251,12 +222,6 @@ jQuery(document).ready(function ($) {
                 headers: {'Content-Type': 'application/json'},
                 data: JSON.stringify({id: getId($(this))}),
             });
-        }
-    });
-
-    $(document).keyup(function (e) {
-        if (e.key === "Escape") {
-            hideModal();
         }
     });
 

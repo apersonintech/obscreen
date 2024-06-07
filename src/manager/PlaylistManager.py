@@ -62,14 +62,22 @@ class PlaylistManager(ModelManager):
         return self.hydrate_object(object)
 
     def get_durations_by_playlists(self):
-        durations = self._db.execute_read_query("select playlist, sum(duration) as total_duration from slideshow where cron_schedule is null group by playlist")
+        durations = self._db.execute_read_query("select playlist_id, sum(duration) as total_duration from slideshow where cron_schedule is null group by playlist_id")
         map = {}
         for duration in durations:
-            map[duration['playlist']] = duration['total_duration']
+            map[duration['playlist_id']] = duration['total_duration']
         return map
 
     def get_all(self) -> List[Playlist]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME))
+
+    def get_all_labels_indexed(self) -> Dict:
+        index = {}
+
+        for item in self.get_all():
+            index[item.id] = item.name
+
+        return index
 
     def get_enabled_playlists(self, with_default: bool = False) -> List[Playlist]:
         playlists = self.get_by(query="enabled = 1")
@@ -80,7 +88,7 @@ class PlaylistManager(ModelManager):
         return [Playlist(
             id=None,
             time_sync=self.variable_manager.map().get('playlist_default_time_sync').as_bool(),
-            name=self.t('slideshow_playlist_panel_item_default'))
+            name=self.t('common_default_playlist'))
         ] + playlists
 
     def get_disabled_playlists(self) -> List[Playlist]:
@@ -91,7 +99,7 @@ class PlaylistManager(ModelManager):
 
     def forget_user(self, user_id: int):
         playlists = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
-        edits_playlists = self.user_manager.forget_user(playlists, user_id)
+        edits_playlists = self.user_manager.forget_user_for_entity(playlists, user_id)
 
         for playlist_id, edits in edits_playlists.items():
             self._db.update_by_id(self.TABLE_NAME, playlist_id, edits)
