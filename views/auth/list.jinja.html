@@ -15,7 +15,7 @@
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.auth_page_title }}</h2>
+        <h2><i class="fa fa-user icon-left"></i>{{ l.auth_page_title }}</h2>
 
         <div class="toolbar-actions">
             {{ HOOK(H_AUTH_TOOLBAR_ACTIONS_START) }}
@@ -56,6 +56,7 @@
             <div class="modals-inner">
                 {% include 'auth/modal/add.jinja.html' %}
                 {% include 'auth/modal/edit.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
             </div>
         </div>
     </div>

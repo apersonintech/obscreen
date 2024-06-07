@@ -1,0 +1,67 @@
+<table class="{{ tclass }}-node-players">
+    <thead>
+    <tr>
+        <th>{{ l.fleet_node_player_panel_th_name }}</th>
+        {% if AUTH_ENABLED %}
+            <th class="tac">
+                <i class="fa fa-user"></i>
+            </th>
+        {% endif %}
+        <th class="tac">{{ l.fleet_node_player_panel_th_host }}</th>
+        <th class="tac">{{ l.fleet_node_player_panel_th_enabled }}</th>
+        <th class="tac">{{ l.fleet_node_player_panel_th_activity }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="empty-tr {% if node_players|length != 0 %}hidden{% endif %}">
+        <td colspan="4">
+            {{ l.fleet_node_player_panel_empty|replace(
+                '%link%',
+                ('<a href="javascript:void(0);" class="item-add node-player-add">'~l.fleet_node_player_button_add~'</a>')|safe
+            ) }}
+        </td>
+    </tr>
+    {% for node_player in node_players %}
+        <tr class="node-player-item" data-level="{{ node_player.id }}" data-entity="{{ node_player.to_json({"created_by": track_created(node_player).username, "updated_by": track_updated(node_player).username}) }}">
+            <td class="infos">
+                <div class="inner">
+                    <a href="javascript:void(0);" class="item-sort node-player-sort">
+                        <i class="fa fa-sort icon-left"></i>
+                    </a>
+
+                    <div class="badge"><i class="fa fa-key icon-left"></i> {{ node_player.id }}</div>
+
+                    <i class="fa fa-tv icon-left"></i>
+                    {{ node_player.name }}
+                </div>
+            </td>
+            {% if AUTH_ENABLED %}
+                <td class="tac">
+                    {% set creator = track_created(node_player) %}
+                    {% if creator.username %}
+                        <a href="javascript:void(0);" class="badge item-utrack node-player-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                            {{ creator.username }}
+                        </a>
+                    {% endif %}
+                </td>
+            {% endif %}
+            <td class="tac">
+                {{ node_player.host }}
+            </td>
+            <td class="tac">
+                <label class="pure-material-switch">
+                    <input type="checkbox" {% if node_player.enabled %}checked="checked"{% endif %}><span></span>
+                </label>
+            </td>
+            <td class="actions tac">
+                <a href="javascript:void(0);" class="item-edit node-player-edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+                <a href="javascript:void(0);" class="item-delete node-player-delete">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -101,7 +101,7 @@ class Playlist:
     def to_json(self, edits: dict = {}) -> str:
         obj = self.to_dict()
 
-        for k,v in edits.items():
+        for k, v in edits.items():
             obj[k] = v
 
         return json.dumps(obj)

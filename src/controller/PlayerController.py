@@ -1,12 +1,12 @@
 import json
 
 from typing import Optional
-from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify
+from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify, abort
 
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
 from src.util.utils import get_safe_cron_descriptor
-from src.util.UtilNetwork import get_ip_address
+from src.util.UtilNetwork import get_ip_address, get_safe_remote_addr
 from src.model.enum.AnimationSpeed import animation_speed_duration
 
 
@@ -45,10 +45,24 @@ class PlayerController(ObController):
         self._app.add_url_rule('/player/playlist/use/<playlist_slug_or_id>', 'player_playlist_use', self.player_playlist, methods=['GET'])
 
     def player(self, playlist_slug_or_id: str = ''):
+        if not playlist_slug_or_id and self._model_store.variable().get_one_by_name('fleet_player_enabled'):
+            node_player = self._model_store.node_player().get_one_by("host = '{}' and enabled = {}".format(
+                get_safe_remote_addr(request.remote_addr),
+                True
+            ))
+
+            if node_player.group_id:
+                node_player_group = self._model_store.node_player_group().get(node_player.group_id)
+                playlist_slug_or_id = node_player_group.playlist_id
+
         current_playlist = self._model_store.playlist().get_one_by("slug = ? OR id = ?", {
             "slug": playlist_slug_or_id,
             "id": playlist_slug_or_id
         })
+
+        if playlist_slug_or_id and not current_playlist:
+            return abort(404)
+
         playlist_id = current_playlist.id if current_playlist else None
 
         return render_template(
