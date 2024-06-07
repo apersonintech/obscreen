@@ -1,0 +1,53 @@
+{% extends 'base.jinja.html' %}
+
+{% block page_title %}
+    {{ l.fleet_node_player_group_page_title }}
+{% endblock %}
+
+{% block add_css %}
+    {{ HOOK(H_FLEET_NODE_PLAYER_GROUP_CSS) }}
+{% endblock %}
+
+{% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/fleet/node-player-groups.js"></script>
+    {{ HOOK(H_FLEET_NODE_PLAYER_GROUP_JAVASCRIPT) }}
+{% endblock %}
+
+{% block page %}
+    <div class="toolbar">
+        <h2><i class="fa fa-layer-group icon-left"></i>{{ l.fleet_node_player_group_page_title }}</h2>
+
+        <div class="toolbar-actions">
+            {{ HOOK(H_FLEET_NODE_PLAYER_GROUP_TOOLBAR_ACTIONS_START) }}
+            <button class="purple node-player-group-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.fleet_node_player_group_button_add }}</button>
+            {{ HOOK(H_FLEET_NODE_PLAYER_GROUP_TOOLBAR_ACTIONS_END) }}
+        </div>
+    </div>
+
+    <div class="alert alert-error hidden">
+
+    </div>
+
+     <div class="panel">
+        <div class="panel-body">
+            <h3>{{ l.fleet_node_player_group_panel_active }}</h3>
+
+            {% with tclass='active', node_player_groups=node_player_groups %}
+                {% include 'fleet/player-group/component/table.jinja.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="modals hidden">
+        <div class="modals-outer">
+            <a href="javascript:void(0);" class="modal-close">
+                <i class="fa fa-close"></i>
+            </a>
+            <div class="modals-inner">
+                {% include 'fleet/player-group/modal/add.jinja.html' %}
+                {% include 'fleet/player-group/modal/edit.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

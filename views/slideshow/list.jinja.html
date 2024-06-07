@@ -19,7 +19,7 @@
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.slideshow_page_title }}</h2>
+        <h2><i class="fa-regular fa-clock icon-left"></i>{{ l.slideshow_page_title }}</h2>
 
         <div class="toolbar-actions">
             {{ HOOK(H_SLIDESHOW_TOOLBAR_ACTIONS_START) }}
@@ -39,9 +39,9 @@
 
 
             {% if PLAYLIST_ENABLED %}
-            <select class="playlist-picker">
+            <select class="select-item-picker playlist-picker">
                 <option value="{{ url_for('slideshow_slide_list') }}" {% if not current_playlist %}selected="selected"{% endif %}>
-                    {{ l.slideshow_playlist_panel_item_default }}
+                    {{ l.common_default_playlist }}
                 </option>
                 {% for playlist in playlists %}
                     {% set is_active_playlist = str(current_playlist.id) == str(playlist.id) %}
@@ -91,7 +91,7 @@
             <div class="modals-inner">
                 {% include 'slideshow/modal/add.jinja.html' %}
                 {% include 'slideshow/modal/edit.jinja.html' %}
-                {% include 'slideshow/modal/utrack.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
             </div>
         </div>
     </div>

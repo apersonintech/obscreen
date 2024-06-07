@@ -1,7 +1,6 @@
 jQuery(document).ready(function ($) {
-    const $tableActive = $('table.active-studios');
-    const $tableInactive = $('table.inactive-studios');
-    const $modalsRoot = $('.modals');
+    const $tableActive = $('table.active-node-players');
+    const $tableInactive = $('table.inactive-node-players');
 
     const getId = function ($el) {
         return $el.is('tr') ? $el.attr('data-level') : $el.parents('tr:eq(0)').attr('data-level');
@@ -9,7 +8,7 @@ jQuery(document).ready(function ($) {
 
     const updateTable = function () {
         $('table').each(function () {
-            if ($(this).find('tbody tr.studio-item:visible').length === 0) {
+            if ($(this).find('tbody tr.node-player-item:visible').length === 0) {
                 $(this).find('tr.empty-tr').removeClass('hidden');
             } else {
                 $(this).find('tr.empty-tr').addClass('hidden');
@@ -18,25 +17,15 @@ jQuery(document).ready(function ($) {
         updatePositions();
     };
 
-    const showModal = function (modalClass) {
-        $modalsRoot.removeClass('hidden').find('form').trigger('reset');
-        $modalsRoot.find('.modal').addClass('hidden');
-        $modalsRoot.find('.modal.' + modalClass).removeClass('hidden');
-    };
-
-    const hideModal = function () {
-        $modalsRoot.addClass('hidden').find('form').trigger('reset');
-    };
-
     const updatePositions = function (table, row) {
         const positions = {};
-        $('.studio-item').each(function (index) {
+        $('.node-player-item').each(function (index) {
             positions[getId($(this))] = index;
         });
 
         $.ajax({
             method: 'POST',
-            url: '/fleet/studio/position',
+            url: '/fleet/node-player/position',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify(positions),
         });
@@ -44,14 +33,18 @@ jQuery(document).ready(function ($) {
 
     const main = function () {
         $("table").tableDnD({
-            dragHandle: 'td a.studio-sort',
+            dragHandle: 'td a.node-player-sort',
             onDrop: updatePositions
         });
     };
 
+    $(document).on('change', 'select.group-picker', function () {
+        document.location.href = $(this).val();
+    });
+
     $(document).on('change', 'input[type=checkbox]', function () {
         $.ajax({
-            url: '/fleet/studio/toggle',
+            url: '/fleet/node-player/toggle',
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
             method: 'POST',
@@ -68,57 +61,48 @@ jQuery(document).ready(function ($) {
         updateTable();
     });
 
-    $(document).on('change', '#studio-add-type', function () {
+    $(document).on('change', '#node-player-add-type', function () {
         const value = $(this).val();
         const inputType = $(this).find('option').filter(function (i, el) {
             return $(el).val() === value;
         }).data('input');
 
-        $('.studio-add-object-input')
+        $('.node-player-add-object-input')
             .addClass('hidden')
             .prop('disabled', true)
-            .filter('#studio-add-object-input-' + inputType)
+            .filter('#node-player-add-object-input-' + inputType)
             .removeClass('hidden')
             .prop('disabled', false)
         ;
     });
 
-    $(document).on('click', '.modal-close', function () {
-        hideModal();
+
+    $(document).on('click', '.node-player-add', function () {
+        showModal('modal-node-player-add');
+        $('.modal-node-player-add input:eq(0)').focus().select();
     });
 
-    $(document).on('click', '.studio-add', function () {
-        showModal('modal-studio-add');
-        $('.modal-studio-add input:eq(0)').focus().select();
+    $(document).on('click', '.node-player-edit', function () {
+        const nodePlayer = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        showModal('modal-node-player-edit');
+        $('.modal-node-player-edit input:visible:eq(0)').focus().select();
+        $('#node-player-edit-name').val(nodePlayer.name);
+        $('#node-player-edit-group-id').val(nodePlayer.group_id);
+        $('#node-player-edit-host').val(nodePlayer.host);
+        $('#node-player-edit-id').val(nodePlayer.id);
     });
 
-    $(document).on('click', '.studio-edit', function () {
-        const studio = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        showModal('modal-studio-edit');
-        $('.modal-studio-edit input:visible:eq(0)').focus().select();
-        $('#studio-edit-name').val(studio.name);
-        $('#studio-edit-host').val(studio.host);
-        $('#studio-edit-port').val(studio.port);
-        $('#studio-edit-id').val(studio.id);
-    });
-
-    $(document).on('click', '.studio-delete', function () {
-        if (confirm(l.js_fleet_studio_delete_confirmation)) {
+    $(document).on('click', '.node-player-delete', function () {
+        if (confirm(l.js_fleet_node_player_delete_confirmation)) {
             const $tr = $(this).parents('tr:eq(0)');
             $tr.remove();
             updateTable();
             $.ajax({
                 method: 'DELETE',
-                url: '/fleet/studio/delete',
+                url: '/fleet/node-player/delete',
                 headers: {'Content-Type': 'application/json'},
                 data: JSON.stringify({id: getId($(this))}),
             });
-        }
-    });
-
-    $(document).keyup(function (e) {
-        if (e.key === "Escape") {
-            hideModal();
         }
     });
 

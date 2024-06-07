@@ -20,7 +20,7 @@ class SlideManager(ModelManager):
         "name CHAR(255)",
         "type CHAR(30)",
         "enabled INTEGER DEFAULT 0",
-        "playlist INTEGER",
+        "playlist_id INTEGER",
         "duration INTEGER",
         "position INTEGER",
         "location TEXT",
@@ -70,7 +70,7 @@ class SlideManager(ModelManager):
 
     def forget_user(self, user_id: int):
         slides = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
-        edits_slides = self.user_manager.forget_user(slides, user_id)
+        edits_slides = self.user_manager.forget_user_for_entity(slides, user_id)
 
         for slide_id, edits in edits_slides.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, edits)
@@ -78,9 +78,9 @@ class SlideManager(ModelManager):
     def get_slides(self, playlist_id: Optional[int] = None, enabled: bool = True) -> List[Slide]:
         query = "enabled = {}".format("1" if enabled else "0")
         if playlist_id:
-            query = "{} {}".format(query, "AND playlist = {}".format(playlist_id))
+            query = "{} {}".format(query, "AND playlist_id = {}".format(playlist_id))
         else:
-            query = "{} {}".format(query, "AND playlist is NULL")
+            query = "{} {}".format(query, "AND playlist_id is NULL")
 
         return self.get_by(query=query, sort="position")
 

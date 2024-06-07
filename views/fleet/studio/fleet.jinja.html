@@ -16,18 +16,18 @@
 </head>
 <body>
 <ul>
-    {% for studio in studios %}
+    {% for node_studio in node_studios %}
     <li class="{% if loop.first %}active{% endif %}">
-        <a href="javascript:void(0);" class="studio-switch" data-id="{{ studio.id }}" onclick="tab('{{ studio.id }}')">
-            {{ studio.name }}
+        <a href="javascript:void(0);" class="studio-switch" data-id="{{ node_studio.id }}" onclick="tab('{{ node_studio.id }}')">
+            {{ node_studio.name }}
         </a>
     </li>
     {% endfor %}
 </ul>
 <main>
-    {% for studio in studios %}
-        <div class="studio-frame {% if not loop.first %}hidden{% endif %}" data-id="{{ studio.id }}">
-            <iframe src="http://{{ studio.host }}:{{ studio.port }}/slideshow?fleet_mode=1" frameborder="0" allowtransparency=""></iframe>
+    {% for node_studio in node_studios %}
+        <div class="studio-frame {% if not loop.first %}hidden{% endif %}" data-id="{{ node_studio.id }}">
+            <iframe src="http://{{ node_studio.host }}:{{ node_studio.port }}/slideshow?fleet_mode=1" frameborder="0" allowtransparency=""></iframe>
         </div>
     {% endfor %}
 </main>

@@ -11,8 +11,13 @@
 
 {% block page %}
     <div class="toolbar">
-        <h2>{{ l.settings_page_title }}</h2>
+        <h2><i class="fa fa-cogs icon-left"></i>{{ l.settings_page_title }}</h2>
     </div>
+
+    {% if request.args.get('error') %}
+        <div class="alert alert-error">{{ request.args.get('error') }}</div>
+    {% endif %}
+
     <div class="panel">
         <div class="panel-body">
             <h3>{{ l.settings_variable_panel_system_variables }}</h3>

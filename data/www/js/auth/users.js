@@ -1,7 +1,6 @@
 jQuery(document).ready(function ($) {
     const $tableActive = $('table.active-users');
     const $tableInactive = $('table.inactive-users');
-    const $modalsRoot = $('.modals');
 
     const getId = function ($el) {
         return $el.is('tr') ? $el.attr('data-level') : $el.parents('tr:eq(0)').attr('data-level');
@@ -15,16 +14,6 @@ jQuery(document).ready(function ($) {
                 $(this).find('tr.empty-tr').addClass('hidden');
             }
         });
-    }
-
-    const showModal = function (modalClass) {
-        $modalsRoot.removeClass('hidden').find('form').trigger('reset');
-        $modalsRoot.find('.modal').addClass('hidden');
-        $modalsRoot.find('.modal.' + modalClass).removeClass('hidden');
-    };
-
-    const hideModal = function () {
-        $modalsRoot.addClass('hidden').find('form').trigger('reset');
     };
 
     const main = function () {
@@ -72,10 +61,6 @@ jQuery(document).ready(function ($) {
         ;
     });
 
-    $(document).on('click', '.modal-close', function () {
-        hideModal();
-    });
-
     $(document).on('click', '.user-add', function () {
         showModal('modal-user-add');
         $('.modal-user-add input:eq(0)').focus().select();
@@ -105,12 +90,6 @@ jQuery(document).ready(function ($) {
                     $('.alert-error').html(data.responseJSON.message).removeClass('hidden');
                 }
             });
-        }
-    });
-
-    $(document).keyup(function (e) {
-        if (e.key === "Escape") {
-            hideModal();
         }
     });
 

@@ -2,6 +2,11 @@
     <thead>
     <tr>
         <th>{{ l.playlist_panel_th_name }}</th>
+        {% if AUTH_ENABLED %}
+            <th class="tac">
+                <i class="fa fa-user"></i>
+            </th>
+        {% endif %}
         <th class="tac"><i class="fa fa-compass"></i></th>
         <th class="tac">{{ l.playlist_panel_th_enabled }}</th>
         <th class="tac">{{ l.playlist_panel_th_duration }}</th>
@@ -18,7 +23,7 @@
         </td>
     </tr>
     {% for playlist in playlists %}
-        <tr class="playlist-item" data-level="{{ playlist.id }}" data-entity="{{ playlist.to_json() }}">
+        <tr class="playlist-item" data-level="{{ playlist.id }}" data-entity="{{ playlist.to_json({"created_by": track_created(playlist).username, "updated_by": track_updated(playlist).username}) }}">
             <td class="infos">
                 <div class="inner">
                     {% if playlist.id %}
@@ -31,6 +36,18 @@
                     {{ playlist.name }}
                 </div>
             </td>
+            {% if AUTH_ENABLED %}
+                <td class="tac">
+                    {% if playlist.id %}
+                        {% set creator = track_created(playlist) %}
+                        {% if creator.username %}
+                            <a href="javascript:void(0);" class="badge item-utrack playlist-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                                {{ creator.username }}
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            {% endif %}
             <td class="tac">
                 {% if playlist.time_sync %}
                     ✅
@@ -55,12 +72,12 @@
             </td>
             <td class="actions tac">
                 {% if playlist.id %}
-                <a href="javascript:void(0);" class="item-edit playlist-edit">
-                    <i class="fa fa-pencil"></i>
-                </a>
-                <a href="javascript:void(0);" class="item-delete playlist-delete">
-                    <i class="fa fa-trash"></i>
-                </a>
+                    <a href="javascript:void(0);" class="item-edit playlist-edit">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="item-delete playlist-delete">
+                        <i class="fa fa-trash"></i>
+                    </a>
                 {% endif %}
             </td>
         </tr>

@@ -5,13 +5,14 @@ from waitress import serve
 from flask import Flask, send_from_directory, redirect, url_for
 from flask_login import LoginManager, current_user
 
-from src.model.entity.User import User
 from src.manager.UserManager import UserManager
 from src.service.ModelStore import ModelStore
 from src.service.TemplateRenderer import TemplateRenderer
 from src.controller.PlayerController import PlayerController
 from src.controller.SlideshowController import SlideshowController
-from src.controller.FleetController import FleetController
+from src.controller.FleetNodeStudioController import FleetNodeStudioController
+from src.controller.FleetNodePlayerController import FleetNodePlayerController
+from src.controller.FleetNodePlayerGroupController import FleetNodePlayerGroupController
 from src.controller.PlaylistController import PlaylistController
 from src.controller.AuthController import AuthController
 from src.controller.SysinfoController import SysinfoController
@@ -81,9 +82,6 @@ class WebServer:
         self._login_manager.init_app(self._app)
         self._login_manager.login_view = 'login'
 
-        if self._model_store.variable().map().get('auth_enabled').as_bool() and self._model_store.user().count_all_enabled() == 0:
-            self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
-
         @self._login_manager.user_loader
         def load_user(user_id):
             return self._model_store.user().get(user_id)
@@ -109,7 +107,9 @@ class WebServer:
         SlideshowController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         SettingsController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         SysinfoController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        FleetController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        FleetNodeStudioController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        FleetNodePlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        FleetNodePlayerGroupController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         PlaylistController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         AuthController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
 

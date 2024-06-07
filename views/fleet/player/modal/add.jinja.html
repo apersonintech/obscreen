@@ -1,0 +1,42 @@
+<div class="modal modal-node-player-add">
+    <h2>
+        {{ l.fleet_node_player_form_add_title }}
+    </h2>
+
+    <form class="form" action="/fleet/node-player/add" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="node-player-add-name">{{ l.fleet_node_player_form_label_name }}</label>
+            <div class="widget">
+                <input name="name" type="text" id="node-player-add-name" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-player-add-group-id">{{ l.fleet_node_player_group_form_label_group_id }}</label>
+            <div class="widget">
+                <select name="group_id" id="node-player-add-group-id">
+                    <option value="" {% if not current_group.id %}selected="selected"{% endif %}>{{ l.common_default_node_player_group }}</option>
+                    {% for group_id, group_name in groups.items() %}
+                        <option value="{{ group_id }}" {% if current_group.id == str(group_id) %}selected="selected"{% endif %}>{{ group_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-player-add-host">{{ l.fleet_node_player_form_label_host }}</label>
+            <div class="widget">
+                <input type="text" name="host" id="node-player-add-host" required="required" />
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn-normal modal-close">
+                {{ l.fleet_node_player_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-plus icon-left"></i> {{ l.fleet_node_player_form_add_submit }}
+            </button>
+        </div>
+    </form>
+</div>
