@@ -51,7 +51,7 @@ class PlayerController(ObController):
                 True
             ))
 
-            if node_player.group_id:
+            if node_player and node_player.group_id:
                 node_player_group = self._model_store.node_player_group().get(node_player.group_id)
                 playlist_slug_or_id = node_player_group.playlist_id
 
