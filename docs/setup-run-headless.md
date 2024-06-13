@@ -94,12 +94,50 @@ sudo journalctl -u obscreen-studio -f
 
 ---
 ## 📺 Run the player
+### Manually on any device capable of running chromium
 When you run the browser yourself don't forget to use these flags for chromium browser:
 ```bash
 # chromium or chromium-browser or even chrome
 # replace http://localhost:5000 with your playlist url
 chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
 ```
+
+### Automatically on a raspberry pi with chromium and x11
+- Install x11 and obscreen-player systemd service
+```bash
+curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
+mkdir -p /home/pi/obscreen/var/run
+nano /home/pi/obscreen/var/run/play
+```
+- Copy this script in `/home/pi/obscreen/var/run/play` file to autorun chromium with correct url (edit `http://localhost:5000` by anything you want)
+```
+#!/bin/bash
+
+# Disable screensaver and DPMS
+xset s off
+xset -dpms
+xset s noblank
+
+# Start unclutter to hide the mouse cursor
+unclutter -display :0 -noevents -grab &
+
+# Modify Chromium preferences to avoid restore messages
+mkdir -p /home/pi/.config/chromium/Default 2>/dev/null
+touch /home/pi/.config/chromium/Default/Preferences
+sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' /home/pi/.config/chromium/Default/Preferences
+
+RESOLUTION=$(DISPLAY=:0 xrandr | grep '*' | awk '{print $1}')
+WIDTH=$(echo $RESOLUTION | cut -d 'x' -f 1)
+HEIGHT=$(echo $RESOLUTION | cut -d 'x' -f 2)
+
+# Start Chromium in kiosk mode
+chromium-browser --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=${WIDTH},${HEIGHT} --display=:0 http://localhost:5000
+```
+- Restart
+```bash
+sudo systemctl restart obscreen-player.service
+```
+
 ---
 
 ## 📎 Additional
