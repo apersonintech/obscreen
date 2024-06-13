@@ -5,15 +5,21 @@ This is:
 - [ ] a question
 
 ### Configuration
+
 > Hardware
+
 - *Device*: `Raspberry Xb+`
 - *OS*: `Raspbian vXX` [use command *lsb_release -a*]
 - *Architecture*: `armvX` [use command *uname -a*]
+  
 > Obscreen Manager
+
 - *Obscreen version*: `v1.XX`
 - [ ] docker installation
 - [ ] system installation
-> Obscreen Player    
+      
+> Obscreen Player
+
 - *Browser*: `Chromium` or `Chrome`
 - [ ] launching player with provided obscreen-player.service
 - [ ] launching player myself
