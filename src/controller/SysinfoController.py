@@ -11,7 +11,7 @@ from src.manager.ConfigManager import ConfigManager
 from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
-from src.util.utils import am_i_in_docker
+from src.util.utils import restart
 from src.util.UtilNetwork import get_ip_address
 from src.service.Sysinfo import get_all_sysinfo
 
@@ -34,9 +34,14 @@ class SysinfoController(ObController):
         )
 
     def sysinfo_restart(self):
+        debug = self._model_store.config().map().get('debug')
         secret = self._model_store.config().map().get('secret_key')
         challenge = request.args.get('secret_key')
-        thread = threading.Thread(target=self.restart, args=(secret, challenge))
+
+        if secret != challenge:
+            return jsonify({'status': 'error'})
+
+        thread = threading.Thread(target=restart, args=(debug,))
         thread.daemon = True
         thread.start()
 
@@ -50,28 +55,6 @@ class SysinfoController(ObController):
             return jsonify({'status': False})
 
         return jsonify({'status': True})
-
-    def restart(self, secret: str, challenge: str) -> None:
-        time.sleep(1)
-
-        if secret != challenge:
-            return jsonify({'status': 'error'})
-
-        if platform.system().lower() == 'darwin':
-            if self._model_store.config().map().get('debug'):
-                python = sys.executable
-                os.execl(python, python, *sys.argv)
-        elif am_i_in_docker():
-            python = sys.executable
-            os.execl(python, python, *sys.argv)
-        else:
-            try:
-                subprocess.run(["sudo", "systemctl", "restart", 'obscreen-studio'], check=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                pass
-            except subprocess.TimeoutExpired:
-                pass
-            except subprocess.CalledProcessError:
-                pass
 
     def sysinfo_get_ipaddr(self):
         ipaddr = get_ip_address()

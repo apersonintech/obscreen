@@ -1,8 +1,11 @@
 import os
 import re
+import sys
+import time
 import inspect
 import subprocess
 import unicodedata
+import platform
 
 
 from typing import Optional, List, Dict
@@ -210,3 +213,24 @@ def get_function_caller(depth: int = 3) -> str:
 
 def clamp(x: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(x, maximum))
+
+
+def restart(debug: bool) -> None:
+    time.sleep(1)
+
+    if platform.system().lower() == 'darwin':
+        if debug:
+            python = sys.executable
+            os.execl(python, python, *sys.argv)
+    elif am_i_in_docker():
+        python = sys.executable
+        os.execl(python, python, *sys.argv)
+    else:
+        try:
+            subprocess.run(["sudo", "systemctl", "restart", 'obscreen-studio'], check=True, timeout=10, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            pass
+        except subprocess.TimeoutExpired:
+            pass
+        except subprocess.CalledProcessError:
+            pass
+            
