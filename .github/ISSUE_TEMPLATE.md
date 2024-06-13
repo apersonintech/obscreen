@@ -9,12 +9,14 @@ This is:
 - *Device*: `Raspberry Xb+`
 - *OS*: `Raspbian vXX` [use command *lsb_release -a*]
 - *Architecture*: `armvX` [use command *uname -a*]
-
-> Software
+> Obscreen Manager
+- *Obscreen version*: `v1.XX`
 - [ ] docker installation
 - [ ] system installation
-- *Obscreen version*: `v1.XX`
-
+> Obscreen Player    
+- *Browser*: `Chromium` or `Chrome`
+- [ ] launching player with provided obscreen-player.service
+- [ ] launching player myself
 
 ### What is the expected behavior?
 
