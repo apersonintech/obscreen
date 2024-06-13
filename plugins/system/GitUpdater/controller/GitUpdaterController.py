@@ -1,10 +1,12 @@
+import time
 import logging
+import threading
 import platform
 
 from flask import Flask, redirect, url_for
 
 from src.interface.ObController import ObController
-from src.util.utils import run_system_command, sudo_run_system_command, get_working_directory, am_i_in_docker
+from src.util.utils import run_system_command, sudo_run_system_command, get_working_directory, am_i_in_docker, restart
 from src.Application import Application
 
 
@@ -14,6 +16,17 @@ class GitUpdaterController(ObController):
         self._app.add_url_rule('/git-updater/update/now', 'git_updater_update_now', self._auth(self.update_now), methods=['GET'])
 
     def update_now(self):
+        secret = self._model_store.config().map().get('secret_key')
+        debug = self._model_store.config().map().get('debug')
+        thread = threading.Thread(target=self.update, args=(debug,))
+        thread.daemon = True
+        thread.start()
+
+        return redirect(url_for('manage'))
+
+    def update(self, debug: bool) -> None:
+        time.sleep(1)
+
         old_version = Application.get_version()
         logging.info("🚧 Application update from {} to master...".format(old_version))
 
@@ -38,7 +51,6 @@ class GitUpdaterController(ObController):
 
         if os_name == "linux":
             logging.warn('Git Updater supports linux process manager, using apt...')
-            sudo_run_system_command(['systemctl', 'restart', Application.get_name()])
         elif os_name == "windows":
             logging.warn('Git Updater doesn\'t fully supports windows process manager, you may need to restart application manually')
         elif os_name == "darwin":
@@ -51,7 +63,5 @@ class GitUpdaterController(ObController):
         else:
             logging.info("🧊 Application already up to date with version {}".format(new_version))
 
-        return redirect(url_for(
-            'sysinfo_restart',
-            secret_key=self._model_store.config().map().get('secret_key')
-        ))
+        restart(debug)
+        
