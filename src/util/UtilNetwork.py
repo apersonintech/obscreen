@@ -35,7 +35,9 @@ def get_ip_address() -> Optional[str]:
         return get_network_ipaddr()
 
 
-def get_safe_remote_addr(remote_addr: str) -> str:
-    if remote_addr == '127.0.0.1' or remote_addr == 'localhost':
-        return get_network_ipaddr()
-    return remote_addr
+def get_safe_remote_addr(host: str) -> str:
+    host = host.split(':')[0]
+
+    if host == '127.0.0.1' or host == 'localhost':
+        return get_ip_address()
+    return host
