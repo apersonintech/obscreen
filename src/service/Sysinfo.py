@@ -7,6 +7,10 @@ from src.util.utils import get_working_directory
 from src.util.UtilFile import convert_size
 
 
+LO_MAC_ADDRESS = '00:00:00:00:00:00'
+LO_IP_ADDR = '127.0.0.1'
+
+
 def get_rpi_model():
     try:
         if os.path.exists('/proc/device-tree/model'):
@@ -54,7 +58,7 @@ def get_network_info():
                         mac_address = addr.address
                     elif addr.family == socket.AF_INET:
                         ip_address = addr.address
-                if mac_address and ip_address:
+                if mac_address and ip_address and mac_address != LO_MAC_ADDRESS and ip_address != LO_IP_ADDR:
                     return {
                         'interface': iface,
                         'mac_address': mac_address,
