@@ -204,6 +204,7 @@
     "basic_month_11": "November",
     "basic_month_12": "December",
 
+    "common_loading": "Loading...",
     "common_default_node_player_group": "Default player group",
     "common_default_playlist": "Default playlist",
     "common_unknown_ipaddr": "Unknown IP address",

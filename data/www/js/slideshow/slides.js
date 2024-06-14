@@ -225,5 +225,10 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $(document).on('submit', '.modal-slide-add form', function () {
+        $(this).find('button[type=submit]').addClass('hidden');
+        $(this).find('.btn-loading').removeClass('hidden');
+    });
+
     main();
 });
