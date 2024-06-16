@@ -14,7 +14,7 @@ from src.model.enum.VariableType import VariableType
 from src.model.enum.HookType import HookType
 from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
-from typing import List, Dict, Union
+from typing import List, Dict
 
 
 class PluginStore:
@@ -38,7 +38,7 @@ class PluginStore:
     def map_plugins(self) -> Dict[str, ObPlugin]:
         plugins = {}
 
-        for plugin in self._system_plugins:
+        for plugin in self._system_plugins + self._user_plugins:
             plugins[plugin.use_id()] = plugin
 
         return plugins
@@ -130,7 +130,7 @@ class PluginStore:
 
         for hook_registration in hooks_registrations:
             if hook_registration.hook not in self._hooks:
-                logging.error("[plugin:{}] Hook {} does not exist".format(plugin.use_id(), hook.name))
+                logging.error("[plugin:{}] Hook {} does not exist".format(plugin.use_id(), hook_registration.name))
                 continue
 
             if isinstance(hook_registration, StaticHookRegistration):
