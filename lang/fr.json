@@ -204,6 +204,7 @@
     "basic_month_11": "Novembre",
     "basic_month_12": "Décembre",
 
+    "common_loading": "Chargement...",
     "common_default_node_player_group": "Groupe de lecteur par défaut",
     "common_default_playlist": "Playlist par défaut",
     "common_unknown_ipaddr": "Adresse IP inconnue",

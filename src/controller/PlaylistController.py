@@ -41,7 +41,7 @@ class PlaylistController(ObController):
     def playlist_add(self):
         playlist = Playlist(
             name=request.form['name'],
-            time_sync=request.form['time_sync'],
+            time_sync=False if request.form['time_sync'] == '0' else True,
         )
 
         self._model_store.playlist().add_form(playlist)
