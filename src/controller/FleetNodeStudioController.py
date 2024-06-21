@@ -27,7 +27,7 @@ class FleetNodeStudioController(ObController):
 
     def fleet(self):
         return render_template(
-            'fleet/studio/fleet.jinja.html',
+            'fleet/studio/fleet-studio.jinja.html',
             node_studios=self._model_store.node_studio().get_enabled_node_studios(),
         )
 

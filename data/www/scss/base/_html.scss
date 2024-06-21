@@ -1,0 +1,29 @@
+* {
+    font-family: 'Roboto', 'Arial', 'sans-serif';
+}
+
+html {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: $blueDark;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-self: stretch;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    background-color: $blueDark;
+    color: $white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-self: stretch;
+}
+

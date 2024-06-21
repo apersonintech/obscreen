@@ -1,0 +1,23 @@
+.container {
+  background: rgba($black, 0.1);
+  margin: auto;
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+  min-width: 70%;
+
+  @media only screen and (max-width: 1200px) {
+    min-width: 95%;
+  }
+}
+
+.container.expand {
+  min-width: 100%;
+
+  @media only screen and (max-width: 1200px) {
+    min-width: 100%;
+  }
+}

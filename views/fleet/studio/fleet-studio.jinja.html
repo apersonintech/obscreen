@@ -1,21 +1,10 @@
 <!DOCTYPE html>
 <head>
-    <title>Obscreen - Fleet View</title>
-    <style>
-        html {margin:0;padding:0;display:flex;flex:1;background: #0f0035;font-family: 'Arial', 'sans-serif'; color: white;height:100vh;}
-        body {margin:0;padding:0;display:flex;flex:1;flex-direction: column}
-        ul {list-style:none;margin: 0;padding:0;display: flex;flex-direction: row;border-bottom: 1px solid #0eef5f;}
-        ul li {flex:1;display: flex;flex-direction: row;justify-content: center;align-items: center;border-right: 1px solid #0eef5f;}
-        ul li a {flex:1;display: flex;flex-direction: row;justify-content: center;align-items: center;padding: 20px 5px;color:#0eef5f;font-weight: bold;text-decoration: none;}
-        ul li.active a { background: #0eef5f;color:white; }
-        main {display: flex;flex:1;}
-        main .studio-frame {display: flex; flex:1;}
-        main .studio-frame iframe {display: flex; flex: 1;}
-        .hidden {display: none !important;}
-    </style>
+    <title>Obscreen - Fleet Studio</title>
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/compiled/fleet-studio.css" />
 </head>
 <body>
-<ul>
+<ul class="pagetab">
     {% for node_studio in node_studios %}
     <li class="{% if loop.first %}active{% endif %}">
         <a href="javascript:void(0);" class="studio-switch" data-id="{{ node_studio.id }}" onclick="tab('{{ node_studio.id }}')">

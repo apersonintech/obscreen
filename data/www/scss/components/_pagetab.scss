@@ -1,0 +1,35 @@
+
+ul.pagetab {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid $limeGreen;
+}
+
+ul.pagetab li {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid $limeGreen;
+}
+
+ul.pagetab li a {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 5px;
+  color: $limeGreen;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+ul.pagetab li.active a {
+  background: $limeGreen;
+  color: $white;
+}
