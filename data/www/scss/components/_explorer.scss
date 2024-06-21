@@ -1,0 +1,41 @@
+.explorer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-self: stretch;
+}
+
+.explorer .left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-self: stretch;
+  flex: 1;
+}
+
+.explorer .right {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+
+.explorer .panel-active {
+  background: $white;
+  color: $lightGrey;
+  border-color: $lightGrey;
+}
+
+.explorer .panel-active h3 {
+  color: $limeGreen;
+}
+
+.explorer .panel-inactive {
+  background: $white;
+  color: $lightGrey;
+  border-color: $lightGrey;
+}

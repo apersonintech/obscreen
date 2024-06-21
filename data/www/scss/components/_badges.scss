@@ -1,0 +1,32 @@
+a.badge,
+.badge {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: rgba($white, .1);
+  border: 1px solid transparent;
+  color: $white;
+}
+
+a.badge:hover {
+  color: $white;
+  border: 1px solid rgba($white, .4);
+}
+
+.panel-inactive .badge {
+  background: rgba($lightGrey, .1);
+  color: $lightGrey;
+}
+
+.panel-inactive a.badge:hover {
+  color: $lightGrey;
+  border: 1px solid rgba($lightGrey,.2);
+}
+
+.badge.anonymous {
+  opacity: .2;
+}

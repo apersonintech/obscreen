@@ -1,0 +1,35 @@
+.alert {
+  margin: 10px 30px 20px 30px;
+  padding: 20px 50px;
+  align-self: stretch;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.alert-info {
+  color: $neutralGrey;
+  border: 1px solid $neutralGrey;
+  background: rgba($neutralGrey, .2);
+}
+
+.alert-success {
+  color: $success;
+  border: 1px solid $success;
+  background: rgba($success, .2);
+}
+
+.alert-error {
+  color: $danger;
+  border: 1px solid $danger;
+  background: rgba($danger, .2);
+}
+
+.alert-icon {
+  border-radius: 4px;
+  padding: 3px 4px;
+  min-width: 18px;
+  text-align: center;
+}

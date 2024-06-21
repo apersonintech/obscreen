@@ -1,0 +1,49 @@
+.modals {
+  position: fixed;
+  background: rgba($black, 0.4);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modals-outer {
+  min-width: 30%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.modals-outer .modal-close {
+  color: $white;
+  font-size: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 0px;
+}
+
+.modals-inner {
+  background: $white;
+  border-radius: 10px;
+  color: lighten($black, 20%);
+}
+
+.modals-inner .modal h2 {
+  border-bottom: 1px solid $lightGrey;
+  padding: 15px 15px;
+  margin: 0;
+}
+
+.modals-inner .modal h3 {
+  align-self: stretch;
+  border-bottom: 1px solid $lightGrey;
+  padding: 15px 15px;
+  margin: 0;
+}

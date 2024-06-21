@@ -18,3 +18,4 @@ var/run/*
 *.swp
 .env
 venv/
+node_modules
