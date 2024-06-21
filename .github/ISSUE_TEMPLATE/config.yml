@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature request
+    url: https://github.com/jr-k/obscreen/issues/new?template=feature_request.md
+    about: Suggest an idea or enhancement for this project
+  - name: Bug report
+    url: https://github.com/jr-k/obscreen/issues/new?template=bug_report.md
+    about: Report a problem or bug to help us improve
+
