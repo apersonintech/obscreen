@@ -238,6 +238,7 @@
     "enum_variable_section_security": "6. Security",
     "enum_application_language_english": "English",
     "enum_application_language_french": "French",
+    "enum_application_language_italian": "Italian",
     "enum_slide_type_url": "URL",
     "enum_slide_type_video": "Video (MP4 only)",
     "enum_slide_type_picture": "Picture",
