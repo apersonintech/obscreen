@@ -90,7 +90,7 @@ class PlayerController(ObController):
     def _get_dynamic_playlist_id(self, playlist_slug_or_id: Optional[str]) -> str:
         if not playlist_slug_or_id and self._model_store.variable().get_one_by_name('fleet_player_enabled'):
             node_player = self._model_store.node_player().get_one_by("host = '{}' and enabled = {}".format(
-                get_safe_remote_addr(request.remote_addr),
+                get_safe_remote_addr(self.get_remote_addr()),
                 True
             ))
 
@@ -98,4 +98,10 @@ class PlayerController(ObController):
                 node_player_group = self._model_store.node_player_group().get(node_player.group_id)
                 playlist_slug_or_id = node_player_group.playlist_id
         return playlist_slug_or_id
-        
+
+    @staticmethod
+    def get_remote_addr() -> str:
+        if request.headers.get('X-Forwarded-For'):
+            return request.headers['X-Forwarded-For'].split(',')[0].strip()
+        else:
+            return request.remote_addr
