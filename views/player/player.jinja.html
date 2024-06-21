@@ -160,6 +160,10 @@
     };
 
     const lookupCurrentItem = function() {
+        if (curItemIndex === -1) {
+            return {duration: introDuration/1000};
+        }
+
         return items.loop[curItemIndex];
     }
 
