@@ -24,7 +24,7 @@
         <iframe src="/player/default"></iframe>
     {% endif %}
 </div>
-<div id="CronSlide" class="slide" style="z-index: 0;">
+<div id="NotificationSlide" class="slide" style="z-index: 0;">
 
 </div>
 <div id="FirstSlide" class="slide slide-loop" style="z-index: 500;">
@@ -74,12 +74,12 @@
     let curItemIndex = -1;
     let secondsBeforeNext = 0;
     const introSlide = document.getElementById('IntroSlide');
-    const cronSlide = document.getElementById('CronSlide');
+    const notificationSlide = document.getElementById('NotificationSlide');
     const firstSlide = document.getElementById('FirstSlide');
     const secondSlide = document.getElementById('SecondSlide');
     let curSlide = secondSlide;
     let nextSlide = firstSlide;
-    let cronItemIndex = null;
+    let notificationItemIndex = null;
 
     // Functions
     const itemCheck = setInterval(function() {
@@ -189,7 +189,7 @@
     };
 
     const main = function() {
-        setInterval(checkAndMoveCron, 1000);
+        setInterval(checkAndMoveNotifications, 1000);
         setTimeout(function() {
             if (items.loop.length === 0) {
                 return setTimeout(main, 5000);
@@ -372,9 +372,9 @@
         setTimeout(autoplayLoader, delayNoisyContentJIT);
     }
 
-    const checkAndMoveCron = function() {
-        for (let i = 0; i < items.cron.length; i++) {
-            const item = items.cron[i];
+    const checkAndMoveNotifications = function() {
+        for (let i = 0; i < items.notifications.length; i++) {
+            const item = items.notifications[i];
 
             const now = new Date();
             const isFullyElapsedMinute = (new Date()).getSeconds() === 0;
@@ -383,52 +383,52 @@
             const hasDateTime = hasCron && validateCronDateTime(item.cron_schedule);
             const hasDateTimeEnd = hasCronEnd && validateCronDateTime(item.cron_schedule_end);
 
-            if (cronItemIndex !== i && hasDateTime) {
+            if (notificationItemIndex !== i && hasDateTime) {
                 const startDate = cronToDateTimeObject(item.cron_schedule);
                 const endDate = hasDateTimeEnd ? cronToDateTimeObject(item.cron_schedule_end) : modifyDate(startDate, item.duration);
 
                 if (now >= startDate && now < endDate) {
-                    moveToCronSlide(i);
+                    moveToNotificationSlide(i);
                 }
             }
 
-            if (cronItemIndex === i && hasDateTime) {
+            if (notificationItemIndex === i && hasDateTime) {
                 const startDate = cronToDateTimeObject(item.cron_schedule);
                 const endDate = hasDateTimeEnd ? cronToDateTimeObject(item.cron_schedule_end) : modifyDate(startDate, item.duration);
 
                 if (now >= endDate) {
-                    stopCronSlide();
+                    stopNotificationSlide();
                 }
             }
 
-            if (cronItemIndex !== i && isFullyElapsedMinute && hasCron && cron.isActive(item.cron_schedule)) {
-                moveToCronSlide(i);
+            if (notificationItemIndex !== i && isFullyElapsedMinute && hasCron && cron.isActive(item.cron_schedule)) {
+                moveToNotificationSlide(i);
             }
 
-            if (cronItemIndex === i && isFullyElapsedMinute && hasCronEnd && cron.isActive(item.cron_schedule_end)) {
-                stopCronSlide();
+            if (notificationItemIndex === i && isFullyElapsedMinute && hasCronEnd && cron.isActive(item.cron_schedule_end)) {
+                stopNotificationSlide();
             }
         }
     };
 
-    const moveToCronSlide = function(cronSlideIndex) {
-        const item = items.cron[cronSlideIndex];
-        cronItemIndex = cronSlideIndex;
+    const moveToNotificationSlide = function(notificationSlideIndex) {
+        const item = items.notifications[notificationSlideIndex];
+        notificationItemIndex = notificationSlideIndex;
         pause();
         const callbackReady = function() {
-            cronSlide.style.zIndex = '2000';
+            notificationSlide.style.zIndex = '2000';
             if (!item.cron_schedule_end) {
                 setTimeout(function() {
-                    stopCronSlide();
+                    stopNotificationSlide();
                 }, safe_duration(item) * 1000);
             }
         };
-        loadContent(cronSlide, callbackReady, item);
+        loadContent(notificationSlide, callbackReady, item);
     };
 
-    const stopCronSlide = function() {
-        cronItemIndex = null;
-        cronSlide.style.zIndex = '0';
+    const stopNotificationSlide = function() {
+        notificationItemIndex = null;
+        notificationSlide.style.zIndex = '0';
         play();
     };
 

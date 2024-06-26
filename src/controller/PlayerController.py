@@ -1,4 +1,5 @@
 import json
+import logging
 
 from typing import Optional
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify, abort
@@ -18,20 +19,27 @@ class PlayerController(ObController):
         playlist = self._model_store.playlist().get(playlist_id)
 
         playlist_loop = []
-        playlist_cron = []
+        playlist_notifications = []
 
         for slide in slides:
-            if 'cron_schedule' in slide and slide['cron_schedule']:
-                if get_safe_cron_descriptor(slide['cron_schedule']):
-                    playlist_cron.append(slide)
+            has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule'])
+
+            if slide['is_notification']:
+                if has_valid_start_date:
+                    playlist_notifications.append(slide)
+                else:
+                    logging.warn('Slide {} is notification but start date is invalid'.format(slide['name']))
             else:
-                playlist_loop.append(slide)
+                if has_valid_start_date:
+                    playlist_loop.append(slide)
+                else:
+                    playlist_loop.append(slide)
 
         playlists = {
             'playlist_id': playlist.id if playlist else None,
             'time_sync': playlist.time_sync if playlist else self._model_store.variable().get_one_by_name("playlist_default_time_sync").as_bool(),
             'loop': playlist_loop,
-            'cron': playlist_cron,
+            'notifications': playlist_notifications,
             'hard_refresh_request': self._model_store.variable().get_one_by_name("refresh_player_request").as_int()
         }
 
