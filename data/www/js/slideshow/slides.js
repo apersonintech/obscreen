@@ -122,7 +122,7 @@ jQuery(document).ready(function ($) {
         }
 
         if (flushDuration) {
-            $targetDuration.val('0');
+            $targetDuration.val('1');
         }
     };
 

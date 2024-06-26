@@ -20,6 +20,7 @@ class SlideManager(ModelManager):
         "name CHAR(255)",
         "type CHAR(30)",
         "enabled INTEGER DEFAULT 0",
+        "is_notification INTEGER DEFAULT 0",
         "playlist_id INTEGER",
         "duration INTEGER",
         "position INTEGER",
