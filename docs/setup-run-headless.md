@@ -6,7 +6,7 @@
 
 
 ---
-## 📡 Run the manager
+## 📡 Run the studio instance
 
 ### with docker run (for test)
 ```bash
@@ -93,7 +93,7 @@ sudo journalctl -u obscreen-studio -f
 
 
 ---
-## 📺 Run the player
+## 📺 Run the player instance
 ### Manually on any device capable of running chromium
 When you run the browser yourself don't forget to use these flags for chromium browser:
 ```bash
