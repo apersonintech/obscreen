@@ -8,7 +8,8 @@
 ---
 ## 📡 Run the studio instance
 
-### with docker run (for test)
+### with docker run
+> Not suitable for production use because it won't survive a reboot but it's ok for quick testing
 ```bash
 # (Optional) Install docker if needed
 curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
@@ -67,7 +68,8 @@ cp .env.dist .env
 - Server configuration is editable in `.env` file.
 - Application configuration will be available at `http://localhost:5000/settings` page after run.
 
-#### Start server (for test)
+#### Start server
+> Not suitable for production use because it won't survive a reboot but it's ok for quick testing
 ```bash
 python ./obscreen.py
 ```
