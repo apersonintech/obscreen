@@ -13,14 +13,14 @@
 
 ---
 
-## 📺 Run the player
+## 📺 Run the player instance
 Install player autorun by executing following script
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
 ```
 
 ---
-## 📡 Run the manager
+## 📡 Run the studio instance
 
 ### with docker run (for test)
 ```bash
