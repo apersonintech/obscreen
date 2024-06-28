@@ -9,7 +9,7 @@
 ## 📡 Run the studio instance
 
 ### with docker run
-> ⚠️ Not suitable for production use because it won't survive a reboot; but it's ok for quick testing
+> ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
 ```bash
 # (Optional) Install docker if needed
 curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
@@ -18,7 +18,7 @@ curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # t
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Run the Docker container
-docker run --rm --name obscreen --pull=always \
+docker run --restart=always --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
   -e PLAYER_AUTOSTART_FILE=/app/var/run/play \
@@ -69,12 +69,12 @@ cp .env.dist .env
 - Application configuration will be available at `http://localhost:5000/settings` page after run.
 
 #### Start server
-> ⚠️ Not suitable for production use because it won't survive a reboot; but it's ok for quick testing
+> ⚠️ Not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use `systemd` (detailed in next section) to ensure that it persists.
 ```bash
 python ./obscreen.py
 ```
 
-#### Start server forever with systemctl
+#### Start server forever with systemd
 ```bash
 cat "$(pwd)/system/obscreen-studio.service" | sed "s#/home/pi#$HOME#g" | sed "s#=pi#=$USER#g" | sudo tee /etc/systemd/system/obscreen-studio.service
 sudo systemctl daemon-reload

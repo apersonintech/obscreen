@@ -23,7 +23,7 @@ curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install
 ## 📡 Run the studio instance
 
 ### with docker run
-> ⚠️ Not suitable for production use because it won't survive a reboot; but it's ok for quick testing
+> ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
 ```bash
 # (Optional) Install docker if needed
 curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
@@ -86,7 +86,7 @@ cp .env.dist .env
 - Application configuration will be available at `http://raspberrypi.local:5000/settings` page after run.
 
 #### Start server
-> ⚠️ Not suitable for production use because it won't survive a reboot; but it's ok for quick testing
+> ⚠️ Not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use `systemd` (detailed in next section) to ensure that it persists.
 ```bash
 python ./obscreen.py
 ```
