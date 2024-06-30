@@ -230,7 +230,6 @@ jQuery(document).ready(function ($) {
             location = 'https://www.youtube.com/watch?v=' + slide.location;
         }
 
-        console.log(slide)
         $('.modal-slide-edit input:visible:eq(0)').focus().select();
         $('#slide-edit-name').val(slide.name);
         $('#slide-edit-type').val(slide.type);
