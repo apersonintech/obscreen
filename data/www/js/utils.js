@@ -3,6 +3,11 @@ const prettyTimestamp = function(timestamp) {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')} `
 };
 
+const getCronDateTime = function(cronExpression) {
+    const [minutes, hours, day, month, _, year] = cronExpression.split(' ');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+};
+
 const validateCronDateTime = function(cronExpression) {
     const pattern = /^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$/;
     return pattern.test(cronExpression);
@@ -28,4 +33,26 @@ const modifyDate = function(date, seconds) {
     const clone = new Date(date.getTime());
     clone.setSeconds(clone.getSeconds() + seconds);
     return clone;
+};
+
+const recreateSelectOptions = function($selectElement, options) {
+    if (!$selectElement.is('select')) {
+        throw new Error("Element is not a <select>");
+    }
+
+    const selectedValue = $selectElement.val();
+    $selectElement.empty();
+
+    $.each(options, function(key, label) {
+        $selectElement.append($('<option>', {
+            value: key,
+            html: label
+        }));
+    });
+
+    if ($selectElement.find(`option[value="${selectedValue}"]`).length > 0) {
+        $selectElement.val(selectedValue);
+    } else {
+        $selectElement.prop('selectedIndex', 0);
+    }
 };

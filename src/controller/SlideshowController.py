@@ -47,6 +47,7 @@ class SlideshowController(ObController):
             name=request.form['name'],
             type=str_to_enum(request.form['type'], SlideType),
             duration=request.form['duration'],
+            is_notification=True if 'is_notification' in request.form else False,
             playlist_id=request.form['playlist_id'] if 'playlist_id' in request.form and request.form['playlist_id'] else None,
             cron_schedule=get_optional_string(request.form['cron_schedule']),
             cron_schedule_end=get_optional_string(request.form['cron_schedule_end']),
@@ -82,6 +83,7 @@ class SlideshowController(ObController):
             id=request.form['id'],
             name=request.form['name'],
             duration=request.form['duration'],
+            is_notification=True if 'is_notification' in request.form else False,
             cron_schedule=request.form['cron_schedule'],
             cron_schedule_end=request.form['cron_schedule_end'],
             location=request.form['location'] if 'location' in request.form and request.form['location'] else None
