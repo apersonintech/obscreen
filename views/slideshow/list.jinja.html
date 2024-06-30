@@ -10,6 +10,18 @@
 {% endblock %}
 
 {% block add_js %}
+    <script type="text/javascript">
+        var schedule_start_choices = {
+            'loop': '{{ l.slideshow_slide_form_label_cron_scheduled_loop }}',
+            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
+            'cron': '{{ l.slideshow_slide_form_label_cron_scheduled_cron }}',
+        };
+        var schedule_end_choices = {
+            'duration': '{{ l.slideshow_slide_form_label_cron_scheduled_duration }}',
+            'stayloop': '{{ l.slideshow_slide_form_label_cron_scheduled_stayloop }}',
+            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
+        };
+    </script>
     <script src="{{ STATIC_PREFIX }}js/lib/flatpickr.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/tablednd-fixed.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/slides.js"></script>
@@ -31,6 +43,7 @@
             <a href="{% if current_playlist %}{{ url_for('player_use', playlist_slug_or_id=current_playlist.slug) }}{% else %}{{ url_for('player') }}{% endif %}" target="_blank" class="btn" title="{{ l.slideshow_goto_player }}">
                 <i class="fa fa-play"></i>
             </a>
+
             <a href="{{ url_for('slideshow_player_refresh') }}" class="btn" title="{{ l.slideshow_refresh_player }}">
                 <i class="fa fa-refresh"></i>
             </a>
@@ -81,7 +94,6 @@
             {% endwith %}
         </div>
     </div>
-</div>
 
     <div class="modals hidden">
         <div class="modals-outer">
