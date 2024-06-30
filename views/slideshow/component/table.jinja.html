@@ -61,8 +61,12 @@
                 {% if slide.cron_schedule %}
                     {% set cron_desc = cron_descriptor(slide.cron_schedule)  %}
                     {% if cron_desc %}
-                        {% if is_validate_cron_date_time(slide.cron_schedule) %}
-                        📆 {{ cron_desc }}
+                        {% if is_valid_cron_date_time(slide.cron_schedule) %}
+                            {% if slide.is_notification %}
+                                🔔 {{ l.slideshow_slide_panel_td_cron_scheduled_notify }} <span class="td-secondary">{{ cron_desc }}</span>
+                            {% else %}
+                                🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}<span class="td-secondary">{{ cron_desc }}</span>
+                            {% endif %}
                         {% else %}
                         ⏳ {{ cron_desc }}
                         {% endif %}
@@ -77,8 +81,12 @@
                 {% if slide.cron_schedule_end %}
                     {% set cron_desc_end = cron_descriptor(slide.cron_schedule_end)  %}
                     {% if cron_desc_end %}
-                        {% if is_validate_cron_date_time(slide.cron_schedule_end) %}
-                        📆 {{ cron_desc_end }}
+                        {% if is_valid_cron_date_time(slide.cron_schedule_end) %}
+                            {% if slide.is_notification %}
+                                📆<span class="td-secondary">{{ cron_desc_end }}</span>
+                            {% else %}
+                                ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}<span class="td-secondary">{{ cron_desc_end }}</span>
+                            {% endif %}
                         {% else %}
                         ⏳ {{ cron_desc_end }}
                         {% endif %}

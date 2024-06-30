@@ -8,13 +8,14 @@ from src.util.utils import str_to_enum
 
 class Slide:
 
-    def __init__(self, location: str = '', playlist_id: Optional[int] = None, duration: int = 3, type: Union[SlideType, str] = SlideType.URL, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, location: str = '', playlist_id: Optional[int] = None, duration: int = 3, type: Union[SlideType, str] = SlideType.URL, is_notification: bool = False, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._location = location
         self._playlist_id = playlist_id
         self._duration = duration
         self._type = str_to_enum(type, SlideType) if isinstance(type, str) else type
         self._enabled = enabled
+        self._is_notification = is_notification
         self._name = name
         self._position = position
         self._cron_schedule = cron_schedule
@@ -117,6 +118,14 @@ class Slide:
         self._enabled = bool(value)
 
     @property
+    def is_notification(self) -> bool:
+        return bool(self._is_notification)
+
+    @is_notification.setter
+    def is_notification(self, value: bool):
+        self._is_notification = bool(value)
+
+    @property
     def name(self) -> str:
         return self._name
 
@@ -138,6 +147,7 @@ class Slide:
                f"name='{self.name}',\n" \
                f"type='{self.type}',\n" \
                f"enabled='{self.enabled}',\n" \
+               f"is_notification='{self.is_notification}',\n" \
                f"duration='{self.duration}',\n" \
                f"position='{self.position}',\n" \
                f"location='{self.location}',\n" \
@@ -163,6 +173,7 @@ class Slide:
             "id": self.id,
             "name": self.name,
             "enabled": self.enabled,
+            "is_notification": self.is_notification,
             "position": self.position,
             "type": self.type.value,
             "duration": self.duration,
