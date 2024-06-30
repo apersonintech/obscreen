@@ -117,7 +117,7 @@ class SlideManager(ModelManager):
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, {"position": slide_position})
 
-    def update_form(self, id: int, name: str, duration: int, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', location: Optional[str] = None) -> Slide:
+    def update_form(self, id: int, name: str, duration: int, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', location: Optional[str] = None) -> Slide:
         slide = self.get(id)
 
         if not slide:
@@ -126,6 +126,7 @@ class SlideManager(ModelManager):
         form = {
             "name": name,
             "duration": duration,
+            "is_notification": True if is_notification else False,
             "cron_schedule": get_optional_string(cron_schedule),
             "cron_schedule_end": get_optional_string(cron_schedule_end)
         }

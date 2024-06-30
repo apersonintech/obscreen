@@ -1,12 +1,13 @@
 import json
 import logging
 
+from datetime import datetime
 from typing import Optional
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify, abort
 
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
-from src.util.utils import get_safe_cron_descriptor
+from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, get_cron_date_time
 from src.util.UtilNetwork import get_ip_address, get_safe_remote_addr
 from src.model.enum.AnimationSpeed import animation_speed_duration
 
@@ -22,15 +23,25 @@ class PlayerController(ObController):
         playlist_notifications = []
 
         for slide in slides:
-            has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule'])
+            has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_valid_cron_date_time(slide['cron_schedule'])
+            has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_valid_cron_date_time(slide['cron_schedule_end'])
 
-            if slide['is_notification']:
+            if slide['is_notification'] and has_valid_start_date:
                 if has_valid_start_date:
                     playlist_notifications.append(slide)
                 else:
                     logging.warn('Slide {} is notification but start date is invalid'.format(slide['name']))
             else:
                 if has_valid_start_date:
+                    start_date = get_cron_date_time(slide['cron_schedule'], object=True)
+                    if datetime.now() <= start_date:
+                        continue
+
+                if has_valid_end_date:
+                    end_date = get_cron_date_time(slide['cron_schedule_end'], object=True)
+                    if datetime.now() >= end_date:
+                        continue
+
                     playlist_loop.append(slide)
                 else:
                     playlist_loop.append(slide)
