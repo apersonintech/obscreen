@@ -8,6 +8,7 @@ import unicodedata
 import platform
 
 
+from datetime import datetime
 from typing import Optional, List, Dict
 from enum import Enum
 from cron_descriptor import ExpressionDescriptor
@@ -58,13 +59,19 @@ def camel_to_snake(camel: str) -> str:
     return CAMEL_CASE_TO_SNAKE_CASE_PATTERN.sub('_', camel).lower()
 
 
-def is_validate_cron_date_time(expression) -> bool:
+def is_valid_cron_date_time(expression: str) -> bool:
     pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$')
     return bool(pattern.match(expression))
 
 
+def get_cron_date_time(cron_expression: str, object: bool) -> str:
+    minutes, hours, day, month, _, year = cron_expression.split(' ')
+    formatted_date_time = f"{year}-{month.zfill(2)}-{day.zfill(2)} {hours.zfill(2)}:{minutes.zfill(2)}"
+    return datetime.strptime(formatted_date_time, '%Y-%m-%d %H:%M') if object else formatted_date_time
+
+
 def get_safe_cron_descriptor(expression: str, use_24hour_time_format=True, locale_code: Optional[str] = None) -> str:
-    if is_validate_cron_date_time(expression):
+    if is_valid_cron_date_time(expression):
         [minutes, hours, day, month, _, year] = expression.split(' ')
         return "{}-{}-{} at {}:{}".format(
             year,
@@ -233,4 +240,4 @@ def restart(debug: bool) -> None:
             pass
         except subprocess.CalledProcessError:
             pass
-            
+
