@@ -4,8 +4,7 @@ from typing import Dict, Optional, List, Tuple, Union
 
 from src.model.entity.Slide import Slide
 from src.model.entity.Playlist import Playlist
-from src.model.enum.SlideType import SlideType
-from src.util.utils import get_optional_string, get_yt_video_id
+from src.util.utils import get_optional_string
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
@@ -15,16 +14,14 @@ from src.service.ModelManager import ModelManager
 
 class SlideManager(ModelManager):
 
-    TABLE_NAME = "slideshow"
+    TABLE_NAME = "slides"
     TABLE_MODEL = [
-        "name CHAR(255)",
-        "type CHAR(30)",
         "enabled INTEGER DEFAULT 0",
         "is_notification INTEGER DEFAULT 0",
         "playlist_id INTEGER",
+        "content_id INTEGER",
         "duration INTEGER",
         "position INTEGER",
-        "location TEXT",
         "cron_schedule CHAR(255)",
         "cron_schedule_end CHAR(255)",
         "created_by CHAR(255)",
@@ -69,7 +66,7 @@ class SlideManager(ModelManager):
     def get_all(self, sort: bool = False) -> List[Slide]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort="position" if sort else None))
 
-    def forget_user(self, user_id: int):
+    def forget_for_user(self, user_id: int):
         slides = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
         edits_slides = self.user_manager.forget_user_for_entity(slides, user_id)
 
@@ -117,25 +114,19 @@ class SlideManager(ModelManager):
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, {"position": slide_position})
 
-    def update_form(self, id: int, name: str, duration: int, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', location: Optional[str] = None) -> Slide:
+    def update_form(self, id: int, duration: int, content_id: Optional[int] = None, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '') -> Slide:
         slide = self.get(id)
 
         if not slide:
             return
 
         form = {
-            "name": name,
             "duration": duration,
+            "content_id": content_id,
             "is_notification": True if is_notification else False,
             "cron_schedule": get_optional_string(cron_schedule),
             "cron_schedule_end": get_optional_string(cron_schedule_end)
         }
-
-        if location is not None and location:
-            form["location"] = location
-
-        if slide.type == SlideType.YOUTUBE:
-            form['location'] = get_yt_video_id(form['location'])
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
@@ -148,9 +139,6 @@ class SlideManager(ModelManager):
             form = slide.to_dict()
             del form['id']
 
-        if form['type'] == SlideType.YOUTUBE.value:
-            form['location'] = get_yt_video_id(form['location'])
-
         self._db.add(self.TABLE_NAME, self.pre_add(form))
         self.post_add(slide.id)
 
@@ -158,12 +146,6 @@ class SlideManager(ModelManager):
         slide = self.get(id)
 
         if slide:
-            if slide.has_file():
-                try:
-                    os.unlink(slide.location)
-                except FileNotFoundError:
-                    pass
-
             self.pre_delete(id)
             self._db.delete_by_id(self.TABLE_NAME, id)
             self.post_delete(id)

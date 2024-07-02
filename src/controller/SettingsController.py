@@ -1,5 +1,6 @@
 import time
 import json
+import threading
 
 from flask import Flask, render_template, redirect, request, url_for
 from typing import Optional
@@ -7,6 +8,7 @@ from typing import Optional
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
 from src.model.entity.User import User
+from src.util.utils import restart
 
 
 class SettingsController(ObController):
@@ -30,7 +32,11 @@ class SettingsController(ObController):
             return redirect(url_for('settings_variable_list', error=error))
 
         self._model_store.variable().update_form(request.form['id'], request.form['value'])
-        self._post_update(request.form['id'])
+        redirect_response = self._post_update(request.form['id'])
+
+        if redirect_response:
+            return redirect_response
+
         return redirect(url_for('settings_variable_list'))
 
     def _pre_update(self, id: int) -> Optional[str]:
@@ -49,10 +55,9 @@ class SettingsController(ObController):
         if variable.refresh_player:
             self._model_store.variable().update_by_name("refresh_player_request", time.time())
 
-        if variable.name == 'slide_upload_limit':
-            self.reload_web_server()
+        self._model_store.variable().reload()
 
-        if variable.name == 'fleet_studio_enabled':
+        if variable.name == 'slide_upload_limit':
             self.reload_web_server()
 
         if variable.name == 'fleet_player_enabled':
@@ -67,7 +72,16 @@ class SettingsController(ObController):
                 self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
 
             self.reload_web_server()
+            return redirect(url_for('logout'))
 
         if variable.name == 'lang':
-            self._model_store.lang().set_lang(variable.value)
-            self._model_store.variable().reload()
+            self.reload_lang(variable.value)
+
+        if variable.is_from_plugin():
+            thread = threading.Thread(target=self.plugin_update)
+            thread.daemon = True
+            thread.start()
+            return redirect(url_for('settings_variable_list'))
+
+    def plugin_update(self) -> None:
+        restart()

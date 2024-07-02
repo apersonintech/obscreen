@@ -29,93 +29,88 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/fontawesome.min.css" />
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/compiled/main-studio.css" />
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/compiled/main.css" />
     {% block add_css %}{% endblock %}
     {{ HOOK(H_ROOT_CSS) }}
 </head>
 <body>
 <div class="container {% block container_class %}{% endblock %}">
-    {% set fleet_mode = request.args.get('fleet_mode') == '1' %}
 
     {% block header %}
-        {% if not fleet_mode %}
-             <header>
-                <h1 class="logo">
-                    <a href="{{ url_for('slideshow_slide_list') }}">
-                        <img src="{{ STATIC_PREFIX }}img/logo.png" />
-                        Obscreen
-                    </a>
-                </h1>
+        <header>
+            <h1 class="logo">
+                <a href="{{ url_for('slideshow_slide_list') }}">
+                    <img src="{{ STATIC_PREFIX }}img/logo.png" />
+                    Obscreen
+                </a>
+            </h1>
 
-                {% if not AUTH_ENABLED or (current_user and current_user.is_authenticated) %}
-                <nav>
-                    <ul>
-                        {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
-                            <a href="{{ url_for('slideshow_slide_list') }}">
-                                <i class="fa-regular fa-clock"></i> {{ l.slideshow_page_title }}
-                            </a>
-                        </li>
-                        {% if PLAYLIST_ENABLED %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'playlist_list' }}">
-                            <a href="{{ url_for('playlist_list') }}">
-                                <i class="fa fa-bars-staggered"></i> {{ l.playlist_page_title }}
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if FLEET_STUDIO_ENABLED %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_studio_list' }}">
-                            <a href="{{ url_for('fleet_node_studio_list') }}">
-                                <i class="fa fa-server"></i> {{ l.fleet_node_studio_page_title }}
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if FLEET_PLAYER_ENABLED %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_group_list' }}">
-                            <a href="{{ url_for('fleet_node_player_group_list') }}">
-                                <i class="fa fa-layer-group"></i> {{ l.fleet_node_player_group_page_title }}
-                            </a>
-                        </li>
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_list' }}">
-                            <a href="{{ url_for('fleet_node_player_list') }}">
-                                <i class="fa fa-tv"></i> {{ l.fleet_node_player_page_title }}
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% if AUTH_ENABLED %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'auth_user_list' }}">
-                            <a href="{{ url_for('auth_user_list') }}">
-                                <i class="fa fa-user"></i> {{ l.auth_page_title }}
-                            </a>
-                        </li>
-                        {% endif %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'settings_variable_list' }}">
-                            <a href="{{ url_for('settings_variable_list') }}">
-                                <i class="fa-solid fa-cogs"></i> {{ l.settings_page_title }}
-                            </a>
-                        </li>
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo_attribute_list' }}">
-                            <a href="{{ url_for('sysinfo_attribute_list') }}">
-                                <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
-                            </a>
-                        </li>
-                        {% if AUTH_ENABLED %}
-                        <li class="user-menu">
-                            <div class="username">
-                                <i class="fa fa-user"></i>
-                                {{ current_user.username }}
-                            </div>
-                            <a href="{{ url_for('logout') }}" title="{{ l.logout }}" class="logout">
-                                <i class="fa fa-right-from-bracket"></i>
-                            </a>
-                        </li>
-                        {% endif %}
-                        {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
-                    </ul>
-                </nav>
-                {% endif %}
-            </header>
-        {% endif %}
+            {% if not AUTH_ENABLED or (current_user and current_user.is_authenticated) %}
+            <nav>
+                <ul>
+                    {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
+                        <a href="{{ url_for('slideshow_slide_list') }}">
+                            <i class="fa-regular fa-clock"></i> {{ l.slideshow_slide_page_title }}
+                        </a>
+                    </li>
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_content_list' }}">
+                        <a href="{{ url_for('slideshow_content_list') }}">
+                            <i class="fa fa-image"></i> {{ l.slideshow_content_page_title }}
+                        </a>
+                    </li>
+                    {% if PLAYLIST_ENABLED %}
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'playlist_list' }}">
+                        <a href="{{ url_for('playlist_list') }}">
+                            <i class="fa fa-bars-staggered"></i> {{ l.playlist_page_title }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if FLEET_PLAYER_ENABLED %}
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_group_list' }}">
+                        <a href="{{ url_for('fleet_node_player_group_list') }}">
+                            <i class="fa fa-layer-group"></i> {{ l.fleet_node_player_group_page_title }}
+                        </a>
+                    </li>
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_list' }}">
+                        <a href="{{ url_for('fleet_node_player_list') }}">
+                            <i class="fa fa-tv"></i> {{ l.fleet_node_player_page_title }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if AUTH_ENABLED %}
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'auth_user_list' }}">
+                        <a href="{{ url_for('auth_user_list') }}">
+                            <i class="fa fa-user"></i> {{ l.auth_page_title }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'settings_variable_list' }}">
+                        <a href="{{ url_for('settings_variable_list') }}">
+                            <i class="fa-solid fa-cogs"></i> {{ l.settings_page_title }}
+                        </a>
+                    </li>
+                    <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo_attribute_list' }}">
+                        <a href="{{ url_for('sysinfo_attribute_list') }}">
+                            <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
+                        </a>
+                    </li>
+                    {% if AUTH_ENABLED %}
+                    <li class="user-menu">
+                        <div class="username">
+                            <i class="fa fa-user"></i>
+                            {{ current_user.username }}
+                        </div>
+                        <a href="{{ url_for('logout') }}" title="{{ l.logout }}" class="logout">
+                            <i class="fa fa-right-from-bracket"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
+                </ul>
+            </nav>
+            {% endif %}
+        </header>
     {% endblock %}
 
     {% block page %}
@@ -137,9 +132,9 @@
         'js_common_are_you_sure': '{{ l.common_are_you_sure }}',
         'js_playlist_delete_confirmation': '{{ l.js_playlist_delete_confirmation }}',
         'js_slideshow_slide_delete_confirmation': '{{ l.js_slideshow_slide_delete_confirmation }}',
+        'js_slideshow_content_delete_confirmation': '{{ l.js_slideshow_content_delete_confirmation }}',
         'js_fleet_node_player_group_delete_confirmation': '{{ l.js_fleet_node_player_group_delete_confirmation }}',
         'js_fleet_node_player_delete_confirmation': '{{ l.js_fleet_node_player_delete_confirmation }}',
-        'js_fleet_node_studio_delete_confirmation': '{{ l.js_fleet_node_studio_delete_confirmation }}',
         'js_auth_user_delete_confirmation': '{{ l.js_auth_user_delete_confirmation }}',
         'js_sysinfo_restart_confirmation': '{{ l.js_sysinfo_restart_confirmation }}',
         'js_sysinfo_restart_loading': '{{ l.js_sysinfo_restart_loading }}'

@@ -222,13 +222,12 @@ def clamp(x: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(x, maximum))
 
 
-def restart(debug: bool) -> None:
+def restart(debug=False) -> None:
     time.sleep(1)
 
     if platform.system().lower() == 'darwin':
-        if debug:
-            python = sys.executable
-            os.execl(python, python, *sys.argv)
+        python = sys.executable
+        os.execl(python, python, *sys.argv)
     elif am_i_in_docker():
         python = sys.executable
         os.execl(python, python, *sys.argv)

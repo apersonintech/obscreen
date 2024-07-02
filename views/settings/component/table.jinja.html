@@ -17,9 +17,9 @@
                 <h3>
                     {% if variable.is_from_plugin() %}
                         {% set plugin = plugins[variable.plugin] %}
-                        <i class="fa fa-puzzle-piece icon-left"></i> {{ plugin.use_title() }}
+                        <i class="fa fa-puzzle-piece icon-left"></i> {{ t(plugin.use_title()) }}
                         {% if plugin.use_description() %}
-                            <div class="plugin-description">{{ plugin.use_description() }}</div>
+                            <div class="plugin-description">{{ t(plugin.use_description()) }}</div>
                         {% endif %}
                     {% else %}
                         <i class="fa fa-cog icon-left"></i> {{ variable.section }}
@@ -31,7 +31,7 @@
         <tr class="variable-item" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
             <td class="infos">
                 <div class="inner">
-                    {{ variable.description }}
+                    {{ t(variable.description) }}
                 </div>
             </td>
             <td>

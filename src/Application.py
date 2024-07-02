@@ -16,11 +16,11 @@ class Application:
         self._project_dir = project_dir
         self._stop_event = threading.Event()
         self._model_store = ModelStore(self.get_plugins)
-        self._template_renderer = TemplateRenderer(project_dir=project_dir, model_store=self._model_store, render_hook=self.render_hook)
-        self._web_server = WebServer(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer)
+        self._template_renderer = TemplateRenderer(kernel=self, model_store=self._model_store, render_hook=self.render_hook)
+        self._web_server = WebServer(kernel=self, model_store=self._model_store, template_renderer=self._template_renderer)
 
         logging.info("[{}] Starting application v{}...".format(self.get_name(), self.get_version()))
-        self._plugin_store = PluginStore(project_dir=project_dir, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
+        self._plugin_store = PluginStore(kernel=self, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
         signal.signal(signal.SIGINT, self.signal_handler)
 
     def start(self) -> None:
@@ -31,6 +31,9 @@ class Application:
         self._model_store.database().close()
         self._stop_event.set()
         sys.exit(0)
+
+    def get_project_dir(self) -> str:
+        return self._project_dir
 
     def render_hook(self, hook: HookType) -> str:
         return self._template_renderer.render_hooks(self._plugin_store.map_hooks()[hook])
@@ -46,3 +49,8 @@ class Application:
     def get_version() -> str:
         with open("version.txt", 'r') as file:
             return file.read().strip()
+
+    def reload_lang(self, lang: str) -> None:
+        self._model_store.lang().set_lang(lang)
+        self._model_store.variable().reload()
+        self._plugin_store.reload_lang()

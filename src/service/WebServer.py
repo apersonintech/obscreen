@@ -9,8 +9,8 @@ from src.manager.UserManager import UserManager
 from src.service.ModelStore import ModelStore
 from src.service.TemplateRenderer import TemplateRenderer
 from src.controller.PlayerController import PlayerController
-from src.controller.SlideshowController import SlideshowController
-from src.controller.FleetNodeStudioController import FleetNodeStudioController
+from src.controller.SlideController import SlideController
+from src.controller.ContentController import ContentController
 from src.controller.FleetNodePlayerController import FleetNodePlayerController
 from src.controller.FleetNodePlayerGroupController import FleetNodePlayerGroupController
 from src.controller.PlaylistController import PlaylistController
@@ -23,11 +23,11 @@ from src.constant.WebDirConstant import WebDirConstant
 
 class WebServer:
 
-    def __init__(self, project_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer):
+    def __init__(self, kernel, model_store: ModelStore, template_renderer: TemplateRenderer):
         self._app = None
         self._auth_enabled = False
         self._login_manager = None
-        self._project_dir = project_dir
+        self._kernel = kernel
         self._model_store = model_store
         self._template_renderer = template_renderer
         self._debug = self._model_store.config().map().get('debug')
@@ -53,13 +53,13 @@ class WebServer:
         return self._app
 
     def get_template_folder(self) -> str:
-        return "{}/{}".format(self._project_dir, WebDirConstant.FOLDER_TEMPLATES)
+        return "{}/{}".format(self._kernel.get_project_dir(), WebDirConstant.FOLDER_TEMPLATES)
 
     def get_static_folder(self) -> str:
-        return "{}/{}".format(self._project_dir, WebDirConstant.FOLDER_STATIC)
+        return "{}/{}".format(self._kernel.get_project_dir(), WebDirConstant.FOLDER_STATIC)
 
     def get_web_folder(self) -> str:
-        return "{}/{}/{}".format(self._project_dir, WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS)
+        return "{}/{}/{}".format(self._kernel.get_project_dir(), WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS)
 
     def _setup_flask_app(self) -> None:
         self._app = Flask(
@@ -87,9 +87,6 @@ class WebServer:
             return self._model_store.user().get(user_id)
 
     def auth_required(self, f):
-        if not self._model_store.variable().map().get('auth_enabled').as_bool():
-            return f
-
         def decorated_function(*args, **kwargs):
             if not self._model_store.variable().map().get('auth_enabled').as_bool():
                 return f(*args, **kwargs)
@@ -101,17 +98,16 @@ class WebServer:
         return decorated_function
 
     def _setup_web_controllers(self) -> None:
-
-        CoreController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        PlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        SlideshowController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        SettingsController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        SysinfoController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        FleetNodeStudioController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        FleetNodePlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        FleetNodePlayerGroupController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        PlaylistController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        AuthController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        CoreController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        PlayerController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        SlideController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        ContentController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        SettingsController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        SysinfoController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        FleetNodePlayerController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        FleetNodePlayerGroupController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        PlaylistController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        AuthController(self._kernel, self, self._app, self.auth_required, self._model_store, self._template_renderer)
 
     def _setup_web_globals(self) -> None:
         @self._app.context_processor

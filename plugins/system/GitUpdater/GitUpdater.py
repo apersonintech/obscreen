@@ -14,10 +14,10 @@ class GitUpdater(ObPlugin):
         return 'git_updater'
 
     def use_title(self):
-        return 'Git Updater'
+        return self.translate('plugin_title')
 
     def use_description(self):
-        return 'Adds an update button (only for system wide installations)'
+        return self.translate('plugin_description')
 
     def use_variables(self) -> List[Variable]:
         return []
