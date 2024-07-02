@@ -1,5 +1,6 @@
 import time
 import json
+import threading
 
 from flask import Flask, render_template, redirect, request, url_for
 from typing import Optional
@@ -7,6 +8,7 @@ from typing import Optional
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
 from src.model.entity.User import User
+from src.util.utils import restart
 
 
 class SettingsController(ObController):
@@ -75,3 +77,12 @@ class SettingsController(ObController):
         if variable.name == 'lang':
             self._model_store.lang().set_lang(variable.value)
             self._model_store.variable().reload()
+
+        if variable.is_from_plugin():
+            thread = threading.Thread(target=self.plugin_update)
+            thread.daemon = True
+            thread.start()
+            return redirect(url_for('settings_variable_list'))
+
+    def plugin_update(self) -> None:
+        restart()
