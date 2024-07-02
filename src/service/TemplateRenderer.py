@@ -15,8 +15,8 @@ from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, se
 
 class TemplateRenderer:
 
-    def __init__(self, project_dir: str, model_store: ModelStore, render_hook):
-        self._project_dir = project_dir
+    def __init__(self, kernel, model_store: ModelStore, render_hook):
+        self._kernel = kernel
         self._model_store = model_store
         self._render_hook = render_hook
 
