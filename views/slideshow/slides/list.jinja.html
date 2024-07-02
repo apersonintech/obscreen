@@ -1,12 +1,12 @@
 {% extends 'base.jinja.html' %}
 
 {% block page_title %}
-    {{ l.slideshow_page_title }}
+    {{ l.slideshow_slide_page_title }}
 {% endblock %}
 
 {% block add_css %}
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css" />
-    {{ HOOK(H_SLIDESHOW_CSS) }}
+    {{ HOOK(H_SLIDESHOW_SLIDES_CSS) }}
 {% endblock %}
 
 {% block add_js %}
@@ -21,30 +21,27 @@
             'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
             'duration': '{{ l.slideshow_slide_form_label_cron_scheduled_duration }}',
         };
+        var contents = {{ json_dumps(contents) | safe }}
     </script>
     <script src="{{ STATIC_PREFIX }}js/lib/flatpickr.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/tablednd-fixed.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/slides.js"></script>
     <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
-    {{ HOOK(H_SLIDESHOW_JAVASCRIPT) }}
+    {{ HOOK(H_SLIDESHOW_SLIDES_JAVASCRIPT) }}
 {% endblock %}
 
 {% block page %}
     <div class="toolbar">
-        <h2><i class="fa-regular fa-clock icon-left"></i>{{ l.slideshow_page_title }}</h2>
+        <h2><i class="fa-regular fa-clock icon-left"></i>{{ l.slideshow_slide_page_title }}</h2>
 
         <div class="toolbar-actions">
-            {{ HOOK(H_SLIDESHOW_TOOLBAR_ACTIONS_START) }}
+            {{ HOOK(H_SLIDESHOW_SLIDES_TOOLBAR_ACTIONS_START) }}
 
-            {% if fleet_mode %}
-                {{ HOOK(H_FLEETMODE_SLIDESHOW_TOOLBAR_ACTIONS) }}
-            {% endif %}
-
-            <a href="{% if current_playlist %}{{ url_for('player_use', playlist_slug_or_id=current_playlist.slug) }}{% else %}{{ url_for('player') }}{% endif %}" target="_blank" class="btn" title="{{ l.slideshow_goto_player }}">
-                <i class="fa fa-play"></i>
+            <a href="{% if current_playlist %}{{ url_for('player_use', playlist_slug_or_id=current_playlist.slug) }}{% else %}{{ url_for('player') }}{% endif %}" target="_blank" class="btn" title="{{ l.slideshow_slide_goto_player }}">
+                <i class="fa fa-eye"></i>
             </a>
 
-            <a href="{{ url_for('slideshow_player_refresh') }}" class="btn" title="{{ l.slideshow_refresh_player }}">
+            <a href="{{ url_for('slideshow_player_refresh') }}" class="btn" title="{{ l.slideshow_slide_refresh_player }}">
                 <i class="fa fa-refresh"></i>
             </a>
 
@@ -65,14 +62,14 @@
             </select>
             {% endif %}
 
-            {{ HOOK(H_SLIDESHOW_TOOLBAR_ACTIONS_END) }}
+            {{ HOOK(H_SLIDESHOW_SLIDES_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
 
     {% if request.args.get('refresh_player') %}
         <div class="alert alert-success">
             <i class="fa fa-refresh icon-left"></i>
-            {{ l.slideshow_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
+            {{ l.slideshow_slide_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
         </div>
     {% endif %}
 
@@ -81,7 +78,7 @@
             <h3>{{ l.slideshow_slide_panel_active }}</h3>
 
             {% with tclass='active', slides=enabled_slides %}
-                {% include 'slideshow/component/table.jinja.html' %}
+                {% include 'slideshow/slides/component/table.jinja.html' %}
             {% endwith %}
         </div>
     </div>
@@ -90,7 +87,7 @@
             <h3>{{ l.slideshow_slide_panel_inactive }}</h3>
 
             {% with tclass='inactive', slides=disabled_slides %}
-                {% include 'slideshow/component/table.jinja.html' %}
+                {% include 'slideshow/slides/component/table.jinja.html' %}
             {% endwith %}
         </div>
     </div>
@@ -101,8 +98,8 @@
                 <i class="fa fa-close"></i>
             </a>
             <div class="modals-inner">
-                {% include 'slideshow/modal/add.jinja.html' %}
-                {% include 'slideshow/modal/edit.jinja.html' %}
+                {% include 'slideshow/slides/modal/add.jinja.html' %}
+                {% include 'slideshow/slides/modal/edit.jinja.html' %}
                 {% include 'core/utrack.jinja.html' %}
             </div>
         </div>

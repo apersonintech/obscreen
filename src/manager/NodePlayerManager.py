@@ -63,7 +63,7 @@ class NodePlayerManager(ModelManager):
 
         return self.get_by(query=query, sort="position")
 
-    def forget_user(self, user_id: int):
+    def forget_for_user(self, user_id: int):
         node_players = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
         edits_node_players = self.user_manager.forget_user_for_entity(node_players, user_id)
 

@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import Flask, send_from_directory, Markup, url_for
 from typing import List
@@ -26,7 +27,6 @@ class TemplateRenderer:
         globals = dict(
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
             SECRET_KEY=self._model_store.config().map().get('secret_key'),
-            FLEET_STUDIO_ENABLED=self._model_store.variable().map().get('fleet_studio_enabled').as_bool(),
             FLEET_PLAYER_ENABLED=self._model_store.variable().map().get('fleet_player_enabled').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
             PLAYLIST_ENABLED=self._model_store.variable().map().get('playlist_enabled').as_bool(),
@@ -40,6 +40,7 @@ class TemplateRenderer:
             str=str,
             seconds_to_hhmmss=seconds_to_hhmmss,
             is_valid_cron_date_time=is_valid_cron_date_time,
+            json_dumps=json.dumps,
             l=self._model_store.lang().map(),
             t=self._model_store.lang().translate,
         )

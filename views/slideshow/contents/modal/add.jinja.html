@@ -1,0 +1,49 @@
+<div class="modal modal-content-add modal-content">
+    <h2>
+        {{ l.slideshow_content_form_add_title }}
+    </h2>
+
+    <form class="form" action="/slideshow/content/add" method="POST" enctype="multipart/form-data">
+
+        {% if current_playlist %}
+            <input name="playlist_id" type="hidden" id="content-add-playlist-id" value="{{ current_playlist.id }}">
+        {% endif %}
+
+        <div class="form-group">
+            <label for="content-add-name">{{ l.slideshow_content_form_label_name }}</label>
+            <div class="widget">
+                <input name="name" type="text" id="content-add-name" required="required" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="content-add-type">{{ l.slideshow_content_form_label_type }}</label>
+            <div class="widget">
+                <select name="type" id="content-add-type">
+                    {% for type in enum_content_type %}
+                        {% set input_type = enum_content_type.get_input(type) %}
+                        <option value="{{ type.value }}" data-input="{{ input_type.value }}">
+                            {{ t(type) }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group object-input">
+            <label for="">{{ l.slideshow_content_form_label_object }}</label>
+            <div class="widget">
+                <input type="text" name="object" id="content-add-object-input-text" class="content-add-object-input" />
+                <input type="file" name="object" id="content-add-object-input-upload" class="content-add-object-input hidden" disabled="disabled" />
+            </div>
+        </div>
+    
+         <div class="actions">
+            <button type="button" class="btn-normal modal-close">
+                {{ l.slideshow_content_form_button_cancel }}
+            </button>
+            <button type="submit" class="green">
+                <i class="fa fa-save icon-left"></i>{{ l.slideshow_content_form_add_submit }}
+            </button>
+        </div>
+    </form>
+</div>

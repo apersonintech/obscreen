@@ -16,7 +16,6 @@ class GitUpdaterController(ObController):
         self._app.add_url_rule('/git-updater/update/now', 'git_updater_update_now', self._auth(self.update_now), methods=['GET'])
 
     def update_now(self):
-        secret = self._model_store.config().map().get('secret_key')
         debug = self._model_store.config().map().get('debug')
         thread = threading.Thread(target=self.update, args=(debug,))
         thread.daemon = True

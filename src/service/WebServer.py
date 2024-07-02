@@ -9,8 +9,8 @@ from src.manager.UserManager import UserManager
 from src.service.ModelStore import ModelStore
 from src.service.TemplateRenderer import TemplateRenderer
 from src.controller.PlayerController import PlayerController
-from src.controller.SlideshowController import SlideshowController
-from src.controller.FleetNodeStudioController import FleetNodeStudioController
+from src.controller.SlideController import SlideController
+from src.controller.ContentController import ContentController
 from src.controller.FleetNodePlayerController import FleetNodePlayerController
 from src.controller.FleetNodePlayerGroupController import FleetNodePlayerGroupController
 from src.controller.PlaylistController import PlaylistController
@@ -104,10 +104,10 @@ class WebServer:
 
         CoreController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         PlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        SlideshowController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        SlideController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
+        ContentController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         SettingsController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         SysinfoController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
-        FleetNodeStudioController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         FleetNodePlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         FleetNodePlayerGroupController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         PlaylistController(self, self._app, self.auth_required, self._model_store, self._template_renderer)

@@ -28,6 +28,7 @@ class DatabaseManager:
 
         self._conn = sqlite3.connect(self.DB_FILE, check_same_thread=False)
         self._conn.row_factory = sqlite3.Row
+        self.pre_migrate()
 
     def open(self, table_name: str, table_model: list):
         new_table_definition = '''CREATE TABLE IF NOT EXISTS {} (
@@ -58,7 +59,7 @@ class DatabaseManager:
     def get_connection(self):
         return self._conn
 
-    def execute_write_query(self, query, params=()) -> None:
+    def execute_write_query(self, query, params=(), silent_errors=False) -> None:
         logging.debug(query)
         cur = None
         sanitized_params = []
@@ -76,7 +77,8 @@ class DatabaseManager:
                 cur = self._conn.cursor()
                 cur.execute(query, tuple(sanitized_params))
         except sqlite3.Error as e:
-            logging.error("SQL query execution error while writing '{}': {}".format(query, e))
+            if not silent_errors:
+                logging.error("SQL query execution error while writing '{}': {}".format(query, e))
             self._conn.rollback()
         except sqlite3.OperationalError:
             pass
@@ -103,9 +105,9 @@ class DatabaseManager:
 
         return result
 
-    def get_all(self, table_name: str, sort: Optional[str] = None) -> list:
+    def get_all(self, table_name: str, sort: Optional[str] = None, ascending=True) -> list:
         return self.execute_read_query(
-            query="select * from {} {}".format(table_name, "ORDER BY {} ASC".format(sort) if sort else "")
+            query="select * from {} {}".format(table_name, "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "")
         )
 
     def get_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, values: dict = {}) -> list:
@@ -208,3 +210,13 @@ class DatabaseManager:
             delta_queries.append(f'ALTER TABLE {old_table_name} DROP COLUMN {column}')
 
         return delta_queries
+
+    def pre_migrate(self):
+        queries = [
+            "DROP TABLE IF EXISTS fleet_studio",
+            "ALTER TABLE slideshow RENAME TO slides",
+            "DELETE FROM settings WHERE name = 'fleet_studio_enabled'",
+        ]
+
+        for query in queries:
+            self.execute_write_query(query=query, silent_errors=True)

@@ -2,21 +2,18 @@ import json
 import time
 
 from typing import Optional, Union
-from src.model.enum.SlideType import SlideType, SlideInputType
 from src.util.utils import str_to_enum
 
 
 class Slide:
 
-    def __init__(self, location: str = '', playlist_id: Optional[int] = None, duration: int = 3, type: Union[SlideType, str] = SlideType.URL, is_notification: bool = False, enabled: bool = False, name: str = 'Untitled', position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, playlist_id: Optional[int] = None, content_id: Optional[int] = None, duration: int = 3, is_notification: bool = False, enabled: bool = False, position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
-        self._location = location
         self._playlist_id = playlist_id
+        self._content_id = content_id
         self._duration = duration
-        self._type = str_to_enum(type, SlideType) if isinstance(type, str) else type
         self._enabled = enabled
         self._is_notification = is_notification
-        self._name = name
         self._position = position
         self._cron_schedule = cron_schedule
         self._cron_schedule_end = cron_schedule_end
@@ -28,14 +25,6 @@ class Slide:
     @property
     def id(self) -> Optional[int]:
         return self._id
-
-    @property
-    def location(self) -> str:
-        return self._location
-
-    @location.setter
-    def location(self, value: str):
-        self._location = value
 
     @property
     def created_by(self) -> str:
@@ -70,20 +59,20 @@ class Slide:
         self._updated_at = value
 
     @property
-    def type(self) -> SlideType:
-        return self._type
-
-    @type.setter
-    def type(self, value: SlideType):
-        self._type = value
-
-    @property
     def playlist_id(self) -> Optional[int]:
         return self._playlist_id
 
     @playlist_id.setter
     def playlist_id(self, value: Optional[int]):
         self._playlist_id = value
+
+    @property
+    def content_id(self) -> Optional[int]:
+        return self._content_id
+
+    @content_id.setter
+    def content_id(self, value: Optional[int]):
+        self._content_id = value
 
     @property
     def cron_schedule(self) -> Optional[str]:
@@ -126,14 +115,6 @@ class Slide:
         self._is_notification = bool(value)
 
     @property
-    def name(self) -> str:
-        return self._name
-
-    @name.setter
-    def name(self, value: str):
-        self._name = value
-
-    @property
     def position(self) -> int:
         return self._position
 
@@ -144,62 +125,44 @@ class Slide:
     def __str__(self) -> str:
         return f"Slide(" \
                f"id='{self.id}',\n" \
-               f"name='{self.name}',\n" \
-               f"type='{self.type}',\n" \
                f"enabled='{self.enabled}',\n" \
                f"is_notification='{self.is_notification}',\n" \
                f"duration='{self.duration}',\n" \
                f"position='{self.position}',\n" \
-               f"location='{self.location}',\n" \
                f"created_by='{self.created_by}',\n" \
                f"updated_by='{self.updated_by}',\n" \
                f"created_at='{self.created_at}',\n" \
                f"updated_at='{self.updated_at}',\n" \
                f"playlist_id='{self.playlist_id}',\n" \
+               f"content_id='{self.content_id}',\n" \
                f"cron_schedule='{self.cron_schedule}',\n" \
                f"cron_schedule_end='{self.cron_schedule_end}',\n" \
                f")"
 
     def to_json(self, edits: dict = {}) -> str:
-        obj = self.to_dict(with_virtual=True)
+        obj = self.to_dict()
 
         for k, v in edits.items():
             obj[k] = v
 
         return json.dumps(obj)
 
-    def to_dict(self, with_virtual: bool = False) -> dict:
+    def to_dict(self) -> dict:
         slide = {
             "id": self.id,
-            "name": self.name,
             "enabled": self.enabled,
             "is_notification": self.is_notification,
             "position": self.position,
-            "type": self.type.value,
             "duration": self.duration,
-            "location": self.location,
             "created_by": self.created_by,
             "updated_by": self.updated_by,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "playlist_id": self.playlist_id,
+            "content_id": self.content_id,
             "cron_schedule": self.cron_schedule,
             "cron_schedule_end": self.cron_schedule_end,
         }
 
-        if with_virtual:
-            slide['is_editable'] = self.is_editable()
-
         return slide
 
-    def has_file(self) -> bool:
-        return (
-            self.type == SlideType.VIDEO
-            or self.type == SlideType.PICTURE
-        )
-
-    def get_input_type(self) -> SlideInputType:
-        return SlideType.get_input(self.type)
-
-    def is_editable(self) -> bool:
-        return SlideInputType.is_editable(self.get_input_type())

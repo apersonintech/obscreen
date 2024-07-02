@@ -1,0 +1,50 @@
+{% extends 'base.jinja.html' %}
+
+{% block page_title %}
+    {{ l.slideshow_content_page_title }}
+{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css" />
+    {{ HOOK(H_SLIDESHOW_CONTENT_CSS) }}
+{% endblock %}
+
+{% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
+    {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
+{% endblock %}
+
+{% block page %}
+    <div class="toolbar">
+        <h2><i class="fa fa-image icon-left"></i>{{ l.slideshow_content_page_title }}</h2>
+
+        <div class="toolbar-actions">
+            {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
+            <button class="purple content-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_content_button_add }}</button>
+            {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END) }}
+        </div>
+    </div>
+    
+    <div class="panel">
+        <div class="panel-body">
+            <h3>{{ l.slideshow_content_panel_active }}</h3>
+
+            {% with tclass='active', contents=contents %}
+                {% include 'slideshow/contents/component/table.jinja.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="modals hidden">
+        <div class="modals-outer">
+            <a href="javascript:void(0);" class="modal-close">
+                <i class="fa fa-close"></i>
+            </a>
+            <div class="modals-inner">
+                {% include 'slideshow/contents/modal/add.jinja.html' %}
+                {% include 'slideshow/contents/modal/edit.jinja.html' %}
+                {% include 'core/utrack.jinja.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

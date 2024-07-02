@@ -52,9 +52,6 @@ class SettingsController(ObController):
         if variable.name == 'slide_upload_limit':
             self.reload_web_server()
 
-        if variable.name == 'fleet_studio_enabled':
-            self.reload_web_server()
-
         if variable.name == 'fleet_player_enabled':
             playlist_enabled = self._model_store.variable().get_one_by_name(name='playlist_enabled')
             if variable.as_bool() and not playlist_enabled.as_bool():
