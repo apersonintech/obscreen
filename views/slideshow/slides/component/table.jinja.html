@@ -1,7 +1,7 @@
 <table class="{{ tclass }}-slides">
     <thead>
     <tr>
-        <th>{{ l.slideshow_slide_panel_th_name }}</th>
+        <th>{{ l.slideshow_slide_panel_th_content }}</th>
         {% if AUTH_ENABLED %}
             <th class="tac">
                 <i class="fa fa-user"></i>
@@ -10,7 +10,7 @@
         <th class="tac">{{ l.slideshow_slide_panel_th_enabled }}</th>
         <th class="">{{ l.slideshow_slide_panel_th_cron_scheduled }}</th>
         <th class="">{{ l.slideshow_slide_panel_th_duration }}</th>
-        <th class="tac">{{ l.slideshow_slide_panel_th_activity }}</th>
+        <th class="">{{ l.slideshow_slide_panel_th_activity }}</th>
     </tr>
     </thead>
     <tbody>
@@ -29,17 +29,7 @@
                     <a href="javascript:void(0);" class="item-sort slide-sort">
                         <i class="fa fa-sort icon-left"></i>
                     </a>
-                    {% set icon_type = 'globe' %}
-                    {% if slide.type == enum_slide_type.VIDEO %}
-                        {% set icon_type = 'film' %}
-                    {% elif slide.type == enum_slide_type.PICTURE %}
-                        {% set icon_type = 'image' %}
-                    {% elif slide.type == enum_slide_type.YOUTUBE %}
-                        {% set icon_type = 'video' %}
-                    {% endif %}
-
-                    <i class="fa fa-{{ icon_type }} icon-left"></i>
-                    {{ slide.name }}
+                    {{ contents[slide.content_id]|default(l.common_empty) }}
                 </div>
             </td>
             {% if AUTH_ENABLED %}
@@ -97,30 +87,20 @@
                     ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
                 {% endif %}
             </td>
-            <td class="actions tac">
+            <td class="actions">
                 <a href="javascript:void(0);" class="item-edit slide-edit">
                     <i class="fa fa-pencil"></i>
-                </a>
-
-                {% set location = slide.location %}
-
-                {% if var_external_url.as_string().strip()|length > 0 and slide.has_file() %}
-                    {% set location = var_external_url.value ~ '/' ~ slide.location %}
-                {% elif slide.has_file() %}
-                    {% set location ='/' ~ slide.location %}
-                {% endif %}
-
-                {% if slide.type == enum_slide_type.YOUTUBE %}
-                    {% set location = 'https://www.youtube.com/watch?v=' ~ slide.location %}
-                {% endif %}
-
-                <a href="{{ location }}" class="item-download slide-download" target="_blank">
-                    <i class="fa fa-eye"></i>
                 </a>
 
                 <a href="javascript:void(0);" class="item-delete slide-delete">
                     <i class="fa fa-trash"></i>
                 </a>
+
+                {% if slide.content_id %}
+                <a href="{{ url_for('slideshow_content_show', content_id=slide.content_id) }}" class="item-download slide-download" target="_blank">
+                    <i class="fa fa-eye"></i>
+                </a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

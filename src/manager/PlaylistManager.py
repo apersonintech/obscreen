@@ -5,6 +5,7 @@ from typing import Dict, Optional, List, Tuple, Union
 from src.model.entity.Playlist import Playlist
 from src.util.utils import get_optional_string, get_yt_video_id, slugify
 from src.manager.DatabaseManager import DatabaseManager
+from src.manager.SlideManager import SlideManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
@@ -62,7 +63,7 @@ class PlaylistManager(ModelManager):
         return self.hydrate_object(object)
 
     def get_durations_by_playlists(self):
-        durations = self._db.execute_read_query("select playlist_id, sum(duration) as total_duration from slideshow where cron_schedule is null group by playlist_id")
+        durations = self._db.execute_read_query("select playlist_id, sum(duration) as total_duration from {} where cron_schedule is null group by playlist_id".format(SlideManager.TABLE_NAME))
         map = {}
         for duration in durations:
             map[duration['playlist_id']] = duration['total_duration']
@@ -97,7 +98,7 @@ class PlaylistManager(ModelManager):
     def update_enabled(self, id: int, enabled: bool) -> None:
         self._db.update_by_id(self.TABLE_NAME, id, {"enabled": enabled})
 
-    def forget_user(self, user_id: int):
+    def forget_for_user(self, user_id: int):
         playlists = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
         edits_playlists = self.user_manager.forget_user_for_entity(playlists, user_id)
 

@@ -56,22 +56,6 @@ jQuery(document).ready(function ($) {
         });
     };
 
-    const inputTypeUpdate = function () {
-        const $el = $('#slide-add-type');
-        const value = $el.val();
-        const inputType = $el.find('option').filter(function (i, el) {
-            return $(el).val() === value;
-        }).data('input');
-
-        $('.slide-add-object-input')
-            .addClass('hidden')
-            .prop('disabled', true)
-            .filter('#slide-add-object-input-' + inputType)
-            .removeClass('hidden')
-            .prop('disabled', false)
-        ;
-    };
-
     const inputSchedulerUpdate = function() {
         const $modal = $('.modal-slide:visible');
         const $scheduleStartGroup = $modal.find('.slide-schedule-group');
@@ -203,15 +187,23 @@ jQuery(document).ready(function ($) {
         inputSchedulerUpdate();
     });
 
-    $(document).on('change', '#slide-add-type', inputTypeUpdate);
-
     $(document).on('click', '.slide-add', function () {
         showModal('modal-slide-add');
         loadDateTimePicker($('.modal-slide-add .datetimepicker'))
-        inputTypeUpdate();
         inputSchedulerUpdate();
+        inputContentUpdate();
         $('.modal-slide-add input:eq(0)').focus().select();
     });
+
+    const inputContentUpdate = function(content_id) {
+        const $modal = $('.modal-slide:visible');
+        const $group = $modal.find('.slide-content-id-group');
+        const $select = $group.find('select');
+        recreateSelectOptions($select, contents);
+        if (content_id) {
+            $select.val(content_id);
+        }
+    };
 
     $(document).on('click', '.slide-edit', function () {
         const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
@@ -224,16 +216,9 @@ jQuery(document).ready(function ($) {
         const hasDateTimeEnd = hasCronEnd && validateCronDateTime(slide.cron_schedule_end);
         const isNotification = slide.is_notification;
 
-        let location = slide.location;
-
-        if (slide.type == 'youtube') {
-            location = 'https://www.youtube.com/watch?v=' + slide.location;
-        }
+        inputContentUpdate(slide.content_id);
 
         $('.modal-slide-edit input:visible:eq(0)').focus().select();
-        $('#slide-edit-name').val(slide.name);
-        $('#slide-edit-type').val(slide.type);
-        $('#slide-edit-location').val(location).prop('disabled', !slide.is_editable);
         $('#slide-edit-duration').val(slide.duration);
         $('#slide-edit-is-notification').prop('checked', isNotification);
 

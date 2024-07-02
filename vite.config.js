@@ -10,8 +10,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        'main-studio': path.resolve(__dirname, 'data/www/scss/main-studio.scss'),
-        'fleet-studio': path.resolve(__dirname, 'data/www/scss/fleet-studio.scss'),
+        main: path.resolve(__dirname, 'data/www/scss/main.scss'),
       },
       output: {
         dir: path.resolve(__dirname, 'data/www/css/compiled'),

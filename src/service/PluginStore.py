@@ -23,8 +23,8 @@ class PluginStore:
     FOLDER_PLUGINS_USER = 'plugins/user'
     DEFAULT_PLUGIN_ENABLED_VARIABLE = "enabled"
 
-    def __init__(self, project_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer, web_server: WebServer):
-        self._project_dir = project_dir
+    def __init__(self, kernel, model_store: ModelStore, template_renderer: TemplateRenderer, web_server: WebServer):
+        self._kernel = kernel
         self._model_store = model_store
         self._template_renderer = template_renderer
         self._web_server = web_server
@@ -34,6 +34,12 @@ class PluginStore:
         self._user_plugins = self.find_plugins_in_directory(self.FOLDER_PLUGINS_USER)
         self.post_load_hooks()
         self.clean_dead_variables()
+
+    def reload_lang(self) -> None:
+        for plugin in self._system_plugins + self._user_plugins:
+            self._model_store.lang().load(directory=plugin.get_directory(), prefix=plugin.use_id())
+
+        self._model_store.variable().reload()
 
     def map_plugins(self) -> Dict[str, ObPlugin]:
         plugins = {}
@@ -48,7 +54,7 @@ class PluginStore:
 
     def find_plugins_in_directory(self, directory: str) -> list:
         plugins = []
-        for root, dirs, files in os.walk('{}/{}'.format(self._project_dir, directory)):
+        for root, dirs, files in os.walk('{}/{}'.format(self._kernel.get_project_dir(), directory)):
             for file in files:
                 if file.endswith(".py"):
                     module_name = file[:-3]
@@ -59,7 +65,7 @@ class PluginStore:
                     for name, obj in inspect.getmembers(module):
                         if inspect.isclass(obj) and issubclass(obj, ObPlugin) and obj is not ObPlugin:
                             plugin = obj(
-                                project_dir=self._project_dir,
+                                kernel=self._kernel,
                                 plugin_dir=root,
                                 model_store=self._model_store,
                                 template_renderer=self._template_renderer
@@ -81,6 +87,7 @@ class PluginStore:
                     for name, obj in inspect.getmembers(module):
                         if inspect.isclass(obj) and issubclass(obj, ObController) and obj is not ObController:
                             obj(
+                                kernel=self._kernel,
                                 web_server=self._web_server,
                                 app=self._web_server.get_app(),
                                 auth_required=self._web_server.auth_required,
@@ -114,7 +121,7 @@ class PluginStore:
                 value=False,
                 type=VariableType.BOOL,
                 editable=True,
-                description="Enable {} plugin".format(plugin.use_title())
+                description="common_enable_plugin"
             )
         ]
 

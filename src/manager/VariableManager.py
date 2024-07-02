@@ -126,7 +126,6 @@ class VariableManager:
 
             ### Fleet Management
             {"name": "fleet_player_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_player_enabled'), "description_edition": self.t('settings_variable_desc_edition_fleet_player_enabled'), "refresh_player": False},
-            {"name": "fleet_studio_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_studio_enabled'), "refresh_player": False},
 
             ### Security
             {"name": "auth_enabled", "section": self.t(VariableSection.SECURITY), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled'), "refresh_player": False},
