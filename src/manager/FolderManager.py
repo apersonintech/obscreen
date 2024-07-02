@@ -52,7 +52,7 @@ class FolderManager(ModelManager):
     def get_all(self, sort: bool = False) -> List[Folder]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "name" if sort else None))
 
-    def forget_user(self, user_id: int):
+    def forget_for_user(self, user_id: int):
         folders = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
         edits_folders = self.user_manager.forget_user_for_entity(folders, user_id)
 

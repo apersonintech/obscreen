@@ -1,3 +1,5 @@
 {
+    "plugin_title": "Bouton de mise à jour",
+    "plugin_description": "Ajoute un bouton de mise à jour (seulement pour les installations système)",
     "button_update": "Mettre à jour"
 }

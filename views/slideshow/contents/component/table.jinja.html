@@ -1,0 +1,66 @@
+<table class="{{ tclass }}-contents">
+    <thead>
+    <tr>
+        <th>{{ l.slideshow_content_panel_th_name }}</th>
+        {% if AUTH_ENABLED %}
+            <th class="tac">
+                <i class="fa fa-user"></i>
+            </th>
+        {% endif %}
+        <th class="tac">{{ l.slideshow_content_panel_th_activity }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="empty-tr {% if contents|length != 0 %}hidden{% endif %}">
+        <td colspan="4">
+            {{ l.slideshow_content_panel_empty|replace(
+                '%link%',
+                ('<a href="javascript:void(0);" class="item-add content-add">'~l.slideshow_content_button_add~'</a>')|safe
+            ) }}
+        </td>
+    </tr>
+    {% for content in contents %}
+        <tr class="content-item" data-level="{{ content.id }}" data-entity="{{ content.to_json({"created_by": track_created(content).username, "updated_by": track_updated(content).username}) }}">
+            <td class="infos">
+                <div class="inner">
+                    {% set icon_type = 'globe' %}
+                    {% if content.type == enum_content_type.VIDEO %}
+                        {% set icon_type = 'film' %}
+                    {% elif content.type == enum_content_type.PICTURE %}
+                        {% set icon_type = 'image' %}
+                    {% elif content.type == enum_content_type.YOUTUBE %}
+                        {% set icon_type = 'video' %}
+                    {% endif %}
+
+                    <i class="fa fa-{{ icon_type }} icon-left"></i>
+                    {{ content.name }}
+                </div>
+            </td>
+            {% if AUTH_ENABLED %}
+                <td class="tac">
+                    {% set creator = track_created(content) %}
+                    {% if creator.username %}
+                        <a href="javascript:void(0);" class="badge item-utrack content-utrack {% if not creator.enabled %}anonymous{% endif %}">
+                            {{ creator.username }}
+                        </a>
+                    {% endif %}
+                </td>
+            {% endif %}
+
+            <td class="actions tac">
+                <a href="javascript:void(0);" class="item-edit content-edit">
+                    <i class="fa fa-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0);" class="item-delete content-delete">
+                    <i class="fa fa-trash"></i>
+                </a>
+
+                <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" class="item-download content-download" target="_blank">
+                    <i class="fa fa-eye"></i>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
