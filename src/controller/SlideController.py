@@ -6,13 +6,12 @@ from flask import Flask, render_template, redirect, request, url_for, send_from_
 from werkzeug.utils import secure_filename
 from src.service.ModelStore import ModelStore
 from src.model.entity.Slide import Slide
-from src.model.enum.SlideType import SlideType
 from src.interface.ObController import ObController
 from src.util.utils import str_to_enum, get_optional_string
 from src.util.UtilFile import randomize_filename
 
 
-class SlideshowController(ObController):
+class SlideController(ObController):
 
     def register(self):
         self._app.add_url_rule('/manage', 'manage', self.manage, methods=['GET'])
@@ -32,43 +31,24 @@ class SlideshowController(ObController):
         current_playlist = self._model_store.playlist().get(playlist_id)
         playlist_id = current_playlist.id if current_playlist else None
         return render_template(
-            'slideshow/list.jinja.html',
+            'slideshow/slides/list.jinja.html',
             current_playlist=current_playlist,
             playlists=self._model_store.playlist().get_enabled_playlists(),
             enabled_slides=self._model_store.slide().get_slides(playlist_id=playlist_id, enabled=True),
             disabled_slides=self._model_store.slide().get_slides(playlist_id=playlist_id, enabled=False),
             var_last_restart=self._model_store.variable().get_one_by_name('last_restart'),
-            var_external_url=self._model_store.variable().get_one_by_name('external_url'),
-            enum_slide_type=SlideType
+            contents={content.id: content.name for content in self._model_store.content().get_contents()},
         )
 
     def slideshow_slide_add(self):
         slide = Slide(
-            name=request.form['name'],
-            type=str_to_enum(request.form['type'], SlideType),
+            content_id=request.form['content_id'],
             duration=request.form['duration'],
             is_notification=True if 'is_notification' in request.form else False,
             playlist_id=request.form['playlist_id'] if 'playlist_id' in request.form and request.form['playlist_id'] else None,
             cron_schedule=get_optional_string(request.form['cron_schedule']),
             cron_schedule_end=get_optional_string(request.form['cron_schedule_end']),
         )
-
-        if slide.has_file():
-            if 'object' not in request.files:
-                return redirect(request.url)
-
-            object = request.files['object']
-
-            if object.filename == '':
-                return redirect(request.url)
-
-            if object:
-                object_name = randomize_filename(object.filename)
-                object_path = os.path.join(self._app.config['UPLOAD_FOLDER'], object_name)
-                object.save(object_path)
-                slide.location = object_path
-        else:
-            slide.location = request.form['object']
 
         self._model_store.slide().add_form(slide)
         self._post_update()
@@ -81,12 +61,11 @@ class SlideshowController(ObController):
     def slideshow_slide_edit(self):
         slide = self._model_store.slide().update_form(
             id=request.form['id'],
-            name=request.form['name'],
+            content_id=request.form['content_id'],
             duration=request.form['duration'],
             is_notification=True if 'is_notification' in request.form else False,
             cron_schedule=request.form['cron_schedule'],
             cron_schedule_end=request.form['cron_schedule_end'],
-            location=request.form['location'] if 'location' in request.form and request.form['location'] else None
         )
         self._post_update()
 
