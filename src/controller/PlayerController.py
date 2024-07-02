@@ -17,12 +17,21 @@ class PlayerController(ObController):
     def _get_playlist(self, playlist_id: Optional[int] = 0) -> dict:
         enabled_slides = self._model_store.slide().get_slides(enabled=True, playlist_id=playlist_id)
         slides = self._model_store.slide().to_dict(enabled_slides)
+        contents = self._model_store.content().get_all_indexed()
         playlist = self._model_store.playlist().get(playlist_id)
 
         playlist_loop = []
         playlist_notifications = []
 
         for slide in slides:
+            if slide['content_id']:
+                content = contents[slide['content_id']].to_dict()
+                slide['name'] = content['name']
+                slide['location'] = content['location']
+                slide['type'] = content['type']
+            else:
+                continue
+
             has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_valid_cron_date_time(slide['cron_schedule'])
             has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_valid_cron_date_time(slide['cron_schedule_end'])
 

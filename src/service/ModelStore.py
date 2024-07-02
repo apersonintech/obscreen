@@ -2,8 +2,8 @@ from typing import Dict
 
 from src.manager.PlaylistManager import PlaylistManager
 from src.manager.SlideManager import SlideManager
+from src.manager.ContentManager import ContentManager
 from src.manager.FolderManager import FolderManager
-from src.manager.NodeStudioManager import NodeStudioManager
 from src.manager.NodePlayerManager import NodePlayerManager
 from src.manager.NodePlayerGroupManager import NodePlayerGroupManager
 from src.manager.UserManager import UserManager
@@ -34,11 +34,11 @@ class ModelStore:
 
         # Model
         self._folder_manager = FolderManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
-        self._node_studio_manager = NodeStudioManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._node_player_manager = NodePlayerManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._node_player_group_manager = NodePlayerGroupManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._playlist_manager = PlaylistManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
+        self._content_manager = ContentManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._variable_manager.reload()
 
     def logging(self) -> LoggingManager:
@@ -56,11 +56,11 @@ class ModelStore:
     def slide(self) -> SlideManager:
         return self._slide_manager
 
+    def content(self) -> ContentManager:
+        return self._content_manager
+
     def playlist(self) -> PlaylistManager:
         return self._playlist_manager
-
-    def node_studio(self) -> NodeStudioManager:
-        return self._node_studio_manager
 
     def node_player(self) -> NodePlayerManager:
         return self._node_player_manager
@@ -81,10 +81,10 @@ class ModelStore:
         return self._get_plugins()
 
     def on_user_delete(self, user_id: int) -> None:
-        self._playlist_manager.forget_user(user_id)
-        self._folder_manager.forget_user(user_id)
-        self._node_player_group_manager.forget_user(user_id)
-        self._node_player_manager.forget_user(user_id)
-        self._node_studio_manager.forget_user(user_id)
-        self._slide_manager.forget_user(user_id)
-        self._user_manager.forget_user(user_id)
+        self._playlist_manager.forget_for_user(user_id)
+        self._folder_manager.forget_for_user(user_id)
+        self._node_player_group_manager.forget_for_user(user_id)
+        self._node_player_manager.forget_for_user(user_id)
+        self._slide_manager.forget_for_user(user_id)
+        self._content_manager.forget_for_user(user_id)
+        self._user_manager.forget_for_user(user_id)
