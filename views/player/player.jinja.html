@@ -416,7 +416,7 @@
         notificationItemIndex = notificationSlideIndex;
         pause();
         const callbackReady = function() {
-            notificationSlide.style.zIndex = '2000';
+            notificationSlide.style.zIndex = '20000';
             if (!item.cron_schedule_end) {
                 setTimeout(function() {
                     stopNotificationSlide();
@@ -429,6 +429,7 @@
     const stopNotificationSlide = function() {
         notificationItemIndex = null;
         notificationSlide.style.zIndex = '0';
+        notificationSlide.innerHTML = '';
         play();
     };
 
