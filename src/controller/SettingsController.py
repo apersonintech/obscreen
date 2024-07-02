@@ -30,7 +30,11 @@ class SettingsController(ObController):
             return redirect(url_for('settings_variable_list', error=error))
 
         self._model_store.variable().update_form(request.form['id'], request.form['value'])
-        self._post_update(request.form['id'])
+        redirect_response = self._post_update(request.form['id'])
+
+        if redirect_response:
+            return redirect_response
+
         return redirect(url_for('settings_variable_list'))
 
     def _pre_update(self, id: int) -> Optional[str]:
@@ -49,6 +53,8 @@ class SettingsController(ObController):
         if variable.refresh_player:
             self._model_store.variable().update_by_name("refresh_player_request", time.time())
 
+        self._model_store.variable().reload()
+
         if variable.name == 'slide_upload_limit':
             self.reload_web_server()
 
@@ -64,6 +70,7 @@ class SettingsController(ObController):
                 self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
 
             self.reload_web_server()
+            return redirect(url_for('logout'))
 
         if variable.name == 'lang':
             self._model_store.lang().set_lang(variable.value)

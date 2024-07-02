@@ -87,9 +87,6 @@ class WebServer:
             return self._model_store.user().get(user_id)
 
     def auth_required(self, f):
-        if not self._model_store.variable().map().get('auth_enabled').as_bool():
-            return f
-
         def decorated_function(*args, **kwargs):
             if not self._model_store.variable().map().get('auth_enabled').as_bool():
                 return f(*args, **kwargs)
@@ -101,7 +98,6 @@ class WebServer:
         return decorated_function
 
     def _setup_web_controllers(self) -> None:
-
         CoreController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         PlayerController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
         SlideController(self, self._app, self.auth_required, self._model_store, self._template_renderer)
