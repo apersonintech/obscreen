@@ -21,8 +21,8 @@ class ObPlugin(abc.ABC):
 
     PLUGIN_PREFIX = "plugin_"
 
-    def __init__(self, project_dir: str, plugin_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer):
-        self._project_dir = project_dir
+    def __init__(self, kernel, plugin_dir: str, model_store: ModelStore, template_renderer: TemplateRenderer):
+        self._kernel = kernel
         self._plugin_dir = plugin_dir
         self._model_store = model_store
         self._template_renderer = template_renderer
@@ -84,12 +84,12 @@ class ObPlugin(abc.ABC):
     def _init_rendering_env(self) -> Environment:
         alias_paths = {
             "::": "{}/".format(WebDirConstant.FOLDER_TEMPLATES),
-            "@": "{}/{}/".format(self._plugin_dir.replace(self._project_dir, ''), WebDirConstant.FOLDER_TEMPLATES)
+            "@": "{}/{}/".format(self._plugin_dir.replace(self._kernel.get_project_dir(), ''), WebDirConstant.FOLDER_TEMPLATES)
         }
 
         env = Environment(
             loader=AliasFileSystemLoader(
-                searchpath=self._project_dir,
+                searchpath=self._kernel.get_project_dir(),
                 alias_paths=alias_paths
             ),
             autoescape=select_autoescape(['html', 'xml'])
@@ -106,3 +106,7 @@ class ObPlugin(abc.ABC):
             **parameters,
             **self._template_renderer.get_view_globals(),
         )
+
+    def translate(self, token, resolve=False) -> Union[Dict, str]:
+        token = token if token.startswith(self.use_id()) else "{}_{}".format(self.use_id(), token)
+        return self._model_store.lang().translate(token) if resolve else token

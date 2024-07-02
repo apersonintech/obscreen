@@ -208,6 +208,7 @@
     "common_unknown_ipaddr": "Adresse IP inconnue",
     "common_empty": "[Vide]",
     "common_are_you_sure": "Êtes-vous sûr ?",
+    "common_enable_plugin": "Activer ce plugin",
     "logout": "Déconnexion",
     "login_error_not_found": "Identifiants invalides",
     "login_error_bad_credentials": "Identifiants invalides",

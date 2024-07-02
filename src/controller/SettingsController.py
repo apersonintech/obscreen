@@ -75,8 +75,7 @@ class SettingsController(ObController):
             return redirect(url_for('logout'))
 
         if variable.name == 'lang':
-            self._model_store.lang().set_lang(variable.value)
-            self._model_store.variable().reload()
+            self.reload_lang(variable.value)
 
         if variable.is_from_plugin():
             thread = threading.Thread(target=self.plugin_update)

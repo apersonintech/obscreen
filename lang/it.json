@@ -208,6 +208,7 @@
     "common_unknown_ipaddr": "IP sconosciuto",
     "common_empty": "[Empty]",
     "common_are_you_sure": "Sei sicuro?",
+    "common_enable_plugin": "Attiva questo plugin",
     "logout": "Logout",
     "login_error_not_found": "Credenziali errate",
     "login_error_bad_credentials": "Credenziali errate",

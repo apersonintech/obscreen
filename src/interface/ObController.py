@@ -8,7 +8,8 @@ from src.interface.ObPlugin import ObPlugin
 
 class ObController(abc.ABC):
 
-    def __init__(self, web_server, app, auth_required, model_store: ModelStore, template_renderer: TemplateRenderer, plugin: Optional[ObPlugin] = None):
+    def __init__(self, kernel, web_server, app, auth_required, model_store: ModelStore, template_renderer: TemplateRenderer, plugin: Optional[ObPlugin] = None):
+        self._kernel = kernel
         self._web_server = web_server
         self._app = app
         self._auth = auth_required
@@ -35,6 +36,9 @@ class ObController(abc.ABC):
 
     def reload_web_server(self):
         self._web_server.reload()
+
+    def reload_lang(self, lang: str):
+        self._kernel.reload_lang(lang)
 
     def t(self, token) -> Union[Dict, str]:
         return self._model_store.lang().translate(token)
