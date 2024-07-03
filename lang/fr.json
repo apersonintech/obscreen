@@ -238,6 +238,7 @@
     "enum_application_language_english": "Anglais",
     "enum_application_language_french": "Français",
     "enum_application_language_italian": "Italien",
+    "enum_application_language_spanish": "Espagnol",
     "enum_content_type_url": "URL",
     "enum_content_type_video": "Vidéo (MP4 seulement)",
     "enum_content_type_picture": "Image",
