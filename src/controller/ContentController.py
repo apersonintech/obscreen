@@ -64,13 +64,14 @@ class ContentController(ObController):
         var_external_url = self._model_store.variable().get_one_by_name('external_url')
         location = content.location
 
-        if len(var_external_url.as_string().strip()) > 0 and content.has_file():
+        if content.type == ContentType.YOUTUBE:
+            location = "https://www.youtube.com/watch?v={}".format(content.location)
+        elif len(var_external_url.as_string().strip()) > 0 and content.has_file():
             location = "{}/{}".format(var_external_url.value, content.location)
         elif content.has_file():
             location = "/{}".format(content.location)
-
-        if content.type == ContentType.YOUTUBE:
-            location = "https://www.youtube.com/watch?v={}".format(content.location)
+        elif content.type == ContentType.URL:
+            location = 'http://' + content.location if not content.location.startswith('http') else content.location
 
         return redirect(location)
 
