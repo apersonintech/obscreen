@@ -64,18 +64,15 @@ jQuery(document).ready(function ($) {
             return $(el).val() === value;
         }).data('input');
 
-        if ($modal.find('.picker').length === 0) {
-            $modal.find('.upload').find('input, select').prop('disabled', false);
+        if ($modal.find('.picker:visible').length === 0) {
+            $('.slide-add-object-input')
+                .addClass('hidden')
+                .prop('disabled', true).prop('required', false)
+                .filter('#slide-add-object-input-' + inputType)
+                .removeClass('hidden')
+                .prop('disabled', false).prop('required', true)
+            ;
         }
-
-        $('.slide-add-object-input')
-            .addClass('hidden')
-            .prop('disabled', true)
-            .filter('#slide-add-object-input-' + inputType)
-            .removeClass('hidden')
-            .prop('disabled', false)
-        ;
-
     };
 
     const inputSchedulerUpdate = function() {
@@ -213,14 +210,19 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.picker button', function () {
         const $parent = $(this).parents('.modal-slide-add');
-        $parent.find('.picker').remove();
-        $parent.find('.upload').removeClass('hidden');
+        $parent.find('.picker').addClass('hidden').find('select').prop('disabled', true);
+        $parent.find('.upload').removeClass('hidden').find('input,select').prop('disabled', false);
         inputTypeUpdate();
     });
 
     $(document).on('click', '.slide-add', function () {
         showModal('modal-slide-add');
-        loadDateTimePicker($('.modal-slide-add .datetimepicker'))
+        const $modal = $('.modal-slide-add:visible');
+        loadDateTimePicker($modal.find('.datetimepicker'));
+        $modal.find('.picker').removeClass('hidden').find('select').prop('disabled', false);
+        $modal.find('.upload').addClass('hidden').find('input,select').prop('disabled', true);
+        $modal.find('button[type=submit]').removeClass('hidden');
+        $modal.find('.btn-loading').addClass('hidden');
         inputTypeUpdate();
         inputSchedulerUpdate();
         inputContentUpdate();
