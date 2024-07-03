@@ -6,6 +6,7 @@ from flask import Flask, render_template, redirect, request, url_for, send_from_
 from werkzeug.utils import secure_filename
 from src.service.ModelStore import ModelStore
 from src.model.entity.Slide import Slide
+from src.model.enum.ContentType import ContentType
 from src.interface.ObController import ObController
 from src.util.utils import str_to_enum, get_optional_string
 from src.util.UtilFile import randomize_filename
@@ -38,11 +39,23 @@ class SlideController(ObController):
             disabled_slides=self._model_store.slide().get_slides(playlist_id=playlist_id, enabled=False),
             var_last_restart=self._model_store.variable().get_one_by_name('last_restart'),
             contents={content.id: content.name for content in self._model_store.content().get_contents()},
+            enum_content_type=ContentType
         )
 
     def slideshow_slide_add(self):
+        content = None
+
+        if 'type' in request.form:
+            content = self._model_store.content().add_form_raw(
+                name=request.form['name'],
+                type=str_to_enum(request.form['type'], ContentType),
+                request_files=request.files,
+                upload_dir=self._app.config['UPLOAD_FOLDER'],
+                location=request.form['object'] if 'object' in request.form else None
+            )
+
         slide = Slide(
-            content_id=request.form['content_id'],
+            content_id=content.id if content else request.form['content_id'],
             duration=request.form['duration'],
             is_notification=True if 'is_notification' in request.form else False,
             playlist_id=request.form['playlist_id'] if 'playlist_id' in request.form and request.form['playlist_id'] else None,
