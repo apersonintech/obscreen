@@ -129,6 +129,10 @@ class PluginStore:
             if variable.name in self._dead_variables_candidates:
                 del self._dead_variables_candidates[variable.name]
 
+        # LANGS
+        self._model_store.lang().load(directory=plugin.get_directory(), prefix=plugin.use_id())
+        self._model_store.variable().reload()
+
         if not self.is_plugin_enabled(plugin):
             return
 
@@ -157,10 +161,6 @@ class PluginStore:
             "s" if len(hooks_registrations) > 1 else "",
         ))
 
-        # LANGS
-        self._model_store.lang().load(directory=plugin.get_directory(), prefix=plugin.use_id())
-        self._model_store.variable().reload()
-
         # WEB CONTROLLERS
         self.load_controllers(plugin)
 
@@ -171,6 +171,6 @@ class PluginStore:
 
     def is_plugin_enabled(self, plugin: ObPlugin) -> bool:
         var = self._model_store.variable().get_one_by_name(plugin.get_plugin_variable_name(self.DEFAULT_PLUGIN_ENABLED_VARIABLE))
-        logging.info("[plugin] {} {}".format("🟢" if var.as_bool() else "⚫️", plugin.use_title()))
+        logging.info("[plugin] {} {}".format("🟢" if var.as_bool() else "⚫️", self._model_store.lang().translate(plugin.use_title())))
 
         return var.as_bool() if var else False
