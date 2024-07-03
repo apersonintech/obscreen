@@ -23,6 +23,8 @@
     "slideshow_slide_form_section_content": "Medios",
     "slideshow_slide_form_section_scheduling": "Programación",
     "slideshow_slide_form_label_name": "Nombre",
+    "slideshow_slide_form_label_add_content": "Agregar a la biblioteca",
+    "slideshow_slide_form_label_from_library": "Dalla biblioteca",
     "slideshow_slide_form_label_content_id": "Contenido",
     "slideshow_slide_form_label_location": "Ubicación",
     "slideshow_slide_form_label_type": "Tipo",

@@ -216,6 +216,7 @@ class DatabaseManager:
             "DROP TABLE IF EXISTS fleet_studio",
             "ALTER TABLE slideshow RENAME TO slides",
             "DELETE FROM settings WHERE name = 'fleet_studio_enabled'",
+            "UPDATE content SET uuid = id WHERE uuid = '' or uuid is null",
         ]
 
         for query in queries:

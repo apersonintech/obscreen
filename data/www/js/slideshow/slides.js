@@ -56,6 +56,28 @@ jQuery(document).ready(function ($) {
         });
     };
 
+    const inputTypeUpdate = function () {
+        const $modal = $('.modal-slide:visible');
+        const $el = $('#slide-add-type');
+        const value = $el.val();
+        const inputType = $el.find('option').filter(function (i, el) {
+            return $(el).val() === value;
+        }).data('input');
+
+        if ($modal.find('.picker').length === 0) {
+            $modal.find('.upload').find('input, select').prop('disabled', false);
+        }
+
+        $('.slide-add-object-input')
+            .addClass('hidden')
+            .prop('disabled', true)
+            .filter('#slide-add-object-input-' + inputType)
+            .removeClass('hidden')
+            .prop('disabled', false)
+        ;
+
+    };
+
     const inputSchedulerUpdate = function() {
         const $modal = $('.modal-slide:visible');
         const $scheduleStartGroup = $modal.find('.slide-schedule-group');
@@ -187,9 +209,19 @@ jQuery(document).ready(function ($) {
         inputSchedulerUpdate();
     });
 
+    $(document).on('change', '#slide-add-type', inputTypeUpdate);
+
+    $(document).on('click', '.picker button', function () {
+        const $parent = $(this).parents('.modal-slide-add');
+        $parent.find('.picker').remove();
+        $parent.find('.upload').removeClass('hidden');
+        inputTypeUpdate();
+    });
+
     $(document).on('click', '.slide-add', function () {
         showModal('modal-slide-add');
         loadDateTimePicker($('.modal-slide-add .datetimepicker'))
+        inputTypeUpdate();
         inputSchedulerUpdate();
         inputContentUpdate();
         $('.modal-slide-add input:eq(0)').focus().select();
