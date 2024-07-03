@@ -11,12 +11,14 @@ from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
 from src.service.ModelManager import ModelManager
+from src.util.UtilFile import randomize_filename
 
 
 class ContentManager(ModelManager):
 
     TABLE_NAME = "content"
     TABLE_MODEL = [
+        "uuid CHAR(255)",
         "name CHAR(255)",
         "type CHAR(30)",
         "location TEXT",
@@ -136,6 +138,32 @@ class ContentManager(ModelManager):
 
         self._db.add(self.TABLE_NAME, self.pre_add(form))
         self.post_add(content.id)
+
+    def add_form_raw(self, name: str, type: ContentType, request_files: Optional[Dict], upload_dir: str, location: Optional[str] = None) -> Content:
+        content = Content(
+            name=name,
+            type=type
+        )
+
+        if content.has_file():
+            if 'object' not in request_files:
+                return redirect(request.url)
+
+            object = request_files['object']
+
+            if object.filename == '':
+                return None
+
+            if object:
+                object_name = randomize_filename(object.filename)
+                object_path = os.path.join(upload_dir, object_name)
+                object.save(object_path)
+                content.location = object_path
+        else:
+            content.location = location
+
+        self.add_form(content)
+        return self.get_one_by(query="uuid = '{}'".format(content.uuid))
 
     def delete(self, id: int) -> None:
         content = self.get(id)

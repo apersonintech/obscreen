@@ -1,5 +1,6 @@
 import json
 import time
+import uuid
 
 from typing import Optional, Union
 from src.model.enum.ContentType import ContentType, ContentInputType
@@ -8,7 +9,8 @@ from src.util.utils import str_to_enum
 
 class Content:
 
-    def __init__(self, location: str = '', type: Union[ContentType, str] = ContentType.URL, name: str = 'Untitled', id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, uuid: str = '', location: str = '', type: Union[ContentType, str] = ContentType.URL, name: str = 'Untitled', id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+        self._uuid = uuid if uuid else self.generate_and_set_uuid()
         self._id = id if id else None
         self._location = location
         self._type = str_to_enum(type, ContentType) if isinstance(type, str) else type
@@ -18,9 +20,22 @@ class Content:
         self._created_at = int(created_at if created_at else time.time())
         self._updated_at = int(updated_at if updated_at else time.time())
 
+    def generate_and_set_uuid(self) -> str:
+        self._uuid = str(uuid.uuid4())
+
+        return self._uuid
+
     @property
     def id(self) -> Optional[int]:
         return self._id
+
+    @property
+    def uuid(self) -> str:
+        return self._uuid
+
+    @uuid.setter
+    def uuid(self, value: str):
+        self._uuid = value
 
     @property
     def location(self) -> str:
@@ -81,6 +96,7 @@ class Content:
     def __str__(self) -> str:
         return f"Content(" \
                f"id='{self.id}',\n" \
+               f"uuid='{self.uuid}',\n" \
                f"name='{self.name}',\n" \
                f"type='{self.type}',\n" \
                f"location='{self.location}',\n" \
@@ -101,6 +117,7 @@ class Content:
     def to_dict(self, with_virtual: bool = False) -> dict:
         content = {
             "id": self.id,
+            "uuid": self.uuid,
             "name": self.name,
             "type": self.type.value,
             "location": self.location,
