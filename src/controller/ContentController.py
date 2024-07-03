@@ -29,35 +29,18 @@ class ContentController(ObController):
         )
 
     def slideshow_content_add(self):
-        content = Content(
+        self._model_store.content().add_form_raw(
             name=request.form['name'],
             type=str_to_enum(request.form['type'], ContentType),
+            request_files=request.files,
+            upload_dir=self._app.config['UPLOAD_FOLDER'],
+            location=request.form['object'] if 'object' in request.form else None
         )
-
-        if content.has_file():
-            if 'object' not in request.files:
-                return redirect(request.url)
-
-            object = request.files['object']
-
-            if object.filename == '':
-                return redirect(request.url)
-
-            if object:
-                object_name = randomize_filename(object.filename)
-                object_path = os.path.join(self._app.config['UPLOAD_FOLDER'], object_name)
-                object.save(object_path)
-                content.location = object_path
-        else:
-            content.location = request.form['object']
-
-        self._model_store.content().add_form(content)
-        self._post_update()
 
         return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_edit(self):
-        content = self._model_store.content().update_form(
+        self._model_store.content().update_form(
             id=request.form['id'],
             name=request.form['name'],
             location=request.form['location'] if 'location' in request.form and request.form['location'] else None

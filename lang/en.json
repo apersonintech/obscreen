@@ -23,6 +23,8 @@
     "slideshow_slide_form_section_content": "Media",
     "slideshow_slide_form_section_scheduling": "Scheduling",
     "slideshow_slide_form_label_name": "Name",
+    "slideshow_slide_form_label_add_content": "Add to library",
+    "slideshow_slide_form_label_from_library": "From library",
     "slideshow_slide_form_label_content_id": "Content",
     "slideshow_slide_form_label_location": "Location",
     "slideshow_slide_form_label_type": "Type",

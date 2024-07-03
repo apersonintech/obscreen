@@ -18,3 +18,10 @@
 a {
     text-decoration: none;
 }
+
+.col {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-self: stretch;
+}
