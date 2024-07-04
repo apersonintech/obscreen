@@ -3,6 +3,7 @@ $blueDark: rgb(15, 0, 53);
 $seaBlue: rgb(2, 123, 255);
 $pinkyRed: rgb(239, 14, 93);
 $limeGreen: rgb(14, 239, 95);
+$bitterGreen: rgb(17, 169, 72);
 $bitterPurple: rgb(105, 47, 189);
 $sweetPurple: rgb(188, 72, 255);
 $neutralGrey: rgb(70, 70, 70);
@@ -15,3 +16,8 @@ $success: $limeGreen;
 $danger: $pinkyRed;
 
 $primary: $seaBlue;
+
+$baseRadius: 4px;
+
+$layoutBorder: 2px solid rgba(0, 0, 0, 0.2);
+$layoutBackground: #111;
