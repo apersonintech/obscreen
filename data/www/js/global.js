@@ -10,7 +10,56 @@ const hideModal = function () {
     $modalsRoot.addClass('hidden').find('form').trigger('reset');
 };
 
+const hideDropdowns = function () {
+    $('.dropdown').removeClass('dropdown-show');
+};
+
 jQuery(document).ready(function ($) {
+     $('.dropdown .trigger').on('click', function(event) {
+        event.stopPropagation();
+        var $dropdown = $(this).closest('.dropdown');
+        var $menu = $dropdown.find('ul.dropdown-menu');
+
+        $('.dropdown').not($dropdown).removeClass('dropdown-show');
+        $dropdown.toggleClass('dropdown-show');
+
+         // Adjust dropdown position to prevent overflow
+        var triggerHeight = $(this).outerHeight() + 20;
+        var triggerOffset = $(this).offset();
+        var menuWidth = $menu.outerWidth();
+        var windowWidth = $(window).width();
+        var menuHeight = $menu.outerHeight();
+        var windowHeight = $(window).height();
+
+        // Set the top position
+        $menu.css('top', triggerHeight + 'px');
+
+        // Adjust the left position to prevent overflow
+        if (triggerOffset.left + menuWidth > windowWidth) {
+            $menu.css('left', 'auto');
+            $menu.css('right', 0);
+        } else {
+            $menu.css('left', 0);
+            $menu.css('right', 'auto');
+        }
+
+        // Adjust the top position to prevent bottom overflow
+        var menuOffset = $menu.offset();
+        if (menuOffset.top + menuHeight > windowHeight) {
+            $menu.css('top', -menuHeight + 'px');
+        } else {
+            $menu.css('top', triggerHeight + 'px');
+        }
+    });
+
+    $(document).on('click', function() {
+        $('.dropdown').removeClass('dropdown-show');
+    });
+
+    $(window).on('resize', function() {
+        $('.dropdown.dropdown-show .trigger').trigger('click');
+    });
+
     $(document).on('click', '.modal-close', function () {
         hideModal();
     });
@@ -18,6 +67,7 @@ jQuery(document).ready(function ($) {
     $(document).keyup(function (e) {
         if (e.key === "Escape") {
             hideModal();
+            hideDropdowns();
         }
     });
 
