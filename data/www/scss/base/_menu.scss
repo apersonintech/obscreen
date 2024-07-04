@@ -1,7 +1,7 @@
 
 menu {
 	width: 300px;
-	background: #111;
+	background: $layoutBackground;
 	overflow-y: auto;
 	overflow-x: visible;
 	padding: 20px;
@@ -10,7 +10,7 @@ menu {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
-	border-right: 2px solid rgba(0, 0, 0, 0.2);
+	border-right: $layoutBorder;
 
 	h1.logo {
 		margin: 40px 0 0 0;
@@ -110,7 +110,7 @@ menu {
 						align-self: stretch;
 						padding: 10px 10px;
 						width: 40px;
-						border-radius: 2px;
+						border-radius: $baseRadius;
 						text-align: center;
 						margin-right: 20px;
 					}
