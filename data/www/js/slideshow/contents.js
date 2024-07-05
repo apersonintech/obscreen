@@ -30,7 +30,7 @@ jQuery(document).ready(function ($) {
     };
 
     const main = function () {
-
+        $('.explr').explr();
     };
 
     $(document).on('change', '#content-add-type', inputTypeUpdate);
