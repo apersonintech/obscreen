@@ -26,25 +26,65 @@ main {
 
 	.main-container {
 		display: flex;
+		flex-direction: column;
 		flex: 1;
 		overflow: hidden;
+		align-self: stretch;
 
-		.main-content {
-			flex: 2;
-			overflow-y: auto;
+		.top-content {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+			align-self: stretch;
+			background: gold;
 			padding: 20px;
-			background: $layoutBackground;
+
+			h1 {
+				flex: 1;
+				color: white;
+				font-weight: normal;
+			}
 		}
 
-		.main-panel {
+		.bottom-content {
+			display: flex;
+			flex-direction: row;
+			align-self: stretch;
+			justify-content: flex-start;
+			align-items: flex-start;
 			flex: 1;
 			overflow-y: auto;
-			padding: 20px;
-			background-color: transparent;
-			background: $layoutBackground;
-			&.left-panel { border-right: $layoutBorder; }
-			&.right-panel { border-left: $layoutBorder; }
+
+			.page-content {
+				flex: 2;
+				overflow-y: auto;
+				padding: 20px;
+				background: $layoutBackground;
+				display: flex;
+				flex-direction: column;
+				align-self: stretch;
+			}
+
+			.page-panel {
+				flex: 1;
+				overflow-y: auto;
+				padding: 20px;
+				align-self: stretch;
+				background-color: transparent;
+				background: $layoutBackground;
+
+				&.left-panel {
+					border-right: $layoutBorder;
+				}
+
+				&.right-panel {
+					border-left: $layoutBorder;
+				}
+			}
 		}
+
+
 	}
 }
 

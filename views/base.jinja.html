@@ -48,7 +48,7 @@
     {% block add_css %}{% endblock %}
     {{ HOOK(H_ROOT_CSS) }}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
 
 <div class="container {% block container_class %}{% endblock %}">
     {% block header %}
@@ -202,11 +202,7 @@
             </div>
         </div>
         <div class="main-container">
-            {#                        <div class="left-panel"></div>#}
-            <div class="main-content">
-                {% block page %}{% endblock %}
-            </div>
-            {#                        <div class="right-panel"></div>#}
+            {% block page %}{% endblock %}
         </div>
     </main>
 
