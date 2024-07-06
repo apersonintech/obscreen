@@ -104,7 +104,7 @@ curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install
 mkdir -p ~/obscreen/var/run
 nano ~/obscreen/var/run/play
 ```
-- Copy following script in `~/obscreen/var/run/play` file to autorun to enable chromium autorun (replace `http://localhost:5000` by your own `obscreen-studio` instance url)
+- Copy following script in `~/obscreen/var/run/play` file to enable chromium autorun (replace `http://localhost:5000` by your own `obscreen-studio` instance url)
 ```
 #!/bin/bash
 
