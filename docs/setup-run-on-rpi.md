@@ -110,7 +110,7 @@ sudo journalctl -u obscreen-studio -f
 ## 📺 Run the player instance
 
 ### Autorun for a RaspberryPi
-- Install player autorun by executing following script (will install x11 and obscreen-player systemd service)
+- Install player autorun by executing following script (will install chromium, x11 and obscreen-player systemd service)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
 mkdir -p ~/obscreen/var/run
