@@ -96,22 +96,15 @@ sudo journalctl -u obscreen-studio -f
 
 ---
 ## 📺 Run the player instance
-### Manually on any device capable of running chromium
-When you run the browser yourself don't forget to use these flags for chromium browser:
-```bash
-# chromium or chromium-browser or even chrome
-# replace http://localhost:5000 with your playlist url
-chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
-```
 
-### Automatically on a raspberry pi with chromium and x11
-- Install x11 and obscreen-player systemd service
+### Autorun for a RaspberryPi
+- Install player autorun by executing following script (will install chromium, x11 and obscreen-player systemd service)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
-mkdir -p /home/pi/obscreen/var/run
-nano /home/pi/obscreen/var/run/play
+mkdir -p ~/obscreen/var/run
+nano ~/obscreen/var/run/play
 ```
-- Copy this script in `/home/pi/obscreen/var/run/play` file to autorun chromium with correct url (edit `http://localhost:5000` by anything you want)
+- Copy following script in `~/obscreen/var/run/play` file to autorun to enable chromium autorun (replace `http://localhost:5000` by your own `obscreen-studio` instance url)
 ```
 #!/bin/bash
 
@@ -140,6 +133,13 @@ chromium-browser --disable-features=Translate --ignore-certificate-errors --disa
 sudo systemctl restart obscreen-player.service
 ```
 
+### Manually on any device capable of running chromium
+When you run the browser yourself, don't forget to use these flags for chromium browser:
+```bash
+# chromium or chromium-browser or even chrome
+# replace http://localhost:5000 with your obscreen-studio instance url
+chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
+```
 ---
 
 ## 📎 Additional
