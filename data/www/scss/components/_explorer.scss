@@ -1,41 +1,31 @@
-.explorer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  align-self: stretch;
-}
+.left-panel {
+	flex: 0.5;
+	overflow-y: auto;
+	padding: 0;
+	background: $layoutBackground;
+	box-shadow: 1px 1px .5px .5px inset rgba(0, 0, 0, 0.2);
+	border: 1px solid #222;
+	max-width: 250px;
 
-.explorer .left {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  align-self: stretch;
-  flex: 1;
-}
+	ul.explr-tree {
+		height: 100% !important;
 
-.explorer .right {
-  flex: 3;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
+		li {
+			span {
+				color: #AAA;
+				font-size: 17px;
+				padding-left: 1px;
+				//text-shadow: 0 1px $seaBlue;
 
+				&.explr-minus {
+					//text-shadow: 0 1px $pinkyRed;
+				}
+			}
 
-.explorer .panel-active {
-  background: $white;
-  color: $lightGrey;
-  border-color: $lightGrey;
-}
-
-.explorer .panel-active h3 {
-  color: $limeGreen;
-}
-
-.explorer .panel-inactive {
-  background: $white;
-  color: $lightGrey;
-  border-color: $lightGrey;
+			a {
+				color: white;
+				padding-right: 80px;
+			}
+		}
+	}
 }

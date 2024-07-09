@@ -7,6 +7,7 @@ from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
+from src.model.enum.FolderEntity import FOLDER_ROOT_PATH
 from src.model.enum.ApplicationLanguage import ApplicationLanguage
 from src.model.enum.VariableType import VariableType
 from src.model.enum.VariableUnit import VariableUnit
@@ -131,6 +132,7 @@ class VariableManager:
             {"name": "auth_enabled", "section": self.t(VariableSection.SECURITY), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled'), "refresh_player": False},
 
             # Not editable (System information)
+            {"name": "last_folder_content", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": self.t('settings_variable_desc_ro_last_folder_content')},
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},
             {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_last_slide_update')},
             {"name": "refresh_player_request", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_refresh_player_request')},

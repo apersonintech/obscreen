@@ -16,7 +16,7 @@
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
 
-{% block body_class %}page-content{% endblock %}
+{% block body_class %}view-content-list{% endblock %}
 
 {% block page %}
     <div class="top-content">
@@ -26,60 +26,106 @@
 
         <div class="top-actions">
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
-            <button class="purple content-add item-add">
-                <i class="fa fa-plus icon-left"></i>
+            <button class="folder-add btn-success-alt">
+                <i class="fa fa-folder-plus"></i>
+            </button>
+            <button class="content-add item-add">
+                <i class="fa fa-file-circle-plus icon-left"></i>
                 {{ l.slideshow_content_button_add }}
             </button>
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
 
-    <div class="alert alert-info">
-        <i class="fa fa-warning"></i> Ceci est une alerte d'info
+{#    <div class="alert alert-info">#}
+{#        <i class="fa fa-warning"></i> Ceci est une alerte d'info#}
+{#    </div>#}
+
+    <div class="breadcrumb-container">
+        <ul class="breadcrumb">
+            {% set ns = namespace(breadpath='') %}
+            {% for dir in working_dir.split('/') %}
+                {% set ns.breadpath = ns.breadpath ~ '/' ~ dir %}
+                <li>
+                    {% if loop.last %}
+                        <span>
+                            <i class="explr-icon explr-icon-folder"></i>
+                            {{ dir }}
+                        </span>
+                    {% else %}
+                        <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
+                            <i class="explr-icon explr-icon-folder"></i>
+                            {{ dir }}
+                        </a>
+                    {% endif %}
+
+                </li>
+                {% if not loop.last %}
+                    <li class="divider">
+                        <i class="fa fa-chevron-right"></i>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
     </div>
 
     <div class="bottom-content">
         <div class="page-panel left-panel">
 
-            <ul class="explr" id="tree">
+            {% macro render_folder(folder) %}
+                <li class="icon-folder">
+                    <a href="{{ url_for('slideshow_content_cd') }}?path={{ folder.path }}">{{ folder.name }}</a>
+                    {% set content_children = contents[folder.id]|default([]) %}
 
-                <li>
-                    <a href="#">/</a>
-                    <ul>
-                        <li>
-                            <a href="#">home</a>
-                            <ul>
-                                <li>
-                                    <a href="#">pictures</a>
-                                    <ul>
-                                        <li>
-                                            <a href="#">test.jpg</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">lost.jpg</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">shark.jpg</a>
-                                        </li>
-                                    </ul>
+                    {% if folder.children or content_children %}
+                        <ul>
+                            {% for child in folder.children %}
+                                {{ render_folder(child) }}
+                            {% endfor %}
+                            {% for content in content_children  %}
+                                {% set icon = 'icon-folder' %}
+                                {% if content.type.value == 'picture' %}
+                                    {% set icon = 'icon-photo' %}
+                                {% elif content.type.value == 'video' %}
+                                    {% set icon = 'icon-star' %}
+                                {% elif content.type.value == 'url' %}
+                                    {% set icon = 'icon-world' %}
+                                {% elif content.type.value == 'youtube' %}
+                                    {% set icon = 'icon-star' %}
+                                {% endif %}
+
+                                <li class="{{ icon }}">
+                                    <a href="javascript:void(0);">{{ content.name }}</a>
                                 </li>
-                            </ul>
-                        </li>
-                    </ul>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </li>
+            {% endmacro %}
+
+            <ul class="explr hidden" id="tree">
+                {{ render_folder(folders_tree) }}
             </ul>
         </div>
 
 
+
         <div class="page-content">
+
+
+            <div class="dirview">
+                <ul>
+                    <li>Folder 1</li>
+                    <li>Folder 2</li>
+                    <li>Folder 3</li>
+                </ul>
+            </div>
 
             <div class="panel">
                 <div class="panel-body">
-                    <h3>{{ l.slideshow_content_panel_active }}</h3>
 
 
 
-                    div.explr-
 
 {#                    {% with tclass='active', contents=contents %}#}
 {#                        {% include 'slideshow/contents/component/table.jinja.html' %}#}

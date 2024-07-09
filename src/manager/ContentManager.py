@@ -22,6 +22,7 @@ class ContentManager(ModelManager):
         "name CHAR(255)",
         "type CHAR(30)",
         "location TEXT",
+        "folder_id INTEGER",
         "created_by CHAR(255)",
         "updated_by CHAR(255)",
         "created_at INTEGER",
@@ -64,11 +65,17 @@ class ContentManager(ModelManager):
     def get_all(self, sort: bool = False) -> List[Content]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort="created_at" if sort else None, ascending=False))
 
-    def get_all_indexed(self) -> Dict[str, Content]:
+    def get_all_indexed(self, attribute: str = 'id', multiple=False) -> Dict[str, Content]:
         index = {}
 
         for item in self.get_contents():
-            index[item.id] = item
+            id = getattr(item, attribute)
+            if multiple:
+                if id not in index:
+                    index[id] = []
+                index[id].append(item)
+            else:
+                index[id] = item
 
         return index
 

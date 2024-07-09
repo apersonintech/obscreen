@@ -45,7 +45,7 @@
     "slideshow_slide_form_button_cancel": "Annuler",
     "js_slideshow_slide_delete_confirmation": "Êtes-vous sûr ?",
 
-    "slideshow_content_page_title": "Contenus",
+    "slideshow_content_page_title": "Bibliothèque de contenus",
     "slideshow_content_button_add": "Ajouter un contenu",
     "slideshow_content_panel_active": "Contenus",
     "slideshow_content_panel_empty": "Actuellement, il n'y a aucun contenu. %link% maintenant.",
@@ -168,9 +168,11 @@
     "settings_variable_desc_slide_animation_exit_effect": "Effet d'animation de sortie de la slide (généralement mieux sans)",
     "settings_variable_desc_slide_animation_speed": "Vitesse de l'animation de la slide",
 
-    "settings_variable_desc_ro_editable":  "Date de dernier redémarrage de l'application",
-    "settings_variable_desc_ro_last_slide_update":  "Date de dernière modification d'une slide",
-    "settings_variable_desc_ro_refresh_player_request":  "Date de dernière demande de rafraîchissement du lecteur",
+    "settings_variable_desc_ro_last_folder_content": "Dossier courant dans l'explorateur de contenu",
+    "settings_variable_desc_ro_last_folder_node_player": "Dossier courant dans l'explorateur du lecteur",
+    "settings_variable_desc_ro_editable": "Date de dernier redémarrage de l'application",
+    "settings_variable_desc_ro_last_slide_update": "Date de dernière modification d'une slide",
+    "settings_variable_desc_ro_refresh_player_request": "Date de dernière demande de rafraîchissement du lecteur",
 
     "sysinfo_page_title": "Système",
     "sysinfo_panel_button_restart": "Redémarrer",

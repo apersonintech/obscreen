@@ -45,7 +45,7 @@
     "slideshow_slide_form_button_cancel": "Annulla",
     "js_slideshow_slide_delete_confirmation": "Sei sicuro?",
 
-    "slideshow_content_page_title": "Contenuti",
+    "slideshow_content_page_title": "Libreria dei contenuti",
     "slideshow_content_button_add": "Aggiungi un contenuto",
     "slideshow_content_panel_active": "Contenuti",
     "slideshow_content_panel_empty": "Attualmente non ci sono contenuti. %link% adesso.",
@@ -168,9 +168,11 @@
     "settings_variable_desc_slide_animation_exit_effect": "Effetto di uscita della diapositiva (meglio senza)",
     "settings_variable_desc_slide_animation_speed": "Velicita animazione slide",
 
-    "settings_variable_desc_ro_editable":  "Data/ora dell'ultimo riavvio dell'applicazione",
-    "settings_variable_desc_ro_last_slide_update":  "Data e ora dell'ultimo aggiornamento della diapositiva",
-    "settings_variable_desc_ro_refresh_player_request":  "Data e ora della richiesta di aggiornamento dell monitor",
+    "settings_variable_desc_ro_last_folder_content": "Cartella corrente in Esplora contenuti",
+    "settings_variable_desc_ro_last_folder_node_player": "Cartella corrente in Player Explorer",
+    "settings_variable_desc_ro_editable": "Data/ora dell'ultimo riavvio dell'applicazione",
+    "settings_variable_desc_ro_last_slide_update": "Data e ora dell'ultimo aggiornamento della diapositiva",
+    "settings_variable_desc_ro_refresh_player_request": "Data e ora della richiesta di aggiornamento dell monitor",
 
     "sysinfo_page_title": "Informazione sistema",
     "sysinfo_panel_button_restart": "Riavvia",

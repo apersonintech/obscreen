@@ -45,7 +45,7 @@
     "slideshow_slide_form_button_cancel": "Cancel",
     "js_slideshow_slide_delete_confirmation": "Are you sure?",
 
-    "slideshow_content_page_title": "Content",
+    "slideshow_content_page_title": "Content Library",
     "slideshow_content_button_add": "Add a content",
     "slideshow_content_panel_active": "Content",
     "slideshow_content_panel_empty": "Currently, there are no content. %link% now.",
@@ -168,9 +168,11 @@
     "settings_variable_desc_slide_animation_exit_effect": "Slide animation exit effect (generally better off without it)",
     "settings_variable_desc_slide_animation_speed": "Slide animation speed",
 
-    "settings_variable_desc_ro_editable":  "Last application reboot datetime",
-    "settings_variable_desc_ro_last_slide_update":  "Last slide update datetime",
-    "settings_variable_desc_ro_refresh_player_request":  "Last player refresh request datetime",
+    "settings_variable_desc_ro_last_folder_content": "Current folder in content explorer",
+    "settings_variable_desc_ro_last_folder_node_player": "Current folder in player explorer",
+    "settings_variable_desc_ro_editable": "Last application reboot datetime",
+    "settings_variable_desc_ro_last_slide_update": "Last slide update datetime",
+    "settings_variable_desc_ro_refresh_player_request": "Last player refresh request datetime",
 
     "sysinfo_page_title": "System infos",
     "sysinfo_panel_button_restart": "Restart",
