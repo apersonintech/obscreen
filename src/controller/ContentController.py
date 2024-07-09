@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from src.service.ModelStore import ModelStore
 from src.model.entity.Content import Content
 from src.model.enum.ContentType import ContentType
+from src.model.enum.FolderEntity import FolderEntity, FOLDER_ROOT_PATH
 from src.interface.ObController import ObController
 from src.util.utils import str_to_enum, get_optional_string
 from src.util.UtilFile import randomize_filename
@@ -20,11 +21,14 @@ class ContentController(ObController):
         self._app.add_url_rule('/slideshow/content/edit', 'slideshow_content_edit', self._auth(self.slideshow_content_edit), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/delete', 'slideshow_content_delete', self._auth(self.slideshow_content_delete), methods=['DELETE'])
         self._app.add_url_rule('/slideshow/content/show/<content_id>', 'slideshow_content_show', self._auth(self.slideshow_content_show), methods=['GET'])
+        self._app.add_url_rule('/slideshow/content/cd', 'slideshow_content_cd', self._auth(self.slideshow_content_cd), methods=['GET'])
 
     def slideshow_content_list(self):
         return render_template(
             'slideshow/contents/list.jinja.html',
-            contents=self._model_store.content().get_contents(),
+            contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
+            folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
+            working_dir=self._model_store.variable().get_one_by_name('last_folder_content').as_string()[1:],
             enum_content_type=ContentType
         )
 
@@ -54,6 +58,28 @@ class ContentController(ObController):
         self._model_store.content().delete(data.get('id'))
         self._post_update()
         return jsonify({'status': 'ok'})
+
+    def slideshow_content_cd(self):
+        path = request.args.get('path')
+
+        if path == FOLDER_ROOT_PATH:
+            self._model_store.variable().update_by_name("last_folder_content", FOLDER_ROOT_PATH)
+            return redirect(url_for('slideshow_content_list', path=FOLDER_ROOT_PATH))
+
+        if not path:
+            return abort(404)
+
+        cd_folder = self._model_store.folder().get_one_by_path(
+            path=path,
+            entity=FolderEntity.CONTENT
+        )
+
+        if not cd_folder:
+            return abort(404)
+
+        self._model_store.variable().update_by_name("last_folder_content", path)
+
+        return redirect(url_for('slideshow_content_list', path=path))
 
     def slideshow_content_show(self, content_id: int = 0):
         content = self._model_store.content().get(content_id)

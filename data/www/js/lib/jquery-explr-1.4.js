@@ -21,11 +21,13 @@
             rememberState       : true,                         // set cookie enabled as default
             startCollapsed      : true,                         // start undefined state as collapsed in default
             treeHeight          : 'auto',                       // default height for the tree in pixel
-            treeWidth           : 'auto'                        // default width for the tree in pixel
+            treeWidth           : 'auto',                        // default width for the tree in pixel
+            classesPlus         : 'fa fa-plus',
+            classesMinus        : 'fa fa-minus',
+            onLoadFinish        : function(tree) {}
         };
 
         var helpers = {
-        
             getState : function($uls){
                 return $uls
                         .map(function(){
@@ -76,7 +78,7 @@
             init : function(options){
 
                 // extend default properties with given params (if any)
-                var opts = $.extend(defaults, options);            
+                var opts = $.extend(defaults, options);
 
                 return this.each(function(){
         
@@ -100,16 +102,18 @@
                             .addClass('icon-text')
                             .end()
                         .has('ul')
-                            .prepend('<span class="explr-plus" title="' + opts.folderTooltip + '"></span>')
-                            .delegate('.explr-plus, a[href="#"]', 'click', function(e){
+                            .prepend('<span class="explr-toggler" title="' + opts.folderTooltip + '"></span>')
+                            .delegate('.explr-toggler, a[href="#"]', 'click', function(e){
                                 $(this)
                                     .siblings('ul')
                                         .slideToggle(opts.animDuration, function(){
                                             // everytime toggled, save tree state to cookie
                                             helpers.cookie('set', treeId, helpers.getState($tree.find('ul')), opts.rememberState);
                                         })
-                                        .siblings('.explr-plus')
-                                            .toggleClass('explr-minus');
+                                        .siblings('.explr-toggler')
+                                    .toggleClass('explr-minus ' + opts.classesMinus)
+                                    .toggleClass('explr-plus ' + opts.classesPlus)
+                                ;
                                 return false;
                             });
 
@@ -142,9 +146,10 @@
                                     // check 1 or 0
                                     if(parseInt(uls[ulIndex],10)){
                                         // if 1 -> expanded
-                                        $(this).siblings('.explr-plus').addClass('explr-minus');
+                                        $(this).siblings('.explr-toggler').addClass('explr-minus '+opts.classesMinus);
                                     } else {
                                         // if 0 -> collapsed
+                                        $(this).siblings('.explr-toggler').addClass('explr-plus '+opts.classesPlus);
                                         $(this).hide();
                                     }
                                     ulIndex += 1;
@@ -156,22 +161,24 @@
                                 .end()
                             .find('.explr-expand')  // unless explicitly set to expand
                                 .show()
-                                .siblings('.explr-plus')
-                                    .addClass('explr-minus');            
+                                .siblings('.explr-toggler')
+                                    .addClass('explr-minus '+opts.classesMinus);
                     } else {
                         $tree
                             .find('.explr-collapse')            // hide every element set to collapse
                                 .hide()
                                 .end()
                             .find('ul:not(.explr-collapse)')    // show the rest
-                                .siblings('.explr-plus')
-                                    .addClass('explr-minus');
+                                .siblings('.explr-toggler')
+                                    .addClass('explr-minus '+opts.classesMinus);
                     }
 
                     if($.browser && $.browser.msie){
                         // set as target of CSS hacks for IE6-8
                         $tree.addClass('explr-ie');
                     }
+
+                    opts.onLoadFinish($tree);
                 });
             }
         };

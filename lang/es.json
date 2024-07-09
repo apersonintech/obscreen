@@ -45,7 +45,7 @@
     "slideshow_slide_form_button_cancel": "Cancelar",
     "js_slideshow_slide_delete_confirmation": "¿Estás seguro?",
 
-    "slideshow_content_page_title": "Contenido",
+    "slideshow_content_page_title": "Biblioteca de contenidos",
     "slideshow_content_button_add": "Agregar un contenido",
     "slideshow_content_panel_active": "Contenido",
     "slideshow_content_panel_empty": "Actualmente, no hay contenido. %link% ahora.",
@@ -168,9 +168,11 @@
     "settings_variable_desc_slide_animation_exit_effect": "Efecto de salida de animación de diapositiva (generalmente mejor sin él)",
     "settings_variable_desc_slide_animation_speed": "Velocidad de animación de diapositiva",
 
-    "settings_variable_desc_ro_editable":  "Fecha y hora del último reinicio de la aplicación",
-    "settings_variable_desc_ro_last_slide_update":  "Fecha y hora de la última actualización de diapositiva",
-    "settings_variable_desc_ro_refresh_player_request":  "Fecha y hora de la última solicitud de actualización del reproductor",
+    "settings_variable_desc_ro_last_folder_content": "Carpeta actual en el explorador de contenidos",
+    "settings_variable_desc_ro_last_folder_node_player": "Carpeta actual en el explorador del reproductor",
+    "settings_variable_desc_ro_editable": "Fecha y hora del último reinicio de la aplicación",
+    "settings_variable_desc_ro_last_slide_update": "Fecha y hora de la última actualización de diapositiva",
+    "settings_variable_desc_ro_refresh_player_request": "Fecha y hora de la última solicitud de actualización del reproductor",
 
     "sysinfo_page_title": "Información del sistema",
     "sysinfo_panel_button_restart": "Reiniciar",

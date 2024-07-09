@@ -1,25 +1,27 @@
 
-.page-content main .main-container {
+.view-content-list main .main-container {
 
-    .left-panel {
-        flex: 0.5;
-        overflow-y: auto;
-        padding: 0;
-        background: #EEE;
-        box-shadow: 1px 1px .5px .5px inset rgba(0, 0, 0, 0.2);
-        border: 1px solid #222;
+	.page-content {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
 
-        ul.explr {
-           li {
+		.dirview {
+			ul {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
 
-           }
-        }
-
-    }
-
-    .main-content {
-
-    }
+				li {
+					display: flex;
+					width: 64px;
+					height: 64px;
+					background: red;
+				}
+			}
+		}
+	}
 }
 
 

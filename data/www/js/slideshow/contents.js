@@ -30,7 +30,13 @@ jQuery(document).ready(function ($) {
     };
 
     const main = function () {
-        $('.explr').explr();
+        const a= $('.explr').explr({
+            classesPlus: 'fa fa-plus',
+            classesMinus: 'fa fa-minus',
+            onLoadFinish: function($tree) {
+                $tree.removeClass('hidden');
+            }
+        });
     };
 
     $(document).on('change', '#content-add-type', inputTypeUpdate);

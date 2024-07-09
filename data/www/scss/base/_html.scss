@@ -37,12 +37,15 @@ main {
 			justify-content: flex-start;
 			align-items: center;
 			align-self: stretch;
-			padding: 10px 20px;
+			padding: 10px 10px 10px 20px;
+			background: transparent;
+			border-bottom: $layoutBorder;
 
 			h1 {
 				flex: 1;
 				color: white;
-				font-weight: normal;
+				font-weight: 600;
+				font-size: 24px;
 			}
 		}
 
@@ -75,16 +78,18 @@ main {
 			.page-panel {
 				flex: 1;
 				overflow-y: auto;
-				padding: 20px;
 				align-self: stretch;
 				background: $layoutBackground;
+				border-top: none;
 
 				&.left-panel {
 					border-right: $layoutBorder;
+					border-left: none;
 				}
 
 				&.right-panel {
 					border-left: $layoutBorder;
+					border-right: none;
 				}
 			}
 		}

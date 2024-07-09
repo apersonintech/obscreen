@@ -73,8 +73,17 @@
 	border-left: 1px dotted #999;
 }
 
-.explr-plus {
-	background: url("../../img/explr/plus.png") 0 0 no-repeat;
+.explr-icon {
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	height: 16px;
+	width: 16px;
+	z-index: 1;
+}
+
+.explr-toggler {
+	background-repeat: no-repeat;
+	background-position: 0 0;
 	height: 16px;
 	margin-left: -8px;
 	margin-top: 2px;
@@ -83,7 +92,8 @@
 	z-index: 1;
 }
 
-.explr-minus { background-image: url("../../img/explr/busy.png"); }
+/*.explr-plus { background-image: url("../../img/explr/plus.png"); }*/
+/*.explr-minus { background-image: url("../../img/explr/busy.png"); }*/
 
 
 /* Menu icons: */
@@ -113,7 +123,7 @@
 .explr-tree .icon-db > li, .explr-tree li.icon-db { background-image: url("../../img/explr/database.png"); }
 .explr-tree .icon-direction > li, .explr-tree li.icon-direction { background-image: url("../../img/explr/milestone.png"); }
 .explr-tree .icon-flag > li, .explr-tree li.icon-flag { background-image: url("../../img/explr/flag.png"); }
-.explr-tree .icon-folder > li, .explr-tree li.icon-folder { background-image: url("../../img/explr/folder.png"); }
+.explr-tree .icon-folder > li, .explr-tree li.icon-folder, .explr-icon-folder { background-image: url("../../img/explr/folder.png"); }
 .explr-tree .icon-folder2 > li, .explr-tree li.icon-folder2 { background-image: url("../../img/explr/finished-work.png"); }
 .explr-tree .icon-folder3 > li, .explr-tree li.icon-folder3 { background-image: url("../../img/explr/upcoming-work.png"); }
 .explr-tree .icon-hand > li, .explr-tree li.icon-hand { background-image: url("../../img/explr/freelance.png"); }
@@ -167,7 +177,7 @@
 }
 
 .explr-ie .explr-line, 
-.explr-ie .explr-plus {
+.explr-ie .explr-toggler {
 	top: 0;
 	left: 4px;
 }
