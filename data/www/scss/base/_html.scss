@@ -37,14 +37,17 @@ main {
 			justify-content: flex-start;
 			align-items: center;
 			align-self: stretch;
-			background: gold;
-			padding: 20px;
+			padding: 10px 20px;
 
 			h1 {
 				flex: 1;
 				color: white;
 				font-weight: normal;
 			}
+		}
+
+		.alert {
+
 		}
 
 		.bottom-content {
@@ -55,12 +58,15 @@ main {
 			align-items: flex-start;
 			flex: 1;
 			overflow-y: auto;
+			background: radial-gradient(circle at 0% 53%, rgba($pinkyRed, 0.8) 10%, transparent 45%),
+			radial-gradient(circle at 135% 53%, rgba($seaBlue, 0.8) 10%, transparent 95%),
+			radial-gradient(circle at 50% 80%, rgba($limeGreen, 0.8) 40%, transparent 95%);
 
 			.page-content {
 				flex: 2;
 				overflow-y: auto;
 				padding: 20px;
-				background: $layoutBackground;
+				background: rgba($layoutBackground, .9);
 				display: flex;
 				flex-direction: column;
 				align-self: stretch;
@@ -71,7 +77,6 @@ main {
 				overflow-y: auto;
 				padding: 20px;
 				align-self: stretch;
-				background-color: transparent;
 				background: $layoutBackground;
 
 				&.left-panel {

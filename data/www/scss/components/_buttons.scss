@@ -1,52 +1,11 @@
-select.select-item-picker,
-.btn,
-button {
-  background-color: $white;
-  border-radius: 5px;
-  border: 1px solid $sweetPurple;
-  color: darken($bitterPurple, 30%);
-  padding: 10px 30px;
-  text-decoration: none;
-  margin: 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  font-weight: 400;
-  font-size: 14px;
-  transition: .2s linear all;
-}
-
-a.btn:hover,
-button:hover {
-  color: $sweetPurple;
-}
-
-select.select-item-picker,
-button.purple {
-  font-weight: bold;
-  border: 1px solid $bitterPurple;
-  color: white;
-  background: $bitterPurple;
-  background: linear-gradient(90deg, $sweetPurple 0%, $bitterPurple 100%);
-}
-
-button.green {
-  font-weight: bold;
-  color: white;
-  border: 1px solid $limeGreen;
-  background: linear-gradient(90deg, lighten($limeGreen, 10%) 0%, darken($limeGreen, 10%) 100%);
-}
-
-button.normal:hover {
-  color: white;
-  border-color: $bitterPurple;
-  background: $bitterPurple;
-  background: linear-gradient(90deg, $sweetPurple 0%, $bitterPurple 100%);
-}
-
-button.green:hover,
-button.purple:hover {
-  border: 1px solid $white;
+button,
+.button {
+	position: relative;
+	padding: 15px 30px;
+	font-size: 16px;
+	color: #fff;
+	cursor: pointer;
+	transition: background-position 0.3s ease;
+	border: 2px solid black;
+	border-radius: $baseRadius;
 }

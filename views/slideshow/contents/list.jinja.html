@@ -19,7 +19,6 @@
 {% block body_class %}page-content{% endblock %}
 
 {% block page %}
-
     <div class="top-content">
         <h1>
             {{ l.slideshow_content_page_title }}
@@ -35,31 +34,32 @@
         </div>
     </div>
 
+    <div class="alert alert-info">
+        <i class="fa fa-warning"></i> Ceci est une alerte d'info
+    </div>
+
     <div class="bottom-content">
         <div class="page-panel left-panel">
 
             <ul class="explr" id="tree">
 
                 <li>
-                    <a href="#">1st item 1st level</a>
+                    <a href="#">/</a>
                     <ul>
                         <li>
-                            <a href="#">1st item 2nd level</a>
+                            <a href="#">home</a>
                             <ul>
                                 <li>
-                                    <a href="#">1st item 2nd level</a>
+                                    <a href="#">pictures</a>
                                     <ul>
                                         <li>
-                                            <a href="#">1st item 2nd level</a>
+                                            <a href="#">test.jpg</a>
                                         </li>
                                         <li>
-                                            <a href="#">1st item 2nd level</a>
+                                            <a href="#">lost.jpg</a>
                                         </li>
                                         <li>
-                                            <a href="#">1st item 2nd level</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">1st item 2nd level</a>
+                                            <a href="#">shark.jpg</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -67,49 +67,6 @@
                         </li>
                     </ul>
                 </li>
-                <li>
-                    <a href="#">1st item 1st level</a>
-                    <ul>
-                        <li>
-                            <a href="#">1st item 2nd level</a>
-                            <ul>
-                                <li>
-                                    <a href="#">1st item 2nd level</a>
-                                    <ul>
-                                        <li>
-                                            <a href="#">1st item 2nd level</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">1st item 2nd level</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">1st item 2nd level</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">1st item 2nd level</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">2nd item 1st level</a>
-                </li>
-                <li>
-                    <a href="#">2nd item 1st level</a>
-                </li>
-                <li>
-                    <a href="#">2nd item 1st level</a>
-                </li>
-                <li>
-                    <a href="#">2nd item 1st level</a>
-                </li>
-                <li>
-                    <a href="#">2nd item 1st level</a>
-                </li>
-
             </ul>
         </div>
 
@@ -120,9 +77,13 @@
                 <div class="panel-body">
                     <h3>{{ l.slideshow_content_panel_active }}</h3>
 
-                    {% with tclass='active', contents=contents %}
-                        {% include 'slideshow/contents/component/table.jinja.html' %}
-                    {% endwith %}
+
+
+                    div.explr-
+
+{#                    {% with tclass='active', contents=contents %}#}
+{#                        {% include 'slideshow/contents/component/table.jinja.html' %}#}
+{#                    {% endwith %}#}
                 </div>
             </div>
 
