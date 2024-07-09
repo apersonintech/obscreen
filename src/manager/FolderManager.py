@@ -46,11 +46,15 @@ class FolderManager(ModelManager):
     def get_by_entity(self, entity: FolderEntity) -> List[Folder]:
         return self.get_by("entity = '{}'".format(entity.value))
 
+    def get_children(self, folder: Optional[Folder]) -> List[Folder]:
+        if folder:
+            return self.get_by("parent_id = {}".format(folder.id))
+
+        return self.get_by("parent_id is null")
+
     def get_one_by_path(self, path: str, entity: FolderEntity) -> Folder:
         parts = path[1:].split('/')
-        return self.hydrate_parents(
-            self.get_one_by("name = '{}' and depth = {} and entity = '{}'".format(parts[-1], len(parts) - 1, entity.value))
-        )
+        return self.get_one_by("name = '{}' and depth = {} and entity = '{}'".format(parts[-1], len(parts) - 1, entity.value))
 
     def hydrate_parents(self, folder: Optional[Folder]) -> Optional[Folder]:
         if not folder:
