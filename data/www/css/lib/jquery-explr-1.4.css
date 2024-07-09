@@ -155,6 +155,10 @@
 .explr-tree .icon-user > li, .explr-tree li.icon-user { background-image: url("../../img/explr/user.png"); }
 .explr-tree .icon-world > li, .explr-tree li.icon-world { background-image: url("../../img/explr/world.png"); }
 .explr-tree .icon-zoom > li, .explr-tree li.icon-zoom { background-image: url("../../img/explr/zoom.png"); }
+.explr-tree .icon-youtube > li, .explr-tree li.icon-youtube { background-image: url("../../img/explr/youtube.png"); }
+.explr-tree .icon-globe > li, .explr-tree li.icon-globe { background-image: url("../../img/explr/globe.png"); }
+.explr-tree .icon-video > li, .explr-tree li.icon-video { background-image: url("../../img/explr/video.png"); }
+.explr-tree .icon-landscape > li, .explr-tree li.icon-landscape { background-image: url("../../img/explr/landscape.png"); }
 
 
 /* IE Hack Fixes: */

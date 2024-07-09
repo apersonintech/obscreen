@@ -24,11 +24,16 @@ class ContentController(ObController):
         self._app.add_url_rule('/slideshow/content/cd', 'slideshow_content_cd', self._auth(self.slideshow_content_cd), methods=['GET'])
 
     def slideshow_content_list(self):
+        working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
+        working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
+
         return render_template(
             'slideshow/contents/list.jinja.html',
             contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
             folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
-            working_dir=self._model_store.variable().get_one_by_name('last_folder_content').as_string()[1:],
+            working_folder_path=working_folder_path,
+            working_folder=working_folder,
+            working_folder_children=self._model_store.folder().get_children(working_folder),
             enum_content_type=ContentType
         )
 
