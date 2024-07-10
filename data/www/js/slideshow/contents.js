@@ -92,6 +92,29 @@ jQuery(document).ready(function ($) {
         $('.modal-content-add input:eq(0)').focus().select();
     });
 
+    $(document).on('click', '.explr-item-edit', function () {
+        const $item = $('.explr-dirview .highlight-clicked');
+        const is_folder = $item.attr('data-folder') === '1';
+
+        if (is_folder) {
+            $item.addClass('renaming');
+            $item.find('input').focus().select();
+        }
+    });
+
+    $(document).on('click', '.explr-item-delete', function () {
+        const $item = $('.explr-dirview .highlight-clicked');
+        const is_folder = $item.attr('data-folder') === '1';
+
+        if (is_folder) {
+            const route = $(this).attr('data-folder-route') + '?id=' + $item.attr('data-id');
+
+            if (confirm(l.js_slideshow_content_delete_confirmation)) {
+                document.location.href = route;
+            }
+        }
+    });
+
     $(document).on('click', '.content-edit', function () {
         const content = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
         showModal('modal-content-edit');

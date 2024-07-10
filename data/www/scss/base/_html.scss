@@ -42,10 +42,21 @@ main {
 			border-bottom: $layoutBorder;
 
 			h1 {
-				flex: 1;
 				color: white;
 				font-weight: 600;
 				font-size: 24px;
+			}
+
+			.top-actions {
+				flex: 1;
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+				align-items: center;
+
+				button {
+					margin-left: 10px;
+				}
 			}
 		}
 

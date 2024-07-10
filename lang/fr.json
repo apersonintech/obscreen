@@ -47,6 +47,8 @@
 
     "slideshow_content_page_title": "Bibliothèque de contenus",
     "slideshow_content_button_add": "Nouveau Contenu",
+    "slideshow_content_button_add_folder": "Nouveau Dossier",
+    "slideshow_content_folder_not_empty_error": "Le dossier n'est pas vide, vous devez d'abord supprimer son contenu",
     "slideshow_content_panel_active": "Contenus",
     "slideshow_content_panel_empty": "Actuellement, il n'y a aucun contenu. %link% maintenant.",
     "slideshow_content_panel_th_name": "Nom",

@@ -93,6 +93,14 @@ class FolderManager(ModelManager):
         for folder_id, edits in edits_folders.items():
             self._db.update_by_id(self.TABLE_NAME, folder_id, edits)
 
+    def get_folders(self, parent_id: Optional[id] = None) -> List[Folder]:
+        query = " 1=1 "
+
+        if parent_id:
+            query = "{} {}".format(query, "AND parent_id = {}".format(parent_id))
+
+        return self.get_by(query=query)
+
     def pre_add(self, folder: Dict) -> Dict:
         self.user_manager.track_user_on_create(folder)
         self.user_manager.track_user_on_update(folder)
@@ -121,15 +129,16 @@ class FolderManager(ModelManager):
     def move_to_folder(self, entity_id: int, folder_id: int, entity_is_folder=False) -> None:
         folder = self.get(folder_id)
 
-        if not folder:
+        if not folder and not entity_is_folder:
             return
 
         if entity_is_folder:
             return self._db.execute_write_query(
                 query="UPDATE {} set parent_id = ?, depth = ? WHERE id = ?".format(self.TABLE_NAME),
-                params=(folder_id, folder.depth + 1, entity_id)
+                params=(folder_id if folder else None, folder.depth + 1 if folder else 1, entity_id)
             )
-        elif folder.entity == FolderEntity.CONTENT:
+
+        if folder.entity == FolderEntity.CONTENT:
             return self._db.execute_write_query(
                 query="UPDATE {} set folder_id = ? WHERE id = ?".format(ContentManager.TABLE_NAME),
                 params=(folder_id, entity_id)
@@ -145,6 +154,14 @@ class FolderManager(ModelManager):
 
         return self.variable_manager.get_one_by_name(var_name).as_string()
 
+    def rename_folder(self, folder_id: int, name: str) -> None:
+        folder = self.get(folder_id)
+
+        if not folder:
+            return
+
+        self.update_form(folder_id, name)
+
     def add_folder(self, entity: FolderEntity, name: str) -> Folder:
         working_folder_path = self.get_working_folder(entity)
         working_folder = self.get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
@@ -156,7 +173,7 @@ class FolderManager(ModelManager):
             entity=entity,
             name=name,
             depth=depth,
-            parent_id=working_folder.id if working_folder else 1
+            parent_id=working_folder.id if working_folder else None
         )
 
         self.add_form(folder)
@@ -220,50 +237,8 @@ class FolderManager(ModelManager):
 
         return tree
 
-    # def build_tree(self, folders: List[Folder]) -> Dict:
-    #     folder_dict = {}
-    #     for folder in folders:
-    #         folder_dict[folder.id] = folder
-    #     folder.children = []
-    #
-    #     root_folders = []
-    #     for folder in folders:
-    #         if folder.parent_id is None:
-    #             root_folders.append(folder)
-    #         else:
-    #             parent_folder = folder_dict.get(folder.parent_id)
-    #             if parent_folder:
-    #                 parent_folder.children.append(folder)
-    #
-    #     def build_nested_dict(folder, path):
-    #         folder_path = f"{path}/{folder.name}"
-    #         folder_dict_repr = {
-    #             'id': folder.id,
-    #             'name': folder.name,
-    #             'depth': folder.depth,
-    #             'entity': folder.entity,
-    #             'created_by': folder.created_by,
-    #             'updated_by': folder.updated_by,
-    #             'created_at': folder.created_at,
-    #             'updated_at': folder.updated_at,
-    #             'path': folder_path,
-    #             'children': []
-    #         }
-    #
-    #         folder.children.sort(key=lambda x: x.name)
-    #         for child in folder.children:
-    #             folder_dict_repr['children'].append(build_nested_dict(child, folder_path))
-    #         return folder_dict_repr
-    #
-    #     root_path = FOLDER_ROOT_PATH
-    #     tree = {
-    #         'id': 'root',
-    #         'name': FOLDER_ROOT_NAME,
-    #         'path': root_path,
-    #         'children': [build_nested_dict(root, root_path) for root in root_folders]
-    #     }
-    #
-    #     return tree
-
     def get_folder_tree(self, entity: FolderEntity) -> Dict:
         return self._build_tree(self.get_by_entity(entity))
+
+    def count_subfolders_for_folder(self, folder_id: int) -> int:
+        return len(self.get_folders(parent_id=folder_id))
