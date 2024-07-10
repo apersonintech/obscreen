@@ -1,9 +1,8 @@
 .panel {
-  background: rgba($white, 0.15);
+  background: $white;
   border-radius: 5px;
-  padding: 0 25px 80px 25px;
+  padding: 25px 25px 80px 25px;
   margin: 10px 25px;
-  border-left: 5px solid $limeGreen;
   align-self: stretch;
 }
 
@@ -12,12 +11,12 @@
 }
 
 .panel h3 {
-  color: $white;
+  color: $black;
 }
 
 .panel-inactive {
-  background: $white;
-  color: $lightGrey;
+  background: rgba(255, 255, 255, .1);
+  color: white;
   border-color: $lightGrey;
 }
 
