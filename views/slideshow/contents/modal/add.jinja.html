@@ -15,6 +15,7 @@
 
         <div class="form-group tab-select">
             <div class="widget">
+                <i class="fa fa-get-pocket object-icon-add"></i>
                 <select name="type" id="content-add-type">
                     {% for type in enum_content_type %}
                         {% set input_type = enum_content_type.get_input(type) %}
@@ -23,7 +24,6 @@
                         </option>
                     {% endfor %}
                 </select>
-                <i class="fa fa-get-pocket object-icon-add"></i>
             </div>
         </div>
 
@@ -31,7 +31,15 @@
             <label for="" class="object-label-add">{{ l.slideshow_content_form_label_object }}</label>
             <div class="widget">
                 <input type="text" name="object" id="content-add-object-input-text" class="content-add-object-input"/>
-                <input type="file" name="object" id="content-add-object-input-upload" class="content-add-object-input hidden" disabled="disabled"/>
+
+                <label for="content-add-object-input-upload" class="btn-upload hidden">
+                    <input type="file" name="object" id="content-add-object-input-upload" class="content-add-object-input" disabled="disabled"/>
+                    <span class="btn btn-info">
+                        <i class="fa fa-file-import"></i>
+                        Upload file
+                    </span>
+                    <input type="text" value="No file choosen yet" disabled="disabled" />
+                </label>
             </div>
         </div>
 
