@@ -69,8 +69,8 @@ class PlaylistManager(ModelManager):
             map[duration['playlist_id']] = duration['total_duration']
         return map
 
-    def get_all(self) -> List[Playlist]:
-        return self.hydrate_list(self._db.get_all(self.TABLE_NAME))
+    def get_all(self, sort: Optional[str] = 'created_at', ascending=False) -> List[Playlist]:
+        return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort=sort, ascending=ascending))
 
     def get_all_labels_indexed(self) -> Dict:
         index = {}
