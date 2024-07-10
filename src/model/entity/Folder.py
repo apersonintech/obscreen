@@ -96,7 +96,7 @@ class Folder:
         self._depth = value
 
     def __str__(self) -> str:
-        return f"NodePlayer(" \
+        return f"Folder(" \
                f"id='{self.id}',\n" \
                f"name='{self.name}',\n" \
                f"parent_id='{self.parent_id}',\n" \

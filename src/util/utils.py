@@ -240,3 +240,10 @@ def restart(debug=False) -> None:
         except subprocess.CalledProcessError:
             pass
 
+
+def truncate(s, length, ellipsis=None):
+    if ellipsis and len(s) > length:
+        return s[:length].strip() + ellipsis
+    return s[:length]
+
+

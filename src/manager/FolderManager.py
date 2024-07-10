@@ -3,6 +3,7 @@ from typing import Dict, Optional, List, Tuple, Union
 from src.model.entity.Folder import Folder
 from src.model.enum.FolderEntity import FolderEntity, FOLDER_ROOT_PATH, FOLDER_ROOT_NAME
 from src.manager.DatabaseManager import DatabaseManager
+from src.manager.ContentManager import ContentManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
@@ -10,7 +11,6 @@ from src.service.ModelManager import ModelManager
 
 
 class FolderManager(ModelManager):
-
     TABLE_NAME = "folder"
     TABLE_MODEL = [
         "name CHAR(255)",
@@ -23,7 +23,8 @@ class FolderManager(ModelManager):
         "updated_at INTEGER"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager):
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager,
+                 variable_manager: VariableManager):
         super().__init__(lang_manager, database_manager, user_manager, variable_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
@@ -54,9 +55,10 @@ class FolderManager(ModelManager):
 
     def get_one_by_path(self, path: str, entity: FolderEntity) -> Folder:
         parts = path[1:].split('/')
-        return self.get_one_by("name = '{}' and depth = {} and entity = '{}'".format(parts[-1], len(parts) - 1, entity.value))
+        return self.get_one_by(
+            "name = '{}' and depth = {} and entity = '{}'".format(parts[-1], len(parts) - 1, entity.value))
 
-    def hydrate_parents(self, folder: Optional[Folder]) -> Optional[Folder]:
+    def hydrate_parents(self, folder: Optional[Folder], deep=False) -> Optional[Folder]:
         if not folder:
             return None
 
@@ -66,6 +68,12 @@ class FolderManager(ModelManager):
         parent = self.get(folder.parent_id)
         folder.set_previous(parent)
         return self.hydrate_parents(parent)
+
+    def get_parent_folder(self, folder: Optional[Folder]) -> Optional[Folder]:
+        if not folder or not folder.parent_id:
+            return None
+
+        return self.get(folder.parent_id)
 
     def get_one_by(self, query) -> Optional[Folder]:
         object = self._db.get_one_by_query(self.TABLE_NAME, query=query)
@@ -109,6 +117,50 @@ class FolderManager(ModelManager):
     def update_form(self, id: int, name: str) -> None:
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"name": name}))
         self.post_update(id)
+
+    def move_to_folder(self, entity_id: int, folder_id: int, entity_is_folder=False) -> None:
+        folder = self.get(folder_id)
+
+        if not folder:
+            return
+
+        if entity_is_folder:
+            return self._db.execute_write_query(
+                query="UPDATE {} set parent_id = ?, depth = ? WHERE id = ?".format(self.TABLE_NAME),
+                params=(folder_id, folder.depth + 1, entity_id)
+            )
+        elif folder.entity == FolderEntity.CONTENT:
+            return self._db.execute_write_query(
+                query="UPDATE {} set folder_id = ? WHERE id = ?".format(ContentManager.TABLE_NAME),
+                params=(folder_id, entity_id)
+            )
+
+    def get_working_folder(self, entity: FolderEntity) -> str:
+        var_name = None
+        if entity == FolderEntity.CONTENT:
+            var_name = "last_folder_content"
+
+        if not var_name:
+            raise Error("No variable for entity {}".format(entity.value))
+
+        return self.variable_manager.get_one_by_name(var_name).as_string()
+
+    def add_folder(self, entity: FolderEntity, name: str) -> Folder:
+        working_folder_path = self.get_working_folder(entity)
+        working_folder = self.get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
+        folder_path = "{}/{}".format(working_folder_path, name)
+        parts = folder_path[1:].split('/')
+        depth = len(parts) - 1
+
+        folder = Folder(
+            entity=entity,
+            name=name,
+            depth=depth,
+            parent_id=working_folder.id if working_folder else 1
+        )
+
+        self.add_form(folder)
+        return folder
 
     def add_form(self, folder: Union[Folder, Dict]) -> None:
         form = folder

@@ -1,36 +1,105 @@
-.left-panel {
-	flex: 0.5;
-	overflow-y: auto;
-	padding: 0;
-	background: $layoutBackground;
-	box-shadow: 1px 1px .5px .5px inset rgba(0, 0, 0, 0.2);
-	border: 1px solid #222;
-	max-width: 250px;
+ul.explr-tree {
+	height: 100% !important;
 
-	ul.explr-tree {
-		height: 100% !important;
+	li {
+		span {
+			color: #AAA;
+			font-size: 17px;
+			padding-left: 1px;
+		}
 
-		li {
-			span {
-				color: #AAA;
-				font-size: 17px;
-				padding-left: 1px;
+		a {
+			color: white;
+			padding-right: 80px;
+
+			&:hover {
+				color: white;
 			}
 
-			a {
-				color: white;
-				padding-right: 80px;
-
-				&.active {
-					background: rgba(255,255,255,.1);
-					border-radius: $baseRadius;
-					font-weight: bold;
-					text-decoration: underline;
-					margin-left: 35px;
-					padding-left: 5px;
-					margin-right: 10px;
-				}
+			&.active {
+				background: rgba(255, 255, 255, .1);
+				border-radius: $baseRadius;
+				font-weight: bold;
+				text-decoration: underline;
+				margin-left: 35px;
+				padding-left: 5px;
+				margin-right: 10px;
 			}
 		}
+	}
+}
+
+ul.explr-dirview {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+
+	li {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		flex-shrink: 0;
+		margin: 18px;
+		min-width: 90px;
+		min-height: 104px;
+		padding-top: 5px;
+		border: 1px solid transparent;
+		border-radius: $baseRadius;
+
+		&.new-folder {
+			a {
+				color: $seaBlue;
+			}
+		}
+
+
+		&.highlight-drop {
+			border: 1px dashed rgba($white, .2);
+			background: rgba($white, .1);
+		}
+
+		&.highlight-clicked {
+			border: 1px dashed rgba($seaBlue, .4);
+			background: rgba($seaBlue, .3);
+		}
+
+		a {
+			color: #BBB;
+			text-decoration: none;
+			flex: 1;
+			text-align: center;
+			font-size: 12px;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			max-width: 84px;
+
+			i {
+				font-size: 64px;
+				margin-bottom: 12px;
+				border-radius: 8px;
+			}
+
+			input {
+				width: 100%;
+
+				&:focus {
+					outline: none;
+				}
+			}
+
+			&:hover {
+				opacity: 0.8;
+			}
+		}
+	}
+}
+
+.ui-draggable-dragging {
+	z-index: 20;
+	a {
+		opacity: 1 !important;
 	}
 }

@@ -6,6 +6,7 @@ from flask import Flask, render_template, redirect, request, url_for, send_from_
 from werkzeug.utils import secure_filename
 from src.service.ModelStore import ModelStore
 from src.model.entity.Content import Content
+from src.model.entity.Folder import Folder
 from src.model.enum.ContentType import ContentType
 from src.model.enum.FolderEntity import FolderEntity, FOLDER_ROOT_PATH
 from src.interface.ObController import ObController
@@ -17,6 +18,8 @@ class ContentController(ObController):
 
     def register(self):
         self._app.add_url_rule('/slideshow/content', 'slideshow_content_list', self._auth(self.slideshow_content_list), methods=['GET'])
+        self._app.add_url_rule('/slideshow/content/add-folder', 'slideshow_content_folder_add', self._auth(self.slideshow_content_folder_add), methods=['POST'])
+        self._app.add_url_rule('/slideshow/content/move-folder', 'slideshow_content_folder_move', self._auth(self.slideshow_content_folder_move), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/add', 'slideshow_content_add', self._auth(self.slideshow_content_add), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/edit', 'slideshow_content_edit', self._auth(self.slideshow_content_edit), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/delete', 'slideshow_content_delete', self._auth(self.slideshow_content_delete), methods=['DELETE'])
@@ -34,8 +37,26 @@ class ContentController(ObController):
             working_folder_path=working_folder_path,
             working_folder=working_folder,
             working_folder_children=self._model_store.folder().get_children(working_folder),
-            enum_content_type=ContentType
+            enum_content_type=ContentType,
+            enum_folder_entity=FolderEntity,
         )
+
+    def slideshow_content_folder_add(self):
+        self._model_store.folder().add_folder(
+            entity=FolderEntity.CONTENT,
+            name=request.form['name'],
+        )
+
+        return redirect(url_for('slideshow_content_list'))
+
+    def slideshow_content_folder_move(self):
+        self._model_store.folder().move_to_folder(
+            entity_id=request.form['entity_id'],
+            folder_id=request.form['new_folder_id'],
+            entity_is_folder=True if request.form['is_folder'] == '1' else False,
+        )
+
+        return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_add(self):
         self._model_store.content().add_form_raw(

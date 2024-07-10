@@ -46,7 +46,7 @@
     "js_slideshow_slide_delete_confirmation": "Are you sure?",
 
     "slideshow_content_page_title": "Content Library",
-    "slideshow_content_button_add": "Add a content",
+    "slideshow_content_button_add": "New Content",
     "slideshow_content_panel_active": "Content",
     "slideshow_content_panel_empty": "Currently, there are no content. %link% now.",
     "slideshow_content_panel_th_name": "Name",

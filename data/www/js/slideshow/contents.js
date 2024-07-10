@@ -29,17 +29,62 @@ jQuery(document).ready(function ($) {
         ;
     };
 
-    const main = function () {
-        const a= $('.explr').explr({
+    const initExplr = function () {
+        $('.explr').explr({
             classesPlus: 'fa fa-plus',
             classesMinus: 'fa fa-minus',
-            onLoadFinish: function($tree) {
+            onLoadFinish: function ($tree) {
                 $tree.removeClass('hidden');
             }
         });
     };
 
+    const initDrags = function () {
+        $(".draggable").draggable({
+            revert: "invalid",
+        });
+        $(".droppable").droppable({
+            accept: ".draggable",
+            over: function (event, ui) {
+                $(this).addClass("highlight-drop");
+            },
+            out: function (event, ui) {
+                $(this).removeClass("highlight-drop");
+            },
+            drop: function (event, ui) {
+                $(this).removeClass("highlight-drop");
+                const $form = $('#folder-move-form');
+                const $moved = ui.draggable;
+                const $target = $(this);
+                $form.find('[name=is_folder]').val($moved.attr('data-folder'))
+                $form.find('[name=entity_id]').val($moved.attr('data-id'))
+                $form.find('[name=new_folder_id]').val($target.attr('data-id'))
+                ui.draggable.position({
+                    my: "center",
+                    at: "center",
+                    of: $(this),
+                    using: function (pos) {
+                        $(this).animate(pos, 50);
+                    }
+                });
+                $form.submit();
+            }
+        });
+    };
+
+    const main = function () {
+        initExplr();
+        initDrags();
+    };
+
     $(document).on('change', '#content-add-type', inputTypeUpdate);
+
+    $(document).on('click', '.folder-add', function () {
+        $('.dirview .new-folder').removeClass('hidden');
+        $('.page-content').animate({scrollTop: 0}, 0);
+        $('.dirview input').focus();
+    });
+
 
     $(document).on('click', '.content-add', function () {
         showModal('modal-content-add');
