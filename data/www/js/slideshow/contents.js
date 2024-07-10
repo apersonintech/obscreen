@@ -23,6 +23,7 @@ jQuery(document).ready(function ($) {
         $('.object-label-add').html(optionAttributes['data-object-label'].value);
         $('.object-icon-add').attr('class', 'object-icon-add fa ' + optionAttributes['data-icon'].value);
         $('.tab-select .widget').attr('class', 'widget ' + ('border-' + color) + ' ' + color);
+        $('.modal:visible button[type=submit]').attr('class', 'btn ' + ('btn-' + color));
     };
 
     const initExplr = function () {

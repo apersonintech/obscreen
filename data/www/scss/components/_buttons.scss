@@ -89,5 +89,12 @@ button,
 		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($bitterRed, 20%) inset; }
 		&:focus { background: darken($bitterRed, 20%); }
 	}
+
+	&.btn-youtube {
+		background: $youtube;
+		box-shadow: 0 $shadowOffset 0 0 darken($youtube, 20%);
+		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($youtube, 20%) inset; }
+		&:focus { background: darken($youtube, 20%); }
+	}
 }
 

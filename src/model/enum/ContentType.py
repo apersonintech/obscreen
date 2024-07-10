@@ -50,7 +50,7 @@ class ContentType(Enum):
         if value == ContentType.PICTURE:
             return 'info'
         elif value == ContentType.VIDEO:
-            return 'success'
+            return 'success-alt'
         elif value == ContentType.YOUTUBE:
             return 'youtube'
         elif value == ContentType.URL:
