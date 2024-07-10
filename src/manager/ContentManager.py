@@ -157,10 +157,11 @@ class ContentManager(ModelManager):
         self._db.add(self.TABLE_NAME, self.pre_add(form))
         self.post_add(content.id)
 
-    def add_form_raw(self, name: str, type: ContentType, request_files: Optional[Dict], upload_dir: str, location: Optional[str] = None) -> Content:
+    def add_form_raw(self, name: str, type: ContentType, request_files: Optional[Dict], upload_dir: str, location: Optional[str] = None, folder_id: Optional[int] = None) -> Content:
         content = Content(
             name=name,
-            type=type
+            type=type,
+            folder_id=folder_id,
         )
 
         if content.has_file():

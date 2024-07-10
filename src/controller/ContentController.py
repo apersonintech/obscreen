@@ -86,12 +86,16 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_add(self):
+        working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
+        working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
+
         self._model_store.content().add_form_raw(
             name=request.form['name'],
             type=str_to_enum(request.form['type'], ContentType),
             request_files=request.files,
             upload_dir=self._app.config['UPLOAD_FOLDER'],
-            location=request.form['object'] if 'object' in request.form else None
+            location=request.form['object'] if 'object' in request.form else None,
+            folder_id=working_folder.id if working_folder else None
         )
 
         return redirect(url_for('slideshow_content_list'))

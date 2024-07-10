@@ -343,7 +343,8 @@
             }
 
             if (element.innerHTML === 'youtube') {
-                element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+                const autoplay = items['preview_mode'] ? '0' : '1';
+                element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=${autoplay}&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
             }
         }
         setTimeout(autoplayLoader, delayNoisyContentJIT);
@@ -370,7 +371,9 @@
             }
 
             if (element.innerHTML.match('<video>')) {
-                video.play();
+                if (!items['preview_mode']) {
+                    video.play();
+                }
             }
         }
         setTimeout(autoplayLoader, delayNoisyContentJIT);
