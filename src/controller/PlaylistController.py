@@ -23,16 +23,11 @@ class PlaylistController(ObController):
         self._app.add_url_rule('/playlist/toggle', 'playlist_toggle', self.guard_playlist(self._auth(self.playlist_toggle)), methods=['POST'])
         self._app.add_url_rule('/playlist/delete', 'playlist_delete', self.guard_playlist(self._auth(self.playlist_delete)), methods=['DELETE'])
 
-    def playlist(self):
-        return render_template(
-            'playlist/playlist.jinja.html',
-            playlists=self._model_store.playlist().get_enabled_playlists(),
-        )
-
     def playlist_list(self):
         durations = self._model_store.playlist().get_durations_by_playlists()
         return render_template(
             'playlist/list.jinja.html',
+            playlists=self._model_store.playlist().get_all(ascending=True),
             enabled_playlists=self._model_store.playlist().get_enabled_playlists(with_default=True),
             disabled_playlists=self._model_store.playlist().get_disabled_playlists(),
             durations=durations
@@ -41,7 +36,8 @@ class PlaylistController(ObController):
     def playlist_add(self):
         playlist = Playlist(
             name=request.form['name'],
-            time_sync=False if request.form['time_sync'] == '0' else True,
+            enabled=True,
+            time_sync=False
         )
 
         self._model_store.playlist().add_form(playlist)
