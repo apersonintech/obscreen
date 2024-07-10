@@ -8,15 +8,23 @@
 }
 
 .tac {
-    text-align: center;
+    text-align: center !important;
 }
 
 .tar {
-    text-align: right;
+    text-align: right !important;
 }
 
 a {
     text-decoration: none;
+}
+
+.normal {
+    font-weight: normal !important;
+}
+
+.bold {
+    font-weight: bold !important;
 }
 
 .col {
