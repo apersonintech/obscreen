@@ -119,13 +119,12 @@ form {
 				left: 0;
 				background: rgba($seaBlue, .05);
 				border-bottom: 2px solid $seaBlue;
-				padding-right: 20px;
 
 				select {
 					border: none;
 					background: none;
 					box-shadow: none;
-					padding: 10px 10px 10px 10px;
+					padding: 10px 35px 10px 10px;
 					margin: 0;
 					appearance: none;
 					-moz-appearance: none;
@@ -134,20 +133,28 @@ form {
 					color: $seaBlue;
 					font-weight: bold;
 					cursor: pointer;
-					border-top-left-radius: 2px;
-					border-top-right-radius: 2px;
+					border-top-left-radius: 4px;
+					border-top-right-radius: 4px;
 					border-bottom-left-radius: 0;
 					border-bottom-right-radius: 0;
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					max-width: 200px;
+					z-index: 2;
 				}
 
 				i {
-					margin-left: 25px;
-					margin-right: 10px;
+					margin-left: 10px;
+					margin-right: 0;
 					color: $seaBlue;
+
+					&.triangle {
+						margin-top: -4px;
+						margin-left: 0;
+						position: absolute;
+						right: 10px;
+					}
 				}
 			}
 		}
