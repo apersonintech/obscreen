@@ -17,7 +17,7 @@
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
 
-{% block body_class %}view-content-list{% endblock %}
+{% block body_class %}view-content-edit{% endblock %}
 
 {% block page %}
     <div class="top-content">
@@ -60,44 +60,22 @@
                     <div class="form-holder">
                         <form class="form" action="{{ url_for('slideshow_content_save') }}" method="POST">
 
-                        <input type="hidden" name="id" id="content-edit-id" />
+                            <input type="hidden" name="id" id="content-edit-id"/>
 
-                        <div class="form-group">
-                            <label for="content-edit-name">{{ l.slideshow_content_form_label_name }}</label>
-                            <div class="widget">
-                                <input type="text" name="name" id="content-edit-name" required="required" />
+                            <div class="form-group">
+                                <label for="content-edit-name">{{ l.slideshow_content_form_label_name }}</label>
+                                <div class="widget">
+                                    <input type="text" name="name" id="content-edit-name" required="required"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="content-edit-type">{{ l.slideshow_content_form_label_type }}</label>
-                            <div class="widget">
-                                <select id="content-edit-type" name="type" disabled="disabled">
-                                    {% for type in enum_content_type %}
-                                        <option value="{{ type.value }}" data-input="{% if type.value == 'url' or type.value == 'youtube' %}text{% else %}upload{% endif %}">
-                                            {{ t(type) }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
+
+                            <div class="form-group">
+                                <label for="content-edit-location">{{ l.slideshow_content_form_label_location }}</label>
+                                <div class="widget">
+                                    <input type="text" name="location" id="content-edit-location"/>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="content-edit-location">{{ l.slideshow_content_form_label_location }}</label>
-                            <div class="widget">
-                                <input type="text" name="location" id="content-edit-location" />
-                            </div>
-                        </div>
-
-
-                        <div class="actions">
-                            <button type="button" class="btn-normal modal-close">
-                                {{ l.slideshow_content_form_button_cancel }}
-                            </button>
-                            <button type="submit" class="green">
-                                <i class="fa fa-save icon-left"></i>{{ l.slideshow_content_form_edit_submit }}
-                            </button>
-                        </div>
-                    </form>
+                        </form>
                     </div>
 
                     <div class="preview-holder">
