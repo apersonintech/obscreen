@@ -39,7 +39,7 @@ class ContentController(ObController):
             folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
             working_folder_path=working_folder_path,
             working_folder=working_folder,
-            working_folder_children=self._model_store.folder().get_children(working_folder),
+            working_folder_children=self._model_store.folder().get_children(working_folder, sort='created_at', ascending=False),
             enum_content_type=ContentType,
             enum_folder_entity=FolderEntity,
         )
@@ -114,7 +114,6 @@ class ContentController(ObController):
             content=content,
             working_folder_path=working_folder_path,
             working_folder=working_folder,
-            working_folder_children=self._model_store.folder().get_children(working_folder),
             enum_content_type=ContentType,
         )
 

@@ -41,17 +41,17 @@ class FolderManager(ModelManager):
         object = self._db.get_by_id(self.TABLE_NAME, id)
         return self.hydrate_object(object, id) if object else None
 
-    def get_by(self, query, sort: Optional[str] = None) -> List[Folder]:
-        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort))
+    def get_by(self, query, sort: Optional[str] = None, ascending=True) -> List[Folder]:
+        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort, ascending=ascending))
 
     def get_by_entity(self, entity: FolderEntity) -> List[Folder]:
         return self.get_by("entity = '{}'".format(entity.value))
 
-    def get_children(self, folder: Optional[Folder]) -> List[Folder]:
+    def get_children(self, folder: Optional[Folder], sort: Optional[str] = None, ascending=True) -> List[Folder]:
         if folder:
-            return self.get_by("parent_id = {}".format(folder.id))
+            return self.get_by("parent_id = {}".format(folder.id), sort, ascending)
 
-        return self.get_by("parent_id is null")
+        return self.get_by("parent_id is null", sort, ascending)
 
     def get_one_by_path(self, path: str, entity: FolderEntity) -> Folder:
         parts = path[1:].split('/')
