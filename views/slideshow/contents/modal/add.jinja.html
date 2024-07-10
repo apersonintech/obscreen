@@ -12,7 +12,6 @@
             </div>
         </div>
 
-
         <div class="form-group tab-select">
             <div class="widget">
                 <i class="fa fa-get-pocket object-icon-add"></i>
@@ -36,20 +35,23 @@
                     <input type="file" name="object" id="content-add-object-input-upload" class="content-add-object-input" disabled="disabled"/>
                     <span class="btn btn-info">
                         <i class="fa fa-file-import"></i>
-                        Upload file
+                        {{ l.slideshow_content_form_button_upload }}
                     </span>
-                    <input type="text" value="No file choosen yet" disabled="disabled" />
+                    <input type="text" value="{{ l.slideshow_content_form_button_upload_choosen }}" disabled="disabled" />
                 </label>
             </div>
         </div>
 
-{#        <div class="actions">#}
-{#            <button type="button" class="btn-normal modal-close">#}
-{#                {{ l.slideshow_content_form_button_cancel }}#}
-{#            </button>#}
-{#            <button type="submit" class="green">#}
-{#                <i class="fa fa-save icon-left"></i>{{ l.slideshow_content_form_add_submit }}#}
-{#            </button>#}
-{#        </div>#}
+        <div class="actions">
+            <button type="button" class="btn btn-naked modal-close">
+                {{ l.common_close }}
+            </button>
+            <button type="submit" class="btn btn-info">
+                <i class="fa fa-save icon-left"></i>{{ l.common_save }}
+            </button>
+            <button type="button" disabled="disabled" class="btn btn-naked hidden btn-loading">
+                {{ l.common_loading }}
+            </button>
+        </div>
     </form>
 </div>

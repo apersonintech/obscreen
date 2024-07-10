@@ -63,6 +63,8 @@
     "slideshow_content_form_label_type": "Type",
     "slideshow_content_form_label_object": "Object",
     "slideshow_content_form_button_cancel": "Cancel",
+    "slideshow_content_form_button_upload": "Upload file",
+    "slideshow_content_form_button_upload_choosen": "No file choosen yet",
     "js_slideshow_content_delete_confirmation": "Are you sure?",
 
     "playlist_page_title": "Playlists",
