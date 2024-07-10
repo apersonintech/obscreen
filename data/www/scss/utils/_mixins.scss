@@ -29,3 +29,17 @@
 @mixin pixel-box($pixelOffset: 1) {
 	box-shadow: #{$pixelOffset}px 0 0 #fff, 0 #{$pixelOffset}px 0 $limeGreen, -#{$pixelOffset}px 0 0 $seaBlue, 0 -#{$pixelOffset}px 0 $pinkyRed;
 }
+
+@mixin generate-color-classes($color-map) {
+  @each $name, $color in $color-map {
+    .#{"#{$name}"} {
+      color: $color;
+    }
+    .bg-#{"#{$name}"} {
+      background-color: $color;
+    }
+    .border-#{"#{$name}"} {
+      border-color: $color;
+    }
+  }
+}

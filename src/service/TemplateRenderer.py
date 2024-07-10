@@ -10,7 +10,7 @@ from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
 from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.constant.WebDirConstant import WebDirConstant
-from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, seconds_to_hhmmss, am_i_in_docker
+from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, seconds_to_hhmmss, am_i_in_docker, truncate
 
 
 class TemplateRenderer:
@@ -41,6 +41,7 @@ class TemplateRenderer:
             seconds_to_hhmmss=seconds_to_hhmmss,
             is_valid_cron_date_time=is_valid_cron_date_time,
             json_dumps=json.dumps,
+            truncate=truncate,
             l=self._model_store.lang().map(),
             t=self._model_store.lang().translate,
         )

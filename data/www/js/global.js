@@ -15,7 +15,7 @@ const hideDropdowns = function () {
 };
 
 jQuery(document).ready(function ($) {
-     $('.dropdown .trigger').on('click', function(event) {
+    $('.dropdown .trigger').on('click', function (event) {
         event.stopPropagation();
         var $dropdown = $(this).closest('.dropdown');
         var $menu = $dropdown.find('ul.dropdown-menu');
@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
         $('.dropdown').not($dropdown).removeClass('dropdown-show');
         $dropdown.toggleClass('dropdown-show');
 
-         // Adjust dropdown position to prevent overflow
+        // Adjust dropdown position to prevent overflow
         var triggerHeight = $(this).outerHeight() + 20;
         var triggerOffset = $(this).offset();
         var menuWidth = $menu.outerWidth();
@@ -52,11 +52,11 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $(document).on('click', function() {
+    $(document).on('click', function () {
         $('.dropdown').removeClass('dropdown-show');
     });
 
-    $(window).on('resize', function() {
+    $(window).on('resize', function () {
         $('.dropdown.dropdown-show .trigger').trigger('click');
     });
 
@@ -71,7 +71,8 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $(document).on('click', '.protected', function(e) {
+    // Link protection
+    $(document).on('click', '.protected', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -88,6 +89,7 @@ jQuery(document).ready(function ($) {
         return false;
     });
 
+    // Datetime and owner tracking
     $(document).on('click', '.item-utrack', function () {
         const entity = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
         showModal('modal-entity-utrack');
@@ -95,6 +97,34 @@ jQuery(document).ready(function ($) {
         $('#entity-utrack-updated-by').val(entity.updated_by);
         $('#entity-utrack-created-at').val(prettyTimestamp(entity.created_at * 1000));
         $('#entity-utrack-updated-at').val(prettyTimestamp(entity.updated_at * 1000));
+    });
+
+
+    // Explorer item selection
+    $(document).on('click', 'a.explr-link', function (event) {
+        event.preventDefault();
+        $('a.explr-link').removeClass('highlight-clicked');
+        $('a.explr-link').parent().removeClass('highlight-clicked');
+        $(this).addClass('highlight-clicked');
+        $(this).parent().addClass('highlight-clicked');
+        $('body').addClass('explr-selection');
+    });
+    $(document).on('dblclick', 'a.explr-link', function (event) {
+        event.preventDefault();
+        $(this).off('click');
+        if ($(this).attr('target') === '_blank') {
+            window.open($(this).attr('href'));
+        } else {
+            window.location.href = $(this).attr('href');
+        }
+    });
+    $(document).on('click', function (event) {
+        const $parentClickable = $(event.target).parents('a, button');
+        if ($parentClickable.length === 0) {
+            $('a.explr-link').removeClass('highlight-clicked');
+            $('a.explr-link').parent().removeClass('highlight-clicked');
+            $('body').removeClass('explr-selection');
+        }
     });
 
 });

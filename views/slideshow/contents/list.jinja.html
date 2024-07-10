@@ -13,6 +13,8 @@
 {% block add_js %}
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
+
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
 
@@ -50,12 +52,12 @@
                     {% if loop.last %}
                         <span>
                             <i class="explr-icon explr-icon-folder"></i>
-                            {{ dir }}
+                            {{ truncate(dir, 25, '...') }}
                         </span>
                     {% else %}
                         <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
                             <i class="explr-icon explr-icon-folder"></i>
-                            {{ dir }}
+                            {{ truncate(dir, 25, '...') }}
                         </a>
                     {% endif %}
 
@@ -112,16 +114,40 @@
             </ul>
         </div>
 
-
+        <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}" class="hidden" method="POST">
+            <input type="text" name="entity_id" />
+            <input type="text" name="new_folder_id" />
+            <input type="text" name="is_folder" />
+        </form>
 
         <div class="page-content">
             <div class="dirview">
-                <ul>
-                    {% for folder in working_folder_children %}
-                        <li>
-                            <a href="{{ url_for('slideshow_content_cd', path=working_folder_path~'/'~folder.name) }}">
+                <ul class="explr-dirview">
+                    <li class="new-folder hidden">
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-folder"></i>
+                            <form action="{{ url_for('slideshow_content_folder_add') }}" method="POST">
+                                <input type="text" name="name" />
+                            </form>
+                        </a>
+                    </li>
+
+                    {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
+                    {% if parent_path %}
+                        <li class="previous-folder droppable" data-path="{{ parent_path }}" data-id="{{ working_folder.parent_id }}">
+                            <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}" class="explr-link">
                                 <i class="fa fa-folder"></i>
-                                {{ folder.name }}
+                                ..
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for folder in working_folder_children %}
+                        {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
+                        <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}" data-folder="1">
+                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}" class="explr-link">
+                                <i class="fa fa-folder"></i>
+                                {{ truncate(folder.name, 25, '...') }}
                             </a>
                         </li>
                     {% endfor %}
@@ -129,21 +155,22 @@
                     {% for content in contents[working_folder.id]|default([]) %}
                         {% set icon = 'fa-file' %}
                         {% if content.type.value == 'picture' %}
-                            {% set icon = 'fa-image' %}
+                            {% set icon = 'fa-regular fa-image info' %}
                         {% elif content.type.value == 'video' %}
-                            {% set icon = 'fa-film' %}
+                            {% set icon = 'fa-video-camera success' %}
                         {% elif content.type.value == 'url' %}
-                            {% set icon = 'fa-globe' %}
+                            {% set icon = 'fa-link danger' %}
                         {% elif content.type.value == 'youtube' %}
-                            {% set icon = 'fa-video' %}
+                            {% set icon = 'fa-brands fa-youtube youtube' %}
                         {% endif %}
 
-                        <li>
-                            <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank">
+                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}" data-folder="0">
+                            <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank" class="explr-link">
                                 <i class="fa {{ icon }}"></i>
-                                {{ content.name }}
+                                {{ truncate(content.name, 25, '...') }}
                             </a>
                         </li>
+
                     {% endfor %}
                 </ul>
             </div>
