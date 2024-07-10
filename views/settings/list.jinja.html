@@ -14,17 +14,12 @@
         <h1>
             {{ l.settings_page_title }}
         </h1>
-
-        <div class="top-actions">
-            <button class="folder-add btn-success-alt">
-                <i class="fa fa-save"></i>
-                {{ l.common_save }}
-            </button>
-        </div>
     </div>
 
     {% if request.args.get('error') %}
-        <div class="alert alert-error">{{ request.args.get('error') }}</div>
+        <div class="alert alert-error">
+            {{ request.args.get('error') }}
+        </div>
     {% endif %}
 
     <div class="bottom-content">

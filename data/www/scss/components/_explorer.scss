@@ -6,6 +6,17 @@ ul.explr-tree {
 			color: #AAA;
 			font-size: 17px;
 			padding-left: 1px;
+			cursor: pointer;
+
+			&.explr-plus,
+			&.explr-minus {
+				z-index: 1;
+
+				&:hover {
+					background: rgba($white, .1);
+					border-radius: 2px;
+				}
+			}
 		}
 
 		a {
@@ -63,6 +74,7 @@ ul.explr-dirview {
 				span {
 					display: none;
 				}
+
 				form {
 					display: block;
 				}
@@ -128,6 +140,7 @@ ul.explr-dirview {
 
 	.ui-draggable-dragging {
 		z-index: 20;
+
 		a {
 			opacity: 1 !important;
 		}

@@ -31,6 +31,9 @@ jQuery(document).ready(function ($) {
                     $tree.removeClass('hidden');
                 }
             });
+
+            // Open complete path in explorer sidebar
+            explrSidebarOpenFromFolder($(this).attr('data-working-folder-id'));
         });
     };
 
