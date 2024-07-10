@@ -7,7 +7,6 @@
 		padding: 0;
 		background: $layoutBackground;
 		box-shadow: 1px 1px .5px .5px inset rgba(0, 0, 0, 0.2);
-		border: 1px solid #222;
 		max-width: 250px;
 	}
 
@@ -16,10 +15,16 @@
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
-		background: rgba(0,0,0,.9);
+		background: rgba(0,0,0,.8);
+		padding: 5px;
 
 		.dirview {
+			flex: 1;
 			padding: 0 10px 40px 10px;
+			background: $layoutBackground;
+			align-self: stretch;
+			border: 1px solid #222;
+			height: 100vh;
 		}
 	}
 }

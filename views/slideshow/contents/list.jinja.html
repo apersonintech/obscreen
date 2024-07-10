@@ -64,33 +64,6 @@
         </div>
     {% endif %}
 
-    <div class="breadcrumb-container">
-        <ul class="breadcrumb">
-            {% set ns = namespace(breadpath='') %}
-            {% for dir in working_folder_path[1:].split('/') %}
-                {% set ns.breadpath = ns.breadpath ~ '/' ~ dir %}
-                <li>
-                    {% if loop.last %}
-                        <span>
-                            <i class="explr-icon explr-icon-folder"></i>
-                            {{ truncate(dir, 25, '...') }}
-                        </span>
-                    {% else %}
-                        <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
-                            <i class="explr-icon explr-icon-folder"></i>
-                            {{ truncate(dir, 25, '...') }}
-                        </a>
-                    {% endif %}
-
-                </li>
-                {% if not loop.last %}
-                    <li class="divider">
-                        <i class="fa fa-chevron-right"></i>
-                    </li>
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
 
     <div class="bottom-content">
         <div class="page-panel left-panel">
@@ -143,6 +116,33 @@
 
         <div class="page-content">
             <div class="dirview">
+                <div class="breadcrumb-container">
+                    <ul class="breadcrumb">
+                        {% set ns = namespace(breadpath='') %}
+                        {% for dir in working_folder_path[1:].split('/') %}
+                            {% set ns.breadpath = ns.breadpath ~ '/' ~ dir %}
+                            <li>
+                                {% if loop.last %}
+                                    <span>
+                                        <i class="explr-icon explr-icon-folder"></i>
+                                        {{ truncate(dir, 25, '...') }}
+                                    </span>
+                                {% else %}
+                                    <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
+                                        <i class="explr-icon explr-icon-folder"></i>
+                                        {{ truncate(dir, 25, '...') }}
+                                    </a>
+                                {% endif %}
+
+                            </li>
+                            {% if not loop.last %}
+                                <li class="divider">
+                                    <i class="fa fa-chevron-right"></i>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
                 <ul class="explr-dirview">
                     <li class="new-folder hidden">
                         <a href="javascript:void(0);">
