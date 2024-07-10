@@ -51,6 +51,64 @@
 <body class="{% block body_class %}{% endblock %}">
 
 <div class="container {% block container_class %}{% endblock %}">
+
+    {% set dynmenu = {
+        "slideshow": {
+            "name": l.dynmenu_content,
+            "icon": "fa-image",
+            "position": 0,
+            "pills": [
+                {"name": "Bibliothèque", "route": "slideshow_content_list", "icon": "fa-image"},
+                {"name": "Planifier", "route": "slideshow_slide_list", "icon": "fa-clock"},
+            ]
+        },
+        "configuration": {
+            "name": "Configuration",
+            "icon": "fa-cog",
+            "position": 3,
+            "pills": [
+                {"name": l.settings_page_title, "route": "settings_variable_list", "icon": "fa-cogs"},
+                {"name": l.sysinfo_page_title, "route": "sysinfo_attribute_list", "icon": "fa-list-check"},
+            ]
+        }
+    } %}
+
+    {% if FLEET_PLAYER_ENABLED %}
+        {% set dynmenu = merge_dicts(dynmenu, {
+            "fleet": {
+                "name": "Appareils",
+                "icon": "fa-tv",
+                "position": 1,
+                "pills": [
+                    {"name": l.fleet_node_player_group_page_title, "route": "fleet_node_player_group_list", "icon": "fa-layer-group"},
+                    {"name": l.fleet_node_player_page_title, "route": "fleet_node_player_list", "icon": "fa-tv"},
+                ]
+            }
+        }) %}
+    {% endif %}
+
+    {% if AUTH_ENABLED %}
+        {% set dynmenu = merge_dicts(dynmenu, {
+            "security": {
+                "name": "Sécurité",
+                "icon": "fa-key",
+                "position": 2,
+                "pills": [
+                    {"name": l.auth_page_title, "route": "auth_user_list", "icon": "fa-user"},
+                ]
+            }
+        }) %}
+    {% endif %}
+
+    {% set dynmenu = dictsort(dynmenu) %}
+    {% set route_to_category = {} %}
+    {% for category, details in dynmenu.items() %}
+        {% for pill in details.pills %}
+            {% set route_to_category = route_to_category.update({pill.route: category}) or route_to_category %}
+        {% endfor %}
+    {% endfor %}
+    {% set current_dynmenu = dynmenu[route_to_category[request.url_rule.endpoint]] %}
+
     {% block header %}
         <menu>
             <h1 class="logo">
@@ -65,68 +123,17 @@
                 <nav>
                     <ul>
                         {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
-                            <a href="{{ url_for('slideshow_slide_list') }}">
-                                <i class="fa-regular fa-clock"></i> {{ l.slideshow_slide_page_title }}
-                            </a>
-                        </li>
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_content_list' }}">
-                            <a href="{{ url_for('slideshow_content_list') }}">
-                                <i class="fa fa-image"></i> {{ l.slideshow_content_page_title }}
-                            </a>
-                        </li>
-                        {% if PLAYLIST_ENABLED %}
-                            <li class="{{ 'active' if request.url_rule.endpoint == 'playlist_list' }}">
-                                <a href="{{ url_for('playlist_list') }}">
-                                    <i class="fa fa-bars-staggered"></i> {{ l.playlist_page_title }}
+                        {% for category, menu in dynmenu.items() %}
+                            <li class="{{ 'active' if menu.name == current_dynmenu.name }}">
+                                <a href="{{ url_for(menu.pills[0].route) }}">
+                                    <i class="fa {{ menu.icon }}"></i> {{ menu.name }}
                                 </a>
                             </li>
-                        {% endif %}
-                        {% if FLEET_PLAYER_ENABLED %}
-                            <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_group_list' }}">
-                                <a href="{{ url_for('fleet_node_player_group_list') }}">
-                                    <i class="fa fa-layer-group"></i> {{ l.fleet_node_player_group_page_title }}
-                                </a>
-                            </li>
-                            <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_list' }}">
-                                <a href="{{ url_for('fleet_node_player_list') }}">
-                                    <i class="fa fa-tv"></i> {{ l.fleet_node_player_page_title }}
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if AUTH_ENABLED %}
-                            <li class="{{ 'active' if request.url_rule.endpoint == 'auth_user_list' }}">
-                                <a href="{{ url_for('auth_user_list') }}">
-                                    <i class="fa fa-user"></i> {{ l.auth_page_title }}
-                                </a>
-                            </li>
-                        {% endif %}
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'settings_variable_list' }}">
-                            <a href="{{ url_for('settings_variable_list') }}">
-                                <i class="fa-solid fa-cogs"></i> {{ l.settings_page_title }}
-                            </a>
-                        </li>
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo_attribute_list' }}">
-                            <a href="{{ url_for('sysinfo_attribute_list') }}">
-                                <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
-                            </a>
-                        </li>
-                        {% if AUTH_ENABLED %}
-                            <li class="user-menu">
-                                <div class="username">
-                                    <i class="fa fa-user"></i>
-                                    {{ current_user.username }}
-                                </div>
-                                <a href="{{ url_for('logout') }}" title="{{ l.logout }}" class="logout">
-                                    <i class="fa fa-right-from-bracket"></i>
-                                </a>
-                            </li>
-                        {% endif %}
+                        {% endfor %}
                         {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
                     </ul>
                 </nav>
             {% endif %}
-
 
             {% block footer %}
                 <footer>
@@ -145,29 +152,27 @@
     {% endblock %}
 
     <main>
-        <div class="context-bar">
-            <div class="context-menu">
-                <div class="inner">
-                    <ul class="pills">
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_content_list' }}">
-                            <a href="{{ url_for('slideshow_content_list') }}">
-                                <span class="icon">
-                                    <i class="fa fa-image"></i>
-                                </span>
-                                Bibliothèque
-                            </a>
-                        </li>
-                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
-                            <a href="{{ url_for('slideshow_slide_list') }}">
-                                <span class="icon">
-                                    <i class="fa fa-clock"></i>
-                                </span>
-                                Planifier
-                            </a>
-                        </li>
-                    </ul>
+        {% set show_context_bar = current_dynmenu or AUTH_ENABLED %}
+
+        <div class="context-bar {{ 'hidden' if not show_context_bar }}">
+            {% if current_dynmenu %}
+                <div class="context-menu">
+                    <div class="inner">
+                        <ul class="pills">
+                            {% for menu in current_dynmenu.pills %}
+                                <li class="{{ 'active' if request.url_rule.endpoint == menu.route }}">
+                                    <a href="{{ url_for(menu.route) }}">
+                                        <span class="icon">
+                                            <i class="fa {{ menu.icon }}"></i>
+                                        </span>
+                                        {{ menu.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             {% if AUTH_ENABLED %}
                 <div class="context-divider"></div>
