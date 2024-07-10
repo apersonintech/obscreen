@@ -225,6 +225,7 @@
     "common_submit": "Enviar",
     "common_validate": "Validar",
     "common_apply": "Aplicar",
+    "common_saved": "Los cambios se han guardado",
     "logout": "Cerrar sesión",
     "login_error_not_found": "Credenciales incorrectas",
     "login_error_bad_credentials": "Credenciales incorrectas",

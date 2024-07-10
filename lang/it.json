@@ -225,6 +225,7 @@
     "common_submit": "Invia",
     "common_validate": "Convalida",
     "common_apply": "Applica",
+    "common_saved": "Le modifiche sono state salvate",
     "logout": "Logout",
     "login_error_not_found": "Credenziali errate",
     "login_error_bad_credentials": "Credenziali errate",

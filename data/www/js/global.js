@@ -131,4 +131,15 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    setTimeout(function() {
+        $('.alert-timeout').remove();
+    }, 3000);
+
+    if ($('.edit-page').length) {
+        const $firstInputText = $('input[type=text]:eq(0)');
+        if ($firstInputText.length) {
+            $firstInputText.focus();
+        }
+    }
 });
+

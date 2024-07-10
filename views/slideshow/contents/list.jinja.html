@@ -29,11 +29,11 @@
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}" data-content-route="{{ url_for('slideshow_content_delete') }}">
-                    <i class="fa fa-trash-alt"></i>
-                </button>
                 <button class="explr-item-edit btn-info" data-content-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
                     <i class="fa fa-pencil"></i>
+                </button>
+                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}" data-content-route="{{ url_for('slideshow_content_delete') }}">
+                    <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
 
@@ -42,7 +42,7 @@
                 {{ l.slideshow_content_button_add }}
             </button>
             <button class="folder-add btn-success-alt">
-                <i class="fa fa-folder-plus"></i>
+                <i class="fa fa-folder-plus icon-left"></i>
                 {{ l.slideshow_content_button_add_folder }}
             </button>
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END) }}
@@ -62,7 +62,6 @@
             {{ l.slideshow_content_referenced_in_slide_error }}
         </div>
     {% endif %}
-
 
     <div class="bottom-content">
         <div class="page-panel left-panel explr-explorer">

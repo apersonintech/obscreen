@@ -17,21 +17,21 @@
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
 
-{% block body_class %}view-content-edit{% endblock %}
+{% block body_class %}view-content-edit edit-page{% endblock %}
 
 {% block page %}
     <div class="top-content">
         <h1>
             {{ l.slideshow_content_form_edit_title }}
         </h1>
-
-        <div class="top-actions">
-            <button class="folder-edit btn-success-alt">
-                <i class="fa fa-save"></i>
-                {{ l.common_save }}
-            </button>
-        </div>
     </div>
+
+    {% if request.args.get('saved') %}
+        <div class="alert alert-success alert-timeout">
+            <i class="fa fa-check icon-left"></i>
+            {{ l.common_saved }}
+        </div>
+    {% endif %}
 
     <div class="bottom-content">
         <div class="page-content">
@@ -58,23 +58,30 @@
 
                 <div class="horizontal">
                     <div class="form-holder">
-                        <form class="form" action="{{ url_for('slideshow_content_save') }}" method="POST">
-
-                            <input type="hidden" name="id" id="content-edit-id"/>
+                        <form class="form" action="{{ url_for('slideshow_content_save', content_id=content.id) }}" method="POST">
 
                             <div class="form-group">
                                 <label for="content-edit-name">{{ l.slideshow_content_form_label_name }}</label>
                                 <div class="widget">
-                                    <input type="text" name="name" id="content-edit-name" required="required"/>
+                                    <input type="text" name="name" id="content-edit-name" required="required" value="{{ content.name }}" />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="content-edit-location">{{ l.slideshow_content_form_label_location }}</label>
                                 <div class="widget">
-                                    <input type="text" name="location" id="content-edit-location"/>
+                                    {% set location = content.location %}
+                                    {% if content.type == enum_content_type.YOUTUBE %}
+                                        {% set location = 'https://www.youtube.com/watch?v=' ~ content.location %}
+                                    {% endif %}
+                                    <input type="text" name="location" id="content-edit-location" value="{{ location }}" {% if not content.is_editable() %}disabled="disabled"{% endif %} />
                                 </div>
                             </div>
+
+                             <button type="submit" class="folder-edit btn-info">
+                                <i class="fa fa-save icon-left"></i>
+                                {{ l.common_save }}
+                            </button>
                         </form>
                     </div>
 
@@ -84,6 +91,13 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="page-panel right-panel">
+
+
+        </div>
+
     </div>
 
 

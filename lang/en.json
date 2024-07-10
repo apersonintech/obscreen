@@ -225,6 +225,7 @@
     "common_submit": "Submit",
     "common_validate": "Validate",
     "common_apply": "Apply",
+    "common_saved": "Changes have been saved",
     "logout": "Logout",
     "login_error_not_found": "Bad credentials",
     "login_error_bad_credentials": "Bad credentials",

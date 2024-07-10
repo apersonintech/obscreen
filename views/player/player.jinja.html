@@ -20,7 +20,7 @@
 </head>
 <body>
 <div id="IntroSlide" class="slide" style="z-index: 10000;">
-    {% if default_slide_duration.eval() > 0 %}
+    {% if default_slide_duration.eval() > 0 and not items['preview_mode'] %}
         <iframe src="/player/default"></iframe>
     {% endif %}
 </div>
