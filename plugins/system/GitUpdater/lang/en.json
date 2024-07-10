@@ -1,5 +1,5 @@
 {
-    "plugin_title": "Botón de Actualización de Git",
-    "plugin_description": "Añade un botón de actualización (solo para instalaciones a nivel del sistema)",
-    "button_update": "Actualizar"
+    "plugin_title": "Git Updater Button",
+    "plugin_description": "Adds an update button (only for system wide installations)",
+    "button_update": "Update"
 }
