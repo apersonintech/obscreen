@@ -11,6 +11,7 @@
 	}
 }
 
+
 form {
 	display: flex;
 	flex-direction: column;
@@ -38,6 +39,28 @@ form {
 			align-items: center;
 			align-self: stretch;
 			color: #666666;
+
+			&.btn-upload {
+				color: white;
+				font-size: 14px;
+				flex: 0;
+				flex-basis: auto;
+
+				input[type=file] {
+					display: none;
+				}
+
+				input[type=text] {
+					margin-bottom: 2px;
+					padding-left: 0;
+					margin-left: 10px;
+				}
+
+				i {
+					margin-left: 3px;
+					margin-right: 10px;
+				}
+			}
 		}
 
 		.widget {
@@ -58,7 +81,18 @@ form {
 				box-shadow: 0 2px 1px #444, 0 4px 2px #333 inset;
 				color: #DDD;
 				font-size: 14px;
+
+				&[disabled] {
+					color: #555;
+					background: none;
+					box-shadow: none;
+					border: none;
+					border-bottom: 1px solid #333;
+					border-radius: 0;
+				}
 			}
+
+
 		}
 
 
@@ -70,6 +104,7 @@ form {
 			height: 48px;
 			padding: 48px 0 0 0;
 			flex: 0;
+			flex-basis: auto;
 
 			.widget {
 				height: 49px;
@@ -83,6 +118,7 @@ form {
 				left: 0;
 				background: rgba($seaBlue, .05);
 				border-bottom: 2px solid $seaBlue;
+				padding-right: 20px;
 
 				select {
 					border: none;
@@ -108,7 +144,7 @@ form {
 				}
 
 				i {
-					margin-left: 10px;
+					margin-left: 25px;
 					margin-right: 10px;
 					color: $seaBlue;
 				}

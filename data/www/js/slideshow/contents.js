@@ -21,15 +21,19 @@ jQuery(document).ready(function ($) {
             return $(el).val() === value;
         }).data('input');
 
-        $('.content-add-object-input')
-            .addClass('hidden')
-            .prop('disabled', true)
-            .filter('#content-add-object-input-' + inputType)
-            .removeClass('hidden')
-            .prop('disabled', false)
-        ;
+        $('.content-add-object-input').each(function() {
+            const active = $(this).attr('id') === 'content-add-object-input-' + inputType;
+
+            if ($(this).is('input[type=file]')) {
+                 $(this).prop('disabled', !active);
+                $(this).parents('label:eq(0)').toggleClass('hidden', !active);
+            } else {
+                $(this).prop('disabled', !active).toggleClass('hidden', !active);
+            }
+        });
 
         $('.object-label-add').html($selectedOption.get(0).attributes['data-object-label'].value);
+        $('.object-icon-add').attr('class', 'object-icon-add fa ' + $selectedOption.get(0).attributes['data-icon'].value)
     };
 
     const initExplr = function () {
@@ -79,6 +83,11 @@ jQuery(document).ready(function ($) {
         initExplr();
         initDrags();
     };
+
+    $(document).on('change', '.modal input[type=file]', function() {
+        const file = $(this).val().replace(/\\/g, '/').split('/').slice(-1);
+        $(this).parents('label:eq(0)').find('input[type=text]').val(file);
+    });
 
     $(document).on('change', '#content-add-type', inputTypeUpdate);
 
