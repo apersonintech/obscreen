@@ -15,6 +15,78 @@ from src.model.enum.AnimationSpeed import animation_speed_duration
 
 class PlayerController(ObController):
 
+    def register(self):
+        self._app.add_url_rule('/', 'player', self.player, methods=['GET'])
+        self._app.add_url_rule('/use/<playlist_slug_or_id>', 'player_use', self.player, methods=['GET'])
+        self._app.add_url_rule('/player/default', 'player_default', self.player_default, methods=['GET'])
+        self._app.add_url_rule('/player/playlist', 'player_playlist', self.player_playlist, methods=['GET'])
+        self._app.add_url_rule('/player/playlist/use/<playlist_slug_or_id>', 'player_playlist_use', self.player_playlist, methods=['GET'])
+
+    def player(self, playlist_slug_or_id: str = ''):
+        preview_content_id = request.args.get('preview_content_id')
+        playlist_slug_or_id = self._get_dynamic_playlist_id(playlist_slug_or_id)
+
+        current_playlist = self._model_store.playlist().get_one_by("slug = ? OR id = ?", {
+            "slug": playlist_slug_or_id,
+            "id": playlist_slug_or_id
+        })
+
+        if playlist_slug_or_id and not current_playlist:
+            return abort(404)
+
+        playlist_id = current_playlist.id if current_playlist else None
+
+        items = self._get_playlist(playlist_id=playlist_id, preview_content_id=preview_content_id)
+
+        return render_template(
+            'player/player.jinja.html',
+            items=items,
+            default_slide_duration=0 if items['preview_mode'] else self._model_store.variable().get_one_by_name('default_slide_duration').eval(),
+            polling_interval=self._model_store.variable().get_one_by_name('polling_interval'),
+            slide_animation_enabled=self._model_store.variable().get_one_by_name('slide_animation_enabled'),
+            slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
+            slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
+            slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed'),
+            animation_speed_duration=animation_speed_duration
+        )
+
+    def player_default(self):
+        return render_template(
+            'player/default.jinja.html',
+            ipaddr=get_ip_address(),
+            time_with_seconds=self._model_store.variable().get_one_by_name('default_slide_time_with_seconds')
+        )
+
+    def player_playlist(self, playlist_slug_or_id: str = ''):
+        playlist_slug_or_id = self._get_dynamic_playlist_id(playlist_slug_or_id)
+
+        current_playlist = self._model_store.playlist().get_one_by("slug = ? OR id = ?", {
+            "slug": playlist_slug_or_id,
+            "id": playlist_slug_or_id
+        })
+        playlist_id = current_playlist.id if current_playlist else None
+
+        return jsonify(self._get_playlist(playlist_id=playlist_id))
+
+    def _get_dynamic_playlist_id(self, playlist_slug_or_id: Optional[str]) -> str:
+        if not playlist_slug_or_id and self._model_store.variable().get_one_by_name('fleet_player_enabled'):
+            node_player = self._model_store.node_player().get_one_by("host = '{}' and enabled = {}".format(
+                get_safe_remote_addr(self.get_remote_addr()),
+                True
+            ))
+
+            if node_player and node_player.group_id:
+                node_player_group = self._model_store.node_player_group().get(node_player.group_id)
+                playlist_slug_or_id = node_player_group.playlist_id
+        return playlist_slug_or_id
+
+    @staticmethod
+    def get_remote_addr() -> str:
+        if request.headers.get('X-Forwarded-For'):
+            return request.headers['X-Forwarded-For'].split(',')[0].strip()
+        else:
+            return request.remote_addr
+
     def _get_playlist(self, playlist_id: Optional[int] = 0, preview_content_id: Optional[int] = None) -> dict:
         enabled_slides = []
         preview_mode = False
@@ -83,73 +155,3 @@ class PlayerController(ObController):
         }
 
         return playlists
-
-    def register(self):
-        self._app.add_url_rule('/', 'player', self.player, methods=['GET'])
-        self._app.add_url_rule('/use/<playlist_slug_or_id>', 'player_use', self.player, methods=['GET'])
-        self._app.add_url_rule('/player/default', 'player_default', self.player_default, methods=['GET'])
-        self._app.add_url_rule('/player/playlist', 'player_playlist', self.player_playlist, methods=['GET'])
-        self._app.add_url_rule('/player/playlist/use/<playlist_slug_or_id>', 'player_playlist_use', self.player_playlist, methods=['GET'])
-
-    def player(self, playlist_slug_or_id: str = ''):
-        preview_content_id = request.args.get('preview_content_id')
-        playlist_slug_or_id = self._get_dynamic_playlist_id(playlist_slug_or_id)
-
-        current_playlist = self._model_store.playlist().get_one_by("slug = ? OR id = ?", {
-            "slug": playlist_slug_or_id,
-            "id": playlist_slug_or_id
-        })
-
-        if playlist_slug_or_id and not current_playlist:
-            return abort(404)
-
-        playlist_id = current_playlist.id if current_playlist else None
-
-        return render_template(
-            'player/player.jinja.html',
-            items=json.dumps(self._get_playlist(playlist_id=playlist_id, preview_content_id=preview_content_id)),
-            default_slide_duration=self._model_store.variable().get_one_by_name('default_slide_duration'),
-            polling_interval=self._model_store.variable().get_one_by_name('polling_interval'),
-            slide_animation_enabled=self._model_store.variable().get_one_by_name('slide_animation_enabled'),
-            slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
-            slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
-            slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed'),
-            animation_speed_duration=animation_speed_duration
-        )
-
-    def player_default(self):
-        return render_template(
-            'player/default.jinja.html',
-            ipaddr=get_ip_address(),
-            time_with_seconds=self._model_store.variable().get_one_by_name('default_slide_time_with_seconds')
-        )
-
-    def player_playlist(self, playlist_slug_or_id: str = ''):
-        playlist_slug_or_id = self._get_dynamic_playlist_id(playlist_slug_or_id)
-
-        current_playlist = self._model_store.playlist().get_one_by("slug = ? OR id = ?", {
-            "slug": playlist_slug_or_id,
-            "id": playlist_slug_or_id
-        })
-        playlist_id = current_playlist.id if current_playlist else None
-
-        return jsonify(self._get_playlist(playlist_id=playlist_id))
-
-    def _get_dynamic_playlist_id(self, playlist_slug_or_id: Optional[str]) -> str:
-        if not playlist_slug_or_id and self._model_store.variable().get_one_by_name('fleet_player_enabled'):
-            node_player = self._model_store.node_player().get_one_by("host = '{}' and enabled = {}".format(
-                get_safe_remote_addr(self.get_remote_addr()),
-                True
-            ))
-
-            if node_player and node_player.group_id:
-                node_player_group = self._model_store.node_player_group().get(node_player.group_id)
-                playlist_slug_or_id = node_player_group.playlist_id
-        return playlist_slug_or_id
-
-    @staticmethod
-    def get_remote_addr() -> str:
-        if request.headers.get('X-Forwarded-For'):
-            return request.headers['X-Forwarded-For'].split(',')[0].strip()
-        else:
-            return request.remote_addr

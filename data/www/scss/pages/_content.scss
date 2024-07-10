@@ -14,8 +14,55 @@
 				margin: 20px 20px 20px 10px;
 			}
 		}
+
 		.page-panel.right-panel {
 			flex: 1;
+			align-self: stretch;
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 20px;
+
+			h3 {
+				color: white;
+				padding: 10px;
+				margin-bottom: 20px;
+				font-size: 16px;
+
+				span {
+					border-width: 1px;
+					border-style: solid;
+					border-radius: 2px;
+					padding: 4px 10px;
+					margin-left: 5px;
+				}
+
+				i {
+					font-size: 16px;
+				}
+			}
+
+			.iframe-wrapper {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+				position: relative;
+				padding-top: 56.25%; /* 16:9 aspect ratio */
+				overflow: hidden;
+				border-radius: $baseRadius;
+				outline: 4px solid rgba($white, .1);
+
+				iframe {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					border: none;
+				}
+			}
 		}
 	}
 }
