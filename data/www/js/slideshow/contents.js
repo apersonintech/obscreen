@@ -105,13 +105,16 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.explr-item-delete', function () {
         const $item = $('.explr-dirview .highlight-clicked');
         const is_folder = $item.attr('data-folder') === '1';
+        let route = document.location.href;
 
         if (is_folder) {
-            const route = $(this).attr('data-folder-route') + '?id=' + $item.attr('data-id');
+            route = $(this).attr('data-folder-route') + '?id=' + $item.attr('data-id');
+        } else {
+            route = $(this).attr('data-content-route') + '?id=' + $item.attr('data-id');
+        }
 
-            if (confirm(l.js_slideshow_content_delete_confirmation)) {
-                document.location.href = route;
-            }
+        if (confirm(l.js_slideshow_content_delete_confirmation)) {
+            document.location.href = route;
         }
     });
 

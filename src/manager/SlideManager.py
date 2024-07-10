@@ -73,12 +73,16 @@ class SlideManager(ModelManager):
         for slide_id, edits in edits_slides.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, edits)
 
-    def get_slides(self, playlist_id: Optional[int] = None, enabled: bool = True) -> List[Slide]:
+    def get_slides(self, playlist_id: Optional[int] = None, content_id: Optional[int] = None, enabled: bool = True) -> List[Slide]:
         query = "enabled = {}".format("1" if enabled else "0")
+
         if playlist_id:
             query = "{} {}".format(query, "AND playlist_id = {}".format(playlist_id))
         else:
             query = "{} {}".format(query, "AND playlist_id is NULL")
+
+        if content_id:
+            query = "{} {}".format(query, "AND content_id = {}".format(content_id))
 
         return self.get_by(query=query, sort="position")
 
@@ -155,3 +159,6 @@ class SlideManager(ModelManager):
 
     def count_slides_for_playlist(self, id: int) -> int:
         return len(self.get_slides(playlist_id=id))
+
+    def count_slides_for_content(self, id: int) -> int:
+        return len(self.get_slides(content_id=id))
