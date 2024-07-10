@@ -117,8 +117,8 @@ form {
 				position: absolute;
 				top: 0;
 				left: 0;
-				background: rgba($seaBlue, .05);
 				border-bottom: 2px solid $seaBlue;
+				color: $seaBlue;
 
 				select {
 					border: none;
@@ -126,11 +126,11 @@ form {
 					box-shadow: none;
 					padding: 10px 35px 10px 10px;
 					margin: 0;
+					color: inherit;
 					appearance: none;
 					-moz-appearance: none;
 					-webkit-appearance: none;
 					text-align: left;
-					color: $seaBlue;
 					font-weight: bold;
 					cursor: pointer;
 					border-top-left-radius: 4px;
@@ -147,7 +147,6 @@ form {
 				i {
 					margin-left: 10px;
 					margin-right: 0;
-					color: $seaBlue;
 
 					&.triangle {
 						margin-top: -4px;

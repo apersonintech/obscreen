@@ -18,8 +18,11 @@ jQuery(document).ready(function ($) {
             }
         });
 
-        $('.object-label-add').html($selectedOption.get(0).attributes['data-object-label'].value);
-        $('.object-icon-add').attr('class', 'object-icon-add fa ' + $selectedOption.get(0).attributes['data-icon'].value)
+        const optionAttributes = $selectedOption.get(0).attributes;
+        const color = optionAttributes['data-color'].value;
+        $('.object-label-add').html(optionAttributes['data-object-label'].value);
+        $('.object-icon-add').attr('class', 'object-icon-add fa ' + optionAttributes['data-icon'].value);
+        $('.tab-select .widget').attr('class', 'widget ' + ('border-' + color) + ' ' + color);
     };
 
     const initExplr = function () {

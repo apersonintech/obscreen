@@ -33,13 +33,13 @@
 @mixin generate-color-classes($color-map) {
   @each $name, $color in $color-map {
     .#{"#{$name}"} {
-      color: $color;
+      color: $color !important;
     }
     .bg-#{"#{$name}"} {
-      background-color: $color;
+      background-color: $color !important;;
     }
     .border-#{"#{$name}"} {
-      border-color: $color;
+      border-color: $color !important;;
     }
   }
 }
