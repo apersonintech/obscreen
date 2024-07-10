@@ -14,6 +14,19 @@ const hideDropdowns = function () {
     $('.dropdown').removeClass('dropdown-show');
 };
 
+// Open complete path in explorer sidebar
+const explrSidebarOpenFromFolder = function (folderId) {
+    const $leaf = $('.li-explr-folder-' + folderId);
+    let $parent = $leaf;
+    while($parent.length > 0) {
+        const $toggler = $parent.find('.explr-toggler:eq(0)');
+        if ($toggler.hasClass('explr-plus')) {
+            $parent.find('.explr-toggler:eq(0)').trigger('click');
+        }
+        $parent = $parent.parents('.li-explr-folder:eq(0)');
+    }
+};
+
 jQuery(document).ready(function ($) {
     $('.dropdown .trigger').on('click', function (event) {
         event.stopPropagation();
@@ -116,10 +129,12 @@ jQuery(document).ready(function ($) {
     $(document).on('dblclick', 'a.explr-link', function (event) {
         event.preventDefault();
         $(this).off('click');
+        const href = $(this).attr('href');
+
         if ($(this).attr('target') === '_blank') {
-            window.open($(this).attr('href'));
+            window.open(href);
         } else {
-            window.location.href = $(this).attr('href');
+            window.location.href = href;
         }
     });
     $(document).on('click', function (event) {

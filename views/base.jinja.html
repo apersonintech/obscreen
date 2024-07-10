@@ -149,19 +149,19 @@
             <div class="context-menu">
                 <div class="inner">
                     <ul class="pills">
-                        <li class="active">
-                            <a href="">
-                                    <span class="icon">
-                                        <i class="fa fa-image"></i>
-                                    </span>
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_content_list' }}">
+                            <a href="{{ url_for('slideshow_content_list') }}">
+                                <span class="icon">
+                                    <i class="fa fa-image"></i>
+                                </span>
                                 Bibliothèque
                             </a>
                         </li>
-                        <li class="">
-                            <a href="">
-                                    <span class="icon">
-                                        <i class="fa fa-clock"></i>
-                                    </span>
+                        <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
+                            <a href="{{ url_for('slideshow_slide_list') }}">
+                                <span class="icon">
+                                    <i class="fa fa-clock"></i>
+                                </span>
                                 Planifier
                             </a>
                         </li>

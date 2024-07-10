@@ -67,13 +67,15 @@
         <div class="page-panel left-panel explr-explorer">
 
             {% macro render_folder(folder) %}
-                <li class="icon-folder">
+                {% set content_children = contents[folder.id]|default([]) %}
+                {% set has_children = folder.children or content_children %}
+
+                <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id }}">
                     <a href="{{ url_for('slideshow_content_cd') }}?path={{ folder.path }}" class="{% if folder.path == working_folder_path %}active{% endif %}">
                         {{ folder.name }}
                     </a>
-                    {% set content_children = contents[folder.id]|default([]) %}
 
-                    {% if folder.children or content_children %}
+                    {% if has_children %}
                         <ul>
                             {% for child in folder.children %}
                                 {{ render_folder(child) }}
@@ -101,7 +103,7 @@
                 </li>
             {% endmacro %}
 
-            <ul class="explr hidden" id="tree">
+            <ul class="explr hidden" id="tree" data-working-folder-id="{{ working_folder.id }}">
                 {{ render_folder(folders_tree) }}
             </ul>
         </div>
@@ -131,7 +133,6 @@
                                         {{ truncate(dir, 25, '...') }}
                                     </a>
                                 {% endif %}
-
                             </li>
                             {% if not loop.last %}
                                 <li class="divider">
@@ -153,7 +154,7 @@
 
                     {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
                     {% if parent_path %}
-                        <li class="previous-folder droppable" data-path="{{ parent_path }}" data-id="{{ working_folder.parent_id }}">
+                        <li class="previous-folder droppable" data-path="{{ parent_path }}" data-id="{{ working_folder.parent_id }}" data-folder="1">
                             <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}" class="explr-link">
                                 <i class="fa fa-folder"></i>
                                 ..
