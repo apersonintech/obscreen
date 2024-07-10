@@ -4,7 +4,7 @@ button,
 	$shadowOffset: 2px;
 
 	position: relative;
-	padding: 10px 10px 8px 10px;
+	padding: 10px 13px 8px 10px;
 	font-size: 14px;
 	color: #fff;
 	cursor: pointer;
@@ -29,6 +29,14 @@ button,
 		background: darken($seaBlue, 20%);
 		color: rgba(white, .5);
 		box-shadow: none;
+	}
+
+	&.btn-neutral {
+		color: #AAA;
+		background: $neutralGrey;
+		box-shadow: 0 $shadowOffset 0 0 darken($neutralGrey, 10%);
+		&:hover { box-shadow: 0 $shadowOffset 0 1px #222 inset; background: darken($neutralGrey, 10%); }
+		&:focus { background: darken($neutralGrey, 20%); }
 	}
 
 	&.btn-info {
