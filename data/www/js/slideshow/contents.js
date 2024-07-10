@@ -11,10 +11,10 @@ jQuery(document).ready(function ($) {
             const active = $(this).attr('id') === 'content-add-object-input-' + inputType;
 
             if ($(this).is('input[type=file]')) {
-                 $(this).prop('disabled', !active);
+                $(this).prop('disabled', !active).prop('required', active);
                 $(this).parents('label:eq(0)').toggleClass('hidden', !active);
             } else {
-                $(this).prop('disabled', !active).toggleClass('hidden', !active);
+                $(this).prop('disabled', !active).prop('required', active).toggleClass('hidden', !active);
             }
         });
 
