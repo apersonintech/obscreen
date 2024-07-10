@@ -225,6 +225,7 @@
     "common_submit": "Envoyer",
     "common_validate": "Valider",
     "common_apply": "Appliquer",
+    "common_saved": "Les modifications ont été enregistrées",
     "logout": "Déconnexion",
     "login_error_not_found": "Identifiants invalides",
     "login_error_bad_credentials": "Identifiants invalides",

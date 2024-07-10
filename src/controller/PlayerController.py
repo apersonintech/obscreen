@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Optional
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify, abort
 
+from src.model.entity.Slide import Slide
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
 from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, get_cron_date_time
@@ -14,8 +15,22 @@ from src.model.enum.AnimationSpeed import animation_speed_duration
 
 class PlayerController(ObController):
 
-    def _get_playlist(self, playlist_id: Optional[int] = 0) -> dict:
-        enabled_slides = self._model_store.slide().get_slides(enabled=True, playlist_id=playlist_id)
+    def _get_playlist(self, playlist_id: Optional[int] = 0, preview_content_id: Optional[int] = None) -> dict:
+        enabled_slides = []
+        preview_mode = False
+
+        if preview_content_id:
+            content = self._model_store.content().get(preview_content_id)
+
+            if content:
+                enabled_slides = [Slide(
+                    content_id=content.id,
+                    duration=1000000,
+                )]
+                preview_mode = True
+        else:
+            enabled_slides = self._model_store.slide().get_slides(enabled=True, playlist_id=playlist_id)
+
         slides = self._model_store.slide().to_dict(enabled_slides)
         contents = self._model_store.content().get_all_indexed()
         playlist = self._model_store.playlist().get(playlist_id)
@@ -25,7 +40,10 @@ class PlayerController(ObController):
 
         for slide in slides:
             if slide['content_id']:
-                content = contents[slide['content_id']].to_dict()
+                if int(slide['content_id']) not in contents:
+                    continue
+
+                content = contents[int(slide['content_id'])].to_dict()
                 slide['name'] = content['name']
                 slide['location'] = content['location']
                 slide['type'] = content['type']
@@ -59,6 +77,7 @@ class PlayerController(ObController):
             'playlist_id': playlist.id if playlist else None,
             'time_sync': playlist.time_sync if playlist else self._model_store.variable().get_one_by_name("playlist_default_time_sync").as_bool(),
             'loop': playlist_loop,
+            'preview_mode': preview_mode,
             'notifications': playlist_notifications,
             'hard_refresh_request': self._model_store.variable().get_one_by_name("refresh_player_request").as_int()
         }
@@ -73,6 +92,7 @@ class PlayerController(ObController):
         self._app.add_url_rule('/player/playlist/use/<playlist_slug_or_id>', 'player_playlist_use', self.player_playlist, methods=['GET'])
 
     def player(self, playlist_slug_or_id: str = ''):
+        preview_content_id = request.args.get('preview_content_id')
         playlist_slug_or_id = self._get_dynamic_playlist_id(playlist_slug_or_id)
 
         current_playlist = self._model_store.playlist().get_one_by("slug = ? OR id = ?", {
@@ -87,7 +107,7 @@ class PlayerController(ObController):
 
         return render_template(
             'player/player.jinja.html',
-            items=json.dumps(self._get_playlist(playlist_id=playlist_id)),
+            items=json.dumps(self._get_playlist(playlist_id=playlist_id, preview_content_id=preview_content_id)),
             default_slide_duration=self._model_store.variable().get_one_by_name('default_slide_duration'),
             polling_interval=self._model_store.variable().get_one_by_name('polling_interval'),
             slide_animation_enabled=self._model_store.variable().get_one_by_name('slide_animation_enabled'),
