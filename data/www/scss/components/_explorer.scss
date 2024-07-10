@@ -70,15 +70,14 @@ ul.explr-dirview {
 		}
 
 		&.highlight-drop {
-			border: 1px dashed rgba($white, .2);
-			background: rgba($white, .1);
-		}
-
-		&.highlight-clicked {
 			border: 1px dashed rgba($seaBlue, .4);
 			background: rgba($seaBlue, .3);
 		}
 
+		&.highlight-clicked {
+			border: 1px dashed rgba($white, .2);
+			background: rgba($white, .1);
+		}
 
 		a {
 			color: #BBB;

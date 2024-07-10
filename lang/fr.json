@@ -63,6 +63,8 @@
     "slideshow_content_form_label_type": "Type",
     "slideshow_content_form_label_object": "Objet",
     "slideshow_content_form_button_cancel": "Annuler",
+    "slideshow_content_form_button_upload": "Uploader un fichier",
+    "slideshow_content_form_button_upload_choosen": "Aucun fichier sélectionné",
     "js_slideshow_content_delete_confirmation": "Êtes-vous sûr ?",
 
     "playlist_page_title": "Listes de lecture",

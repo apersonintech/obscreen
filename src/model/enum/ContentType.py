@@ -16,9 +16,9 @@ class ContentInputType(Enum):
 
 class ContentType(Enum):
 
+    PICTURE = 'picture'
     URL = 'url'
     YOUTUBE = 'youtube'
-    PICTURE = 'picture'
     VIDEO = 'video'
 
     @staticmethod

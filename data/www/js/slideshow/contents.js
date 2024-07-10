@@ -1,18 +1,4 @@
 jQuery(document).ready(function ($) {
-    const getId = function ($el) {
-        return $el.is('tr') ? $el.attr('data-level') : $el.parents('tr:eq(0)').attr('data-level');
-    };
-
-    const updateTable = function () {
-        $('table').each(function () {
-            if ($(this).find('tbody tr.content-item:visible').length === 0) {
-                $(this).find('tr.empty-tr').removeClass('hidden');
-            } else {
-                $(this).find('tr.empty-tr').addClass('hidden');
-            }
-        });
-    };
-
     const inputTypeUpdate = function () {
         const $el = $('#content-add-type');
         const value = $el.val();
@@ -85,8 +71,13 @@ jQuery(document).ready(function ($) {
     };
 
     $(document).on('change', '.modal input[type=file]', function() {
-        const file = $(this).val().replace(/\\/g, '/').split('/').slice(-1);
+        const file = $(this).val().replace(/\\/g, '/').split('/').slice(-1)[0];
         $(this).parents('label:eq(0)').find('input[type=text]').val(file);
+
+        if ($('#content-add-name').val().trim().length === 0) {
+            const fileWithoutExt = file.split('.').slice(0, -1).join('.');
+            $('#content-add-name').val(fileWithoutExt);
+        }
     });
 
     $(document).on('change', '#content-add-type', inputTypeUpdate);
@@ -96,7 +87,6 @@ jQuery(document).ready(function ($) {
         $('.page-content').animate({scrollTop: 0}, 0);
         $('.dirview input').focus();
     });
-
 
     $(document).on('click', '.content-add', function () {
         showModal('modal-content-add');
@@ -147,23 +137,16 @@ jQuery(document).ready(function ($) {
         $('#content-edit-id').val(content.id);
     });
 
-    $(document).on('click', '.content-delete', function () {
-        if (confirm(l.js_slideshow_content_delete_confirmation)) {
-            const $tr = $(this).parents('tr:eq(0)');
-            $tr.remove();
-            updateTable();
-            $.ajax({
-                method: 'DELETE',
-                url: '/slideshow/content/delete',
-                headers: {'Content-Type': 'application/json'},
-                data: JSON.stringify({id: getId($(this))}),
-            });
-        }
+    $(document).on('submit', '.modal-content-add form', function () {
+        const $modal = $(this).parents('.modal:eq(0)');
+        $modal.find('button[type=submit]').addClass('hidden');
+        $modal.find('.btn-loading').removeClass('hidden');
     });
 
-    $(document).on('submit', '.modal-content-add form', function () {
-        $(this).find('button[type=submit]').addClass('hidden');
-        $(this).find('.btn-loading').removeClass('hidden');
+     $(document).keyup(function (e) {
+        if (e.key === "Escape") {
+            $('.dirview .new-folder').addClass('hidden');
+        }
     });
 
     main();

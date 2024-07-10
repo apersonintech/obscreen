@@ -38,6 +38,13 @@ button,
 		&:focus { background: darken($info, 20%); }
 	}
 
+	&.btn-naked {
+		background: transparent;
+		box-shadow: none;
+		&:hover { box-shadow: 0 $shadowOffset 0 1px #222 inset; background: darken($neutralGrey, 10%); }
+		&:focus { background: darken($neutralGrey, 20%); }
+	}
+
 	&.btn-info-alt {
 		background: $bitterBlue;
 		box-shadow: 0 $shadowOffset 0 0 darken($bitterBlue, 20%);
