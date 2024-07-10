@@ -24,7 +24,7 @@ class ContentController(ObController):
         self._app.add_url_rule('/slideshow/content/delete-folder', 'slideshow_content_folder_delete', self._auth(self.slideshow_content_folder_delete), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/add', 'slideshow_content_add', self._auth(self.slideshow_content_add), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/edit', 'slideshow_content_edit', self._auth(self.slideshow_content_edit), methods=['POST'])
-        self._app.add_url_rule('/slideshow/content/delete', 'slideshow_content_delete', self._auth(self.slideshow_content_delete), methods=['DELETE'])
+        self._app.add_url_rule('/slideshow/content/delete', 'slideshow_content_delete', self._auth(self.slideshow_content_delete), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/show/<content_id>', 'slideshow_content_show', self._auth(self.slideshow_content_show), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/cd', 'slideshow_content_cd', self._auth(self.slideshow_content_cd), methods=['GET'])
 
@@ -106,10 +106,19 @@ class ContentController(ObController):
         return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_delete(self):
-        data = request.get_json()
-        self._model_store.content().delete(data.get('id'))
+        content = self._model_store.content().get(request.args.get('id'))
+
+        if not content:
+            return redirect(url_for('slideshow_content_list'))
+
+        slide_counter = self._model_store.slide().count_slides_for_content(content.id)
+
+        if slide_counter > 0:
+            return redirect(url_for('slideshow_content_list', referenced_in_slide_error=True))
+
+        self._model_store.content().delete(content.id)
         self._post_update()
-        return jsonify({'status': 'ok'})
+        return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_cd(self):
         path = request.args.get('path')

@@ -30,7 +30,7 @@
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}">
+                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}" data-content-route="{{ url_for('slideshow_content_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
                 <button class="explr-item-edit btn-info">
@@ -54,6 +54,13 @@
         <div class="alert alert-danger">
             <i class="fa fa-warning icon-left"></i>
             {{ l.slideshow_content_folder_not_empty_error }}
+        </div>
+    {% endif %}
+
+    {% if request.args.get('referenced_in_slide_error') %}
+        <div class="alert alert-danger">
+            <i class="fa fa-warning icon-left"></i>
+            {{ l.slideshow_content_referenced_in_slide_error }}
         </div>
     {% endif %}
 
@@ -170,7 +177,8 @@
                         </li>
                     {% endfor %}
 
-                    {% for content in contents[working_folder.id]|default([]) %}
+
+                    {% for content in contents[working_folder.id|default(None)]|default([]) %}
                         {% set icon = 'fa-file' %}
                         {% if content.type.value == 'picture' %}
                             {% set icon = 'fa-regular fa-image info' %}

@@ -49,6 +49,7 @@
     "slideshow_content_button_add": "New Content",
     "slideshow_content_button_add_folder": "New Folder",
     "slideshow_content_folder_not_empty_error": "Folder isn't empty, you must delete its content first",
+    "slideshow_content_referenced_in_slide_error": "Content is referenced in a slide, remove slide first",
     "slideshow_content_panel_active": "Content",
     "slideshow_content_panel_empty": "Currently, there are no content. %link% now.",
     "slideshow_content_panel_th_name": "Name",

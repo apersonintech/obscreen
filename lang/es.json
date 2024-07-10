@@ -49,6 +49,7 @@
     "slideshow_content_button_add": "Nuevo Contenido",
     "slideshow_content_button_add_folder": "Nuevo Carpeta",
     "slideshow_content_folder_not_empty_error": "La carpeta no está vacía, primero debes eliminar su contenido",
+    "slideshow_content_referenced_in_slide_error": "Se hace referencia al contenido en una diapositiva; elimine la diapositiva primero",
     "slideshow_content_panel_active": "Contenido",
     "slideshow_content_panel_empty": "Actualmente, no hay contenido. %link% ahora.",
     "slideshow_content_panel_th_name": "Nombre",
