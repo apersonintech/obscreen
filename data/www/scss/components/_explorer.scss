@@ -29,6 +29,17 @@ ul.explr-tree {
 	}
 }
 
+.explr-selection-actions {
+	display: none;
+	margin-right: 10px;
+	border-right: 1px solid #222;
+	padding-right: 20px;
+}
+
+.explr-selection .explr-selection-actions {
+	display: flex;
+}
+
 ul.explr-dirview {
 	display: flex;
 	flex-direction: row;
@@ -47,12 +58,16 @@ ul.explr-dirview {
 		border: 1px solid transparent;
 		border-radius: $baseRadius;
 
-		&.new-folder {
+		&.renaming {
 			a {
-				color: $seaBlue;
+				span {
+					display: none;
+				}
+				form {
+					display: block;
+				}
 			}
 		}
-
 
 		&.highlight-drop {
 			border: 1px dashed rgba($white, .2);
@@ -63,6 +78,7 @@ ul.explr-dirview {
 			border: 1px dashed rgba($seaBlue, .4);
 			background: rgba($seaBlue, .3);
 		}
+
 
 		a {
 			color: #BBB;
@@ -84,6 +100,7 @@ ul.explr-dirview {
 
 			input {
 				width: 100%;
+				padding: 0 3px;
 
 				&:focus {
 					outline: none;
@@ -93,13 +110,28 @@ ul.explr-dirview {
 			&:hover {
 				opacity: 0.8;
 			}
+
+			form {
+				display: none;
+			}
+		}
+
+		&.new-folder {
+			a {
+				color: $seaBlue;
+
+				form {
+					display: block;
+				}
+			}
+		}
+	}
+
+	.ui-draggable-dragging {
+		z-index: 20;
+		a {
+			opacity: 1 !important;
 		}
 	}
 }
 
-.ui-draggable-dragging {
-	z-index: 20;
-	a {
-		opacity: 1 !important;
-	}
-}

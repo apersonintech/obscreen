@@ -86,8 +86,16 @@ class ContentManager(ModelManager):
         for content_id, edits in edits_contents.items():
             self._db.update_by_id(self.TABLE_NAME, content_id, edits)
 
-    def get_contents(self) -> List[Content]:
-        return self.get_all(sort=True)
+    def get_contents(self, slide_id: Optional[id] = None, folder_id: Optional[id] = None) -> List[Content]:
+        query = " 1=1 "
+
+        if slide_id:
+            query = "{} {}".format(query, "AND slide_id = {}".format(slide_id))
+
+        if folder_id:
+            query = "{} {}".format(query, "AND folder_id = {}".format(folder_id))
+
+        return self.get_by(query=query)
 
     def pre_add(self, content: Dict) -> Dict:
         self.user_manager.track_user_on_create(content)
@@ -189,5 +197,8 @@ class ContentManager(ModelManager):
     def to_dict(self, contents: List[Content]) -> List[Dict]:
         return [content.to_dict() for content in contents]
 
-    def count_contents_for_slide(self, id: int) -> int:
-        return len(self.get_contents())
+    def count_contents_for_slide(self, slide_id: int) -> int:
+        return len(self.get_contents(slide_id=slide_id))
+
+    def count_contents_for_folder(self, folder_id: int) -> int:
+        return len(self.get_contents(folder_id=folder_id))

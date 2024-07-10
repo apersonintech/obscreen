@@ -28,20 +28,34 @@
 
         <div class="top-actions">
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
-            <button class="folder-add btn-success-alt">
-                <i class="fa fa-folder-plus"></i>
-            </button>
+
+            <div class="explr-selection-actions">
+                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}">
+                    <i class="fa fa-trash-alt"></i>
+                </button>
+                <button class="explr-item-edit btn-info">
+                    <i class="fa fa-pencil"></i>
+                </button>
+            </div>
+
             <button class="content-add item-add">
                 <i class="fa fa-file-circle-plus icon-left"></i>
                 {{ l.slideshow_content_button_add }}
+            </button>
+            <button class="folder-add btn-success-alt">
+                <i class="fa fa-folder-plus"></i>
+                {{ l.slideshow_content_button_add_folder }}
             </button>
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
 
-{#    <div class="alert alert-info">#}
-{#        <i class="fa fa-warning"></i> Ceci est une alerte d'info#}
-{#    </div>#}
+    {% if request.args.get('folder_not_empty_error') %}
+        <div class="alert alert-danger">
+            <i class="fa fa-warning icon-left"></i>
+            {{ l.slideshow_content_folder_not_empty_error }}
+        </div>
+    {% endif %}
 
     <div class="breadcrumb-container">
         <ul class="breadcrumb">
@@ -115,9 +129,9 @@
         </div>
 
         <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}" class="hidden" method="POST">
-            <input type="text" name="entity_id" />
-            <input type="text" name="new_folder_id" />
-            <input type="text" name="is_folder" />
+            <input type="hidden" name="entity_id" />
+            <input type="hidden" name="new_folder_id" />
+            <input type="hidden" name="is_folder" />
         </form>
 
         <div class="page-content">
@@ -127,7 +141,7 @@
                         <a href="javascript:void(0);">
                             <i class="fa fa-folder"></i>
                             <form action="{{ url_for('slideshow_content_folder_add') }}" method="POST">
-                                <input type="text" name="name" />
+                                <input type="text" name="name" autocomplete="off" />
                             </form>
                         </a>
                     </li>
@@ -145,9 +159,13 @@
                     {% for folder in working_folder_children %}
                         {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
                         <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}" data-folder="1">
-                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}" class="explr-link">
+                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}" class="explr-link explr-item-selectable">
                                 <i class="fa fa-folder"></i>
-                                {{ truncate(folder.name, 25, '...') }}
+                                <span>{{ truncate(folder.name, 25, '...') }}</span>
+                                <form action="{{ url_for('slideshow_content_folder_rename') }}" method="POST">
+                                    <input type="text" name="name" value="{{ folder.name }}" autocomplete="off" />
+                                    <input type="hidden" name="id" value="{{ folder.id }}" />
+                                </form>
                             </a>
                         </li>
                     {% endfor %}
@@ -165,7 +183,7 @@
                         {% endif %}
 
                         <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}" data-folder="0">
-                            <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank" class="explr-link">
+                            <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank" class="explr-link explr-item-selectable">
                                 <i class="fa {{ icon }}"></i>
                                 {{ truncate(content.name, 25, '...') }}
                             </a>

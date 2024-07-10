@@ -47,6 +47,8 @@
 
     "slideshow_content_page_title": "Content Library",
     "slideshow_content_button_add": "New Content",
+    "slideshow_content_button_add_folder": "New Folder",
+    "slideshow_content_folder_not_empty_error": "Folder isn't empty, you must delete its content first",
     "slideshow_content_panel_active": "Content",
     "slideshow_content_panel_empty": "Currently, there are no content. %link% now.",
     "slideshow_content_panel_th_name": "Name",

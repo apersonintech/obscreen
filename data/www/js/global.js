@@ -105,9 +105,13 @@ jQuery(document).ready(function ($) {
         event.preventDefault();
         $('a.explr-link').removeClass('highlight-clicked');
         $('a.explr-link').parent().removeClass('highlight-clicked');
-        $(this).addClass('highlight-clicked');
-        $(this).parent().addClass('highlight-clicked');
-        $('body').addClass('explr-selection');
+        $('body').removeClass('explr-selection');
+
+        if ($(this).hasClass('explr-item-selectable')) {
+            $(this).addClass('highlight-clicked');
+            $(this).parent().addClass('highlight-clicked');
+            $('body').addClass('explr-selection');
+        }
     });
     $(document).on('dblclick', 'a.explr-link', function (event) {
         event.preventDefault();
