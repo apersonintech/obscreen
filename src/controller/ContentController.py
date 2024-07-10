@@ -22,8 +22,9 @@ class ContentController(ObController):
         self._app.add_url_rule('/slideshow/content/move-folder', 'slideshow_content_folder_move', self._auth(self.slideshow_content_folder_move), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/rename-folder', 'slideshow_content_folder_rename', self._auth(self.slideshow_content_folder_rename), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/delete-folder', 'slideshow_content_folder_delete', self._auth(self.slideshow_content_folder_delete), methods=['GET'])
-        self._app.add_url_rule('/slideshow/content/add', 'slideshow_content_add', self._auth(self.slideshow_content_add), methods=['POST'])
-        self._app.add_url_rule('/slideshow/content/edit', 'slideshow_content_edit', self._auth(self.slideshow_content_edit), methods=['POST'])
+        self._app.add_url_rule('/slideshow/content/add', 'slideshow_content_add', self._auth(self.slideshow_content_add), methods=['GET', 'POST'])
+        self._app.add_url_rule('/slideshow/content/edit/<content_id>', 'slideshow_content_edit', self._auth(self.slideshow_content_edit), methods=['GET'])
+        self._app.add_url_rule('/slideshow/content/save', 'slideshow_content_save', self._auth(self.slideshow_content_save), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/delete', 'slideshow_content_delete', self._auth(self.slideshow_content_delete), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/show/<content_id>', 'slideshow_content_show', self._auth(self.slideshow_content_show), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/cd', 'slideshow_content_cd', self._auth(self.slideshow_content_cd), methods=['GET'])
@@ -95,7 +96,19 @@ class ContentController(ObController):
 
         return redirect(url_for('slideshow_content_list'))
 
-    def slideshow_content_edit(self):
+    def slideshow_content_edit(self, content_id: int = 0):
+        working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
+        working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
+        return render_template(
+            'slideshow/contents/edit.jinja.html',
+            working_folder_path=working_folder_path,
+            working_folder=working_folder,
+            working_folder_children=self._model_store.folder().get_children(working_folder),
+            enum_content_type=ContentType,
+            enum_folder_entity=FolderEntity,
+        )
+
+    def slideshow_content_save(self):
         self._model_store.content().update_form(
             id=request.form['id'],
             name=request.form['name'],

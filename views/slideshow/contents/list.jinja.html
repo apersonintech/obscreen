@@ -33,12 +33,12 @@
                 <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}" data-content-route="{{ url_for('slideshow_content_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
-                <button class="explr-item-edit btn-info">
+                <button class="explr-item-edit btn-info" data-content-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
                     <i class="fa fa-pencil"></i>
                 </button>
             </div>
 
-            <button class="content-add item-add">
+            <button class="btn btn-info content-add item-add">
                 <i class="fa fa-file-circle-plus icon-left"></i>
                 {{ l.slideshow_content_button_add }}
             </button>
@@ -66,7 +66,7 @@
 
 
     <div class="bottom-content">
-        <div class="page-panel left-panel">
+        <div class="page-panel left-panel explr-explorer">
 
             {% macro render_folder(folder) %}
                 <li class="icon-folder">
@@ -115,7 +115,7 @@
         </form>
 
         <div class="page-content">
-            <div class="dirview">
+            <div class="inner dirview">
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
                         {% set ns = namespace(breadpath='') %}
@@ -179,15 +179,16 @@
 
 
                     {% for content in contents[working_folder.id|default(None)]|default([]) %}
-                        {% set icon = 'fa-file' %}
+                        {% set icon = enum_content_type.get_fa_icon(content.type) %}
+
                         {% if content.type.value == 'picture' %}
-                            {% set icon = 'fa-regular fa-image info' %}
+                            {% set icon = icon ~ ' info' %}
                         {% elif content.type.value == 'video' %}
-                            {% set icon = 'fa-video-camera success' %}
+                            {% set icon = icon ~ ' success' %}
                         {% elif content.type.value == 'url' %}
-                            {% set icon = 'fa-link danger' %}
+                            {% set icon = icon ~ ' danger' %}
                         {% elif content.type.value == 'youtube' %}
-                            {% set icon = 'fa-brands fa-youtube youtube' %}
+                            {% set icon = icon ~ ' youtube' %}
                         {% endif %}
 
                         <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}" data-folder="0">
@@ -196,16 +197,12 @@
                                 {{ truncate(content.name, 25, '...') }}
                             </a>
                         </li>
-
                     {% endfor %}
                 </ul>
             </div>
 
             <div class="modals hidden">
                 <div class="modals-outer">
-                    <a href="javascript:void(0);" class="modal-close">
-                        <i class="fa fa-close"></i>
-                    </a>
                     <div class="modals-inner">
                         {% include 'slideshow/contents/modal/add.jinja.html' %}
                         {% include 'slideshow/contents/modal/edit.jinja.html' %}

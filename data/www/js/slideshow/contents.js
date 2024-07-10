@@ -16,6 +16,7 @@ jQuery(document).ready(function ($) {
     const inputTypeUpdate = function () {
         const $el = $('#content-add-type');
         const value = $el.val();
+        const $selectedOption = $('#content-add-type option[value='+value+']');
         const inputType = $el.find('option').filter(function (i, el) {
             return $(el).val() === value;
         }).data('input');
@@ -27,6 +28,8 @@ jQuery(document).ready(function ($) {
             .removeClass('hidden')
             .prop('disabled', false)
         ;
+
+        $('.object-label-add').html($selectedOption.get(0).attributes['data-object-label'].value);
     };
 
     const initExplr = function () {

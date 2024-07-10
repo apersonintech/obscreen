@@ -31,3 +31,16 @@ class ContentType(Enum):
             return ContentInputType.TEXT
         elif value == ContentType.URL:
             return ContentInputType.TEXT
+
+    @staticmethod
+    def get_fa_icon(value: Enum) -> ContentInputType:
+        if value == ContentType.PICTURE:
+            return 'fa-regular fa-image'
+        elif value == ContentType.VIDEO:
+            return 'fa-video-camera'
+        elif value == ContentType.YOUTUBE:
+            return 'fa-brands fa-youtube'
+        elif value == ContentType.URL:
+            return 'fa-link'
+
+        return 'fa-file'

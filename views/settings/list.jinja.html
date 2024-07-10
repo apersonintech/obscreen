@@ -10,42 +10,61 @@
 {% endblock %}
 
 {% block page %}
-    <div class="toolbar">
-        <h2><i class="fa fa-cogs icon-left"></i>{{ l.settings_page_title }}</h2>
+    <div class="top-content">
+        <h1>
+            {{ l.settings_page_title }}
+        </h1>
+
+        <div class="top-actions">
+            <button class="folder-add btn-success-alt">
+                <i class="fa fa-save"></i>
+                {{ l.common_save }}
+            </button>
+        </div>
     </div>
 
     {% if request.args.get('error') %}
         <div class="alert alert-error">{{ request.args.get('error') }}</div>
     {% endif %}
 
-    <div class="panel">
-        <div class="panel-body">
-            <h3>{{ l.settings_variable_panel_system_variables }}</h3>
+    <div class="bottom-content">
+        <div class="page-content">
+            <div class="inner">
 
-            {% with variables=system_variables %}
-                {% include 'settings/component/table.jinja.html' %}
-            {% endwith %}
-        </div>
-    </div>
 
-    <div class="panel panel-inactive">
-        <div class="panel-body">
-            <h3>{{ l.settings_variable_panel_plugin_variables }}</h3>
+                    <div class="panel">
+                        <div class="panel-body">
+                            <h3>{{ l.settings_variable_panel_system_variables }}</h3>
 
-            {% with variables=plugin_variables %}
-                {% include 'settings/component/table.jinja.html' %}
-            {% endwith %}
-        </div>
-    </div>
+                            {% with variables=system_variables %}
+                                {% include 'settings/component/table.jinja.html' %}
+                            {% endwith %}
+                        </div>
+                    </div>
 
-    <div class="modals hidden">
-        <div class="modals-outer">
-            <a href="javascript:void(0);" class="modal-close">
-                <i class="fa fa-close"></i>
-            </a>
-            <div class="modals-inner">
-                {% include 'settings/modal/edit.jinja.html' %}
+                    <div class="panel panel-inactive">
+                        <div class="panel-body">
+                            <h3>{{ l.settings_variable_panel_plugin_variables }}</h3>
+
+                            {% with variables=plugin_variables %}
+                                {% include 'settings/component/table.jinja.html' %}
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="modals hidden">
+                        <div class="modals-outer">
+                            <a href="javascript:void(0);" class="modal-close">
+                                <i class="fa fa-close"></i>
+                            </a>
+                            <div class="modals-inner">
+                                {% include 'settings/modal/edit.jinja.html' %}
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>
+
+
 {% endblock %}

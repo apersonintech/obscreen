@@ -78,7 +78,6 @@
 	background-position: 0 0;
 	height: 16px;
 	width: 16px;
-	z-index: 1;
 }
 
 .explr-toggler {
@@ -89,7 +88,6 @@
 	margin-top: 2px;
 	position: absolute;
 	width: 40px;
-	z-index: 1;
 }
 
 /*.explr-plus { background-image: url("../../img/explr/plus.png"); }*/
