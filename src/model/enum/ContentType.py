@@ -44,3 +44,16 @@ class ContentType(Enum):
             return 'fa-link'
 
         return 'fa-file'
+
+    @staticmethod
+    def get_color_icon(value: Enum) -> ContentInputType:
+        if value == ContentType.PICTURE:
+            return 'info'
+        elif value == ContentType.VIDEO:
+            return 'success'
+        elif value == ContentType.YOUTUBE:
+            return 'youtube'
+        elif value == ContentType.URL:
+            return 'danger'
+
+        return 'neutral'

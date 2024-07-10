@@ -78,15 +78,13 @@
                                 </div>
                             </div>
 
-                             <button type="submit" class="folder-edit btn-info">
-                                <i class="fa fa-save icon-left"></i>
-                                {{ l.common_save }}
-                            </button>
+                            <div class="actions actions-left">
+                                <button type="submit" class="folder-edit btn-info">
+                                    <i class="fa fa-save icon-left"></i>
+                                    {{ l.common_save }}
+                                </button>
+                            </div>
                         </form>
-                    </div>
-
-                    <div class="preview-holder">
-                        Hi
                     </div>
                 </div>
             </div>
@@ -94,8 +92,17 @@
 
 
         <div class="page-panel right-panel">
+            {% set icon = enum_content_type.get_fa_icon(content.type) %}
+            {% set color = enum_content_type.get_color_icon(content.type) %}
 
-
+            <h3>
+                <span class="{{ color }} border-{{ color }}">
+                    <i class="fa {{ icon }} {{ color }}"></i> {{ t(content.type) }}
+                </span>
+            </h3>
+            <div class="iframe-wrapper">
+                 <iframe src="{{ url_for('player', preview_content_id=content.id) }}"></iframe>
+            </div>
         </div>
 
     </div>

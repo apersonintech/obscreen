@@ -136,6 +136,9 @@ class ContentManager(ModelManager):
 
         if content.type == ContentType.YOUTUBE:
             form['location'] = get_yt_video_id(form['location'])
+        elif content.type == ContentType.URL:
+            if not form['location'].startswith('http'):
+                form['location'] = "https://{}".format(form['location'])
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
