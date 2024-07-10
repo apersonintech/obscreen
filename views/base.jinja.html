@@ -107,7 +107,8 @@
             {% set route_to_category = route_to_category.update({pill.route: category}) or route_to_category %}
         {% endfor %}
     {% endfor %}
-    {% set current_dynmenu = dynmenu[route_to_category[request.url_rule.endpoint]] %}
+    {% set active_route = active_pill_route if active_pill_route else request.url_rule.endpoint %}
+    {% set current_dynmenu = dynmenu[route_to_category[active_route]] %}
 
     {% block header %}
         <menu>
@@ -124,7 +125,7 @@
                     <ul>
                         {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
                         {% for category, menu in dynmenu.items() %}
-                            <li class="{{ 'active' if menu.name == current_dynmenu.name }}">
+                            <li class="{{ 'active' if current_dynmenu and menu.name == current_dynmenu.name }}">
                                 <a href="{{ url_for(menu.pills[0].route) }}">
                                     <i class="fa {{ menu.icon }}"></i> {{ menu.name }}
                                 </a>
@@ -160,7 +161,7 @@
                     <div class="inner">
                         <ul class="pills">
                             {% for menu in current_dynmenu.pills %}
-                                <li class="{{ 'active' if request.url_rule.endpoint == menu.route }}">
+                                <li class="{{ 'active' if active_route == menu.route }}">
                                     <a href="{{ url_for(menu.route) }}">
                                         <span class="icon">
                                             <i class="fa {{ menu.icon }}"></i>
@@ -189,7 +190,7 @@
                         </div>
                         <ul class="dropdown-menu">
                             <li class="danger">
-                                <a href="#_">
+                                <a href="{{ url_for('logout') }}">
                                     <i class="fa fa-power-off"></i> {{ l.logout }}
                                 </a>
                             </li>
