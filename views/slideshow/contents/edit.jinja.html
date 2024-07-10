@@ -1,0 +1,112 @@
+{% extends 'base.jinja.html' %}
+
+{% block page_title %}
+    {{ l.slideshow_content_page_title }}
+{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css"/>
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/jquery-explr-1.4.css"/>
+    {{ HOOK(H_SLIDESHOW_CONTENT_CSS) }}
+{% endblock %}
+
+{% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
+
+    {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
+{% endblock %}
+
+{% block body_class %}view-content-list{% endblock %}
+
+{% block page %}
+    <div class="top-content">
+        <h1>
+            {{ l.slideshow_content_form_edit_title }}
+        </h1>
+
+        <div class="top-actions">
+            <button class="folder-edit btn-success-alt">
+                <i class="fa fa-save"></i>
+                {{ l.common_save }}
+            </button>
+        </div>
+    </div>
+
+    <div class="bottom-content">
+        <div class="page-content">
+            <div class="inner dirview">
+                <div class="breadcrumb-container">
+                    <ul class="breadcrumb">
+                        {% set ns = namespace(breadpath='') %}
+                        {% for dir in working_folder_path[1:].split('/') %}
+                            {% set ns.breadpath = ns.breadpath ~ '/' ~ dir %}
+                            <li>
+                                <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
+                                    <i class="explr-icon explr-icon-folder"></i>
+                                    {{ truncate(dir, 25, '...') }}
+                                </a>
+                            </li>
+                            {% if not loop.last %}
+                                <li class="divider">
+                                    <i class="fa fa-chevron-right"></i>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="horizontal">
+                    <div class="form-holder">
+                        <form class="form" action="{{ url_for('slideshow_content_save') }}" method="POST">
+
+                        <input type="hidden" name="id" id="content-edit-id" />
+
+                        <div class="form-group">
+                            <label for="content-edit-name">{{ l.slideshow_content_form_label_name }}</label>
+                            <div class="widget">
+                                <input type="text" name="name" id="content-edit-name" required="required" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="content-edit-type">{{ l.slideshow_content_form_label_type }}</label>
+                            <div class="widget">
+                                <select id="content-edit-type" name="type" disabled="disabled">
+                                    {% for type in enum_content_type %}
+                                        <option value="{{ type.value }}" data-input="{% if type.value == 'url' or type.value == 'youtube' %}text{% else %}upload{% endif %}">
+                                            {{ t(type) }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="content-edit-location">{{ l.slideshow_content_form_label_location }}</label>
+                            <div class="widget">
+                                <input type="text" name="location" id="content-edit-location" />
+                            </div>
+                        </div>
+
+
+                        <div class="actions">
+                            <button type="button" class="btn-normal modal-close">
+                                {{ l.slideshow_content_form_button_cancel }}
+                            </button>
+                            <button type="submit" class="green">
+                                <i class="fa fa-save icon-left"></i>{{ l.slideshow_content_form_edit_submit }}
+                            </button>
+                        </div>
+                    </form>
+                    </div>
+
+                    <div class="preview-holder">
+                        Hi
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
