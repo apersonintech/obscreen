@@ -25,7 +25,10 @@ class PlayerController(ObController):
 
         for slide in slides:
             if slide['content_id']:
-                content = contents[slide['content_id']].to_dict()
+                if int(slide['content_id']) not in contents:
+                    continue
+
+                content = contents[int(slide['content_id'])].to_dict()
                 slide['name'] = content['name']
                 slide['location'] = content['location']
                 slide['type'] = content['type']
