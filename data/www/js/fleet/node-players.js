@@ -6,6 +6,7 @@ jQuery(document).ready(function ($) {
 
     const inputOperatingSystemUpdate = function () {
         const $el = $('form:visible .operating-system-select');
+        if ($el.length === 0) return;
         const $form = $el.parents('form:eq(0)');
         const value = $el.val();
         const $selectedOption = $el.find('option[value='+value+']');
