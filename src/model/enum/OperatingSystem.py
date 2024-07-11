@@ -35,6 +35,6 @@ class OperatingSystem(Enum):
         elif value == OperatingSystem.CENTOS:
             return 'fa-brands fa-centos'
         elif value == OperatingSystem.OTHER:
-            return 'fa-server'
+            return 'fa-display'
 
         return 'fa-server'

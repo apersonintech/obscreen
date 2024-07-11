@@ -1,8 +1,22 @@
 jQuery(document).ready(function ($) {
 
     const main = function () {
-
+        inputOperatingSystemUpdate();
     };
+
+    const inputOperatingSystemUpdate = function () {
+        const $el = $('form:visible .operating-system-select');
+        const $form = $el.parents('form:eq(0)');
+        const value = $el.val();
+        const $selectedOption = $el.find('option[value='+value+']');
+        const optionAttributes = $selectedOption.get(0).attributes;
+        const color = optionAttributes['data-color'].value;
+        $('.operating-system-icon').attr('class', 'operating-system-icon fa ' + optionAttributes['data-icon'].value);
+        $('.tab-select .widget').attr('class', 'widget ' + ('border-' + color) + ' ' + color);
+        $form.find('button[type=submit]').attr('class', 'btn ' + ('btn-' + color));
+    };
+
+    $(document).on('change', '.operating-system-select', inputOperatingSystemUpdate);
 
     $(document).on('click', '.folder-add', function () {
         $('.dirview .new-folder').removeClass('hidden');
@@ -12,6 +26,7 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.node-player-add', function () {
         showModal('modal-node-player-add');
+        inputOperatingSystemUpdate();
         $('.modal-node-player-add input:eq(0)').focus().select();
     });
 

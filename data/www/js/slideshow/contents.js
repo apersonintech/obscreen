@@ -1,14 +1,15 @@
 jQuery(document).ready(function ($) {
     const inputTypeUpdate = function () {
-        const $el = $('#content-add-type');
+        const $el = $('form:visible .type-select');
+        const $form = $el.parents('form:eq(0)');
         const value = $el.val();
-        const $selectedOption = $('#content-add-type option[value='+value+']');
+        const $selectedOption = $el.find('option[value='+value+']');
         const inputType = $el.find('option').filter(function (i, el) {
             return $(el).val() === value;
         }).data('input');
 
-        $('.content-add-object-input').each(function() {
-            const active = $(this).attr('id') === 'content-add-object-input-' + inputType;
+        $form.find('.content-object-input').each(function() {
+            const active = $(this).attr('data-input-type') === inputType;
 
             if ($(this).is('input[type=file]')) {
                 $(this).prop('disabled', !active).prop('required', active);
@@ -20,10 +21,10 @@ jQuery(document).ready(function ($) {
 
         const optionAttributes = $selectedOption.get(0).attributes;
         const color = optionAttributes['data-color'].value;
-        $('.object-label-add').html(optionAttributes['data-object-label'].value);
-        $('.object-icon-add').attr('class', 'object-icon-add fa ' + optionAttributes['data-icon'].value);
+        $form.find('.object-label').html(optionAttributes['data-object-label'].value);
+        $('.type-icon').attr('class', 'type-icon fa ' + optionAttributes['data-icon'].value);
         $('.tab-select .widget').attr('class', 'widget ' + ('border-' + color) + ' ' + color);
-        $('.modal:visible button[type=submit]').attr('class', 'btn ' + ('btn-' + color));
+        $form.find('button[type=submit]').attr('class', 'btn ' + ('btn-' + color));
     };
 
     const main = function () {

@@ -39,62 +39,11 @@ button,
 		&:focus { background: darken($neutralGrey, 20%); }
 	}
 
-	&.btn-info {
-		background: $info;
-		box-shadow: 0 $shadowOffset 0 0 darken($info, 20%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($info, 20%) inset; }
-		&:focus { background: darken($info, 20%); }
-	}
-
 	&.btn-naked {
 		background: transparent;
 		box-shadow: none;
 		&:hover { box-shadow: 0 $shadowOffset 0 1px #222 inset; background: darken($neutralGrey, 10%); }
 		&:focus { background: darken($neutralGrey, 20%); }
-	}
-
-	&.btn-info-alt {
-		background: $bitterBlue;
-		box-shadow: 0 $shadowOffset 0 0 darken($bitterBlue, 20%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($bitterBlue, 20%) inset; }
-		&:focus { background: darken($bitterBlue, 20%); }
-	}
-
-	&.btn-success {
-		background: $success;
-		box-shadow: 0 $shadowOffset 0 0 darken($success, 20%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($success, 20%) inset; }
-		&:focus { background: darken($success, 20%); }
-	}
-
-	&.btn-success-alt {
-		background: $bitterGreen;
-		box-shadow: 0 $shadowOffset 0 0 darken($bitterGreen, 20%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($bitterGreen, 20%) inset; }
-		&:focus { background: darken($bitterGreen, 20%); }
-	}
-
-	&.btn-danger,
-	&.btn-error {
-		background: $danger;
-		box-shadow: 0 $shadowOffset 0 0 darken($danger, 20%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($danger, 20%) inset; }
-		&:focus { background: darken($danger, 20%); }
-	}
-
-	&.btn-danger-alt,
-	&.btn-error-alt {
-		background: $bitterRed;
-		box-shadow: 0 $shadowOffset 0 0 darken($bitterRed, 20%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($bitterRed, 20%) inset; }
-		&:focus { background: darken($bitterRed, 20%); }
-	}
-
-	&.btn-youtube {
-		background: $youtube;
-		box-shadow: 0 $shadowOffset 0 0 darken($youtube, 20%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px darken($youtube, 20%) inset; }
-		&:focus { background: darken($youtube, 20%); }
 	}
 }
 

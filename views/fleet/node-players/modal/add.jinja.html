@@ -12,23 +12,24 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="node-player-add-host">{{ l.fleet_node_player_form_label_host }}</label>
+        <div class="form-group tab-select">
             <div class="widget">
-                <input name="host" type="text" id="node-player-add-host" required="required"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="node-player-add-operating-system">{{ l.fleet_node_player_form_label_operating_system }}</label>
-            <div class="widget">
-                <select name="operating_system" id="node-player-add-operating-system">
+                <i class="fa fa-get-pocket operating-system-icon"></i>
+                <select name="operating_system" id="node-player-add-operating-system" class="operating-system-select">
                     {% for os in enum_operating_system %}
-                        <option value="{{ os.value }}">
+                        <option value="{{ os.value }}" data-icon="{{ enum_operating_system.get_fa_icon(os) }}" data-color="{{ os.value }}">
                             {{ t(os) }}
                         </option>
                     {% endfor %}
                 </select>
+                <i class="fa fa-sort-desc triangle"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-player-add-host">{{ l.fleet_node_player_form_label_host }}</label>
+            <div class="widget">
+                <input name="host" type="text" id="node-player-add-host" required="required"/>
             </div>
         </div>
 
