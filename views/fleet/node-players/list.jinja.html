@@ -83,8 +83,9 @@
                             {% endfor %}
                             {% for node_player in node_player_children %}
                                 {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
+                                {% set color = node_player.operating_system.value %}
                                 <li class="explr-item">
-                                    <i class="fa {{ icon }}"></i>
+                                    <i class="fa {{ icon }} {{ color }}"></i>
                                     <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}">
                                         {{ node_player.name }}
                                     </a>
@@ -171,9 +172,10 @@
 
                     {% for node_player in node_players[working_folder.id|default(None)]|default([]) %}
                         {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
+                        {% set color = node_player.operating_system.value %}
                         <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}" data-folder="0">
                             <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}" target="_blank" class="explr-link explr-item-selectable">
-                                <i class="fa {{ icon }}"></i>
+                                <i class="fa {{ icon }} {{ color }}"></i>
                                 {{ truncate(node_player.name, 25, '...') }}
                             </a>
                         </li>

@@ -6,6 +6,7 @@ class OperatingSystem(Enum):
     RASPBIAN = 'raspbian'
     WINDOWS = 'windows'
     MACOS = 'macos'
+    DEBIAN = 'debian'
     FEDORA = 'fedora'
     UBUNTU = 'ubuntu'
     SUSE = 'suse'
@@ -21,6 +22,8 @@ class OperatingSystem(Enum):
             return 'fa-brands fa-windows'
         elif value == OperatingSystem.MACOS:
             return 'fa-brands fa-apple'
+        elif value == OperatingSystem.DEBIAN:
+            return 'fa-brands fa-debian'
         elif value == OperatingSystem.FEDORA:
             return 'fa-brands fa-fedora'
         elif value == OperatingSystem.UBUNTU:
