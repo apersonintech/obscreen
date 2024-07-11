@@ -122,7 +122,7 @@ class NodePlayerManager(ModelManager):
         form = {
             "name": name,
             "host": host,
-            "operating_system": operating_system,
+            "operating_system": operating_system.value if operating_system else None,
             "group_id": group_id if group_id else None
         }
 
