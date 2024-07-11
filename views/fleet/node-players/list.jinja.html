@@ -1,7 +1,7 @@
 {% extends 'base.jinja.html' %}
 
 {% block page_title %}
-    {{ l.slideshow_content_page_title }}
+    {{ l.fleet_node_player_page_title }}
 {% endblock %}
 
 {% block add_css %}
@@ -11,35 +11,35 @@
 
 {% block add_js %}
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/fleet/node-players.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
 
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
 
-{% block body_class %}view-content-list{% endblock %}
+{% block body_class %}view-node-player-list{% endblock %}
 
 {% block page %}
     <div class="top-content">
         <h1>
-            {{ l.slideshow_content_page_title }}
+            {{ l.fleet_node_player_page_title }}
         </h1>
 
         <div class="top-actions">
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-edit btn-info" data-content-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
+                <button class="explr-item-edit btn-info" data-node-player-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}" data-content-route="{{ url_for('slideshow_content_delete') }}">
+                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-node-player-route="{{ url_for('fleet_node_player_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
 
-            <button class="btn btn-info content-add item-add">
+            <button class="btn btn-info node-player-add item-add">
                 <i class="fa fa-file-circle-plus icon-left"></i>
-                {{ l.slideshow_content_button_add }}
+                {{ l.fleet_node_player_button_add }}
             </button>
             <button class="folder-add btn-neutral">
                 <i class="fa fa-folder-plus icon-left"></i>
@@ -56,10 +56,10 @@
         </div>
     {% endif %}
 
-    {% if request.args.get('referenced_in_slide_error') %}
+    {% if request.args.get('referenced_in_node_player_group_error') %}
         <div class="alert alert-danger">
             <i class="fa fa-warning icon-left"></i>
-            {{ l.slideshow_content_referenced_in_slide_error }}
+            {{ l.fleet_node_player_referenced_in_node_player_group_error }}
         </div>
     {% endif %}
 
@@ -67,11 +67,11 @@
         <div class="page-panel left-panel explr-explorer">
 
             {% macro render_folder(folder) %}
-                {% set content_children = contents[folder.id]|default([]) %}
-                {% set has_children = folder.children or content_children %}
+                {% set node_player_children = node_players[folder.id]|default([]) %}
+                {% set has_children = folder.children or node_player_children %}
 
                 <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id }}">
-                    <a href="{{ url_for('slideshow_content_cd') }}?path={{ folder.path }}" class="{% if folder.path == working_folder_path %}active{% endif %}">
+                    <a href="{{ url_for('fleet_node_player_cd') }}?path={{ folder.path }}" class="{% if folder.path == working_folder_path %}active{% endif %}">
                         {{ folder.name }}
                     </a>
 
@@ -80,13 +80,12 @@
                             {% for child in folder.children %}
                                 {{ render_folder(child) }}
                             {% endfor %}
-                            {% for content in content_children %}
-                                {% set icon = enum_content_type.get_fa_icon(content.type) %}
-                                {% set color = enum_content_type.get_color_icon(content.type) %}
+                            {% for node_player in node_player_children %}
+                                {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
                                 <li class="explr-item">
-                                    <i class="fa {{ icon }} {{ color }}"></i>
-                                    <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank">
-                                        {{ content.name }}
+                                    <i class="fa {{ icon }}"></i>
+                                    <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}">
+                                        {{ node_player.name }}
                                     </a>
                                 </li>
                             {% endfor %}
@@ -100,7 +99,7 @@
             </ul>
         </div>
 
-        <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}" class="hidden" method="POST">
+        <form id="folder-move-form" action="{{ url_for('fleet_node_player_folder_move') }}" class="hidden" method="POST">
             <input type="hidden" name="entity_id" />
             <input type="hidden" name="new_folder_id" />
             <input type="hidden" name="is_folder" />
@@ -120,7 +119,7 @@
                                         {{ truncate(dir, 25, '...') }}
                                     </span>
                                 {% else %}
-                                    <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
+                                    <a href="{{ url_for('fleet_node_player_cd', path=ns.breadpath) }}">
                                         <i class="explr-icon explr-icon-folder"></i>
                                         {{ truncate(dir, 25, '...') }}
                                     </a>
@@ -138,7 +137,7 @@
                     <li class="new-folder hidden">
                         <a href="javascript:void(0);">
                             <i class="fa fa-folder"></i>
-                            <form action="{{ url_for('slideshow_content_folder_add') }}" method="POST">
+                            <form action="{{ url_for('fleet_node_player_folder_add') }}" method="POST">
                                 <input type="text" name="name" autocomplete="off" />
                             </form>
                         </a>
@@ -147,7 +146,7 @@
                     {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
                     {% if parent_path %}
                         <li class="previous-folder droppable" data-path="{{ parent_path }}" data-id="{{ working_folder.parent_id }}" data-folder="1">
-                            <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}" class="explr-link">
+                            <a href="{{ url_for('fleet_node_player_cd', path=parent_path) }}" class="explr-link">
                                 <i class="fa fa-folder"></i>
                                 ..
                             </a>
@@ -157,10 +156,10 @@
                     {% for folder in working_folder_children %}
                         {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
                         <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}" data-folder="1">
-                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}" class="explr-link explr-item-selectable">
+                            <a href="{{ url_for('fleet_node_player_cd', path=folder_path) }}" class="explr-link explr-item-selectable">
                                 <i class="fa fa-folder"></i>
                                 <span>{{ truncate(folder.name, 25, '...') }}</span>
-                                <form action="{{ url_for('slideshow_content_folder_rename') }}" method="POST">
+                                <form action="{{ url_for('fleet_node_player_folder_rename') }}" method="POST">
                                     <input type="text" name="name" value="{{ folder.name }}" autocomplete="off" />
                                     <input type="hidden" name="id" value="{{ folder.id }}" />
                                 </form>
@@ -169,14 +168,12 @@
                     {% endfor %}
 
 
-                    {% for content in contents[working_folder.id|default(None)]|default([]) %}
-                        {% set icon = enum_content_type.get_fa_icon(content.type) %}
-                        {% set color = enum_content_type.get_color_icon(content.type) %}
-
-                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}" data-folder="0">
-                            <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank" class="explr-link explr-item-selectable">
-                                <i class="fa {{ icon }} {{ color }}"></i>
-                                {{ truncate(content.name, 25, '...') }}
+                    {% for node_player in node_players[working_folder.id|default(None)]|default([]) %}
+                        {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
+                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}" data-folder="0">
+                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}" target="_blank" class="explr-link explr-item-selectable">
+                                <i class="fa {{ icon }}"></i>
+                                {{ truncate(node_player.name, 25, '...') }}
                             </a>
                         </li>
                     {% endfor %}
@@ -186,7 +183,7 @@
             <div class="modals hidden">
                 <div class="modals-outer">
                     <div class="modals-inner">
-                        {% include 'slideshow/contents/modal/add.jinja.html' %}
+                        {% include 'fleet/node-players/modal/add.jinja.html' %}
                         {% include 'core/utrack.jinja.html' %}
                     </div>
                 </div>

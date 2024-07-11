@@ -1,108 +1,120 @@
 jQuery(document).ready(function ($) {
-    const $tableActive = $('table.active-node-players');
-    const $tableInactive = $('table.inactive-node-players');
+    const initExplr = function () {
+        $('.explr').each(function() {
+            $(this).explr({
+                classesPlus: 'fa fa-plus',
+                classesMinus: 'fa fa-minus',
+                onLoadFinish: function ($tree) {
+                    $tree.removeClass('hidden');
+                }
+            });
 
-    const getId = function ($el) {
-        return $el.is('tr') ? $el.attr('data-level') : $el.parents('tr:eq(0)').attr('data-level');
+            // Open complete path in explorer sidebar
+            explrSidebarOpenFromFolder($(this).attr('data-working-folder-id'));
+        });
     };
 
-    const updateTable = function () {
-        $('table').each(function () {
-            if ($(this).find('tbody tr.node-player-item:visible').length === 0) {
-                $(this).find('tr.empty-tr').removeClass('hidden');
-            } else {
-                $(this).find('tr.empty-tr').addClass('hidden');
-            }
-        }).tableDnDUpdate();
-        updatePositions();
-    };
-
-    const updatePositions = function (table, row) {
-        const positions = {};
-        $('.node-player-item').each(function (index) {
-            positions[getId($(this))] = index;
+    const initDrags = function () {
+        $('.draggable').each(function() {
+            $(this).draggable({
+                revert: "invalid",
+            });
         });
 
-        $.ajax({
-            method: 'POST',
-            url: '/fleet/node-player/position',
-            headers: {'Content-Type': 'application/json'},
-            data: JSON.stringify(positions),
+        $('.droppable').each(function() {
+            $(this).droppable({
+                accept: ".draggable",
+                over: function (event, ui) {
+                    $(this).addClass("highlight-drop");
+                },
+                out: function (event, ui) {
+                    $(this).removeClass("highlight-drop");
+                },
+                drop: function (event, ui) {
+                    $(this).removeClass("highlight-drop");
+                    const $form = $('#folder-move-form');
+                    const $moved = ui.draggable;
+                    const $target = $(this);
+                    $form.find('[name=is_folder]').val($moved.attr('data-folder'))
+                    $form.find('[name=entity_id]').val($moved.attr('data-id'))
+                    $form.find('[name=new_folder_id]').val($target.attr('data-id'))
+                    ui.draggable.position({
+                        my: "center",
+                        at: "center",
+                        of: $(this),
+                        using: function (pos) {
+                            $(this).animate(pos, 50);
+                        }
+                    });
+                    $form.submit();
+                }
+            });
         });
     };
 
     const main = function () {
-        $("table").tableDnD({
-            dragHandle: 'td a.node-player-sort',
-            onDrop: updatePositions
-        });
+        initExplr();
+        initDrags();
     };
 
-    $(document).on('change', 'select.group-picker', function () {
-        document.location.href = $(this).val();
+    $(document).on('click', '.folder-add', function () {
+        $('.dirview .new-folder').removeClass('hidden');
+        $('.page-content').animate({scrollTop: 0}, 0);
+        $('.dirview input').focus();
     });
-
-    $(document).on('change', 'input[type=checkbox]', function () {
-        $.ajax({
-            url: '/fleet/node-player/toggle',
-            headers: {'Content-Type': 'application/json'},
-            data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
-            method: 'POST',
-        });
-
-        const $tr = $(this).parents('tr:eq(0)').remove().clone();
-
-        if ($(this).is(':checked')) {
-            $tableActive.append($tr);
-        } else {
-            $tableInactive.append($tr);
-        }
-
-        updateTable();
-    });
-
-    $(document).on('change', '#node-player-add-type', function () {
-        const value = $(this).val();
-        const inputType = $(this).find('option').filter(function (i, el) {
-            return $(el).val() === value;
-        }).data('input');
-
-        $('.node-player-add-object-input')
-            .addClass('hidden')
-            .prop('disabled', true)
-            .filter('#node-player-add-object-input-' + inputType)
-            .removeClass('hidden')
-            .prop('disabled', false)
-        ;
-    });
-
 
     $(document).on('click', '.node-player-add', function () {
         showModal('modal-node-player-add');
         $('.modal-node-player-add input:eq(0)').focus().select();
     });
 
-    $(document).on('click', '.node-player-edit', function () {
-        const nodePlayer = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        showModal('modal-node-player-edit');
-        $('.modal-node-player-edit input:visible:eq(0)').focus().select();
-        $('#node-player-edit-name').val(nodePlayer.name);
-        $('#node-player-edit-group-id').val(nodePlayer.group_id);
-        $('#node-player-edit-host').val(nodePlayer.host);
-        $('#node-player-edit-id').val(nodePlayer.id);
+    $(document).on('click', '.explr-item-edit', function () {
+        const $item = $('.explr-dirview .highlight-clicked');
+        const is_folder = $item.attr('data-folder') === '1';
+
+        if (is_folder) {
+            $item.addClass('renaming');
+            $item.find('input').focus().select();
+        } else {
+            document.location.href = $(this).attr('data-node-player-route').replace('!c!', $item.attr('data-id'));
+        }
     });
 
-    $(document).on('click', '.node-player-delete', function () {
+    $(document).on('click', '.explr-item-delete', function () {
+        const $item = $('.explr-dirview .highlight-clicked');
+        const is_folder = $item.attr('data-folder') === '1';
+        let route;
+
+        if (is_folder) {
+            route = $(this).attr('data-folder-route') + '?id=' + $item.attr('data-id');
+        } else {
+            route = $(this).attr('data-node-player-route') + '?id=' + $item.attr('data-id');
+        }
+
         if (confirm(l.js_fleet_node_player_delete_confirmation)) {
-            const $tr = $(this).parents('tr:eq(0)');
-            $tr.remove();
-            updateTable();
-            $.ajax({
-                method: 'DELETE',
-                url: '/fleet/node-player/delete',
-                headers: {'Content-Type': 'application/json'},
-                data: JSON.stringify({id: getId($(this))}),
-            });
+            document.location.href = route;
+        }
+    });
+
+    $(document).on('click', '.node-player-edit', function () {
+        const node_player = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        showModal('modal-node-player-edit');
+
+
+
+        $('.modal-node-player-edit input:visible:eq(0)').focus().select();
+        $('#node-player-edit-id').val(node_player.id);
+    });
+
+    $(document).on('submit', '.modal-node-player-add form', function () {
+        const $modal = $(this).parents('.modal:eq(0)');
+        $modal.find('button[type=submit]').addClass('hidden');
+        $modal.find('.btn-loading').removeClass('hidden');
+    });
+
+     $(document).keyup(function (e) {
+        if (e.key === "Escape") {
+            $('.dirview .new-folder').addClass('hidden');
         }
     });
 

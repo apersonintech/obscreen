@@ -33,7 +33,7 @@ class ContentType(Enum):
             return ContentInputType.TEXT
 
     @staticmethod
-    def get_fa_icon(value: Enum) -> ContentInputType:
+    def get_fa_icon(value: Enum) -> str:
         if value == ContentType.PICTURE:
             return 'fa-regular fa-image'
         elif value == ContentType.VIDEO:
@@ -46,7 +46,7 @@ class ContentType(Enum):
         return 'fa-file'
 
     @staticmethod
-    def get_color_icon(value: Enum) -> ContentInputType:
+    def get_color_icon(value: Enum) -> str:
         if value == ContentType.PICTURE:
             return 'info'
         elif value == ContentType.VIDEO:

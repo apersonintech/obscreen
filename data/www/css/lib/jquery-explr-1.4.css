@@ -80,6 +80,17 @@
 	width: 16px;
 }
 
+.explr-item i.fa {
+	position: absolute;
+	z-index: 1;
+	top: 2px;
+	font-size: 14px;
+	left: 16px;
+	color: rgb(187, 187, 187);
+	width: 18px;
+	text-align: center;
+}
+
 .explr-toggler {
 	background-repeat: no-repeat;
 	background-position: 0 0;
@@ -96,7 +107,8 @@
 
 /* Menu icons: */
 
-.explr-tree .icon-text > li, .explr-tree li.icon-text { background-image: url("../../img/explr/attibutes.png"); }
+.explr-tree .icon-text > li, .explr-tree li.icon-text { background-image: none; }
+.explr-tree .icon-file > li, .explr-tree li.icon-file { background-image: url("../../img/explr/attibutes.png"); }
 .explr-tree .icon-address > li, .explr-tree li.icon-address { background-image: url("../../img/explr/address.png"); }
 .explr-tree .icon-archives > li, .explr-tree li.icon-archives { background-image: url("../../img/explr/archives.png"); }
 .explr-tree .icon-badge > li, .explr-tree li.icon-badge { background-image: url("../../img/explr/bestseller.png"); }

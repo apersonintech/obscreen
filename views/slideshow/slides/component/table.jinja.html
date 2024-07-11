@@ -49,7 +49,7 @@
             </td>
             <td class="">
                 {% if slide.cron_schedule %}
-                    {% set cron_desc = cron_descriptor(slide.cron_schedule)  %}
+                    {% set cron_desc = cron_descriptor(slide.cron_schedule) %}
                     {% if cron_desc %}
                         {% if is_valid_cron_date_time(slide.cron_schedule) %}
                             {% if slide.is_notification %}
@@ -69,7 +69,7 @@
             </td>
             <td class="">
                 {% if slide.cron_schedule_end %}
-                    {% set cron_desc_end = cron_descriptor(slide.cron_schedule_end)  %}
+                    {% set cron_desc_end = cron_descriptor(slide.cron_schedule_end) %}
                     {% if cron_desc_end %}
                         {% if is_valid_cron_date_time(slide.cron_schedule_end) %}
                             {% if slide.is_notification %}
