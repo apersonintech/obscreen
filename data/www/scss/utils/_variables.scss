@@ -19,7 +19,7 @@ $raspbian: rgb(182, 18, 64);
 $windows: rgb(18, 167, 227);
 $macos: rgb(179, 188, 194);
 $debian: rgb(207, 8, 78);
-$fedora: rgb(40, 63, 111);
+$fedora: rgb(82, 162, 218);
 $ubuntu: rgb(214, 69, 20);
 $suse: rgb(111, 180, 37);
 $redhat: rgb(198, 2, 0);
@@ -40,8 +40,11 @@ $layoutBackground: #111;
 // Packs
 $colors: (
 	info: $info,
+	info-alt: $bitterBlue,
 	success: $success,
 	success-alt: $bitterGreen,
+	error: $danger,
+	error-alt: $bitterRed,
 	danger: $danger,
 	danger-alt: $bitterRed,
 	purple: $sweetPurple,
@@ -64,3 +67,4 @@ $colors: (
 
 // Classes
 @include generate-color-classes($colors);
+@include generate-button-classes($colors);
