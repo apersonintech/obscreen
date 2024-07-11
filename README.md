@@ -6,7 +6,7 @@
 **⭐️ You liked it ? Give this repository a star, it's free :)**
 
 ## About
-Use a RaspberryPi (Lite OS) to show a fullscreen slideshow (Kiosk-mode)
+Use a RaspberryPi (Lite OS) to show a fullscreen slideshow in a web browser (Kiosk-mode)
 
 [![Docker Pulls](https://badgen.net/docker/pulls/jierka/obscreen?icon=docker&label=docker%20pulls)](https://hub.docker.com/r/jierka/obscreen/)
 
