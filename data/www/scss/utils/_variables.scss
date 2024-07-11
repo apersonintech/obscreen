@@ -12,7 +12,19 @@ $neutralGrey: rgb(70, 70, 70);
 $lightGrey: rgb(153, 153, 153);
 $white: rgb(255, 255, 255);
 $black: rgb(0, 0, 0);
+
+// Brand Colors
 $youtube: rgb(253, 60, 1);
+$raspbian: rgb(182, 18, 64);
+$windows: rgb(18, 167, 227);
+$macos: rgb(179, 188, 194);
+$debian: rgb(207, 8, 78);
+$fedora: rgb(40, 63, 111);
+$ubuntu: rgb(214, 69, 20);
+$suse: rgb(111, 180, 37);
+$redhat: rgb(198, 2, 0);
+$centos: rgb(155, 76, 136);
+$other: rgb(229, 161, 35);
 
 // Type Colors
 $info: $seaBlue;
@@ -27,17 +39,27 @@ $layoutBackground: #111;
 
 // Packs
 $colors: (
-  info: $info,
-  success: $success,
-  success-alt: $bitterGreen,
-  danger: $danger,
-  danger-alt: $bitterRed,
-  purple: $sweetPurple,
-  purple-alt: $bitterPurple,
-  youtube: $youtube,
-  neutral: $neutralGrey,
-  white: $white,
-  black: $black,
+	info: $info,
+	success: $success,
+	success-alt: $bitterGreen,
+	danger: $danger,
+	danger-alt: $bitterRed,
+	purple: $sweetPurple,
+	purple-alt: $bitterPurple,
+	neutral: $neutralGrey,
+	white: $white,
+	black: $black,
+	youtube: $youtube,
+	raspbian: $raspbian,
+	windows:$windows,
+	macos:$macos,
+	debian:$debian,
+	fedora:$fedora,
+	ubuntu:$ubuntu,
+	suse:$suse,
+	redhat:$redhat,
+	centos:$centos,
+	other:$other,
 );
 
 // Classes
