@@ -133,6 +133,7 @@ class VariableManager:
 
             # Not editable (System information)
             {"name": "last_folder_content", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": self.t('settings_variable_desc_ro_last_folder_content')},
+            {"name": "last_folder_node_player", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": self.t('settings_variable_desc_ro_last_folder_node_player')},
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},
             {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_last_slide_update')},
             {"name": "refresh_player_request", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_refresh_player_request')},

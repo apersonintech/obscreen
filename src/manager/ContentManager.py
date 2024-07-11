@@ -63,7 +63,7 @@ class ContentManager(ModelManager):
         return self.hydrate_object(object)
 
     def get_all(self, sort: Optional[str] = 'created_at', ascending=False) -> List[Content]:
-        return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort=sort, ascending=ascending))
+        return self.hydrate_list(self._db.get_all(table_name=self.TABLE_NAME, sort=sort, ascending=ascending))
 
     def get_all_indexed(self, attribute: str = 'id', multiple=False) -> Dict[str, Content]:
         index = {}

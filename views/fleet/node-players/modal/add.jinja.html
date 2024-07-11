@@ -1,0 +1,47 @@
+<div class="modal modal-node-player-add modal-node-player">
+    <h2>
+        {{ l.fleet_node_player_form_add_title }}
+    </h2>
+
+    <form class="form" action="{{ url_for('fleet_node_player_add') }}" method="POST" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label for="node-player-add-name">{{ l.fleet_node_player_form_label_name }}</label>
+            <div class="widget">
+                <input name="name" type="text" id="node-player-add-name" required="required"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-player-add-host">{{ l.fleet_node_player_form_label_host }}</label>
+            <div class="widget">
+                <input name="host" type="text" id="node-player-add-host" required="required"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-player-add-operating-system">{{ l.fleet_node_player_form_label_operating_system }}</label>
+            <div class="widget">
+                <select name="operating_system" id="node-player-add-operating-system">
+                    {% for os in enum_operating_system %}
+                        <option value="{{ os.value }}">
+                            {{ t(os) }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn btn-naked modal-close">
+                {{ l.common_close }}
+            </button>
+            <button type="submit" class="btn btn-info">
+                <i class="fa fa-save icon-left"></i>{{ l.common_save }}
+            </button>
+            <button type="button" disabled="disabled" class="btn btn-naked hidden btn-loading">
+                {{ l.common_loading }}
+            </button>
+        </div>
+    </form>
+</div>

@@ -4,6 +4,7 @@ from src.model.entity.Folder import Folder
 from src.model.enum.FolderEntity import FolderEntity, FOLDER_ROOT_PATH, FOLDER_ROOT_NAME
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.ContentManager import ContentManager
+from src.manager.NodePlayerManager import NodePlayerManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
@@ -47,11 +48,16 @@ class FolderManager(ModelManager):
     def get_by_entity(self, entity: FolderEntity) -> List[Folder]:
         return self.get_by("entity = '{}'".format(entity.value))
 
-    def get_children(self, folder: Optional[Folder], sort: Optional[str] = None, ascending=True) -> List[Folder]:
-        if folder:
-            return self.get_by("parent_id = {}".format(folder.id), sort, ascending)
+    def get_children(self, folder: Optional[Folder], entity: Optional[FolderEntity] = None, sort: Optional[str] = None, ascending=True) -> List[Folder]:
+        query = " 1=1 "
 
-        return self.get_by("parent_id is null", sort, ascending)
+        if entity:
+            query = "{} {}".format(query, "AND entity = '{}'".format(entity.value))
+
+        if folder:
+            return self.get_by("parent_id = {} AND {}".format(folder.id, query), sort, ascending)
+
+        return self.get_by("parent_id is null AND {}".format(query), sort, ascending)
 
     def get_one_by_path(self, path: str, entity: FolderEntity) -> Folder:
         parts = path[1:].split('/')
@@ -138,9 +144,16 @@ class FolderManager(ModelManager):
                 params=(folder_id if folder else None, folder.depth + 1 if folder else 1, entity_id)
             )
 
+        table = None
+
         if folder.entity == FolderEntity.CONTENT:
+            table = ContentManager.TABLE_NAME
+        elif folder.entity == FolderEntity.NODE_PLAYER:
+            table = NodePlayerManager.TABLE_NAME
+
+        if table:
             return self._db.execute_write_query(
-                query="UPDATE {} set folder_id = ? WHERE id = ?".format(ContentManager.TABLE_NAME),
+                query="UPDATE {} set folder_id = ? WHERE id = ?".format(table),
                 params=(folder_id, entity_id)
             )
 
@@ -148,6 +161,8 @@ class FolderManager(ModelManager):
         var_name = None
         if entity == FolderEntity.CONTENT:
             var_name = "last_folder_content"
+        elif entity == FolderEntity.NODE_PLAYER:
+            var_name = "last_folder_node_player"
 
         if not var_name:
             raise Error("No variable for entity {}".format(entity.value))
@@ -164,7 +179,7 @@ class FolderManager(ModelManager):
 
     def add_folder(self, entity: FolderEntity, name: str) -> Folder:
         working_folder_path = self.get_working_folder(entity)
-        working_folder = self.get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
+        working_folder = self.get_one_by_path(path=working_folder_path, entity=entity)
         folder_path = "{}/{}".format(working_folder_path, name)
         parts = folder_path[1:].split('/')
         depth = len(parts) - 1

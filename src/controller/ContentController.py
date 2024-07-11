@@ -6,7 +6,6 @@ from flask import Flask, render_template, redirect, request, url_for, send_from_
 from werkzeug.utils import secure_filename
 from src.service.ModelStore import ModelStore
 from src.model.entity.Content import Content
-from src.model.entity.Folder import Folder
 from src.model.enum.ContentType import ContentType
 from src.model.enum.FolderEntity import FolderEntity, FOLDER_ROOT_PATH
 from src.interface.ObController import ObController
@@ -18,16 +17,16 @@ class ContentController(ObController):
 
     def register(self):
         self._app.add_url_rule('/slideshow/content', 'slideshow_content_list', self._auth(self.slideshow_content_list), methods=['GET'])
-        self._app.add_url_rule('/slideshow/content/add-folder', 'slideshow_content_folder_add', self._auth(self.slideshow_content_folder_add), methods=['POST'])
-        self._app.add_url_rule('/slideshow/content/move-folder', 'slideshow_content_folder_move', self._auth(self.slideshow_content_folder_move), methods=['POST'])
-        self._app.add_url_rule('/slideshow/content/rename-folder', 'slideshow_content_folder_rename', self._auth(self.slideshow_content_folder_rename), methods=['POST'])
-        self._app.add_url_rule('/slideshow/content/delete-folder', 'slideshow_content_folder_delete', self._auth(self.slideshow_content_folder_delete), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/add', 'slideshow_content_add', self._auth(self.slideshow_content_add), methods=['GET', 'POST'])
         self._app.add_url_rule('/slideshow/content/edit/<content_id>', 'slideshow_content_edit', self._auth(self.slideshow_content_edit), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/save/<content_id>', 'slideshow_content_save', self._auth(self.slideshow_content_save), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/delete', 'slideshow_content_delete', self._auth(self.slideshow_content_delete), methods=['GET'])
-        self._app.add_url_rule('/slideshow/content/show/<content_id>', 'slideshow_content_show', self._auth(self.slideshow_content_show), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/cd', 'slideshow_content_cd', self._auth(self.slideshow_content_cd), methods=['GET'])
+        self._app.add_url_rule('/slideshow/content/add-folder', 'slideshow_content_folder_add', self._auth(self.slideshow_content_folder_add), methods=['POST'])
+        self._app.add_url_rule('/slideshow/content/move-folder', 'slideshow_content_folder_move', self._auth(self.slideshow_content_folder_move), methods=['POST'])
+        self._app.add_url_rule('/slideshow/content/rename-folder', 'slideshow_content_folder_rename', self._auth(self.slideshow_content_folder_rename), methods=['POST'])
+        self._app.add_url_rule('/slideshow/content/delete-folder', 'slideshow_content_folder_delete', self._auth(self.slideshow_content_folder_delete), methods=['GET'])
+        self._app.add_url_rule('/slideshow/content/show/<content_id>', 'slideshow_content_show', self._auth(self.slideshow_content_show), methods=['GET'])
 
     def slideshow_content_list(self):
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
@@ -39,51 +38,10 @@ class ContentController(ObController):
             folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
             working_folder_path=working_folder_path,
             working_folder=working_folder,
-            working_folder_children=self._model_store.folder().get_children(working_folder, sort='created_at', ascending=False),
+            working_folder_children=self._model_store.folder().get_children(folder=working_folder, entity=FolderEntity.CONTENT, sort='created_at', ascending=False),
             enum_content_type=ContentType,
             enum_folder_entity=FolderEntity,
         )
-
-    def slideshow_content_folder_add(self):
-        self._model_store.folder().add_folder(
-            entity=FolderEntity.CONTENT,
-            name=request.form['name'],
-        )
-
-        return redirect(url_for('slideshow_content_list'))
-
-    def slideshow_content_folder_rename(self):
-        self._model_store.folder().rename_folder(
-            folder_id=request.form['id'],
-            name=request.form['name'],
-        )
-
-        return redirect(url_for('slideshow_content_list'))
-
-    def slideshow_content_folder_move(self):
-        self._model_store.folder().move_to_folder(
-            entity_id=request.form['entity_id'],
-            folder_id=request.form['new_folder_id'],
-            entity_is_folder=True if request.form['is_folder'] == '1' else False,
-        )
-
-        return redirect(url_for('slideshow_content_list'))
-
-    def slideshow_content_folder_delete(self):
-        folder = self._model_store.folder().get(request.args.get('id'))
-
-        if not folder:
-            return redirect(url_for('slideshow_content_list'))
-
-        content_counter = self._model_store.content().count_contents_for_folder(folder.id)
-        folder_counter = self._model_store.folder().count_subfolders_for_folder(folder.id)
-
-        if content_counter > 0 or folder_counter:
-            return redirect(url_for('slideshow_content_list', folder_not_empty_error=True))
-
-        self._model_store.folder().delete(id=folder.id)
-
-        return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_add(self):
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
@@ -168,6 +126,47 @@ class ContentController(ObController):
         self._model_store.variable().update_by_name("last_folder_content", path)
 
         return redirect(url_for('slideshow_content_list', path=path))
+
+    def slideshow_content_folder_add(self):
+        self._model_store.folder().add_folder(
+            entity=FolderEntity.CONTENT,
+            name=request.form['name'],
+        )
+
+        return redirect(url_for('slideshow_content_list'))
+
+    def slideshow_content_folder_rename(self):
+        self._model_store.folder().rename_folder(
+            folder_id=request.form['id'],
+            name=request.form['name'],
+        )
+
+        return redirect(url_for('slideshow_content_list'))
+
+    def slideshow_content_folder_move(self):
+        self._model_store.folder().move_to_folder(
+            entity_id=request.form['entity_id'],
+            folder_id=request.form['new_folder_id'],
+            entity_is_folder=True if request.form['is_folder'] == '1' else False,
+        )
+
+        return redirect(url_for('slideshow_content_list'))
+
+    def slideshow_content_folder_delete(self):
+        folder = self._model_store.folder().get(request.args.get('id'))
+
+        if not folder:
+            return redirect(url_for('slideshow_content_list'))
+
+        content_counter = self._model_store.content().count_contents_for_folder(folder.id)
+        folder_counter = self._model_store.folder().count_subfolders_for_folder(folder.id)
+
+        if content_counter > 0 or folder_counter:
+            return redirect(url_for('slideshow_content_list', folder_not_empty_error=True))
+
+        self._model_store.folder().delete(id=folder.id)
+
+        return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_show(self, content_id: int = 0):
         content = self._model_store.content().get(content_id)

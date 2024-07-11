@@ -123,7 +123,7 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.explr-item-delete', function () {
         const $item = $('.explr-dirview .highlight-clicked');
         const is_folder = $item.attr('data-folder') === '1';
-        let route = document.location.href;
+        let route;
 
         if (is_folder) {
             route = $(this).attr('data-folder-route') + '?id=' + $item.attr('data-id');
@@ -134,16 +134,6 @@ jQuery(document).ready(function ($) {
         if (confirm(l.js_slideshow_content_delete_confirmation)) {
             document.location.href = route;
         }
-    });
-
-    $(document).on('click', '.content-edit', function () {
-        const content = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
-        showModal('modal-content-edit');
-
-
-
-        $('.modal-content-edit input:visible:eq(0)').focus().select();
-        $('#content-edit-id').val(content.id);
     });
 
     $(document).on('submit', '.modal-content-add form', function () {
