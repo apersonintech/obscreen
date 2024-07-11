@@ -11,6 +11,7 @@
 
 {% block add_js %}
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/explorer.js"></script>
     <script src="{{ STATIC_PREFIX }}js/fleet/node-players.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
 
@@ -29,10 +30,10 @@
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-edit btn-info" data-node-player-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
+                <button class="explr-item-edit btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-node-player-route="{{ url_for('fleet_node_player_delete') }}">
+                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-entity-route="{{ url_for('fleet_node_player_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
