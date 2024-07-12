@@ -16,13 +16,20 @@ class SettingsController(ObController):
     def register(self):
         self._app.add_url_rule('/settings/variable/list', 'settings_variable_list', self._auth(self.settings_variable_list), methods=['GET'])
         self._app.add_url_rule('/settings/variable/edit', 'settings_variable_edit', self._auth(self.settings_variable_edit), methods=['POST'])
+        self._app.add_url_rule('/settings/variable-plugin/list', 'settings_variable_plugin_list', self._auth(self.settings_variable_plugin_list), methods=['GET'])
+        self._app.add_url_rule('/settings/variable-plugin/edit', 'settings_variable_plugin_edit', self._auth(self.settings_variable_plugin_edit), methods=['POST'])
 
     def settings_variable_list(self):
         return render_template(
-            'settings/list.jinja.html',
+            'configuration/settings/list.jinja.html',
+            variables=self._model_store.variable().get_editable_variables(plugin=False, sort='section'),
+        )
+
+    def settings_variable_plugin_list(self):
+        return render_template(
+            'configuration/plugins/list.jinja.html',
             plugins=self._model_store.plugins(),
-            system_variables=self._model_store.variable().get_editable_variables(plugin=False, sort='section'),
-            plugin_variables=self._model_store.variable().get_editable_variables(plugin=True, sort='plugin'),
+            variables=self._model_store.variable().get_editable_variables(plugin=True, sort='plugin'),
         )
 
     def settings_variable_edit(self):
@@ -38,6 +45,20 @@ class SettingsController(ObController):
             return redirect_response
 
         return redirect(url_for('settings_variable_list'))
+
+    def settings_variable_plugin_edit(self):
+        error = self._pre_update(request.form['id'])
+
+        if error:
+            return redirect(url_for('settings_variable_plugin_list', error=error))
+
+        self._model_store.variable().update_form(request.form['id'], request.form['value'])
+        redirect_response = self._post_update(request.form['id'])
+
+        if redirect_response:
+            return redirect_response
+
+        return redirect(url_for('settings_variable_plugin_list'))
 
     def _pre_update(self, id: int) -> Optional[str]:
         variable = self._model_store.variable().get(id)
@@ -81,7 +102,7 @@ class SettingsController(ObController):
             thread = threading.Thread(target=self.plugin_update)
             thread.daemon = True
             thread.start()
-            return redirect(url_for('settings_variable_list'))
+            return redirect(url_for('settings_variable_plugin_list'))
 
     def plugin_update(self) -> None:
         restart()

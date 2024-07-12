@@ -145,6 +145,7 @@
     "js_auth_user_delete_confirmation": "Sei sicuro?",
 
     "settings_page_title": "Impostazioni",
+    "settings_plugin_page_title": "Plugins",
     "settings_variable_panel_system_variables": "Impostazioni generali",
     "settings_variable_panel_plugin_variables": "Impostazioni Plugin",
     "settings_variable_panel_th_description": "Descrizione",
@@ -188,7 +189,8 @@
     "sysinfo_panel_th_attribute": "Attributi",
     "sysinfo_panel_th_value": "Valore",
     "sysinfo_panel_td_ipaddr": "Indirizzo ip",
-    "sysinfo_panel_last_logs": "Logs (ultime 100 righe)",
+    "logs_page_title": "Logs",
+    "logs_panel_last_logs": "Logs (ultime 100 righe)",
     "js_sysinfo_restart_confirmation": "Sei sicuro?",
     "js_sysinfo_restart_loading": "Riavvio in corso, attendi...",
 
@@ -274,7 +276,7 @@
     "enum_operating_system_fedora": "Fedora",
     "enum_operating_system_ubuntu": "Ubuntu",
     "enum_operating_system_suse": "Suse",
-    "enum_operating_system_redhat": "Redhat",
+    "enum_operating_system_redhat": "RedHat",
     "enum_operating_system_centos": "CentOS",
     "enum_operating_system_other": "Altro",
 

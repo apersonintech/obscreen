@@ -74,7 +74,7 @@
                                     <i class="fa fa-get-pocket operating-system-icon"></i>
                                     <select name="operating_system" id="node-player-edit-operating-system" class="operating-system-select">
                                         {% for os in enum_operating_system %}
-                                            <option value="{{ os.value }}" data-icon="{{ enum_operating_system.get_fa_icon(os) }}" data-color="{{ os.value }}">
+                                            <option value="{{ os.value }}" data-icon="{{ enum_operating_system.get_fa_icon(os) }}" data-color="{{ os.value }}" {% if os == node_player.operating_system %}selected="selected"{% endif %}>
                                                 {{ t(os) }}
                                             </option>
                                         {% endfor %}
@@ -96,6 +96,10 @@
                                     <i class="fa fa-save icon-left"></i>
                                     {{ l.common_save }}
                                 </button>
+                                <a href="{{ url_for('fleet_node_player_list') }}" class="btn btn-naked">
+                                    <i class="fa fa-rectangle-xmark icon-left"></i>
+                                    {{ l.common_cancel }}
+                                </a>
                             </div>
                         </form>
                     </div>

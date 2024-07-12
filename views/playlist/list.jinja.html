@@ -33,9 +33,14 @@
     <div class="bottom-content">
         <div class="page-content">
             <div class="inner">
-                {% with playlists=playlists %}
-                    {% include 'playlist/component/table.jinja.html' %}
-                {% endwith %}
+                <div class="panel">
+                    <div class="panel-body">
+                        <h3>{{ l.sysinfo_panel_title }}</h3>
+                        {% with playlists=playlists %}
+                            {% include 'playlist/component/table.jinja.html' %}
+                        {% endwith %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

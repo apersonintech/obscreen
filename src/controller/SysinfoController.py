@@ -20,15 +20,21 @@ class SysinfoController(ObController):
 
     def register(self):
         self._app.add_url_rule('/sysinfo', 'sysinfo_attribute_list', self._auth(self.sysinfo), methods=['GET'])
+        self._app.add_url_rule('/logs', 'logs', self._auth(self.logs), methods=['GET'])
         self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self.sysinfo_restart, methods=['GET', 'POST'])
         self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self._auth(self.sysinfo_restart_needed), methods=['GET'])
         self._app.add_url_rule('/sysinfo/get/ipaddr', 'sysinfo_get_ipaddr', self._auth(self.sysinfo_get_ipaddr), methods=['GET'])
 
+    def logs(self):
+        return render_template(
+            'configuration/logs/list.jinja.html',
+            last_logs=self._model_store.logging().get_last_lines_of_stdout(100),
+        )
+
     def sysinfo(self):
         return render_template(
-            'sysinfo/list.jinja.html',
+            'configuration/sysinfo/list.jinja.html',
             sysinfo=get_all_sysinfo(),
-            last_logs=self._model_store.logging().get_last_lines_of_stdout(100),
             ro_variables=self._model_store.variable().get_readonly_variables(),
             env_variables=self._model_store.config().map()
         )
