@@ -37,7 +37,8 @@ class WebServer:
         serve(
             self._app,
             host=self._model_store.config().map().get('bind'),
-            port=self._model_store.config().map().get('port')
+            port=self._model_store.config().map().get('port'),
+            threads=100
         )
 
     def reload(self) -> None:
