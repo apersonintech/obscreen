@@ -1,5 +1,9 @@
+
 span.empty {
-  text-transform: uppercase;
-  opacity: 0.5;
-  color: $lightGrey;
+	background: rgba($yellow, .3);
+	color: $yellow;
+	text-transform: lowercase;
+	border-radius: 2px;
+	padding: 2px 4px;
+	font-weight: bold;
 }

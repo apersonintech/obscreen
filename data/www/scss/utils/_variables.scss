@@ -12,6 +12,7 @@ $neutralGrey: rgb(70, 70, 70);
 $lightGrey: rgb(153, 153, 153);
 $white: rgb(255, 255, 255);
 $black: rgb(0, 0, 0);
+$yellow: rgb(229, 161, 35);
 
 // Brand Colors
 $youtube: rgb(253, 60, 1);
@@ -24,7 +25,7 @@ $ubuntu: rgb(214, 69, 20);
 $suse: rgb(111, 180, 37);
 $redhat: rgb(198, 2, 0);
 $centos: rgb(155, 76, 136);
-$other: rgb(229, 161, 35);
+$other: $yellow;
 
 // Type Colors
 $info: $seaBlue;
@@ -50,6 +51,7 @@ $colors: (
 	purple: $sweetPurple,
 	purple-alt: $bitterPurple,
 	neutral: $neutralGrey,
+	yellow: $yellow,
 	white: $white,
 	black: $black,
 	youtube: $youtube,

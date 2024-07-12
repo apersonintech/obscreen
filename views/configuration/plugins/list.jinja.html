@@ -27,23 +27,17 @@
     <div class="bottom-content">
         <div class="page-content">
             <div class="inner">
-                    <div class="panel panel-inactive">
-                        <div class="panel-body">
-                            <h3>{{ l.settings_variable_panel_plugin_variables }}</h3>
+                {% with variables=variables %}
+                    {% include 'configuration/plugins/component/table.jinja.html' %}
+                {% endwith %}
 
-                            {% with variables=variables %}
-                                {% include 'configuration/plugins/component/table.jinja.html' %}
-                            {% endwith %}
+                <div class="modals hidden">
+                    <div class="modals-outer">
+                        <div class="modals-inner">
+                            {% include 'configuration/plugins/modal/edit.jinja.html' %}
                         </div>
                     </div>
-
-                    <div class="modals hidden">
-                        <div class="modals-outer">
-                            <div class="modals-inner">
-                                {% include 'configuration/plugins/modal/edit.jinja.html' %}
-                            </div>
-                        </div>
-                    </div>
+                </div>
             </div>
         </div>
     </div>

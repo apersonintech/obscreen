@@ -1,46 +1,29 @@
-<table class="variables">
-    <thead>
-    <tr>
-        <th>{{ l.settings_variable_panel_th_description }}</th>
-        <th>{{ l.settings_variable_panel_th_value }}</th>
-        <th class="tac">{{ l.settings_variable_panel_th_activity }}</th>
-    </tr>
-    </thead>
+<table class="panes variables">
     <tbody>
     {% set ns = namespace(last_section='') %}
     {% for variable in variables %}
-        {% set section_change = variable.plugin and ns.last_section != variable.plugin or variable.section and ns.last_section != variable.section %}
+        {% set section_change = variable.section and ns.last_section != variable.section %}
 
         {% if section_change %}
-        <tr>
-            <td colspan="3">
-                <h3>
-                    {% if variable.is_from_plugin() %}
-                        {% set plugin = plugins[variable.plugin] %}
-                        <i class="fa fa-puzzle-piece icon-left"></i> {{ t(plugin.use_title()) }}
-                        {% if plugin.use_description() %}
-                            <div class="plugin-description">{{ t(plugin.use_description()) }}</div>
-                        {% endif %}
-                    {% else %}
-                        <i class="fa fa-cog icon-left"></i> {{ variable.section }}
-                    {% endif %}
-                </h3>
-            </td>
-        </tr>
+            {% if not loop.first %}</tbody><tbody>{% endif %}
+            <tr class="title-item">
+                <td colspan="3">
+                    {{ variable.section }}
+                </td>
+            </tr>
         {% endif %}
-        <tr class="variable-item" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
-            <td class="infos">
-                <div class="inner">
-                    {{ t(variable.description) }}
-                </div>
+        <tr class="variable-item variable-edit" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
+            <td class="description">
+                {{ t(variable.description) }}
             </td>
-            <td>
+            <td class="value">
+                <i class="fa fa-pencil icon-legend"></i>
                 {% if variable.value %}
                     {% if variable.type.value == 'bool' %}
                         {% if variable.display() %}
-                            <i class="fa fa-check alert-success alert-icon"></i>
+                            <i class="fa fa-check alert-success alert-icon icon-value"></i>
                         {% else %}
-                            <i class="fa fa-times alert-error alert-icon"></i>
+                            <i class="fa fa-times alert-error alert-icon icon-value"></i>
                         {% endif %}
                     {% else %}
                         {{ variable.display() }}
@@ -49,18 +32,10 @@
                     <span class="empty">{{ l.common_empty }}</span>
                 {% endif %}
             </td>
-            <td class="actions tac">
-                <a href="javascript:void(0);" class="item-edit variable-edit">
-                    <i class="fa fa-pencil"></i>
-                </a>
-            </td>
         </tr>
 
-        {% if variable.is_from_plugin() %}
-            {% set ns.last_section = variable.plugin %}
-        {% else %}
-            {% set ns.last_section = variable.section %}
-        {% endif %}
+
+        {% set ns.last_section = variable.section %}
     {% endfor %}
     </tbody>
 </table>
