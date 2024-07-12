@@ -21,6 +21,7 @@ class ContentController(ObController):
         self._app.add_url_rule('/slideshow/content/edit/<content_id>', 'slideshow_content_edit', self._auth(self.slideshow_content_edit), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/save/<content_id>', 'slideshow_content_save', self._auth(self.slideshow_content_save), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/delete', 'slideshow_content_delete', self._auth(self.slideshow_content_delete), methods=['GET'])
+        self._app.add_url_rule('/slideshow/content/rename', 'slideshow_content_rename', self._auth(self.slideshow_content_rename), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/cd', 'slideshow_content_cd', self._auth(self.slideshow_content_cd), methods=['GET'])
         self._app.add_url_rule('/slideshow/content/add-folder', 'slideshow_content_folder_add', self._auth(self.slideshow_content_folder_add), methods=['POST'])
         self._app.add_url_rule('/slideshow/content/move-folder', 'slideshow_content_folder_move', self._auth(self.slideshow_content_folder_move), methods=['POST'])
@@ -103,6 +104,14 @@ class ContentController(ObController):
 
         self._model_store.content().delete(content.id)
         self._post_update()
+        return redirect(url_for('slideshow_content_list'))
+
+    def slideshow_content_rename(self):
+        self._model_store.content().update_form(
+            id=request.form['id'],
+            name=request.form['name'],
+        )
+
         return redirect(url_for('slideshow_content_list'))
 
     def slideshow_content_cd(self):

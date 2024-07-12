@@ -112,40 +112,6 @@ jQuery(document).ready(function ($) {
         $('#entity-utrack-updated-at').val(prettyTimestamp(entity.updated_at * 1000));
     });
 
-
-    // Explorer item selection
-    $(document).on('click', 'a.explr-link', function (event) {
-        event.preventDefault();
-        $('a.explr-link').removeClass('highlight-clicked');
-        $('a.explr-link').parent().removeClass('highlight-clicked');
-        $('body').removeClass('explr-selection');
-
-        if ($(this).hasClass('explr-item-selectable')) {
-            $(this).addClass('highlight-clicked');
-            $(this).parent().addClass('highlight-clicked');
-            $('body').addClass('explr-selection');
-        }
-    });
-    $(document).on('dblclick', 'a.explr-link', function (event) {
-        event.preventDefault();
-        $(this).off('click');
-        const href = $(this).attr('href');
-
-        if ($(this).attr('target') === '_blank') {
-            window.open(href);
-        } else {
-            window.location.href = href;
-        }
-    });
-    $(document).on('click', function (event) {
-        const $parentClickable = $(event.target).parents('a, button');
-        if ($parentClickable.length === 0) {
-            $('a.explr-link').removeClass('highlight-clicked');
-            $('a.explr-link').parent().removeClass('highlight-clicked');
-            $('body').removeClass('explr-selection');
-        }
-    });
-
     setTimeout(function() {
         $('.alert-timeout').remove();
     }, 3000);

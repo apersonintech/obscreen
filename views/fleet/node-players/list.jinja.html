@@ -30,10 +30,13 @@
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-edit btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
+                <button class="explr-item-edit explr-selection-entity btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
+                    <i class="fa fa-eye"></i>
+                </button>
+                <button class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button class="explr-item-delete btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-entity-route="{{ url_for('fleet_node_player_delete') }}">
+                <button class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-entity-route="{{ url_for('fleet_node_player_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
@@ -148,7 +151,7 @@
                     {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
                     {% if parent_path %}
                         <li class="previous-folder droppable" data-path="{{ parent_path }}" data-id="{{ working_folder.parent_id }}" data-folder="1">
-                            <a href="{{ url_for('fleet_node_player_cd', path=parent_path) }}" class="explr-link">
+                            <a href="{{ url_for('fleet_node_player_cd', path=parent_path) }}" class="explr-link explr-item-selectable explr-item-folder">
                                 <i class="fa fa-folder"></i>
                                 ..
                             </a>
@@ -158,7 +161,7 @@
                     {% for folder in working_folder_children %}
                         {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
                         <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}" data-folder="1">
-                            <a href="{{ url_for('fleet_node_player_cd', path=folder_path) }}" class="explr-link explr-item-selectable">
+                            <a href="{{ url_for('fleet_node_player_cd', path=folder_path) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
                                 <i class="fa fa-folder"></i>
                                 <span>{{ truncate(folder.name, 25, '...') }}</span>
                                 <form action="{{ url_for('fleet_node_player_folder_rename') }}" method="POST">
@@ -174,9 +177,13 @@
                         {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
                         {% set color = node_player.operating_system.value %}
                         <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}" data-folder="0">
-                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}" target="_blank" class="explr-link explr-item-selectable">
+                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-entity">
                                 <i class="fa {{ icon }} {{ color }}"></i>
-                                {{ truncate(node_player.name, 25, '...') }}
+                                <span>{{ truncate(node_player.name, 25, '...') }}</span>
+                                <form action="{{ url_for('fleet_node_player_rename') }}" method="POST">
+                                    <input type="text" name="name" value="{{ node_player.name }}" autocomplete="off" />
+                                    <input type="hidden" name="id" value="{{ node_player.id }}" />
+                                </form>
                             </a>
                         </li>
                     {% endfor %}

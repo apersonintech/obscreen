@@ -45,11 +45,35 @@ ul.explr-tree {
 	margin-right: 10px;
 	border-right: 1px solid #222;
 	padding-right: 20px;
+
+	button {
+		display: none;
+	}
 }
 
-.explr-selection .explr-selection-actions {
-	display: flex;
+body.explr-selection-actionable {
+	.explr-selection-actions {
+		display: flex;
+	}
+
+	&.explr-selection-folder {
+		.explr-selection-actions {
+			button.explr-selection-folder {
+				display: flex;
+			}
+		}
+	}
+
+	&.explr-selection-entity {
+		.explr-selection-actions {
+			button.explr-selection-entity {
+				display: flex;
+			}
+		}
+	}
 }
+
+
 
 ul.explr-dirview {
 	display: flex;
