@@ -6,30 +6,29 @@
     <form class="form" action="{{ url_for('settings_variable_edit') }}" method="POST">
         <input type="hidden" name="id" id="variable-edit-id" />
 
-        <div class="form-group">
+        <div class="form-group hidden">
             <label for="variable-edit-name" class="hidden">{{ l.settings_variable_form_label_name }}</label>
             <div class="widget">
-                <div id="variable-edit-description"></div>
                 <input type="text" name="name" id="variable-edit-name" required="required" disabled="disabled" class="hidden" />
             </div>
         </div>
 
-        <div id="variable-edit-description-edition" class="alert alert-info">
+        <div id="variable-edit-description-edition" class="alert alert-danger">
 
         </div>
 
         <div class="form-group">
-            <label for="variable-edit-value">{{ l.settings_variable_form_label_value }}</label>
+            <label for="variable-edit-value" id="variable-edit-description"></label>
             <div class="widget">
                 <input type="text" name="value" id="variable-edit-value" required="required" />
             </div>
         </div>
 
         <div class="actions">
-            <button type="button" class="btn-normal modal-close">
+            <button type="button" class="btn-naked modal-close">
                 {{ l.settings_variable_form_button_cancel }}
             </button>
-            <button type="submit" class="green">
+            <button type="submit" class="btn-info">
                 <i class="fa fa-save icon-left"></i>{{ l.settings_variable_form_edit_submit }}
             </button>
         </div>

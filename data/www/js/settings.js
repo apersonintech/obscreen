@@ -4,7 +4,8 @@ jQuery(document).ready(function ($) {
     };
 
     $(document).on('click', '.variable-edit', function () {
-        const variable = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        const $dataHolder = $(this).is('tr') ? $(this) : $(this).parents('tr:eq(0)');
+        const variable = JSON.parse($dataHolder.attr('data-entity'));
 
         if (variable['selectables']) {
             var $select = $('<select id="variable-edit-value" name="value" required="required"></select>');

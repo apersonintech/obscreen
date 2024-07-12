@@ -19,6 +19,12 @@ form {
 	align-items: flex-start;
 	align-self: stretch;
 
+	.alert {
+		padding: 8px 15px;
+		font-size: 14px;
+		margin: 0 0 25px 0;
+	}
+
 	.form-group {
 		display: flex;
 		flex-direction: column;
@@ -69,6 +75,12 @@ form {
 			align-self: stretch;
 			display: flex;
 			flex-direction: row;
+
+
+			div {
+				color: rgba($white, .7);
+				font-size: 14px;
+			}
 
 			select,
 			input,
