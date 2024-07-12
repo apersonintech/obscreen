@@ -25,6 +25,7 @@ class FleetNodePlayerController(ObController):
         self._app.add_url_rule('/fleet/node-player/edit/<node_player_id>', 'fleet_node_player_edit', self._auth(self.fleet_node_player_edit), methods=['GET'])
         self._app.add_url_rule('/fleet/node-player/save/<node_player_id>', 'fleet_node_player_save', self._auth(self.fleet_node_player_save), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player/delete', 'fleet_node_player_delete', self.guard_fleet(self._auth(self.fleet_node_player_delete)), methods=['GET'])
+        self._app.add_url_rule('/fleet/node-player/rename', 'fleet_node_player_rename', self.guard_fleet(self._auth(self.fleet_node_player_rename)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player/cd', 'fleet_node_player_cd', self._auth(self.fleet_node_player_cd), methods=['GET'])
         self._app.add_url_rule('/fleet/node-player/add-folder', 'fleet_node_player_folder_add', self._auth(self.fleet_node_player_folder_add), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player/move-folder', 'fleet_node_player_folder_move', self._auth(self.fleet_node_player_folder_move), methods=['POST'])
@@ -101,6 +102,14 @@ class FleetNodePlayerController(ObController):
 
         self._model_store.node_player().delete(node_player.id)
         self._post_update()
+        return redirect(url_for('fleet_node_player_list'))
+
+    def fleet_node_player_rename(self):
+        self._model_store.node_player().update_form(
+            id=request.form['id'],
+            name=request.form['name'],
+        )
+
         return redirect(url_for('fleet_node_player_list'))
 
     def fleet_node_player_cd(self):
