@@ -2,24 +2,29 @@
 	.bottom-content {
 		.page-content {
 
-			.panel-logs {
-				padding-bottom: 20px;
+			.inner {
+				padding-top: 8px;
+				padding-bottom: 8px;
 			}
 
-			.panel-logs pre {
-				background: rgba($black, 0.9);
-				border: 1px solid $neutralGrey;
-				border-radius: 4px;
-				font-family: monospace;
-				color: darken($white, 5%);
-				padding: 20px;
-				min-height: 200px;
-				max-height: 500px;
-				overflow: auto;
-				max-width: 1100px;
-				overflow: auto;
-			}
+			.logs {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				align-self: stretch;
 
+				pre {
+					flex: 1;
+					background: rgba($black, 0.9);
+					border: 1px solid rgba($neutralGrey, .5);
+					border-radius: 4px;
+					font-family: monospace;
+					color: darken($white, 5%);
+					padding: 20px;
+					overflow: auto;
+					align-self: stretch;
+				}
+			}
 		}
 
 		.page-panel.right-panel {

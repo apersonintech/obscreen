@@ -70,7 +70,8 @@ table.panes {
 				&.value {
 					flex: 0;
 					margin-left: 20px;
-					min-width: 100px;
+					word-break: break-all;
+					flex-basis: auto;
 
 					i.icon-legend {
 						font-size: 10px;
@@ -93,6 +94,10 @@ table.panes {
 					color: rgba($seaBlue, .9);
 					font-size: 16px;
 					font-weight: bold;
+
+					i {
+						margin-right: 10px;
+					}
 
 					.more {
 						flex: 1;
