@@ -175,7 +175,7 @@
                         {% set color = enum_content_type.get_color_icon(content.type) %}
 
                         <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}" data-folder="0">
-                            <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank" class="explr-link explr-item-selectable">
+                            <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}" class="explr-link explr-item-selectable">
                                 <i class="fa {{ icon }} {{ color }}"></i>
                                 {{ truncate(content.name, 25, '...') }}
                             </a>

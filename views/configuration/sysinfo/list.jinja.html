@@ -9,6 +9,8 @@
     <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
 {% endblock %}
 
+{% block body_class %}view-sysinfo-list{% endblock %}
+
 {% block page %}
 
     <div class="top-content">
@@ -105,20 +107,7 @@
                         </table>
                     </div>
                 </div>
-
-                <div class="panel panel-inactive panel-logs">
-                    <div class="panel-body">
-                        <h3>{{ l.sysinfo_panel_last_logs }}</h3>
-                        <pre style="">{%- for log_line in last_logs.split("\n") %}
-                            {{ log_line ~ "\n" }}{%- endfor %}</pre>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
-
-
-
-
 {% endblock %}

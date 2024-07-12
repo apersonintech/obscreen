@@ -1,0 +1,97 @@
+.panel {
+	background: $white;
+	border-radius: 5px;
+	padding: 25px 25px 80px 25px;
+	margin: 10px 25px;
+	align-self: stretch;
+
+	&.no-border {
+		border: none;
+	}
+
+	h3 {
+		color: $black;
+	}
+
+	table {
+		width: 100%;
+		margin-top: 30px;
+		border-collapse: collapse;
+		text-align: left;
+		font-weight: normal;
+
+		th {
+			border-bottom: 1px solid $white;
+			border-collapse: collapse;
+			padding: 10px;
+			font-weight: normal;
+		}
+
+		td {
+			border-collapse: collapse;
+			padding: 10px;
+
+			.td-secondary {
+				font-size: 14px;
+				opacity: 0.6;
+				margin-left: 3px;
+			}
+
+			a.item-name {
+				color: $white;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+
+			&.infos {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: flex-start;
+			}
+
+			&.actions {
+				a {
+					background: $white;
+					color: lighten($black, 20%);
+					border: 1px solid $lightGrey;
+					border-radius: 4px;
+					padding: 2px;
+					width: 35px;
+					display: inline-block;
+					text-align: center;
+					margin: 0 2px;
+
+					&:hover {
+						color: $limeGreen;
+						border-color: $limeGreen;
+					}
+				}
+			}
+
+			.inner {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+			}
+
+			.badge {
+				margin-right: 5px;
+				font-size: 10px;
+				font-weight: bold;
+			}
+
+			a {
+				color: $limeGreen;
+				text-decoration: none;
+
+				&hover {
+					color: darken($limeGreen, 10%);
+				}
+			}
+		}
+	}
+}

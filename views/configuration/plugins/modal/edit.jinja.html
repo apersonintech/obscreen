@@ -3,7 +3,7 @@
         {{ l.settings_variable_form_edit_title }}
     </h2>
 
-    <form class="form" action="/settings/variable/edit" method="POST">
+    <form class="form" action="{{ url_for('settings_variable_plugin_edit') }}" method="POST">
         <input type="hidden" name="id" id="variable-edit-id" />
 
         <div class="form-group">

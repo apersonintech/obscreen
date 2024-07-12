@@ -1,0 +1,52 @@
+{% extends 'base.jinja.html' %}
+
+
+{% block page_title %}
+    {{ l.settings_page_title }}
+{% endblock %}
+
+{% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/plugins.js"></script>
+{% endblock %}
+
+{% block body_class %}view-plugins-list{% endblock %}
+
+{% block page %}
+    <div class="top-content">
+        <h1>
+            {{ l.settings_plugin_page_title }}
+        </h1>
+    </div>
+
+    {% if request.args.get('error') %}
+        <div class="alert alert-error">
+            {{ request.args.get('error') }}
+        </div>
+    {% endif %}
+
+    <div class="bottom-content">
+        <div class="page-content">
+            <div class="inner">
+                    <div class="panel panel-inactive">
+                        <div class="panel-body">
+                            <h3>{{ l.settings_variable_panel_plugin_variables }}</h3>
+
+                            {% with variables=variables %}
+                                {% include 'configuration/plugins/component/table.jinja.html' %}
+                            {% endwith %}
+                        </div>
+                    </div>
+
+                    <div class="modals hidden">
+                        <div class="modals-outer">
+                            <div class="modals-inner">
+                                {% include 'configuration/plugins/modal/edit.jinja.html' %}
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

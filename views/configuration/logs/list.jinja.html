@@ -1,0 +1,34 @@
+{% extends 'base.jinja.html' %}
+
+{% block page_title %}
+    {{ l.logs_page_title }}
+{% endblock %}
+
+{% block add_js %}
+
+{% endblock %}
+
+{% block body_class %}view-logs-list{% endblock %}
+
+{% block page %}
+
+    <div class="top-content">
+        <h1>
+            {{ l.logs_page_title }}
+        </h1>
+    </div>
+
+    <div class="bottom-content">
+        <div class="page-content">
+            <div class="inner">
+                <div class="panel panel-inactive panel-logs">
+                    <div class="panel-body">
+                        <h3>{{ l.logs_panel_last_logs }}</h3>
+                        <pre style="">{%- for log_line in last_logs.split("\n") %}
+                            {{ log_line ~ "\n" }}{%- endfor %}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
