@@ -89,7 +89,7 @@
                                 {% set color = enum_content_type.get_color_icon(content.type) %}
                                 <li class="explr-item">
                                     <i class="fa {{ icon }} {{ color }}"></i>
-                                    <a href="{{ url_for('slideshow_content_show', content_id=content.id) }}" target="_blank">
+                                    <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}" target="_blank">
                                         {{ content.name }}
                                     </a>
                                 </li>
