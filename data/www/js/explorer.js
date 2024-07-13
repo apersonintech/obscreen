@@ -3,8 +3,8 @@ jQuery(function ($) {
     const initExplr = function () {
         $('.explr').each(function () {
             $(this).explr({
-                classesPlus: 'fa fa-plus',
-                classesMinus: 'fa fa-minus',
+                classesPlus: 'fa fa-chevron-right',
+                classesMinus: 'fa fa-chevron-down',
                 onLoadFinish: function ($tree) {
                     $tree.removeClass('hidden');
                 }
