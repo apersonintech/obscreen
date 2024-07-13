@@ -70,7 +70,7 @@ class PlayerController(ObController):
 
     def _get_dynamic_playlist_id(self, playlist_slug_or_id: Optional[str]) -> str:
         if not playlist_slug_or_id and self._model_store.variable().get_one_by_name('fleet_player_enabled'):
-            node_player = self._model_store.node_player().get_one_by("host = '{}' and enabled = {}".format(
+            node_player = self._model_store.node_player().get_one_by("host = '{}'".format(
                 get_safe_remote_addr(self.get_remote_addr()),
                 True
             ))
