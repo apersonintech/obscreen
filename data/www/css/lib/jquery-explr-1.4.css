@@ -54,8 +54,8 @@
 }
 
 .explr-line {
-	border-left: 1px dotted #999;
-	border-bottom: 1px dotted #999;
+	/*border-left: 1px dotted #999;*/
+	/*border-bottom: 1px dotted #999;*/
 	height: 22px;
 	position: absolute;
 	margin-left: 0;
@@ -70,7 +70,7 @@
 }
 
 .explr-line-fix {
-	border-left: 1px dotted #999;
+	/*border-left: 1px dotted #999;*/
 }
 
 .explr-icon {
