@@ -1,7 +1,7 @@
-$toggleActiveColor: $limeGreen;
 $containerWidth: 42px;
 $containerHeight: 26px;
 $containerRadius: 15px;
+$toggleActiveColor: lighten($seaBlue, 30%);
 $containerShadowActive: 0 2px 2px #222 inset;
 $containerShadowInactive: 0 2px 2px #111 inset;
 $backgroundColorInactive: #222;

@@ -30,13 +30,16 @@
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-edit explr-selection-entity btn-info" data-entity-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
+                <button class="explr-item-edit explr-selection-entity btn-info"
+                        data-entity-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
                     <i class="fa fa-eye"></i>
                 </button>
                 <button class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt" data-folder-route="{{ url_for('slideshow_content_folder_delete') }}" data-entity-route="{{ url_for('slideshow_content_delete') }}">
+                <button class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
+                        data-folder-route="{{ url_for('slideshow_content_folder_delete') }}"
+                        data-entity-route="{{ url_for('slideshow_content_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
@@ -69,45 +72,16 @@
 
     <div class="bottom-content">
         <div class="page-panel left-panel explr-explorer">
-
-            {% macro render_folder(folder) %}
-                {% set content_children = contents[folder.id]|default([]) %}
-                {% set has_children = folder.children or content_children %}
-
-                <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id }}">
-                    <a href="{{ url_for('slideshow_content_cd') }}?path={{ folder.path }}" class="{% if folder.path == working_folder_path %}active{% endif %}">
-                        {{ folder.name }}
-                    </a>
-
-                    {% if has_children %}
-                        <ul>
-                            {% for child in folder.children %}
-                                {{ render_folder(child) }}
-                            {% endfor %}
-                            {% for content in content_children %}
-                                {% set icon = enum_content_type.get_fa_icon(content.type) %}
-                                {% set color = enum_content_type.get_color_icon(content.type) %}
-                                <li class="explr-item">
-                                    <i class="fa {{ icon }} {{ color }}"></i>
-                                    <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}" target="_blank">
-                                        {{ content.name }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endmacro %}
-
-            <ul class="explr hidden" id="tree" data-working-folder-id="{{ working_folder.id }}">
-                {{ render_folder(folders_tree) }}
-            </ul>
+            {% with use_href=True %}
+                {% include 'slideshow/contents/component/explr-sidebar.jinja.html' %}
+            {% endwith %}
         </div>
 
-        <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}" class="hidden" method="POST">
-            <input type="hidden" name="entity_id" />
-            <input type="hidden" name="new_folder_id" />
-            <input type="hidden" name="is_folder" />
+        <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}" class="hidden"
+              method="POST">
+            <input type="hidden" name="entity_id"/>
+            <input type="hidden" name="new_folder_id"/>
+            <input type="hidden" name="is_folder"/>
         </form>
 
         <div class="page-content">
@@ -143,15 +117,17 @@
                         <a href="javascript:void(0);">
                             <i class="fa fa-folder"></i>
                             <form action="{{ url_for('slideshow_content_folder_add') }}" method="POST">
-                                <input type="text" name="name" autocomplete="off" />
+                                <input type="text" name="name" autocomplete="off"/>
                             </form>
                         </a>
                     </li>
 
                     {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
                     {% if parent_path %}
-                        <li class="previous-folder droppable" data-path="{{ parent_path }}" data-id="{{ working_folder.parent_id }}" data-folder="1">
-                            <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}" class="explr-link explr-item-selectable explr-item-folder">
+                        <li class="previous-folder droppable" data-path="{{ parent_path }}"
+                            data-id="{{ working_folder.parent_id }}" data-folder="1">
+                            <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}"
+                               class="explr-link explr-item-selectable explr-item-folder">
                                 <i class="fa fa-folder"></i>
                                 ..
                             </a>
@@ -160,30 +136,34 @@
 
                     {% for folder in working_folder_children %}
                         {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
-                        <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}" data-folder="1">
-                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
+                        <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}"
+                            data-folder="1">
+                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}"
+                               class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
                                 <i class="fa fa-folder"></i>
                                 <span>{{ truncate(folder.name, 25, '...') }}</span>
                                 <form action="{{ url_for('slideshow_content_folder_rename') }}" method="POST">
-                                    <input type="text" name="name" value="{{ folder.name }}" autocomplete="off" />
-                                    <input type="hidden" name="id" value="{{ folder.id }}" />
+                                    <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
+                                    <input type="hidden" name="id" value="{{ folder.id }}"/>
                                 </form>
                             </a>
                         </li>
                     {% endfor %}
 
 
-                    {% for content in contents[working_folder.id|default(None)]|default([]) %}
+                    {% for content in foldered_contents[working_folder.id|default(None)]|default([]) %}
                         {% set icon = enum_content_type.get_fa_icon(content.type) %}
                         {% set color = enum_content_type.get_color_icon(content.type) %}
 
-                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}" data-folder="0">
-                            <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-entity">
+                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}"
+                            data-folder="0">
+                            <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}"
+                               class="explr-link explr-item-selectable explr-item-actionable explr-item-entity">
                                 <i class="fa {{ icon }} {{ color }}"></i>
                                 <span>{{ truncate(content.name, 25, '...') }}</span>
                                 <form action="{{ url_for('slideshow_content_rename') }}" method="POST">
-                                    <input type="text" name="name" value="{{ content.name }}" autocomplete="off" />
-                                    <input type="hidden" name="id" value="{{ content.id }}" />
+                                    <input type="text" name="name" value="{{ content.name }}" autocomplete="off"/>
+                                    <input type="hidden" name="id" value="{{ content.id }}"/>
                                 </form>
                             </a>
                         </li>
@@ -195,7 +175,6 @@
                 <div class="modals-outer">
                     <div class="modals-inner">
                         {% include 'slideshow/contents/modal/add.jinja.html' %}
-                        {% include 'core/utrack.jinja.html' %}
                     </div>
                 </div>
             </div>

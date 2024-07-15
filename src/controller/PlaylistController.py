@@ -4,6 +4,8 @@ from flask import Flask, render_template, redirect, request, url_for, jsonify, a
 from src.exceptions.PlaylistSlugAlreadyExist import PlaylistSlugAlreadyExist
 from src.service.ModelStore import ModelStore
 from src.model.entity.Playlist import Playlist
+from src.model.enum.FolderEntity import FolderEntity
+from src.model.enum.ContentType import ContentType
 from src.interface.ObController import ObController
 
 
@@ -31,6 +33,8 @@ class PlaylistController(ObController):
         current_playlist = self._model_store.playlist().get(playlist_id)
         playlists = self._model_store.playlist().get_all(sort="created_at", ascending=False)
         durations = self._model_store.playlist().get_durations_by_playlists()
+        working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
+        working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
 
         if not current_playlist and len(playlists) > 0:
             current_playlist = playlists[0]
@@ -42,7 +46,13 @@ class PlaylistController(ObController):
             playlists=playlists,
             durations=durations,
             slides=self._model_store.slide().get_slides(playlist_id=current_playlist.id),
-            contents={content.id: content for content in self._model_store.content().get_contents()},
+            foldered_contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
+            contents={content.id: {"id": content.id, "name": content.name, "type": content.type.value} for content in self._model_store.content().get_contents()},
+            working_folder_path=working_folder_path,
+            working_folder=working_folder,
+            folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
+            enum_content_type=ContentType,
+            enum_folder_entity=FolderEntity,
         )
 
     def playlist_add(self):

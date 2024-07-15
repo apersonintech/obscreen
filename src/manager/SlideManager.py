@@ -110,16 +110,12 @@ class SlideManager(ModelManager):
 
     def post_delete(self, slide_id: str) -> str:
         return slide_id
-
-    def update_enabled(self, id: int, enabled: bool) -> None:
-        self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"enabled": enabled, "position": 999}))
-        self.post_update(id)
         
     def update_positions(self, positions: list) -> None:
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, {"position": slide_position})
 
-    def update_form(self, id: int, duration: int, content_id: Optional[int] = None, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '') -> Slide:
+    def update_form(self, id: int, duration: int, content_id: Optional[int] = None, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', enabled: bool = True) -> Slide:
         slide = self.get(id)
 
         if not slide:
@@ -128,6 +124,7 @@ class SlideManager(ModelManager):
         form = {
             "duration": duration,
             "content_id": content_id,
+            "enabled": enabled,
             "is_notification": True if is_notification else False,
             "cron_schedule": get_optional_string(cron_schedule),
             "cron_schedule_end": get_optional_string(cron_schedule_end)

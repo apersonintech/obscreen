@@ -17,8 +17,38 @@
 				border-radius: $baseRadius;
 			}
 		}
-
 	}
+
+	.modal-slide {
+		h2 {
+			font-size: 20px;
+		}
+
+		input {
+			&[disabled] {
+				color: #AAA;
+			}
+		}
+
+		.slide-schedule-group,
+		.slide-schedule-end-group {
+			select {
+				margin-right: 5px;
+			}
+
+			select,
+			input {
+				font-size: 12px;
+				max-width: 50%;
+
+				&.datetimepicker {
+					margin-left: 5px;
+					padding-left: 0;
+				}
+			}
+		}
+	}
+
 
 	.bottom-content {
 		.page-content {
@@ -61,19 +91,6 @@
 					.form-group {
 						flex-grow: 0;
 						margin-bottom: 0;
-
-						.widget {
-							a,
-							.btn {
-								margin-left: 10px;
-							}
-
-							input[type=text] {
-								border: none;
-								background: #000;
-								border-radius: $baseRadius;
-							}
-						}
 					}
 
 					h4 {
@@ -108,6 +125,7 @@
 
 					.qrcode-pic {
 						margin-top: 10px;
+
 						img {
 							border: 1px dashed #555;
 							padding: 5px;

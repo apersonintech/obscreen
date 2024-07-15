@@ -35,7 +35,7 @@ class ContentController(ObController):
 
         return render_template(
             'slideshow/contents/list.jinja.html',
-            contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
+            foldered_contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
             folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
             working_folder_path=working_folder_path,
             working_folder=working_folder,

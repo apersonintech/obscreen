@@ -1,4 +1,5 @@
 const $modalsRoot = $('.modals');
+const $pickersRoot = $('.pickers');
 
 const showModal = function (modalClass) {
     $modalsRoot.removeClass('hidden').find('form').trigger('reset');
@@ -6,25 +7,32 @@ const showModal = function (modalClass) {
     $modalsRoot.find('.modal.' + modalClass).removeClass('hidden');
 };
 
+const showPickers = function (modalClass, callback) {
+    $pickersRoot.removeClass('hidden').find('form').trigger('reset');
+    $pickersRoot.find('.modal').addClass('hidden');
+    $pickersRoot.find('.modal.' + modalClass).removeClass('hidden');
+    onPickedElement = callback;
+};
+
 const hideModal = function () {
     $modalsRoot.addClass('hidden').find('form').trigger('reset');
+};
+
+const hidePicker = function () {
+    $pickersRoot.addClass('hidden').find('form').trigger('reset');
 };
 
 const hideDropdowns = function () {
     $('.dropdown').removeClass('dropdown-show');
 };
 
-// Open complete path in explorer sidebar
-const explrSidebarOpenFromFolder = function (folderId) {
-    const $leaf = $('.li-explr-folder-' + folderId);
-    let $parent = $leaf;
-    while ($parent.length > 0) {
-        const $toggler = $parent.find('.explr-toggler:eq(0)');
-        if ($toggler.hasClass('explr-plus')) {
-            $parent.find('.explr-toggler:eq(0)').trigger('click');
-        }
-        $parent = $parent.parents('.li-explr-folder:eq(0)');
-    }
+const showToast = function (text) {
+    const $toast = $("#toast");
+    $toast.addClass('show');
+    $toast.text(text);
+    setTimeout(function() {
+        $toast.removeClass('show');
+    }, 3000);
 };
 
 jQuery(document).ready(function ($) {
@@ -77,9 +85,14 @@ jQuery(document).ready(function ($) {
         hideModal();
     });
 
+    $(document).on('click', '.picker-close', function () {
+        hidePicker();
+    });
+
     $(document).keyup(function (e) {
         if (e.key === "Escape") {
             hideModal();
+            hidePicker();
             hideDropdowns();
         }
     });
@@ -133,6 +146,8 @@ jQuery(document).ready(function ($) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText($input.val());
         }
+
+        showToast(l.js_common_copied);
     });
 });
 
