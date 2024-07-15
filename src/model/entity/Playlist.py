@@ -89,7 +89,7 @@ class Playlist:
         return f"Playlist(" \
                f"id='{self.id}',\n" \
                f"name='{self.name}',\n" \
-               f"nameslug='{self.slug}',\n" \
+               f"slug='{self.slug}',\n" \
                f"enabled='{self.enabled}',\n" \
                f"time_sync='{self.time_sync}',\n" \
                f"created_by='{self.created_by}',\n" \

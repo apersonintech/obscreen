@@ -28,6 +28,15 @@ body, html {
 	align-self: stretch;
 }
 
+.vertical {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	flex: 1;
+	align-self: stretch;
+}
+
 main {
 	flex: 1;
 	display: flex;
@@ -51,7 +60,7 @@ main {
 			border-bottom: $layoutBorder;
 
 			h1 {
-				color: white;
+				color: $white;
 				font-weight: 600;
 				font-size: 24px;
 			}
@@ -63,14 +72,11 @@ main {
 				justify-content: flex-end;
 				align-items: center;
 
+				.btn,
 				button {
 					margin-left: 10px;
 				}
 			}
-		}
-
-		.alert {
-
 		}
 
 		.bottom-content {

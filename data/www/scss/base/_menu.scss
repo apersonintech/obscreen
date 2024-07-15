@@ -103,7 +103,7 @@ menu {
 					padding-left: 10px;
 
 					i {
-						color: white;
+						color: $white;
 						opacity: .2;
 						background: transparent;
 						display: flex;
@@ -119,7 +119,7 @@ menu {
 				}
 
 				&:after {
-					background: white;
+					background: $white;
 					content: "";
 					height: 195px;
 					left: -200px;
@@ -156,11 +156,11 @@ menu {
 					}
 
 					a {
-						color: white;
+						color: $white;
 						font-weight: bold;
 
 						i {
-							color: white;
+							color: $white;
 							opacity: 1;
 						}
 					}

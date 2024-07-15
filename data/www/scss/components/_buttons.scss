@@ -4,7 +4,7 @@ button,
 	$shadowOffset: 2px;
 
 	position: relative;
-	padding: 10px 13px 8px 10px;
+	padding: 10px 10px 8px 10px;
 	font-size: 14px;
 	color: #fff;
 	cursor: pointer;
@@ -35,15 +35,48 @@ button,
 		color: #AAA;
 		background: $neutralGrey;
 		box-shadow: 0 $shadowOffset 0 0 darken($neutralGrey, 10%);
-		&:hover { box-shadow: 0 $shadowOffset 0 1px #222 inset; background: darken($neutralGrey, 10%); }
-		&:focus { background: darken($neutralGrey, 20%); }
+
+		&:hover {
+			box-shadow: 0 $shadowOffset 0 1px #222 inset;
+			background: darken($neutralGrey, 10%);
+		}
+
+		&:focus {
+			background: darken($neutralGrey, 20%);
+		}
+	}
+
+	.btn-wire-neutral {
+		background: transparent;
+		border: 2px solid $neutralGrey;
+		color: rgba($white, .8);
+		box-shadow: none;
+
+		&:hover {
+			background: rgba($neutralGrey, 0.05);
+			border-color: darken($neutralGrey, 10%);
+			color: darken($neutralGrey, 10%);
+			box-shadow: none;
+		}
+
+		&:focus {
+			border-color: darken($neutralGrey, 20%);
+			background: transparent;
+		}
 	}
 
 	&.btn-naked {
 		background: transparent;
 		box-shadow: none;
-		&:hover { box-shadow: 0 $shadowOffset 0 1px #222 inset; background: darken($neutralGrey, 10%); }
-		&:focus { background: darken($neutralGrey, 20%); }
+
+		&:hover {
+			box-shadow: 0 $shadowOffset 0 1px #222 inset;
+			background: darken($neutralGrey, 10%);
+		}
+
+		&:focus {
+			background: darken($neutralGrey, 20%);
+		}
 	}
 }
 

@@ -255,3 +255,13 @@ def merge_dicts(dict1, dict2):
 
 def dictsort(dict1, attribute="position"):
     return dict(sorted(dict1.items(), key=lambda item: item[1][attribute]))
+
+
+def slugify_next(slug: str) -> str:
+    parts = slug.rsplit('-', 1)
+
+    if len(parts) > 1 and parts[-1].isdigit():
+        next_number = int(parts[-1]) + 1
+        return f"{parts[0]}-{next_number}"
+    else:
+        return f"{slug}-1"

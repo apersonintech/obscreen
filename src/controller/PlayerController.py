@@ -37,13 +37,22 @@ class PlayerController(ObController):
         playlist_id = current_playlist.id if current_playlist else None
 
         items = self._get_playlist(playlist_id=playlist_id, preview_content_id=preview_content_id)
+        intro_slide_duration = self._model_store.variable().get_one_by_name('intro_slide_duration').eval()
+
+        if items['preview_mode'] or request.args.get('intro', '1') == '0':
+            intro_slide_duration = 0
+
+        animation_enabled = self._model_store.variable().get_one_by_name('slide_animation_enabled').eval()
+
+        if request.args.get('animation', '1') == '0':
+            animation_enabled = False
 
         return render_template(
             'player/player.jinja.html',
             items=items,
-            default_slide_duration=0 if items['preview_mode'] else self._model_store.variable().get_one_by_name('default_slide_duration').eval(),
+            intro_slide_duration=intro_slide_duration,
             polling_interval=self._model_store.variable().get_one_by_name('polling_interval'),
-            slide_animation_enabled=self._model_store.variable().get_one_by_name('slide_animation_enabled'),
+            slide_animation_enabled=animation_enabled,
             slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
             slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
             slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed'),

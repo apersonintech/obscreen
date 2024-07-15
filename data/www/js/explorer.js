@@ -105,7 +105,7 @@ jQuery(function ($) {
             route = $(this).attr('data-entity-route') + '?id=' + $item.attr('data-id');
         }
 
-        if (confirm(l.common_are_you_sure)) {
+        if (confirm(l.js_common_are_you_sure)) {
             document.location.href = route;
         }
     });
@@ -134,7 +134,13 @@ jQuery(function ($) {
                 selectEpxlrLink(verticalNeighbors.above.find('.explr-link'));
             } else if (e.key === "ArrowDown" && verticalNeighbors.below) {
                 selectEpxlrLink(verticalNeighbors.below.find('.explr-link'));
+            } else if (e.key === "Backspace") {
+                if ($('.explr-item-delete:visible').length) {
+                    $('.explr-item-delete:visible').click();
+                }
             }
+        } else if (e.key.indexOf('Arrow') === 0) {
+            selectEpxlrLink($('.explr-dirview li:visible:eq(0)').find('.explr-link'));
         }
     });
 

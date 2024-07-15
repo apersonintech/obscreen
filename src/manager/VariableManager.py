@@ -1,5 +1,6 @@
 import json
 import time
+import math
 from typing import Dict, Optional, List, Tuple, Union
 
 from src.manager.DatabaseManager import DatabaseManager
@@ -111,7 +112,7 @@ class VariableManager:
             {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32, "unit": VariableUnit.MEGABYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
 
             ### Player Options
-            {"name": "default_slide_duration", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 3, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_default_slide_duration'), "refresh_player": False},
+            {"name": "intro_slide_duration", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 3, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_intro_slide_duration'), "refresh_player": False},
             {"name": "default_slide_time_with_seconds", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_default_slide_time_with_seconds'), "refresh_player": False},
             {"name": "polling_interval", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 5, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_polling_interval'), "refresh_player": True},
 
@@ -132,6 +133,7 @@ class VariableManager:
             {"name": "auth_enabled", "section": self.t(VariableSection.SECURITY), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled'), "refresh_player": False},
 
             # Not editable (System information)
+            {"name": "start_counter", "value": 0, "type": VariableType.INT, "editable": False, "description": self.t('settings_variable_desc_ro_start_counter')},
             {"name": "last_folder_content", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": self.t('settings_variable_desc_ro_last_folder_content')},
             {"name": "last_folder_node_player", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": self.t('settings_variable_desc_ro_last_folder_node_player')},
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},

@@ -1,0 +1,117 @@
+.tiles {
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-self: stretch;
+
+	.tiles-inner {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		align-items: flex-start;
+		align-self: stretch;
+		padding: 2px;
+
+		.tiles-empty {
+
+		}
+
+		.tile-item {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+			background: #222;
+			align-self: stretch;
+			color: $white;
+			margin: 1px;
+			padding: 15px;
+
+			&:hover,
+			&.active {
+				background: #111;
+
+				&:hover {
+					opacity: 1;
+				}
+			}
+
+
+			&.disabled {
+
+				.tile-header {
+					.head-icon {
+						i {
+							color: #222;
+						}
+					}
+				}
+			}
+
+			.tile-header {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+				align-self: stretch;
+
+
+				.head-icon {
+					flex: 1;
+
+					i {
+						font-size: 6px;
+						color: white;
+						opacity: .8;
+						display: flex;
+					}
+				}
+
+				.status-icons {
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+					align-items: center;
+
+					i {
+						font-size: 16px;
+						margin-left: 10px;
+					}
+				}
+			}
+
+			.tile-body {
+				flex: 1;
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+				font-size: 15px;
+				font-weight: normal;
+				letter-spacing: 0.8px;
+				line-height: 22px;
+				margin: 0 0 0 10px;
+				flex-wrap: nowrap;
+			}
+
+			.tile-footer {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+				align-items: center;
+				margin: 0;
+
+				.foot-span {
+					opacity: .8;
+					font-size: 13px;
+					font-family: "Courier New";
+				}
+			}
+
+		}
+	}
+}

@@ -1,10 +1,10 @@
 .form-holder {
-	min-width: 686px;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: flex-start;
 	align-self: stretch;
+	flex: 1;
 
 	form {
 		max-width: 434px;
@@ -24,172 +24,196 @@ form {
 		font-size: 14px;
 		margin: 0 0 25px 0;
 	}
+}
 
-	.form-group {
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-		align-items: flex-start;
-		align-self: stretch;
-		width: 100%;
+.form-group {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-self: stretch;
+	width: 100%;
+	flex: 1;
+	margin-bottom: 20px;
+
+
+	label {
 		flex: 1;
-		margin-bottom: 20px;
+		font-size: 12px;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		align-self: stretch;
+		color: #666666;
+
+		&.btn-upload {
+			color: $white;
+			font-size: 14px;
+			flex: 0;
+			flex-basis: auto;
+			margin-top: 5px;
+
+			input[type=file] {
+				display: none;
+			}
+
+			input[type=text] {
+				margin-bottom: 2px;
+				padding-left: 0;
+				margin-left: 10px;
+			}
+
+			i {
+				margin-left: 3px;
+				margin-right: 10px;
+			}
+		}
+	}
+
+	.widget {
+		margin-top: 10px;
+		align-self: stretch;
+		display: flex;
+		flex-direction: row;
 
 
-		label {
+		div {
+			color: rgba($white, .7);
+			font-size: 14px;
+		}
+
+		select,
+		input,
+		textarea {
+			outline: none;
+			padding: 8px 0 5px 8px;
+			border-radius: 2px;
+			border: 1px solid rgba($white, .05);
 			flex: 1;
-			font-size: 12px;
+			background: #555;
+			box-shadow: 0 2px 1px #444, 0 4px 2px #333 inset;
+			color: #DDD;
+			font-size: 14px;
+
+			&[disabled] {
+				color: #555;
+				background: none;
+				box-shadow: none;
+				border: none;
+				border-bottom: 1px solid #333;
+				border-radius: 0;
+			}
+		}
+
+
+	}
+
+
+	&.tab-select {
+		border-bottom: 1px solid #444;
+		display: flex;
+		flex-direction: row;
+		position: relative;
+		height: 48px;
+		padding: 48px 0 0 0;
+		flex: 0;
+		flex-basis: auto;
+
+		.widget {
+			height: 49px;
+			margin-top: 0;
 			display: flex;
 			flex-direction: row;
 			justify-content: flex-start;
 			align-items: center;
-			align-self: stretch;
-			color: #666666;
+			position: absolute;
+			top: 0;
+			left: 0;
+			border-bottom: 2px solid $seaBlue;
+			color: $seaBlue;
 
-			&.btn-upload {
-				color: white;
-				font-size: 14px;
-				flex: 0;
-				flex-basis: auto;
-				margin-top: 5px;
-
-				input[type=file] {
-					display: none;
-				}
-
-				input[type=text] {
-					margin-bottom: 2px;
-					padding-left: 0;
-					margin-left: 10px;
-				}
-
-				i {
-					margin-left: 3px;
-					margin-right: 10px;
-				}
-			}
-		}
-
-		.widget {
-			margin-top: 10px;
-			align-self: stretch;
-			display: flex;
-			flex-direction: row;
-
-
-			div {
-				color: rgba($white, .7);
-				font-size: 14px;
+			select {
+				border: none;
+				background: none;
+				box-shadow: none;
+				padding: 10px 35px 10px 10px;
+				margin: 0;
+				color: inherit;
+				appearance: none;
+				-moz-appearance: none;
+				-webkit-appearance: none;
+				text-align: left;
+				font-weight: bold;
+				cursor: pointer;
+				border-top-left-radius: 4px;
+				border-top-right-radius: 4px;
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 200px;
+				z-index: 2;
 			}
 
-			select,
-			input,
-			textarea {
-				outline: none;
-				padding: 8px 0 5px 8px;
-				border-radius: 2px;
-				border: 1px solid rgba($white, .05);
-				flex: 1;
-				background: #555;
-				box-shadow: 0 2px 1px #444, 0 4px 2px #333 inset;
-				color: #DDD;
-				font-size: 14px;
+			i {
+				margin-left: 10px;
+				margin-right: 0;
 
-				&[disabled] {
-					color: #555;
-					background: none;
-					box-shadow: none;
-					border: none;
-					border-bottom: 1px solid #333;
-					border-radius: 0;
-				}
-			}
-
-
-		}
-
-
-		&.tab-select {
-			border-bottom: 1px solid #444;
-			display: flex;
-			flex-direction: row;
-			position: relative;
-			height: 48px;
-			padding: 48px 0 0 0;
-			flex: 0;
-			flex-basis: auto;
-
-			.widget {
-				height: 49px;
-				margin-top: 0;
-				display: flex;
-				flex-direction: row;
-				justify-content: flex-start;
-				align-items: center;
-				position: absolute;
-				top: 0;
-				left: 0;
-				border-bottom: 2px solid $seaBlue;
-				color: $seaBlue;
-
-				select {
-					border: none;
-					background: none;
-					box-shadow: none;
-					padding: 10px 35px 10px 10px;
-					margin: 0;
-					color: inherit;
-					appearance: none;
-					-moz-appearance: none;
-					-webkit-appearance: none;
-					text-align: left;
-					font-weight: bold;
-					cursor: pointer;
-					border-top-left-radius: 4px;
-					border-top-right-radius: 4px;
-					border-bottom-left-radius: 0;
-					border-bottom-right-radius: 0;
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					max-width: 200px;
-					z-index: 2;
-				}
-
-				i {
-					margin-left: 10px;
-					margin-right: 0;
-
-					&.triangle {
-						margin-top: -4px;
-						margin-left: 0;
-						position: absolute;
-						right: 10px;
-					}
+				&.triangle {
+					margin-top: -4px;
+					margin-left: 0;
+					position: absolute;
+					right: 10px;
 				}
 			}
 		}
 	}
 
-	.actions {
-		display: flex;
+	&.form-group-horizontal {
+		margin: 10px 0 20px 0;
 		flex-direction: row;
-		justify-content: flex-end;
+		justify-content: flex-start;
 		align-items: center;
-		align-self: stretch;
-		margin: 20px 0 0 0;
+
+		.widget {
+			margin: 0;
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+		}
+	}
+}
+
+.actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	align-self: stretch;
+	margin: 20px 0 0 0;
+
+	button {
+		margin-left: 25px;
+	}
+
+	&.actions-left {
+		justify-content: flex-start;
 
 		button {
-			margin-left: 25px;
+			margin-left: 0;
+			margin-right: 25px;
 		}
+	}
 
-		&.actions-left {
-			justify-content: flex-start;
+	&.actions-center {
+		justify-content: center;
 
-			button {
-				margin-left: 0;
-				margin-right: 25px;
-			}
+		button {
+			margin-left: 0;
+			margin-right: 0;
 		}
 	}
 }

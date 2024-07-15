@@ -58,6 +58,29 @@
 					background: darken($color, 20%);
 				}
 			}
+
+			&.btn-wire-#{"#{$name}"} {
+				background: transparent;
+				box-shadow: none;
+				border: 2px solid $color;
+				color: rgba($white, .8);
+
+				i.btn-match {
+					color: $color;
+				}
+
+				&:hover {
+					background: rgba($color, 0.05);
+					border-color: darken($color, 10%);
+					color: darken($color, 10%);
+					box-shadow: none;
+				}
+
+				&:focus {
+					border-color: darken($color, 20%);
+					background: transparent;
+				}
+			}
 		}
 	}
 }

@@ -18,7 +18,7 @@ const hideDropdowns = function () {
 const explrSidebarOpenFromFolder = function (folderId) {
     const $leaf = $('.li-explr-folder-' + folderId);
     let $parent = $leaf;
-    while($parent.length > 0) {
+    while ($parent.length > 0) {
         const $toggler = $parent.find('.explr-toggler:eq(0)');
         if ($toggler.hasClass('explr-plus')) {
             $parent.find('.explr-toggler:eq(0)').trigger('click');
@@ -112,7 +112,7 @@ jQuery(document).ready(function ($) {
         $('#entity-utrack-updated-at').val(prettyTimestamp(entity.updated_at * 1000));
     });
 
-    setTimeout(function() {
+    setTimeout(function () {
         $('.alert-timeout').remove();
     }, 3000);
 
@@ -122,5 +122,17 @@ jQuery(document).ready(function ($) {
             $firstInputText.focus();
         }
     }
+
+    $(document).on('click', '.copy-link', function (e) {
+        e.preventDefault();
+        const $input = $('#' + $(this).attr('data-target-id'));
+        $input.select();
+        $input[0].setSelectionRange(0, 99999);
+        document.execCommand("copy");
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText($input.val());
+        }
+    });
 });
 

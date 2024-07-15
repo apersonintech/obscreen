@@ -22,7 +22,7 @@
 			background: $layoutBackground;
 			border-radius: 10px;
 			color: lighten($black, 20%);
-            padding: 40px;
+			padding: 40px;
 			box-shadow: 0 2px #222;
 			border: 1px solid #222;
 
@@ -30,15 +30,27 @@
 				h2 {
 					padding: 0;
 					margin: 0 0 30px 0;
-                    font-weight: normal;
-                    color: #999;
+					font-weight: normal;
+					color: #999;
 				}
 
 				h3 {
 					align-self: stretch;
-					border-bottom: 1px solid $lightGrey;
-					padding: 15px 15px;
 					margin: 0;
+					font-size: 14px;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-start;
+					align-items: center;
+					color: white;
+					padding-bottom: 10px;
+					text-decoration: none;
+
+					&.divide {
+						border-top: 1px solid #222;
+						margin-top: 20px;
+						padding-top: 20px;
+					}
 				}
 			}
 		}

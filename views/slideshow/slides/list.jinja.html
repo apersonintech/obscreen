@@ -1,77 +1,15 @@
-{% extends 'base.jinja.html' %}
-
-{% block page_title %}
-    {{ l.slideshow_slide_page_title }}
-{% endblock %}
-
-{% block add_css %}
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css" />
-    {{ HOOK(H_SLIDESHOW_SLIDES_CSS) }}
-{% endblock %}
-
-{% block add_js %}
-    <script type="text/javascript">
-        var schedule_start_choices = {
-            'loop': '{{ l.slideshow_slide_form_label_cron_scheduled_loop }}',
-            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
-            'cron': '{{ l.slideshow_slide_form_label_cron_scheduled_cron }}',
-        };
-        var schedule_end_choices = {
-            'stayloop': '{{ l.slideshow_slide_form_label_cron_scheduled_stayloop }}',
-            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
-            'duration': '{{ l.slideshow_slide_form_label_cron_scheduled_duration }}',
-        };
-        var contents = {{ json_dumps(contents) | safe }}
-    </script>
-    <script src="{{ STATIC_PREFIX }}js/lib/flatpickr.min.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/lib/tablednd-fixed.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/slideshow/slides.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
-    {{ HOOK(H_SLIDESHOW_SLIDES_JAVASCRIPT) }}
-{% endblock %}
-
 {% block page %}
     <div class="toolbar">
-        <h2><i class="fa-regular fa-clock icon-left"></i>{{ l.slideshow_slide_page_title }}</h2>
-
         <div class="toolbar-actions">
-            {{ HOOK(H_SLIDESHOW_SLIDES_TOOLBAR_ACTIONS_START) }}
-
-            <a href="{% if current_playlist %}{{ url_for('player_use', playlist_slug_or_id=current_playlist.slug) }}{% else %}{{ url_for('player') }}{% endif %}" target="_blank" class="btn" title="{{ l.slideshow_slide_goto_player }}">
-                <i class="fa fa-eye"></i>
-            </a>
-
             <a href="{{ url_for('slideshow_player_refresh') }}" class="btn" title="{{ l.slideshow_slide_refresh_player }}">
                 <i class="fa fa-refresh"></i>
             </a>
 
             <button class="purple slide-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_slide_button_add }}</button>
-
-
-            {% if PLAYLIST_ENABLED %}
-            <select class="select-item-picker playlist-picker">
-                <option value="{{ url_for('slideshow_slide_list') }}" {% if not current_playlist %}selected="selected"{% endif %}>
-                    {{ l.common_default_playlist }}
-                </option>
-                {% for playlist in playlists %}
-                    {% set is_active_playlist = str(current_playlist.id) == str(playlist.id) %}
-                    <option value="{{ url_for('slideshow_slide_list_playlist_use', playlist_id=playlist.id) }}" {% if is_active_playlist %}selected="selected"{% endif %}>
-                        {{ playlist.name }}
-                    </option>
-                {% endfor %}
-            </select>
-            {% endif %}
-
-            {{ HOOK(H_SLIDESHOW_SLIDES_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
 
-    {% if request.args.get('refresh_player') %}
-        <div class="alert alert-success">
-            <i class="fa fa-refresh icon-left"></i>
-            {{ l.slideshow_slide_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
-        </div>
-    {% endif %}
+
 
     <div class="panel {% if PLAYLIST_ENABLED %}panel-active{% endif %}">
         <div class="panel-body">
@@ -82,26 +20,5 @@
             {% endwith %}
         </div>
     </div>
-    <div class="panel panel-inactive">
-        <div class="panel-body">
-            <h3>{{ l.slideshow_slide_panel_inactive }}</h3>
 
-            {% with tclass='inactive', slides=disabled_slides %}
-                {% include 'slideshow/slides/component/table.jinja.html' %}
-            {% endwith %}
-        </div>
-    </div>
-
-    <div class="modals hidden">
-        <div class="modals-outer">
-            <a href="javascript:void(0);" class="modal-close">
-                <i class="fa fa-close"></i>
-            </a>
-            <div class="modals-inner">
-                {% include 'slideshow/slides/modal/add.jinja.html' %}
-                {% include 'slideshow/slides/modal/edit.jinja.html' %}
-                {% include 'core/utrack.jinja.html' %}
-            </div>
-        </div>
-    </div>
 {% endblock %}
