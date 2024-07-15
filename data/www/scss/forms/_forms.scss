@@ -127,6 +127,7 @@ form {
 			font-size: 14px;
 
 			&.input-naked,
+			&.disabled,
 			&[disabled] {
 				color: #555;
 				background: none;
@@ -136,6 +137,7 @@ form {
 				border-radius: 0;
 			}
 
+			&.disabled,
 			&[disabled] {
 				border: none;
 				background: $black;

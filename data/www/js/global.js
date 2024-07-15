@@ -89,11 +89,20 @@ jQuery(document).ready(function ($) {
         hidePicker();
     });
 
+    $(document).on('focus', 'input.disabled', function () {
+        $(this).blur();
+    });
+
     $(document).keyup(function (e) {
         if (e.key === "Escape") {
-            hideModal();
-            hidePicker();
             hideDropdowns();
+
+            if ($('.pickers .modal:visible').length) {
+                hidePicker();
+                return;
+            }
+
+            hideModal();
         }
     });
 

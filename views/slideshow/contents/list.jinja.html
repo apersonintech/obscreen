@@ -30,25 +30,25 @@
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-edit explr-selection-entity btn-info"
+                <button type="button" class="explr-item-edit explr-selection-entity btn-info"
                         data-entity-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
                     <i class="fa fa-eye"></i>
                 </button>
-                <button class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
+                <button type="button" class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
+                <button type="button" class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
                         data-folder-route="{{ url_for('slideshow_content_folder_delete') }}"
                         data-entity-route="{{ url_for('slideshow_content_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
 
-            <button class="btn btn-info content-add item-add">
+            <button type="button" class="btn btn-info content-add item-add">
                 <i class="fa fa-file-circle-plus icon-left"></i>
                 {{ l.slideshow_content_button_add }}
             </button>
-            <button class="folder-add btn-neutral">
+            <button type="button" class="folder-add btn-neutral">
                 <i class="fa fa-folder-plus icon-left"></i>
                 {{ l.common_new_folder }}
             </button>

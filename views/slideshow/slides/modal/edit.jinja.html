@@ -29,12 +29,12 @@
         <div class="form-group slide-content-id-group">
             <label for="slide-edit-content-id">{{ l.slideshow_slide_form_label_content_id }}</label>
             <div class="widget">
-                <input type="text" disabled="disabled" value="" class="target-label" />
+                <input type="text" value="" class="disabled target-label content-explr-picker" />
                 <input type="hidden" name="content_id" id="slide-edit-content-id" required="required" class="target"></input>
-                <button class="btn btn-naked content-explr-picker">
+                <button type="button" class="btn btn-naked content-explr-picker">
                     <i class="fa fa-crosshairs"></i>
                 </button>
-                <button class="btn btn-neutral hidden slide-content-show" data-route="{{ url_for('slideshow_content_show', content_id='__id__') }}">
+                <button type="button" class="btn btn-neutral hidden slide-content-show" data-route="{{ url_for('slideshow_content_show', content_id='__id__') }}">
                     <i class="fa-solid fa-up-right-from-square"></i>
                 </button>
             </div>

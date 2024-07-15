@@ -29,22 +29,22 @@
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
-                <button class="explr-item-edit explr-selection-entity btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
+                <button type="button" class="explr-item-edit explr-selection-entity btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
                     <i class="fa fa-eye"></i>
                 </button>
-                <button class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
+                <button type="button" class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-entity-route="{{ url_for('fleet_node_player_delete') }}">
+                <button type="button" class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-entity-route="{{ url_for('fleet_node_player_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
 
-            <button class="btn btn-info node-player-add item-add">
+            <button type="button" class="btn btn-info node-player-add item-add">
                 <i class="fa fa-file-circle-plus icon-left"></i>
                 {{ l.fleet_node_player_button_add }}
             </button>
-            <button class="folder-add btn-neutral">
+            <button type="button" class="folder-add btn-neutral">
                 <i class="fa fa-folder-plus icon-left"></i>
                 {{ l.common_new_folder }}
             </button>
