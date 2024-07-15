@@ -58,12 +58,6 @@
                 <a href="javascript:void(0);" class="item-delete slide-delete" data-route="{{ url_for('slideshow_slide_delete', slide_id=slide.id) }}">
                     <i class="fa fa-trash"></i>
                 </a>
-
-                {% if slide.content_id %}
-                <a href="{{ url_for('slideshow_content_show', content_id=slide.content_id) }}" class="item-download slide-download" target="_blank">
-                    <i class="fa fa-eye"></i>
-                </a>
-                {% endif %}
             </td>
         </tr>
     {% endfor %}

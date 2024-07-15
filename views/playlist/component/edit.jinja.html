@@ -20,7 +20,7 @@
                 <label for="">{{ l.playlist_form_label_enabled }}</label>
                 <div class="widget">
                     <div class="toggle">
-                        <input type="checkbox" id="playlist-edit-enabled" name="enabled"
+                        <input type="checkbox" id="playlist-edit-enabled" name="enabled" value="1"
                                {% if current_playlist.enabled %}checked="checked"{% endif %}>
                         <label for="playlist-edit-enabled"></label>
                     </div>
@@ -31,7 +31,7 @@
                 <label for="">{{ l.playlist_form_label_time_sync }}</label>
                 <div class="widget">
                     <div class="toggle">
-                        <input type="checkbox" id="playlist-edit-time-sync" name="time_sync"
+                        <input type="checkbox" id="playlist-edit-time-sync" name="time_sync" value="1"
                                {% if current_playlist.time_sync %}checked="checked"{% endif %}>
                         <label for="playlist-edit-time-sync"></label>
                     </div>
