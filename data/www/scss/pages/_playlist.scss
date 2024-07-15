@@ -1,28 +1,155 @@
-
 .view-playlist-list main .main-container {
 
+	.modal-playlist-qrcode {
+		h2 {
+			text-align: center;
+		}
 
+		.qrcode-pic {
+			text-align: center;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
 
-}
+			img {
+				border: 4px solid #555;
+				border-radius: $baseRadius;
+			}
+		}
 
-.view-playlist-edit main .main-container {
+	}
 
 	.bottom-content {
 		.page-content {
 			flex: 1;
 
-			.form-holder {
-				margin: 20px 20px 20px 10px;
+			&.with-right-panel {
+				flex: 0.5;
+			}
+
+			.inner {
+				padding: 0;
+
+				h3 {
+					font-size: 16px;
+					font-weight: 500;
+					color: #DDD;
+					text-decoration: none;
+					margin: 0 0 20px 0;
+				}
+
+				.form-holder {
+					margin: 20px 10px 20px 20px;
+					border-right: 1px solid #222;
+					padding-right: 20px;
+					flex: 1.3;
+
+					form {
+						max-width: initial;
+					}
+
+					.form-group {
+						flex-grow: 0;
+					}
+				}
+
+				.preview-holder {
+					margin: 20px 20px 20px 10px;
+					flex: 1;
+
+					.form-group {
+						flex-grow: 0;
+						margin-bottom: 0;
+
+						.widget {
+							a,
+							.btn {
+								margin-left: 10px;
+							}
+
+							input[type=text] {
+								border: none;
+								background: #000;
+								border-radius: $baseRadius;
+							}
+						}
+					}
+
+					h4 {
+						font-size: 14px;
+						display: flex;
+						flex-direction: row;
+						justify-content: flex-start;
+						align-items: center;
+						align-self: stretch;
+						color: white;
+						padding-bottom: 10px;
+						text-decoration: none;
+
+						&.divide {
+							border-top: 1px solid #222;
+							margin-top: 20px;
+							padding-top: 20px;
+						}
+					}
+
+					p {
+						font-size: 12px;
+						line-height: 18px;
+						display: flex;
+						margin-bottom: 5px;
+						flex-direction: row;
+						justify-content: flex-start;
+						align-items: center;
+						align-self: stretch;
+						color: #666666;
+					}
+
+					.qrcode-pic {
+						margin-top: 10px;
+						img {
+							border: 1px dashed #555;
+							padding: 5px;
+							border-radius: $baseRadius;
+						}
+					}
+
+					.preview {
+						background: black;
+						border: 1px solid rgba($white, .3);
+						border-radius: $baseRadius;
+						justify-content: center;
+						align-items: center;
+						align-self: stretch;
+						display: flex;
+						margin: 10px 0 20px 0;
+						height: 300px;
+
+						iframe {
+							flex: 1;
+							align-self: stretch;
+						}
+					}
+				}
+
+				.slides-holder {
+					margin-top: 40px;
+					border-top: 1px solid #222;
+					align-self: stretch;
+					padding-top: 20px;
+				}
 			}
 		}
 
-		.page-panel.right-panel {
-
+		.page-panel.left-panel {
+			flex: 0.3;
+			max-width: initial;
+			justify-content: center;
+			align-items: center;
+			display: flex;
 		}
 	}
 }
-
-
-
 
 

@@ -6,12 +6,33 @@
 
 {% block add_css %}
     {{ HOOK(H_PLAYLIST_CSS) }}
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css" />
 {% endblock %}
 
 {% block add_js %}
+    <script type="text/javascript">
+        var schedule_start_choices = {
+            'loop': '{{ l.slideshow_slide_form_label_cron_scheduled_loop }}',
+            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
+            'cron': '{{ l.slideshow_slide_form_label_cron_scheduled_cron }}',
+        };
+        var schedule_end_choices = {
+            'stayloop': '{{ l.slideshow_slide_form_label_cron_scheduled_stayloop }}',
+            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
+            'duration': '{{ l.slideshow_slide_form_label_cron_scheduled_duration }}',
+        };
+        var contents = {{ json_dumps(contents) | safe }}
+    </script>
+    <script src="{{ STATIC_PREFIX }}js/lib/flatpickr.min.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/tablednd-fixed.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/qrcode.min.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/slideshow/slides.js"></script>
     <script src="{{ STATIC_PREFIX }}js/playlist/playlists.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
     {{ HOOK(H_PLAYLIST_JAVASCRIPT) }}
 {% endblock %}
+
+{% block body_class %}view-playlist-list{% endblock %}
 
 {% block page %}
 
@@ -26,21 +47,49 @@
                 <i class="fa fa-play icon-left"></i>
                 {{ l.playlist_button_add }}
             </button>
+
+            {% if current_playlist %}
+                <a href="{{ url_for('playlist_delete', playlist_id=current_playlist.id) }}" class="btn btn-danger-alt protected">
+                    <i class="fa fa-trash"></i>
+                </a>
+            {% endif %}
+
             {{ HOOK(H_PLAYLIST_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
 
+    <div class="alert alert-info tiles-empty empty-flag {% if playlists|length != 0 %}hidden{% endif %}">
+        {{ l.playlist_panel_empty|replace(
+            '%link%',
+            ('<a href="javascript:void(0);" class="item-add playlist-add">'~l.playlist_button_add~'</a>')|safe
+        ) }}
+    </div>
+
+     {% if request.args.get('refresh_player') %}
+        <div class="alert alert-success">
+            <i class="fa fa-refresh icon-left"></i>
+            {{ l.slideshow_slide_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ l[error] }}
+        </div>
+    {% endif %}
+
     <div class="bottom-content">
+        <div class="page-panel left-panel">
+            {% with playlists=playlists %}
+                {% include 'playlist/component/table.jinja.html' %}
+            {% endwith %}
+        </div>
+
         <div class="page-content">
             <div class="inner">
-                <div class="panel">
-                    <div class="panel-body">
-                        <h3>{{ l.sysinfo_panel_title }}</h3>
-                        {% with playlists=playlists %}
-                            {% include 'playlist/component/table.jinja.html' %}
-                        {% endwith %}
-                    </div>
-                </div>
+                {% with playlists=playlists %}
+                    {% include 'playlist/component/edit.jinja.html' %}
+                {% endwith %}
             </div>
         </div>
     </div>
@@ -49,6 +98,9 @@
         <div class="modals-outer">
             <div class="modals-inner">
                 {% include 'playlist/modal/add.jinja.html' %}
+                {% include 'playlist/modal/qrcode.jinja.html' %}
+                {% include 'slideshow/slides/modal/add.jinja.html' %}
+                {% include 'slideshow/slides/modal/edit.jinja.html' %}
                 {% include 'core/utrack.jinja.html' %}
             </div>
         </div>

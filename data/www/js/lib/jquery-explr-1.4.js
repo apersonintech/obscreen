@@ -159,10 +159,8 @@
                             .find('ul')             // hide every ul
                                 .hide()
                                 .end()
-                            .find('.explr-expand')  // unless explicitly set to expand
-                                .show()
-                                .siblings('.explr-toggler')
-                                    .addClass('explr-minus '+opts.classesMinus);
+                                .find('.explr-toggler')
+                                    .addClass('explr-plus '+opts.classesPlus);
                     } else {
                         $tree
                             .find('.explr-collapse')            // hide every element set to collapse

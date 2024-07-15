@@ -1,6 +1,7 @@
 import json
 
-from flask import Flask, render_template, redirect, request, url_for, jsonify
+from flask import Flask, render_template, redirect, request, url_for, jsonify, abort
+from src.exceptions.PlaylistSlugAlreadyExist import PlaylistSlugAlreadyExist
 from src.service.ModelStore import ModelStore
 from src.model.entity.Playlist import Playlist
 from src.interface.ObController import ObController
@@ -17,20 +18,31 @@ class PlaylistController(ObController):
         return decorated_function
 
     def register(self):
-        self._app.add_url_rule('/playlist/list', 'playlist_list', self.guard_playlist(self._auth(self.playlist_list)), methods=['GET'])
+        self._app.add_url_rule('/playlist', 'playlist', self.guard_playlist(self._auth(self.playlist)), methods=['GET'])
+        self._app.add_url_rule('/playlist/list/<playlist_id>', 'playlist_list', self.guard_playlist(self._auth(self.playlist_list)), methods=['GET'])
         self._app.add_url_rule('/playlist/add', 'playlist_add', self.guard_playlist(self._auth(self.playlist_add)), methods=['POST'])
-        self._app.add_url_rule('/playlist/edit', 'playlist_edit', self.guard_playlist(self._auth(self.playlist_edit)), methods=['POST'])
-        self._app.add_url_rule('/playlist/toggle', 'playlist_toggle', self.guard_playlist(self._auth(self.playlist_toggle)), methods=['POST'])
-        self._app.add_url_rule('/playlist/delete', 'playlist_delete', self.guard_playlist(self._auth(self.playlist_delete)), methods=['DELETE'])
+        self._app.add_url_rule('/playlist/save', 'playlist_save', self.guard_playlist(self._auth(self.playlist_save)), methods=['POST'])
+        self._app.add_url_rule('/playlist/delete/<playlist_id>', 'playlist_delete', self.guard_playlist(self._auth(self.playlist_delete)), methods=['GET'])
 
-    def playlist_list(self):
+    def playlist(self):
+        return redirect(url_for('playlist_list', playlist_id=0))
+
+    def playlist_list(self, playlist_id: int = 0):
+        current_playlist = self._model_store.playlist().get(playlist_id)
+        playlists = self._model_store.playlist().get_all(sort="created_at", ascending=False)
         durations = self._model_store.playlist().get_durations_by_playlists()
+
+        if not current_playlist and len(playlists) > 0:
+            current_playlist = playlists[0]
+
         return render_template(
             'playlist/list.jinja.html',
-            playlists=self._model_store.playlist().get_all(ascending=True),
-            enabled_playlists=self._model_store.playlist().get_enabled_playlists(with_default=True),
-            disabled_playlists=self._model_store.playlist().get_disabled_playlists(),
-            durations=durations
+            error=request.args.get('error', None),
+            current_playlist=current_playlist,
+            playlists=playlists,
+            durations=durations,
+            slides=self._model_store.slide().get_slides(playlist_id=current_playlist.id),
+            contents={content.id: content for content in self._model_store.content().get_contents()},
         )
 
     def playlist_add(self):
@@ -40,32 +52,28 @@ class PlaylistController(ObController):
             time_sync=False
         )
 
-        self._model_store.playlist().add_form(playlist)
+        try:
+            playlist = self._model_store.playlist().add_form(playlist)
+        except PlaylistSlugAlreadyExist as e:
+            abort(409)
 
-        return redirect(url_for('playlist_list'))
+        return redirect(url_for('playlist_list', playlist_id=playlist.id))
 
-    def playlist_edit(self):
+    def playlist_save(self):
         self._model_store.playlist().update_form(
             id=request.form['id'],
             name=request.form['name'],
-            time_sync=request.form['time_sync'],
+            time_sync=True if 'time_sync' in request.form else False,
+            enabled=True if 'enabled' in request.form else False
         )
-        return redirect(url_for('playlist_list'))
+        return redirect(url_for('playlist_list', playlist_id=request.form['id']))
 
-    def playlist_toggle(self):
-        data = request.get_json()
-        self._model_store.playlist().update_enabled(data.get('id'), data.get('enabled'))
-        return jsonify({'status': 'ok'})
+    def playlist_delete(self, playlist_id: int):
+        if self._model_store.slide().count_slides_for_playlist(playlist_id) > 0:
+            return redirect(url_for('playlist_list', playlist_id=playlist_id, error='playlist_delete_has_slides'))
 
-    def playlist_delete(self):
-        data = request.get_json()
-        id = data.get('id')
+        if self._model_store.node_player_group().count_node_player_groups_for_playlist(playlist_id) > 0:
+            return redirect(url_for('playlist_list', playlist_id=playlist_id, error='playlist_delete_has_node_player_groups'))
 
-        if self._model_store.slide().count_slides_for_playlist(id) > 0:
-            return jsonify({'status': 'error', 'message': self.t('playlist_delete_has_slides')}), 400
-
-        if self._model_store.node_player_group().count_node_player_groups_for_playlist(id) > 0:
-            return jsonify({'status': 'error', 'message': self.t('playlist_delete_has_node_player_groups')}), 400
-
-        self._model_store.playlist().delete(id)
-        return jsonify({'status': 'ok'})
+        self._model_store.playlist().delete(playlist_id)
+        return redirect(url_for('playlist'))

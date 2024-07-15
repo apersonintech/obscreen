@@ -6,7 +6,7 @@
 
 {% block add_css %}
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/jquery-explr-1.4.css"/>
-    {{ HOOK(H_SLIDESHOW_CONTENT_CSS) }}
+    {{ HOOK(H_FLEET_NODE_PLAYER_CSS) }}
 {% endblock %}
 
 {% block add_js %}
@@ -14,8 +14,7 @@
     <script src="{{ STATIC_PREFIX }}js/explorer.js"></script>
     <script src="{{ STATIC_PREFIX }}js/fleet/node-players.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
-
-    {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
+    {{ HOOK(H_FLEET_NODE_PLAYER_JAVASCRIPT) }}
 {% endblock %}
 
 {% block body_class %}view-node-player-list{% endblock %}
@@ -27,7 +26,7 @@
         </h1>
 
         <div class="top-actions">
-            {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
+            {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START) }}
 
             <div class="explr-selection-actions">
                 <button class="explr-item-edit explr-selection-entity btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
@@ -49,7 +48,7 @@
                 <i class="fa fa-folder-plus icon-left"></i>
                 {{ l.common_new_folder }}
             </button>
-            {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END) }}
+            {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
 
@@ -74,7 +73,7 @@
                 {% set node_player_children = node_players[folder.id]|default([]) %}
                 {% set has_children = folder.children or node_player_children %}
 
-                <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id }}">
+                <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id if folder.id else 0 }}">
                     <a href="{{ url_for('fleet_node_player_cd') }}?path={{ folder.path }}" class="{% if folder.path == working_folder_path %}active{% endif %}">
                         {{ folder.name }}
                     </a>

@@ -118,16 +118,16 @@ table.panes {
 
 					td {
 						font-weight: bold;
-						color: white;
+						color: $white;
 
 						i.icon-legend {
-							color: white;
+							color: $white;
 						}
 
 						span,
 						i.icon-value {
 							background-color: rgba($white, .3);
-							color: white;
+							color: $white;
 						}
 
 						&.description {

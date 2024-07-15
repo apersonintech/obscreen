@@ -3,7 +3,8 @@ import os
 from typing import Dict, Optional, List, Tuple, Union
 
 from src.model.entity.Playlist import Playlist
-from src.util.utils import get_optional_string, get_yt_video_id, slugify
+from src.util.utils import get_optional_string, get_yt_video_id, slugify, slugify_next
+from src.exceptions.PlaylistSlugAlreadyExist import PlaylistSlugAlreadyExist
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.SlideManager import SlideManager
 from src.manager.LangManager import LangManager
@@ -54,8 +55,8 @@ class PlaylistManager(ModelManager):
     def get_by(self, query, sort: Optional[str] = None, values: dict = {}) -> List[Playlist]:
         return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort, values=values))
 
-    def get_one_by(self, query, values: dict = {}) -> Optional[Playlist]:
-        object = self._db.get_one_by_query(self.TABLE_NAME, query=query, values=values)
+    def get_one_by(self, query, values: dict = {}, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> Optional[Playlist]:
+        object = self._db.get_one_by_query(self.TABLE_NAME, query=query, values=values, sort=sort, ascending=ascending, limit=limit)
 
         if not object:
             return None
@@ -105,8 +106,25 @@ class PlaylistManager(ModelManager):
         for playlist_id, edits in edits_playlists.items():
             self._db.update_by_id(self.TABLE_NAME, playlist_id, edits)
 
+    def get_available_slug(self, slug) -> str:
+        known_playlist = {"slug": slug}
+        next_slug = slug
+        while known_playlist is not None:
+            next_slug = slugify_next(next_slug)
+            known_playlist = self.get_one_by(query="slug = ?", values={"slug": next_slug}, sort="created_at", ascending=False, limit=1)
+
+        return next_slug
+
     def pre_add(self, playlist: Dict) -> Dict:
         playlist["slug"] = slugify(playlist["name"])
+
+        known_playlist = self.get_one_by(query="slug = ?", values={
+            "slug": playlist["slug"]
+        }, sort="created_at", ascending=False, limit=1)
+
+        if known_playlist:
+            playlist["slug"] = self.get_available_slug(playlist["slug"])
+
         self.user_manager.track_user_on_create(playlist)
         self.user_manager.track_user_on_update(playlist)
         return playlist
@@ -131,7 +149,7 @@ class PlaylistManager(ModelManager):
     def post_delete(self, playlist_id: str) -> str:
         return playlist_id
 
-    def update_form(self, id: int, name: str, time_sync: bool) -> None:
+    def update_form(self, id: int, name: str, time_sync: bool, enabled: bool) -> None:
         playlist = self.get(id)
 
         if not playlist:
@@ -139,13 +157,14 @@ class PlaylistManager(ModelManager):
 
         form = {
             "name": name,
-            "time_sync": time_sync
+            "time_sync": time_sync,
+            "enabled": enabled
         }
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
 
-    def add_form(self, playlist: Union[Playlist, Dict]) -> None:
+    def add_form(self, playlist: Union[Playlist, Dict]) -> Playlist:
         form = playlist
 
         if not isinstance(playlist, dict):
@@ -153,7 +172,11 @@ class PlaylistManager(ModelManager):
             del form['id']
 
         self._db.add(self.TABLE_NAME, self.pre_add(form))
+        playlist = self.get_one_by(query="slug = ?", values={
+            "slug": form["slug"]
+        })
         self.post_add(playlist.id)
+        return playlist
 
     def delete(self, id: int) -> None:
         playlist = self.get(id)

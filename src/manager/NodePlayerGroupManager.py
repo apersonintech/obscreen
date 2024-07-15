@@ -72,10 +72,9 @@ class NodePlayerGroupManager(ModelManager):
 
     def get_node_players_groups(self, playlist_id: Optional[int] = None) -> List[NodePlayerGroup]:
         query = " 1=1 "
+
         if playlist_id:
             query = "{} {}".format(query, "AND playlist_id = {}".format(playlist_id))
-        else:
-            query = "{} {}".format(query, "AND playlist_id is NULL")
 
         return self.get_by(query=query, sort="name")
 

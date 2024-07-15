@@ -120,8 +120,13 @@ class DatabaseManager:
             params=tuple(v for v in values.values())
         )
 
-    def get_one_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, ascending=True, values: dict = {}) -> list:
-        query = "select * from {} where {} {}".format(table_name, query, "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "")
+    def get_one_by_query(self, table_name: str, query: str = "1=1", values: dict = {}, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> list:
+        query = "select * from {} where {} {} {}".format(
+            table_name,
+            query,
+            "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "",
+            "LIMIT {}".format(limit) if limit else ""
+        )
         lines = self.execute_read_query(query=query, params=tuple(v for v in values.values()))
         count = len(lines)
 
@@ -216,6 +221,7 @@ class DatabaseManager:
             "DROP TABLE IF EXISTS fleet_studio",
             "ALTER TABLE slideshow RENAME TO slides",
             "DELETE FROM settings WHERE name = 'fleet_studio_enabled'",
+            "DELETE FROM settings WHERE name = 'default_slide_duration'",
             "UPDATE content SET uuid = id WHERE uuid = '' or uuid is null",
         ]
 

@@ -30,17 +30,17 @@ class AuthController(ObController):
         login_error = None
 
         if current_user.is_authenticated:
-            return redirect(url_for('slideshow_slide_list'))
+            return redirect(url_for('playlist'))
 
         if not self._model_store.variable().map().get('auth_enabled').as_bool():
-            return redirect(url_for('slideshow_slide_list'))
+            return redirect(url_for('playlist'))
 
         if len(request.form):
             user = self._model_store.user().get_one_by_username(request.form['username'], enabled=True)
             if user:
                 if user.password == self._model_store.user().encode_password(request.form['password']):
                     login_user(user)
-                    return redirect(url_for('slideshow_slide_list'))
+                    return redirect(url_for('playlist'))
                 else:
                     login_error = 'bad_credentials'
             else:

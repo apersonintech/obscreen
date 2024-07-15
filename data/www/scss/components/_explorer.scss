@@ -19,11 +19,11 @@ ul.explr-tree {
 		}
 
 		a {
-			color: white;
+			color: $white;
 			padding-right: 80px;
 
 			&:hover {
-				color: white;
+				color: $white;
 			}
 
 			&.active {
