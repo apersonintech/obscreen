@@ -56,7 +56,7 @@
             {% endwith %}
 
             <div class="actions actions-right">
-                <button class="btn btn-info slide-add">
+                <button type="button" class="btn btn-info slide-add">
                     <i class="fa fa-image"></i> {{ l.slideshow_slide_form_add_title }}
                 </button>
             </div>
@@ -74,7 +74,7 @@
             <div class="widget">
                 <input type="text" name="name" id="playlist-preview-url" required="required" value="{{ preview_url }}"
                        class="disabled" disabled="disabled"/>
-                <button class="btn btn-naked copy-link" data-target-id="playlist-preview-url">
+                <button type="button" class="btn btn-naked copy-link" data-target-id="playlist-preview-url">
                     <i class="fa fa-copy"></i>
                 </button>
                 <a href="{{ preview_url }}" class="btn btn-neutral" target="_blank">
@@ -99,7 +99,7 @@
         </p>
 
         <div class="preview">
-            <button class="btn btn-info btn-naked"
+            <button type="button" class="btn btn-info btn-naked"
                     onclick="$(this).parent().find('iframe').removeClass('hidden');$(this).addClass('hidden');">
                 <i class="fa fa-eye icon-left"></i> {{ l.playlist_panel_preview_action }}
             </button>
