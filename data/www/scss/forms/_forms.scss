@@ -77,6 +77,36 @@ form {
 		display: flex;
 		flex-direction: row;
 
+		.btn {
+			margin-left: 10px;
+		}
+
+		&.widget-unit {
+
+			select,
+			input {
+				flex-grow: 0;
+				background: none;
+				box-shadow: none;
+				border: none;
+				border-bottom: 1px solid #333;
+				border-radius: 0;
+				max-width: 80px;
+				padding-left: 0;
+				color: $white;
+				text-align: center;
+			}
+
+			span {
+				font-size: 12px;
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+				margin-left: 5px;
+				color: #555;
+			}
+		}
 
 		div {
 			color: rgba($white, .7);
@@ -96,6 +126,7 @@ form {
 			color: #DDD;
 			font-size: 14px;
 
+			&.input-naked,
 			&[disabled] {
 				color: #555;
 				background: none;
@@ -104,9 +135,13 @@ form {
 				border-bottom: 1px solid #333;
 				border-radius: 0;
 			}
+
+			&[disabled] {
+				border: none;
+				background: $black;
+				border-radius: $baseRadius;
+			}
 		}
-
-
 	}
 
 
@@ -194,6 +229,10 @@ form {
 	align-items: center;
 	align-self: stretch;
 	margin: 20px 0 0 0;
+
+	&.actions-intermediate {
+		margin: 0;
+	}
 
 	button {
 		margin-left: 25px;

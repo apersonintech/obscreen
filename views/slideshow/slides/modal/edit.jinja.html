@@ -14,10 +14,29 @@
         <input type="hidden" name="id" id="slide-edit-id"/>
 
 
-        <div class="form-group slide-content-id-group">
-            <label for="slide-add-content-id">{{ l.slideshow_slide_form_label_content_id }}</label>
+        <div class="form-group form-group-horizontal">
+            <label for="">{{ l.slideshow_slide_form_label_enabled }}</label>
             <div class="widget">
-                <select name="content_id" type="text" id="slide-add-content-id" required="required"></select>
+                <div class="toggle">
+                    <input type="checkbox" class="trigger slide-enabled" name="enabled"
+                           id="slide-edit-enabled"/>
+                    <label for="slide-edit-enabled"></label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group slide-content-id-group">
+            <label for="slide-edit-content-id">{{ l.slideshow_slide_form_label_content_id }}</label>
+            <div class="widget">
+                <input type="text" disabled="disabled" value="" class="target-label" />
+                <input type="hidden" name="content_id" id="slide-edit-content-id" required="required" class="target"></input>
+                <button class="btn btn-naked content-explr-picker">
+                    <i class="fa fa-crosshairs"></i>
+                </button>
+                <button class="btn btn-neutral hidden slide-content-show" data-route="{{ url_for('slideshow_content_show', content_id='__id__') }}">
+                    <i class="fa-solid fa-up-right-from-square"></i>
+                </button>
             </div>
         </div>
 
@@ -29,8 +48,11 @@
         <div class="form-group slide-notification-group">
             <label for="slide-edit-is-notification">{{ l.slideshow_slide_form_label_is_notification }}</label>
             <div class="widget">
-                <input type="checkbox" class="trigger slide-is-notification" name="is_notification"
-                       id="slide-edit-is-notification"/>
+                <div class="toggle">
+                    <input type="checkbox" class="trigger slide-is-notification" name="is_notification"
+                           id="slide-edit-is-notification"/>
+                    <label for="slide-edit-is-notification"></label>
+                </div>
             </div>
         </div>
 
@@ -42,7 +64,8 @@
                     <option value="datetime">{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}</option>
                     <option value="cron">{{ l.slideshow_slide_form_label_cron_scheduled_cron }}</option>
                 </select>
-                <input type="text" id="slide-edit-cron-schedule-datetimepicker" class="datetimepicker" value=""
+                <input type="text" id="slide-edit-cron-schedule-datetimepicker" class="input-naked datetimepicker"
+                       value=""
                        placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>
                 <input type="text" name="cron_schedule" id="slide-edit-cron-schedule" class="target hidden"
                        placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}"/>
@@ -56,7 +79,8 @@
                     <option value="duration">{{ l.slideshow_slide_form_label_cron_scheduled_duration }}</option>
                     <option value="datetime">{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}</option>
                 </select>
-                <input type="text" id="slide-edit-cron-schedule-end-datetimepicker" class="datetimepicker" value=""
+                <input type="text" id="slide-edit-cron-schedule-end-datetimepicker" class="input-naked datetimepicker"
+                       value=""
                        placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>
                 <input type="text" name="cron_schedule_end" id="slide-edit-cron-schedule-end" class="target hidden"
                        placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}"/>
@@ -65,9 +89,9 @@
 
         <div class="form-group slide-duration-group">
             <label for="slide-edit-duration">{{ l.slideshow_slide_form_label_duration }}</label>
-            <div class="widget">
+            <div class="widget widget-unit">
                 <input type="number" name="duration" id="slide-edit-duration" required="required"/>
-                <span>{{ l.slideshow_slide_form_label_duration_unit }}</span>
+                <span class="unit">{{ l.slideshow_slide_form_label_duration_unit }}</span>
             </div>
         </div>
 

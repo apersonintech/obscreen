@@ -6,7 +6,8 @@
 
 {% block add_css %}
     {{ HOOK(H_PLAYLIST_CSS) }}
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/jquery-explr-1.4.css"/>
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css"/>
 {% endblock %}
 
 {% block add_js %}
@@ -21,14 +22,17 @@
             'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
             'duration': '{{ l.slideshow_slide_form_label_cron_scheduled_duration }}',
         };
-        var contents = {{ json_dumps(contents) | safe }}
+        var contents =
+        {{ json_dumps(contents) | safe }}
     </script>
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/flatpickr.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/tablednd-fixed.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/qrcode.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/slides.js"></script>
     <script src="{{ STATIC_PREFIX }}js/playlist/playlists.js"></script>
     <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/explorer.js"></script>
     {{ HOOK(H_PLAYLIST_JAVASCRIPT) }}
 {% endblock %}
 
@@ -49,7 +53,8 @@
             </button>
 
             {% if current_playlist %}
-                <a href="{{ url_for('playlist_delete', playlist_id=current_playlist.id) }}" class="btn btn-danger-alt protected">
+                <a href="{{ url_for('playlist_delete', playlist_id=current_playlist.id) }}"
+                   class="btn btn-danger-alt protected">
                     <i class="fa fa-trash"></i>
                 </a>
             {% endif %}
@@ -65,7 +70,7 @@
         ) }}
     </div>
 
-     {% if request.args.get('refresh_player') %}
+    {% if request.args.get('refresh_player') %}
         <div class="alert alert-success">
             <i class="fa fa-refresh icon-left"></i>
             {{ l.slideshow_slide_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
@@ -101,7 +106,14 @@
                 {% include 'playlist/modal/qrcode.jinja.html' %}
                 {% include 'slideshow/slides/modal/add.jinja.html' %}
                 {% include 'slideshow/slides/modal/edit.jinja.html' %}
-                {% include 'core/utrack.jinja.html' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="pickers hidden">
+        <div class="modals-outer">
+            <div class="modals-inner">
+                {% include 'slideshow/contents/modal/explr-picker.jinja.html' %}
             </div>
         </div>
     </div>

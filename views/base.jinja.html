@@ -49,6 +49,7 @@
     {{ HOOK(H_ROOT_CSS) }}
 </head>
 <body class="{% block body_class %}{% endblock %}">
+<div id="toast"></div>
 
 <div class="container {% block container_class %}{% endblock %}">
 
@@ -59,7 +60,7 @@
             "position": 0,
             "pills": [
                 {"name": "Bibliothèque", "route": "slideshow_content_list", "icon": "fa-image"},
-                {"name": "Playlists", "route": "playlist", "icon": "fa-play"},
+                {"name": "Playlists", "route": "playlist", "route_alt": "playlist_list", "icon": "fa-play"},
             ]
         },
         "configuration": {
@@ -107,6 +108,7 @@
     {% for category, details in dynmenu.items() %}
         {% for pill in details.pills %}
             {% set route_to_category = route_to_category.update({pill.route: category}) or route_to_category %}
+            {% set route_to_category = route_to_category.update({pill.route_alt: category}) or route_to_category %}
         {% endfor %}
     {% endfor %}
     {% set active_route = active_pill_route if active_pill_route else request.url_rule.endpoint %}
@@ -163,7 +165,7 @@
                     <div class="inner">
                         <ul class="pills">
                             {% for menu in current_dynmenu.pills %}
-                                <li class="{{ 'active' if active_route == menu.route }}">
+                                <li class="{{ 'active' if active_route == menu.route or active_route == menu.route_alt }}">
                                     {% set href = menu.url_for if menu.url_for else url_for(menu.route) %}
                                     <a href="{{ href }}">
                                         <span class="icon">
@@ -220,7 +222,8 @@
         'js_fleet_node_player_delete_confirmation': '{{ l.js_fleet_node_player_delete_confirmation }}',
         'js_auth_user_delete_confirmation': '{{ l.js_auth_user_delete_confirmation }}',
         'js_sysinfo_restart_confirmation': '{{ l.js_sysinfo_restart_confirmation }}',
-        'js_sysinfo_restart_loading': '{{ l.js_sysinfo_restart_loading }}'
+        'js_sysinfo_restart_loading': '{{ l.js_sysinfo_restart_loading }}',
+        'js_common_copied': '{{ l.common_copied }}'
     };
 </script>
 <script src="{{ STATIC_PREFIX }}js/lib/jquery.min.js"></script>

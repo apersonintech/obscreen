@@ -1,7 +1,4 @@
 jQuery(document).ready(function ($) {
-    const $tableActive = $('table.active-slides');
-    const $tableInactive = $('table.inactive-slides');
-
     const loadDateTimePicker = function($els) {
         const d = new Date();
 
@@ -179,65 +176,61 @@ jQuery(document).ready(function ($) {
         });
     };
 
-    $(document).on('change', 'select.playlist-picker', function () {
-        document.location.href = $(this).val();
-    });
-
-    $(document).on('change', '.slide-item input[type=checkbox]', function () {
-        $.ajax({
-            url: '/slideshow/slide/toggle',
-            headers: {'Content-Type': 'application/json'},
-            data: JSON.stringify({id: getId($(this)), enabled: $(this).is(':checked')}),
-            method: 'POST',
-        });
-
-        const $tr = $(this).parents('tr:eq(0)').remove().clone();
-
-        if ($(this).is(':checked')) {
-            $tableActive.append($tr);
-        } else {
-            $tableInactive.append($tr);
-        }
-
-        updateTable();
-    });
-
     $(document).on('change', '.modal-slide select.trigger, .modal-slide input.trigger', function () {
         inputSchedulerUpdate();
     });
 
     $(document).on('change', '#slide-add-type', inputTypeUpdate);
 
-    $(document).on('click', '.picker button', function () {
-        const $parent = $(this).parents('.modal-slide-add');
-        $parent.find('.picker').addClass('hidden').find('select').prop('disabled', true);
-        $parent.find('.upload').removeClass('hidden').find('input,select').prop('disabled', false);
-        inputTypeUpdate();
-    });
+    // $(document).on('click', '.picker button', function () {
+    //     const $parent = $(this).parents('.modal-slide-add');
+    //     $parent.find('.picker').addClass('hidden').find('select').prop('disabled', true);
+    //     $parent.find('.upload').removeClass('hidden').find('input,select').prop('disabled', false);
+    //     inputTypeUpdate();
+    // });
 
     $(document).on('click', '.slide-add', function () {
         showModal('modal-slide-add');
         const $modal = $('.modal-slide-add:visible');
         loadDateTimePicker($modal.find('.datetimepicker'));
-        $modal.find('.picker').removeClass('hidden').find('select').prop('disabled', false);
-        $modal.find('.upload').addClass('hidden').find('input,select').prop('disabled', true);
-        $modal.find('button[type=submit]').removeClass('hidden');
-        $modal.find('.btn-loading').addClass('hidden');
+        // $modal.find('.picker').removeClass('hidden').find('select').prop('disabled', false);
+        // $modal.find('.upload').addClass('hidden').find('input,select').prop('disabled', true);
+        // $modal.find('button[type=submit]').removeClass('hidden');
+        // $modal.find('.btn-loading').addClass('hidden');
         inputTypeUpdate();
         inputSchedulerUpdate();
         inputContentUpdate();
         $('.modal-slide-add input:eq(0)').focus().select();
     });
 
-    const inputContentUpdate = function(content_id) {
+    $(document).on('click', '.content-explr-picker', function () {
+        showPickers('modal-content-explr-picker', function(content) {
+            inputContentUpdate(content)
+        });
+    });
+
+    const inputContentUpdate = function(content) {
         const $modal = $('.modal-slide:visible');
         const $group = $modal.find('.slide-content-id-group');
-        const $select = $group.find('select');
-        recreateSelectOptions($select, contents);
-        if (content_id) {
-            $select.val(content_id);
+        const $inputLabel = $group.find('.target-label');
+        const $inputId = $group.find('.target');
+        const $actionShow = $group.find('.slide-content-show');
+
+        if (content === undefined || !content.id) {
+            $inputLabel.val('');
+            $inputId.val('');
+            $actionShow.addClass('hidden');
+            return;
         }
+
+        $inputLabel.val(content.name);
+        $inputId.val(content.id);
+        $actionShow.removeClass('hidden');
     };
+
+    $(document).on('click', '.slide-content-show', function () {
+        window.open($(this).attr('data-route').replace('__id__', $(this).parents('.widget:eq(0)').find('.target').val()));
+    });
 
     $(document).on('click', '.slide-edit', function () {
         const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
@@ -250,11 +243,12 @@ jQuery(document).ready(function ($) {
         const hasDateTimeEnd = hasCronEnd && validateCronDateTime(slide.cron_schedule_end);
         const isNotification = slide.is_notification;
 
-        inputContentUpdate(slide.content_id);
+        inputContentUpdate(slide.content);
 
         $('.modal-slide-edit input:visible:eq(0)').focus().select();
         $('#slide-edit-duration').val(slide.duration);
         $('#slide-edit-is-notification').prop('checked', isNotification);
+        $('#slide-edit-enabled').prop('checked', slide.enabled);
 
         $('#slide-edit-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
         $('#slide-edit-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
@@ -282,9 +276,8 @@ jQuery(document).ready(function ($) {
             updateTable();
             $.ajax({
                 method: 'DELETE',
-                url: '/slideshow/slide/delete',
+                url: $(this).attr('data-route').replace('__id__', getId($(this))),
                 headers: {'Content-Type': 'application/json'},
-                data: JSON.stringify({id: getId($(this))}),
             });
         }
     });

@@ -1,4 +1,18 @@
+let onPickedElement = function(element) {};
+
 jQuery(function ($) {
+
+    const explrSidebarOpenFromFolder = function (folderId) {
+        const $leaf = $('.li-explr-folder-' + folderId);
+        let $parent = $leaf;
+        while ($parent.length > 0) {
+            const $toggler = $parent.find('.explr-toggler:eq(0)');
+            if ($toggler.hasClass('explr-plus')) {
+                $parent.find('.explr-toggler:eq(0)').trigger('click');
+            }
+            $parent = $parent.parents('.li-explr-folder:eq(0)');
+        }
+    };
 
     const initExplr = function () {
         $('.explr').each(function () {
@@ -80,7 +94,7 @@ jQuery(function ($) {
         return $('.explr-dirview .highlight-clicked');
     };
 
-    const renameExplrItem = function($item) {
+    const renameExplrItem = function ($item) {
         $('.dirview .renaming').removeClass('renaming');
         $item.addClass('renaming');
         $item.find('input').focus().select();
@@ -167,6 +181,15 @@ jQuery(function ($) {
             $('a.explr-link').parent().removeClass('highlight-clicked');
             $('body').removeClass('explr-selection explr-selection-entity explr-selection-folder explr-selection-actionable');
         }
+    });
+
+    $(document).on('click', '.modal-explr-picker .explr-pick-folder', function () {
+        $(this).parents('li:eq(0)').find('.explr-toggler').click();
+    });
+
+    $(document).on('click', '.modal-explr-picker .explr-pick-element', function () {
+        onPickedElement(JSON.parse($(this).attr('data-json')));
+        hidePicker();
     });
 
     const getAboveBelowElement = function ($elem) {

@@ -73,7 +73,6 @@ body.explr-selection-actionable {
 }
 
 
-
 ul.explr-dirview {
 	display: flex;
 	flex-direction: row;
@@ -170,3 +169,18 @@ ul.explr-dirview {
 	}
 }
 
+.modal-explr-picker {
+	h2 {
+		margin-top: 0;
+	}
+
+	.explr-tree {
+		width: 400px;
+		max-height: 300px;
+		overflow: auto;
+		background: #222;
+		padding: 10px 20px 10px 20px;
+		border-radius: 4px;
+		margin-top: 15px;
+	}
+}
