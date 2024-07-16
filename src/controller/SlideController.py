@@ -20,7 +20,7 @@ class SlideController(ObController):
         self._app.add_url_rule('/slideshow/slide/edit', 'slideshow_slide_edit', self._auth(self.slideshow_slide_edit), methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/delete/<slide_id>', 'slideshow_slide_delete', self._auth(self.slideshow_slide_delete), methods=['DELETE'])
         self._app.add_url_rule('/slideshow/slide/position', 'slideshow_slide_position', self._auth(self.slideshow_slide_position), methods=['POST'])
-        self._app.add_url_rule('/slideshow/player-refresh', 'slideshow_player_refresh/<playlist_id>', self._auth(self.slideshow_player_refresh), methods=['GET'])
+        self._app.add_url_rule('/slideshow/player-refresh', 'slideshow_player_refresh', self._auth(self.slideshow_player_refresh), methods=['GET'])
 
     def manage(self):
         return redirect(url_for('playlist'))
@@ -93,15 +93,12 @@ class SlideController(ObController):
         self._post_update()
         return jsonify({'status': 'ok'})
 
-    def slideshow_player_refresh(self, playlist_id: int):
+    def slideshow_player_refresh(self):
         self._model_store.variable().update_by_name("refresh_player_request", time.time())
-        return redirect(
-            url_for(
-                'playlist_list',
-                playlist_id=playlist_id,
-                refresh_player=self._model_store.variable().get_one_by_name('polling_interval').as_int()
-            )
-        )
+        max_timeout_value = self._model_store.variable().get_one_by_name('polling_interval').as_int()
+        query_params = '{}={}'.format('refresh_player', max_timeout_value)
+        next_url = request.args.get('next')
+        return redirect('{}{}{}'.format(next_url, '&' if '?' in next_url else '?', query_params))
 
     def _post_update(self):
         self._model_store.variable().update_by_name("last_slide_update", time.time())

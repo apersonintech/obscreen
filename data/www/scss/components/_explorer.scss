@@ -41,9 +41,10 @@ ul.explr-tree {
 
 .explr-selection-actions {
 	display: none;
-	margin-right: 10px;
-	border-right: 1px solid #222;
-	padding-right: 20px;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex: 1;
 
 	button {
 		display: none;

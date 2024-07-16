@@ -3,7 +3,7 @@
   "slideshow_slide_page_title": "Programmazione",
   "slideshow_slide_goto_player": "Vai al player",
   "slideshow_slide_refresh_player": "Aggiorna player",
-  "slideshow_slide_refresh_player_success": "L' aggiornamento è stato richiesto, sarà applicato in (%time% secondi)",
+  "slideshow_slide_refresh_player_success": "Il segnale di aggiornamento dei giocatori è stato inviato, dovrebbe arrivare a breve (%time% secondi)",
   "slideshow_slide_button_add": "Aggiungi slide",
   "slideshow_slide_panel_active": "Attiva slide",
   "slideshow_slide_panel_inactive": "Slide inattive",

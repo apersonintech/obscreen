@@ -14,7 +14,7 @@
                     {% set color = enum_content_type.get_color_icon(content.type) %}
                     <i class="fa {{ icon }} {{ color }}"></i>
                 </div>
-                <div class="title">
+                <div class="title" title="{{ content.name|default(l.common_empty) }}">
                     {{ truncate(content.name|default(l.common_empty), 30, '...') }}
                 </div>
             </a>

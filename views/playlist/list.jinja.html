@@ -42,9 +42,9 @@
 {% block page %}
 
     <div class="top-content">
-        <h1>
-            {{ l.playlist_page_title }}
-        </h1>
+{#        <h1>#}
+{#            {{ l.playlist_page_title }}#}
+{#        </h1>#}
 
         <div class="top-actions">
             {{ HOOK(H_PLAYLIST_TOOLBAR_ACTIONS_START) }}
@@ -70,13 +70,6 @@
             ('<a href="javascript:void(0);" class="item-add playlist-add">'~l.playlist_button_add~'</a>')|safe
         ) }}
     </div>
-
-    {% if request.args.get('refresh_player') %}
-        <div class="alert alert-success">
-            <i class="fa fa-refresh icon-left"></i>
-            {{ l.slideshow_slide_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
-        </div>
-    {% endif %}
 
     {% if error %}
         <div class="alert alert-danger">

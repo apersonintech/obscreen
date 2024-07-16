@@ -75,14 +75,14 @@
 					}
 
 					.title {
-						display: flex;
-						flex-direction: row;
-						justify-content: flex-start;
-						align-items: center;
-						align-self: stretch;
+						display: block;
 						word-break: break-all;
 						font-size: 13px;
 						color: #AAA;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						max-width: 100%;
 					}
 
 					.type {

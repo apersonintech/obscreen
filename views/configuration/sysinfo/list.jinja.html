@@ -14,11 +14,11 @@
 {% block page %}
 
     <div class="top-content">
-        <h1>
-            {{ l.sysinfo_panel_title }}
-        </h1>
+{#        <h1>#}
+{#            {{ l.sysinfo_panel_title }}#}
+{#        </h1>#}
 
-        <div class="top-actions">
+        <div class="top-actions align-right">
             {{ HOOK(H_SYSINFO_TOOLBAR_ACTIONS_START) }}
             <button type="button" class="btn btn-info sysinfo-restart">
                 <i class="fa fa-refresh icon-left"></i>{{ l.sysinfo_panel_button_restart }}

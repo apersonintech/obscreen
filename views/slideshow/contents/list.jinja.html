@@ -22,12 +22,21 @@
 
 {% block page %}
     <div class="top-content">
-        <h1>
-            {{ l.slideshow_content_page_title }}
-        </h1>
+{#        <h1>#}
+{#            {{ l.slideshow_content_page_title }}#}
+{#        </h1>#}
 
         <div class="top-actions">
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
+
+            <button type="button" class="btn btn-info content-add item-add">
+                <i class="fa fa-file-circle-plus icon-left"></i>
+                {{ l.slideshow_content_button_add }}
+            </button>
+            <button type="button" class="folder-add btn-neutral">
+                <i class="fa fa-folder-plus icon-left"></i>
+                {{ l.common_new_folder }}
+            </button>
 
             <div class="explr-selection-actions">
                 <button type="button" class="explr-item-edit explr-selection-entity btn-info"
@@ -44,14 +53,6 @@
                 </button>
             </div>
 
-            <button type="button" class="btn btn-info content-add item-add">
-                <i class="fa fa-file-circle-plus icon-left"></i>
-                {{ l.slideshow_content_button_add }}
-            </button>
-            <button type="button" class="folder-add btn-neutral">
-                <i class="fa fa-folder-plus icon-left"></i>
-                {{ l.common_new_folder }}
-            </button>
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>

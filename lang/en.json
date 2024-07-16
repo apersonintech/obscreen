@@ -3,7 +3,7 @@
   "slideshow_slide_page_title": "Schedule Overview",
   "slideshow_slide_goto_player": "Go to player",
   "slideshow_slide_refresh_player": "Refresh player",
-  "slideshow_slide_refresh_player_success": "Player refresh signal has been sent, it should happen soon enough (%time% seconds maximum)",
+  "slideshow_slide_refresh_player_success": "Players update signal has been sent, should arrive soon (%time% seconds maximum)",
   "slideshow_slide_button_add": "Add a slide",
   "slideshow_slide_panel_active": "Active slides",
   "slideshow_slide_panel_inactive": "Inactive slides",

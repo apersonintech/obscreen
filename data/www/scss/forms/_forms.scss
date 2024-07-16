@@ -243,16 +243,26 @@ form {
 	&.actions-left {
 		justify-content: flex-start;
 
-		button {
+		.btn {
 			margin-left: 0;
 			margin-right: 25px;
+		}
+	}
+
+	&.actions-right {
+		justify-content: flex-end;
+
+
+		.btn {
+			margin-left: 10px;
+			margin-right: 0;
 		}
 	}
 
 	&.actions-center {
 		justify-content: center;
 
-		button {
+		.btn {
 			margin-left: 0;
 			margin-right: 0;
 		}

@@ -35,6 +35,7 @@ button,
 		color: #AAA;
 		background: $neutralGrey;
 		box-shadow: 0 $shadowOffset 0 0 darken($neutralGrey, 10%);
+		border: 1px solid transparent;
 
 		&:hover {
 			box-shadow: 0 $shadowOffset 0 1px #222 inset;
@@ -43,6 +44,7 @@ button,
 
 		&:focus {
 			background: darken($neutralGrey, 20%);
+			border: 1px solid #AAA;
 		}
 	}
 
@@ -58,7 +60,6 @@ button,
 			color: darken($neutralGrey, 10%);
 			box-shadow: none;
 		}
-
 		&:focus {
 			border-color: darken($neutralGrey, 20%);
 			background: transparent;
@@ -68,6 +69,7 @@ button,
 	&.btn-naked {
 		background: transparent;
 		box-shadow: none;
+		border: 1px solid transparent;
 
 		&:hover {
 			box-shadow: 0 $shadowOffset 0 1px #222 inset;
@@ -76,6 +78,35 @@ button,
 
 		&:focus {
 			background: darken($neutralGrey, 20%);
+			border: 1px solid #AAA;
+		}
+	}
+
+
+	i.main {
+		font-size: 18px;
+	}
+
+	sup,
+	sub {
+		position: absolute;
+		top: -4px;
+		right: -4px;
+		background: #777;
+		border-bottom: 2px solid $neutralGrey;
+		color: black;
+		border-radius: $baseRadius;
+		width: 16px;
+		height: 16px;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding-top: 2px;
+		padding-bottom: 1px;
+		i {
+			color: white;
+			font-size: 10px;
 		}
 	}
 }

@@ -3,7 +3,7 @@
   "slideshow_slide_page_title": "Vue Planning",
   "slideshow_slide_goto_player": "Voir le lecteur",
   "slideshow_slide_refresh_player": "Rafraîchir le lecteur",
-  "slideshow_slide_refresh_player_success": "Un rafraîchissement du lecteur a été programmé, il devrait avoir lieu sous peu (%time% secondes maximum)",
+  "slideshow_slide_refresh_player_success": "Un rafraîchissement des lecteurs a été programmé, il devrait avoir lieu sous peu (%time% secondes maximum)",
   "slideshow_slide_button_add": "Ajouter une slide",
   "slideshow_slide_panel_active": "Slides actives",
   "slideshow_slide_panel_inactive": "Slides inactives",
