@@ -6,6 +6,7 @@ from typing import Optional
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify, abort
 
 from src.model.entity.Slide import Slide
+from src.exceptions.NoFallbackPlaylistException import NoFallbackPlaylistException
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
 from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, get_cron_date_time
@@ -36,7 +37,11 @@ class PlayerController(ObController):
 
         playlist_id = current_playlist.id if current_playlist else None
 
-        items = self._get_playlist(playlist_id=playlist_id, preview_content_id=preview_content_id)
+        try:
+            items = self._get_playlist(playlist_id=playlist_id, preview_content_id=preview_content_id)
+        except NoFallbackPlaylistException:
+            abort(404)
+
         intro_slide_duration = self._model_store.variable().get_one_by_name('intro_slide_duration').eval()
 
         if items['preview_mode'] or request.args.get('intro', '1') == '0':
@@ -75,7 +80,10 @@ class PlayerController(ObController):
         })
         playlist_id = current_playlist.id if current_playlist else None
 
-        return jsonify(self._get_playlist(playlist_id=playlist_id))
+        try:
+            return jsonify(self._get_playlist(playlist_id=playlist_id))
+        except NoFallbackPlaylistException:
+            abort(404)
 
     def _get_dynamic_playlist_id(self, playlist_slug_or_id: Optional[str]) -> str:
         if not playlist_slug_or_id and self._model_store.variable().get_one_by_name('fleet_player_enabled'):
@@ -97,6 +105,14 @@ class PlayerController(ObController):
             return request.remote_addr
 
     def _get_playlist(self, playlist_id: Optional[int] = 0, preview_content_id: Optional[int] = None) -> dict:
+        if playlist_id == 0 or not playlist_id:
+            playlist = self._model_store.playlist().get_one_by(query="fallback = 1")
+
+            if playlist:
+                playlist_id = playlist.id
+            else:
+                raise NoFallbackPlaylistException()
+
         enabled_slides = []
         preview_mode = False
 
