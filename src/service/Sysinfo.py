@@ -124,12 +124,12 @@ def get_all_sysinfo():
         "sysinfo_os_version": get_os_version(),
         "sysinfo_install_directory": get_working_directory()
     }
-    network_info = get_network_info()
+    network_info = get_network_info(all=True)
 
-    if isinstance(network_info, dict):
-        infos["sysinfo_network_interface"] = network_info['interface']
-        infos["sysinfo_mac_address"] = network_info['mac_address']
-        infos["sysinfo_ip_address"] = network_info['ip_address']
+    if isinstance(network_info, list) and len(network_info) > 0:
+        infos["sysinfo_network_interface"] = ", ".join([iface['interface'] for iface in network_info])
+        infos["sysinfo_mac_address"] = ", ".join([iface['mac_address'] for iface in network_info])
+        infos["sysinfo_ip_address"] = ", ".join([iface['ip_address'] for iface in network_info])
     else:
         infos["sysinfo_ip_address"] = 'common_unknown_ipaddr'
 
