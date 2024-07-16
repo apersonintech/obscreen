@@ -3,9 +3,13 @@ import logging
 import subprocess
 import platform
 
-from typing import Optional
+from typing import Optional, List
 
-from src.service.Sysinfo import get_network_ipaddr
+from src.service.Sysinfo import get_network_ipaddr, get_network_info
+
+
+def get_network_interfaces() -> List:
+    return get_network_info(all=True)
 
 
 def get_ip_address() -> Optional[str]:

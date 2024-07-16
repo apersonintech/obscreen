@@ -10,7 +10,7 @@ from src.exceptions.NoFallbackPlaylistException import NoFallbackPlaylistExcepti
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
 from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, get_cron_date_time
-from src.util.UtilNetwork import get_ip_address, get_safe_remote_addr
+from src.util.UtilNetwork import get_safe_remote_addr, get_network_interfaces
 from src.model.enum.AnimationSpeed import animation_speed_duration
 
 
@@ -63,7 +63,7 @@ class PlayerController(ObController):
     def player_default(self):
         return render_template(
             'player/default.jinja.html',
-            ipaddr=get_ip_address(),
+            interfaces=[iface['ip_address'] for iface in get_network_interfaces()],
             time_with_seconds=self._model_store.variable().get_one_by_name('default_slide_time_with_seconds')
         )
 
@@ -84,7 +84,7 @@ class PlayerController(ObController):
     def _get_dynamic_playlist_id(self, playlist_slug_or_id: Optional[str]) -> str:
         if not playlist_slug_or_id and self._model_store.variable().get_one_by_name('fleet_player_enabled'):
             node_player = self._model_store.node_player().get_one_by("host = '{}'".format(
-                get_safe_remote_addr(self.get_remote_addr()),
+                get_safe_remote_addr(self.get_remote_addr_for_node_player()),
                 True
             ))
 
@@ -94,7 +94,7 @@ class PlayerController(ObController):
         return playlist_slug_or_id
 
     @staticmethod
-    def get_remote_addr() -> str:
+    def get_remote_addr_for_node_player() -> str:
         if request.headers.get('X-Forwarded-For'):
             return request.headers['X-Forwarded-For'].split(',')[0].strip()
         else:

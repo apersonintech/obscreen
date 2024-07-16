@@ -36,7 +36,7 @@
 
 <script type="text/javascript">
     // Backend config
-    let items = {{ json_dumps(items) | safe}};
+    let items = {{ json_dumps(items) | safe }};
     const introDuration = {{ intro_slide_duration * 1000 }};
     const playlistCheckResolutionMs = {{ polling_interval * 1000 }};
 

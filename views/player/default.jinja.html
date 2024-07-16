@@ -32,19 +32,25 @@
                 xhr.open("GET", "{{ url_for('sysinfo_get_ipaddr') }}", true);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                         setIp(xhr.responseText);
+                        const jsonResponse = JSON.parse(xhr.responseText);
+                        setIps(jsonResponse.interfaces)
                     }
                 };
                 xhr.send();
-            }, 5000);
+            }, 1000);
         </script>
         <style>
-            body { text-align: center; font-family: 'Arial', 'sans-serif'; color: white;  background-color: black; }
-            #bottom { display: flex; justify-content: center; align-items: center; background: #111; position: fixed; left: 0; right: 0; bottom: 0; padding: 50px 0; min-height: 50px; }
+            * { font-family: 'Tahoma', 'Arial', 'sans-serif'; }
+            body { text-align: center; color: white;  background-color: black; }
+            #bottom { display: flex; justify-content: center; align-items: center; flex-direction: column; background: #111; position: fixed; left: 0; right: 0; bottom: 0; padding: 30px 0 50px 0; min-height: 50px; }
             #time { font-size: 10em; }
             #date { font-size: 3em; }
-            #ipaddr { font-size: 1.25em; color: #888888; }
-            #ipaddr a { color: white; text-decoration: none; font-weight: bold; }
+            .caption { font-size: 1.25em; color: #888888; font-weight: bold; margin-bottom: 10px; }
+            .ipaddrs { display: flex; list-style: none; flex-direction: column; align-items: center; align-self:stretch; margin: 20px 40px 0 40px; padding: 10px 0; background: rgba(0,0,0,.3); border-radius: 14px; }
+            .ipaddr { color: white; text-decoration: none; font-weight: bold; margin: 5px 0 5px 0; display:flex; flex-direction:row; align-self: stretch; justify-content:center; align-items:center; }
+            .ipaddr a { text-decoration: none; font-weight: normal; font-size: 1.2em; color: #666; transition: .1s ease-in all; display:block; flex-direction:row; align-self: stretch; flex: 1; text-align: center; margin: 0 20px; border-radius: 6px; padding: 10px 0; }
+            .ipaddr a span { color: white; font-size: 1.2em; }
+            .ipaddr a:hover { color: #fff; background: #017BFF; }
             #hidden-container { display: none; }
         </style>
     </head>
@@ -53,24 +59,45 @@
         <div id="time"></div>
         <div id="date"></div>
         <div id="bottom">
-            <div id="ipaddr"> </div>
         </div>
         <script>
-            const js_l_common_unknown_ipaddr = '{{ l.common_unknown_ipaddr }}';
-            const js_l_player_default_welcome_message = '{{ l.player_default_welcome_message }}';
+            const interfaces = {{ json_dumps(interfaces) | safe }};
+            const translation_common_unknown_ipaddr = '{{ l.common_unknown_ipaddr }}';
+            const translation_player_default_welcome_message = '{{ l.player_default_welcome_message }}';
             const manage_url_template = '{{ 'http://%ipaddr%:' ~ PORT ~ url_for('manage') }}';
 
-            const setIp = function(ipaddr) {
-                const $container = document.getElementById('ipaddr');
+            const setIps = function(ips) {
+                const $container = document.getElementById('bottom');
+                $container.innerHTML = '';
+                const $empty = document.createElement('div');
+                Object.assign($empty, { className: 'caption'});
 
-                if (ipaddr) {
-                    const link = manage_url_template.replace('%ipaddr%', ipaddr);
-                    $container.innerHTML = js_l_player_default_welcome_message.replace('%link%', '<a href="'+link+'" target="_blank">'+link+'</a>')
+                if (ips.length === 0) {
+                    $empty.innerHTML = translation_common_unknown_ipaddr;
+                    $container.appendChild($empty);
                 } else {
-                    $container.innerHTML = js_l_common_unknown_ipaddr;
+                    $empty.innerHTML = translation_player_default_welcome_message;
+                    $container.appendChild($empty);
+                    const $ipaddrs = document.createElement('ul');
+                    Object.assign($ipaddrs, { className: 'ipaddrs'});
+                    $container.appendChild($ipaddrs);
+
+                    for (let i = 0; i < ips.length; i++) {
+                        addIp(ips[i], $ipaddrs);
+                    }
                 }
             };
-            setIp('{{ ipaddr if ipaddr else '' }}')
+
+            const addIp = function(ip, $container) {
+                const href = manage_url_template.replace('%ipaddr%', '<span>'+ip+'</span>');
+                const link = '<a href="' + href + '" target="_blank">' + href + '</a>';
+                const $ipaddr = document.createElement('li');
+                Object.assign($ipaddr, { className: 'ipaddr'});
+                $ipaddr.innerHTML = link;
+                $container.appendChild($ipaddr);
+            }
+
+            setIps(interfaces);
         </script>
     </body>
 </html>

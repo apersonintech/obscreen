@@ -45,7 +45,8 @@ def get_memory_usage():
         return ''
 
 
-def get_network_info():
+def get_network_info(all=False):
+    interfaces = []
     try:
         addrs = psutil.net_if_addrs()
         stats = psutil.net_if_stats()
@@ -54,19 +55,26 @@ def get_network_info():
                 mac_address = None
                 ip_address = None
                 for addr in addr_list:
+
                     if addr.family == psutil.AF_LINK:
                         mac_address = addr.address
                     elif addr.family == socket.AF_INET:
                         ip_address = addr.address
+
                 if mac_address and ip_address and mac_address != LO_MAC_ADDRESS and ip_address != LO_IP_ADDR:
-                    return {
+                    interface = {
                         'interface': iface,
                         'mac_address': mac_address,
                         'ip_address': ip_address
                     }
-        return ''
-    except Exception as e:
-        return ''
+
+                    if not all:
+                        return interface
+
+                    interfaces.append(interface)
+        return '' if not all else interfaces
+    except Exception:
+        return '' if not all else interfaces
 
 
 def get_os_version():

@@ -295,5 +295,5 @@
   "sysinfo_network_interface": "Network Interface",
   "sysinfo_mac_address": "MAC Address",
   "sysinfo_ip_address": "IP Address",
-  "player_default_welcome_message": "To manage this player, go to a browser at %link%"
+  "player_default_welcome_message": "To manage this player, go to a browser at"
 }
