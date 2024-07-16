@@ -24,6 +24,8 @@ class FleetNodePlayerGroupController(ObController):
         self._app.add_url_rule('/fleet/node-player-group/add', 'fleet_node_player_group_add', self.guard_fleet(self._auth(self.fleet_node_player_group_add)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player-group/save', 'fleet_node_player_group_save', self.guard_fleet(self._auth(self.fleet_node_player_group_save)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player-group/delete/<player_group_id>', 'fleet_node_player_group_delete', self.guard_fleet(self._auth(self.fleet_node_player_group_delete)), methods=['GET'])
+        self._app.add_url_rule('/fleet/node-player-group/unassign-player', 'fleet_node_player_group_unassign_player', self._auth(self.fleet_node_player_group_unassign_player), methods=['DELETE'])
+        self._app.add_url_rule('/fleet/node-player-group/assign-player/<player_group_id>/<player_id>', 'fleet_node_player_group_assign_player', self._auth(self.fleet_node_player_group_assign_player), methods=['GET'])
 
     def fleet_node_player_group(self):
         return redirect(url_for('fleet_node_player_group_list', player_group_id=0))
@@ -85,3 +87,43 @@ class FleetNodePlayerGroupController(ObController):
 
         self._model_store.node_player_group().delete(player_group_id)
         return redirect(url_for('fleet_node_player_group'))
+
+    def fleet_node_player_group_unassign_player(self, node_player_id: int = 0):
+        node_player_id = request.form['id'] if 'id' in request.form else node_player_id
+        node_player = self._model_store.node_player().get(node_player_id)
+
+        if not node_player:
+            return redirect(url_for('fleet_node_player_group'))
+
+        group_id = node_player.group_id
+
+        self._model_store.node_player().update_form(
+            id=node_player.id,
+            group_id=False,
+        )
+        self._post_update()
+        pcounter = self._model_store.node_player_group().get_player_counters_by_player_groups(group_id=group_id)
+
+        return jsonify({'status': 'ok', 'pcounter': pcounter, 'group_id': group_id})
+
+    def fleet_node_player_group_assign_player(self, player_group_id: int = 0, player_id: int = 0):
+        node_player_group = self._model_store.node_player().get(player_group_id)
+
+        if not node_player_group:
+            return redirect(url_for('fleet_node_player_group'))
+
+        node_player = self._model_store.node_player().get(player_id)
+
+        if not node_player:
+            return redirect(url_for('fleet_node_player_group_list', player_group_id=node_player_group.id))
+
+        self._model_store.node_player().update_form(
+            id=node_player.id,
+            group_id=node_player_group.id,
+        )
+        self._post_update()
+
+        return redirect(url_for('fleet_node_player_group_list', player_group_id=node_player_group.id))
+
+    def _post_update(self):
+        pass

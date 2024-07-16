@@ -2,6 +2,8 @@ ul.explr-tree {
 	height: 100% !important;
 
 	li {
+		position: relative;
+
 		span {
 			color: #555;
 			font-size: 13px;
@@ -15,6 +17,33 @@ ul.explr-tree {
 				&:hover {
 					color: #AAA;
 				}
+			}
+		}
+
+		i.main {
+			font-size: 14px;
+		}
+
+		sup,
+		sub {
+			position: absolute;
+			top: 0;
+			left: 5px;
+			background: #777;
+			border-bottom: 2px solid $neutralGrey;
+			color: black;
+			border-radius: $baseRadius;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-top: 2px;
+			padding-bottom: 1px;
+
+			i {
+				color: white;
+				font-size: 4px !important;
+				margin-bottom: 0;
 			}
 		}
 
@@ -41,10 +70,10 @@ ul.explr-tree {
 
 .explr-selection-actions {
 	display: none;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    flex: 1;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	flex: 1;
 
 	button {
 		display: none;
@@ -125,11 +154,37 @@ ul.explr-dirview {
 			justify-content: flex-start;
 			align-items: center;
 			max-width: 84px;
+			position: relative;
 
 			i {
 				font-size: 64px;
 				margin-bottom: 12px;
 				border-radius: 8px;
+			}
+
+			sup,
+			sub {
+				position: absolute;
+				top: 0;
+				right: -12px;
+				background: #777;
+				border-bottom: 2px solid $neutralGrey;
+				color: black;
+				border-radius: $baseRadius;
+				width: 16px;
+				height: 16px;
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding-top: 2px;
+				padding-bottom: 1px;
+
+				i {
+					color: white;
+					font-size: 10px;
+					margin-bottom: 0;
+				}
 			}
 
 			input {

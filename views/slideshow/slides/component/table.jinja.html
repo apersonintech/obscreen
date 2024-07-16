@@ -3,7 +3,7 @@
         {% set content = contents[slide.content_id] %}
         <li class="slide-item {{ 'disabled' if not slide.enabled }}" data-level="{{ slide.id }}"
             data-entity="{{ slide.to_json({"content": content}) }}">
-            <div class="sort">
+            <div class="head sort">
                 <a href="javascript:void(0);" class="item-sort slide-sort">
                     <i class="fa fa-bars icon-left"></i>
                 </a>

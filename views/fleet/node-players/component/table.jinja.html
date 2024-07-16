@@ -1,0 +1,33 @@
+<ul class="players">
+    {% for player in players %}
+        <li class="player-item" data-level="{{ player.id }}"
+            data-entity="{{ player.to_json() }}">
+            <div class="head sort">
+                <i class="fa fa-display icon-left"></i>
+            </div>
+            <div class="infos">
+                <div class="type">
+                    {% set icon = enum_operating_system.get_fa_icon(player.operating_system) %}
+                    {% set color = enum_operating_system.get_color_icon(player.operating_system) %}
+                    <i class="fa {{ icon }} {{ color }}"></i>
+                </div>
+                <div class="title" title="{{ player.name|default(l.common_empty) }}">
+                    {{ truncate(player.name|default(l.common_empty), 30, '...') }}
+                </div>
+            </div>
+            <div class="body">
+                <span>{{ l.common_reachable_at }}: </span>{{ player.host }}
+            </div>
+
+            <div class="tail">
+                <a href="javascript:void(0);" class="item-delete node-player-group-unassign-player btn btn-naked" data-route="{{ url_for('fleet_node_player_group_unassign_player', node_player_id=player.id) }}">
+                    <i class="fa fa-close"></i>
+                </a>
+            </div>
+        </li>
+    {% else %}
+        <div class="inner-empty empty-flag">
+            <i class="fa fa-display"></i>
+        </div>
+    {% endfor %}
+</ul>

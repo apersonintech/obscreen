@@ -14,7 +14,7 @@
         <div class="form-group">
             <label for="node-player-group-add-playlist-id">{{ l.fleet_node_player_group_form_label_playlist_id }}</label>
             <div class="widget">
-                <select name="playlist_id" id="node-player-group-add-playlist-id">
+                <select name="playlist_id" id="node-player-group-add-playlist-id" class="input-naked">
                     {% for playlist_id, playlist_name in playlists.items() %}
                         <option value="{{ playlist_id }}">{{ playlist_name }}</option>
                     {% endfor %}

@@ -36,9 +36,11 @@ class FleetNodePlayerController(ObController):
         self._model_store.variable().update_by_name('last_pillmenu_fleet', 'fleet_node_player_list')
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_node_player').as_string()
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.NODE_PLAYER)
+
         return render_template(
             'fleet/node-players/list.jinja.html',
-            node_players=self._model_store.node_player().get_all_indexed('folder_id', multiple=True),
+            foldered_node_players=self._model_store.node_player().get_all_indexed('folder_id', multiple=True),
+            groups=self._model_store.node_player_group().get_all_labels_indexed(),
             folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.NODE_PLAYER),
             working_folder_path=working_folder_path,
             working_folder=working_folder,

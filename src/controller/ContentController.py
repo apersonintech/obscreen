@@ -33,11 +33,13 @@ class ContentController(ObController):
         self._model_store.variable().update_by_name('last_pillmenu_slideshow', 'slideshow_content_list')
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
+        slides_with_content = self._model_store.slide().get_all_indexed(attribute='content_id', multiple=True)
 
         return render_template(
             'slideshow/contents/list.jinja.html',
             foldered_contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
             folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
+            slides_with_content=slides_with_content,
             working_folder_path=working_folder_path,
             working_folder=working_folder,
             working_folder_children=self._model_store.folder().get_children(folder=working_folder, entity=FolderEntity.CONTENT, sort='created_at', ascending=False),

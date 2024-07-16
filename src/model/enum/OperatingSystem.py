@@ -38,3 +38,27 @@ class OperatingSystem(Enum):
             return 'fa-display'
 
         return 'fa-server'
+
+    def get_color_icon(value: Enum) -> str:
+        if value == OperatingSystem.RASPBIAN:
+            return 'raspbian'
+        elif value == OperatingSystem.WINDOWS:
+            return 'windows'
+        elif value == OperatingSystem.MACOS:
+            return 'apple'
+        elif value == OperatingSystem.DEBIAN:
+            return 'debian'
+        elif value == OperatingSystem.FEDORA:
+            return 'fedora'
+        elif value == OperatingSystem.UBUNTU:
+            return 'ubuntu'
+        elif value == OperatingSystem.SUSE:
+            return 'suse'
+        elif value == OperatingSystem.REDHAT:
+            return 'redhat'
+        elif value == OperatingSystem.CENTOS:
+            return 'centos'
+        elif value == OperatingSystem.OTHER:
+            return 'other'
+
+        return 'white'

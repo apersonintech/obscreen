@@ -21,9 +21,9 @@
 
 {% block page %}
     <div class="top-content">
-{#        <h1>#}
-{#            {{ l.fleet_node_player_page_title }}#}
-{#        </h1>#}
+        {#        <h1>#}
+        {#            {{ l.fleet_node_player_page_title }}#}
+        {#        </h1>#}
 
         <div class="top-actions">
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START) }}
@@ -36,14 +36,18 @@
                 {{ l.common_new_folder }}
             </button>
 
-             <div class="explr-selection-actions">
-                <button type="button" class="explr-item-edit explr-selection-entity btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
+            <div class="explr-selection-actions">
+                <button type="button" class="explr-item-edit explr-selection-entity btn-info"
+                        data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
                     <i class="fa fa-eye"></i>
                 </button>
                 <button type="button" class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
                     <i class="fa fa-pencil"></i>
                 </button>
-                <button type="button" class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt" data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}" data-entity-route="{{ url_for('fleet_node_player_delete') }}">
+                <button type="button"
+                        class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
+                        data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}"
+                        data-entity-route="{{ url_for('fleet_node_player_delete') }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
@@ -68,44 +72,16 @@
     <div class="bottom-content">
         <div class="page-panel left-panel explr-explorer">
 
-            {% macro render_folder(folder) %}
-                {% set node_player_children = node_players[folder.id]|default([]) %}
-                {% set has_children = folder.children or node_player_children %}
-
-                <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id if folder.id else 0 }}">
-                    <a href="{{ url_for('fleet_node_player_cd') }}?path={{ folder.path }}" class="{% if folder.path == working_folder_path %}active{% endif %}">
-                        {{ folder.name }}
-                    </a>
-
-                    {% if has_children %}
-                        <ul>
-                            {% for child in folder.children %}
-                                {{ render_folder(child) }}
-                            {% endfor %}
-                            {% for node_player in node_player_children %}
-                                {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
-                                {% set color = node_player.operating_system.value %}
-                                <li class="explr-item">
-                                    <i class="fa {{ icon }} {{ color }}"></i>
-                                    <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}">
-                                        {{ node_player.name }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endmacro %}
-
-            <ul class="explr hidden" id="tree" data-working-folder-id="{{ working_folder.id }}">
-                {{ render_folder(folders_tree) }}
-            </ul>
+            {% with use_href=True %}
+                {% include 'fleet/node-players/component/explr-sidebar.jinja.html' %}
+            {% endwith %}
         </div>
 
-        <form id="folder-move-form" action="{{ url_for('fleet_node_player_folder_move') }}" class="hidden" method="POST">
-            <input type="hidden" name="entity_id" />
-            <input type="hidden" name="new_folder_id" />
-            <input type="hidden" name="is_folder" />
+        <form id="folder-move-form" action="{{ url_for('fleet_node_player_folder_move') }}" class="hidden"
+              method="POST">
+            <input type="hidden" name="entity_id"/>
+            <input type="hidden" name="new_folder_id"/>
+            <input type="hidden" name="is_folder"/>
         </form>
 
         <div class="page-content">
@@ -141,15 +117,17 @@
                         <a href="javascript:void(0);">
                             <i class="fa fa-folder"></i>
                             <form action="{{ url_for('fleet_node_player_folder_add') }}" method="POST">
-                                <input type="text" name="name" autocomplete="off" />
+                                <input type="text" name="name" autocomplete="off"/>
                             </form>
                         </a>
                     </li>
 
                     {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
                     {% if parent_path %}
-                        <li class="previous-folder droppable" data-path="{{ parent_path }}" data-id="{{ working_folder.parent_id }}" data-folder="1">
-                            <a href="{{ url_for('fleet_node_player_cd', path=parent_path) }}" class="explr-link explr-item-selectable explr-item-folder">
+                        <li class="previous-folder droppable" data-path="{{ parent_path }}"
+                            data-id="{{ working_folder.parent_id }}" data-folder="1">
+                            <a href="{{ url_for('fleet_node_player_cd', path=parent_path) }}"
+                               class="explr-link explr-item-selectable explr-item-folder">
                                 <i class="fa fa-folder"></i>
                                 ..
                             </a>
@@ -158,29 +136,40 @@
 
                     {% for folder in working_folder_children %}
                         {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
-                        <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}" data-folder="1">
-                            <a href="{{ url_for('fleet_node_player_cd', path=folder_path) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
+                        <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}"
+                            data-folder="1">
+                            <a href="{{ url_for('fleet_node_player_cd', path=folder_path) }}"
+                               class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
                                 <i class="fa fa-folder"></i>
                                 <span>{{ truncate(folder.name, 25, '...') }}</span>
                                 <form action="{{ url_for('fleet_node_player_folder_rename') }}" method="POST">
-                                    <input type="text" name="name" value="{{ folder.name }}" autocomplete="off" />
-                                    <input type="hidden" name="id" value="{{ folder.id }}" />
+                                    <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
+                                    <input type="hidden" name="id" value="{{ folder.id }}"/>
                                 </form>
                             </a>
                         </li>
                     {% endfor %}
 
 
-                    {% for node_player in node_players[working_folder.id|default(None)]|default([]) %}
+                    {% for node_player in foldered_node_players[working_folder.id|default(None)]|default([]) %}
                         {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
                         {% set color = node_player.operating_system.value %}
-                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}" data-folder="0" data-entity-json="{{ node_player.to_json() }}">
-                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-entity" data-callback="nodePlayerEdit">
-                                <i class="fa {{ icon }} {{ color }}"></i>
+                        {% set group_label = groups[node_player.group_id]|default(l.common_empty) %}
+                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}"
+                            data-folder="0" data-entity-json="{{ node_player.to_json({"group_label": group_label}) }}">
+                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}"
+                               class="explr-link explr-item-selectable explr-item-actionable explr-item-entity"
+                               data-callback="nodePlayerEdit">
+                                <i class="fa {{ icon }} {{ color }} main"></i>
+                                {% if node_player.group_id %}
+                                    <sub>
+                                        <i class="fa fa-layer-group"></i>
+                                    </sub>
+                                {% endif %}
                                 <span>{{ truncate(node_player.name, 25, '...') }}</span>
                                 <form action="{{ url_for('fleet_node_player_rename') }}" method="POST">
-                                    <input type="text" name="name" value="{{ node_player.name }}" autocomplete="off" />
-                                    <input type="hidden" name="id" value="{{ node_player.id }}" />
+                                    <input type="text" name="name" value="{{ node_player.name }}" autocomplete="off"/>
+                                    <input type="hidden" name="id" value="{{ node_player.id }}"/>
                                 </form>
                             </a>
                         </li>

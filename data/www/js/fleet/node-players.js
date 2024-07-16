@@ -11,6 +11,15 @@ jQuery(document).ready(function ($) {
         $('#node-player-edit-name').val(nodePlayer.name);
         $('#node-player-edit-host').val(nodePlayer.host);
         $('#node-player-edit-id').val(nodePlayer.id);
+        $('#node-player-edit-group-label').val(nodePlayer.group_label);
+        $('.group-edit-link').attr('href', 'javascript:void(0);');
+        $('.form-group-for-group-id').addClass('hidden');
+
+        if (nodePlayer.group_id) {
+            $('.form-group-for-group-id').removeClass('hidden');
+            $('.group-edit-link').attr('href', $('.group-edit-link').attr('data-route').replace('__id__', nodePlayer.group_id));
+        }
+
         inputOperatingSystemUpdate();
     };
 
