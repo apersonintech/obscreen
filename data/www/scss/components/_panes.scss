@@ -1,4 +1,4 @@
-table.panes {
+.panes {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
@@ -6,6 +6,7 @@ table.panes {
 	align-items: flex-start;
 	align-self: stretch;
 
+	.pane-section,
 	tbody {
 		display: flex;
 		flex-direction: column;
@@ -25,6 +26,7 @@ table.panes {
 			}
 		}
 
+		.pane-item,
 		tr {
 			flex: 1;
 			display: flex;
@@ -47,6 +49,7 @@ table.panes {
 				background-color: #141414;
 			}
 
+			.pane-cell,
 			td {
 				color: #888;
 				display: flex;

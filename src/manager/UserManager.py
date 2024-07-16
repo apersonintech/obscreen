@@ -51,6 +51,11 @@ class UserManager:
         if id:
             raw_user['id'] = id
 
+        [raw_user, user_tracker_edits] = self.initialize_user_trackers(raw_user)
+
+        if len(user_tracker_edits) > 0:
+            self._db.update_by_id(self.TABLE_NAME, raw_user['id'], user_tracker_edits)
+
         return User(**raw_user)
 
     def hydrate_list(self, raw_users: list) -> List[User]:
@@ -60,11 +65,11 @@ class UserManager:
         object = self._db.get_by_id(self.TABLE_NAME, id)
         return self.hydrate_object(object, id) if object else None
 
-    def get_by(self, query, sort: Optional[str] = None) -> List[User]:
-        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort))
+    def get_by(self, query, sort: Optional[str] = None, values: dict = {}) -> List[User]:
+        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort, values=values))
 
-    def get_one_by(self, query) -> Optional[User]:
-        object = self._db.get_one_by_query(self.TABLE_NAME, query=query)
+    def get_one_by(self, query, values: dict = {}, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> Optional[User]:
+        object = self._db.get_one_by_query(self.TABLE_NAME, query=query, values=values, sort=sort, ascending=ascending, limit=limit)
 
         if not object:
             return None
@@ -75,7 +80,7 @@ class UserManager:
         return self.get_one_by("username = '{}' and (enabled is null or enabled = {})".format(username, int(enabled)))
 
     def count_all_enabled(self):
-        return len(self.get_enabled_users())
+        return len(self.get_by("enabled = 1"))
 
     def track_user_created(self, id_or_entity: Optional[str]) -> User:
         return self.track_user_action(id_or_entity, 'created_by')
@@ -104,21 +109,18 @@ class UserManager:
 
         return User(username=self._lang_manager.translate('anonymous'), enabled=False)
 
-    def get_all(self, sort: bool = False) -> List[User]:
-        return self.hydrate_list(self._db.get_all(self.TABLE_NAME, "username" if sort else None))
+    def get_all(self, sort: Optional[str] = 'created_at', ascending=True) -> List[User]:
+        return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort=sort, ascending=ascending))
 
     def forget_for_user(self, user_id: int):
         users = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
-        edits_users = self.user_manager.forget_user_for_entity(users, user_id)
+        edits_users = self.forget_user_for_entity(users, user_id)
 
         for user_id, edits in edits_users.items():
             self._db.update_by_id(self.TABLE_NAME, user_id, edits)
 
-    def get_enabled_users(self) -> List[User]:
-        return self.get_by(query="enabled = 1", sort="username")
-
-    def get_disabled_users(self) -> List[User]:
-        return self.get_by(query="enabled = 0", sort="username")
+    def get_users(self) -> List[User]:
+        return self.get_all()
 
     def pre_add(self, user: Dict) -> Dict:
         self.track_user_on_create(user)
@@ -149,8 +151,16 @@ class UserManager:
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"enabled": enabled}))
         self.post_update(id)
 
-    def update_form(self, id: int, username: str, password: Optional[str]) -> None:
-        form = {"username": username}
+    def update_form(self, id: int, username: Optional[str] = None, password: Optional[str] = None, enabled: Optional[bool] = None) -> None:
+        user = self.get(id)
+
+        if not user:
+            return
+
+        form = {
+            "username": username if user else user.username,
+            "enabled": enabled if enabled is not None else user.enabled
+        }
 
         if password is not None and password:
             form['password'] = self.encode_password(password)
@@ -171,9 +181,12 @@ class UserManager:
         self.post_add(user.id)
 
     def delete(self, id: int) -> None:
-        self.pre_delete(id)
-        self._db.delete_by_id(self.TABLE_NAME, id)
-        self.post_delete(id)
+        user = self.get(id)
+
+        if user:
+            self.pre_delete(id)
+            self._db.delete_by_id(self.TABLE_NAME, id)
+            self.post_delete(id)
 
     def to_dict(self, users: List[User]) -> List[Dict]:
         return [user.to_dict() for user in users]

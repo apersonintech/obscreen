@@ -159,7 +159,7 @@ class ContentController(ObController):
         self._model_store.folder().move_to_folder(
             entity_id=request.form['entity_id'],
             folder_id=request.form['new_folder_id'],
-            entity_is_folder=True if request.form['is_folder'] == '1' else False,
+            entity_is_folder=True if 'is_folder' in request.form and request.form['is_folder'] == '1' else False,
         )
 
         return redirect(url_for('slideshow_content_list'))

@@ -1,59 +1,24 @@
-<table class="{{ tclass }}-users">
-    <thead>
-    <tr>
-        <th>{{ l.auth_user_panel_th_username }}</th>
-        {% if AUTH_ENABLED %}
-            <th class="tac">
-                <i class="fa fa-user"></i>
-            </th>
-        {% endif %}
-        <th class="tac">{{ l.auth_user_panel_th_enabled }}</th>
-        <th class="tac">{{ l.auth_user_panel_th_activity }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr class="empty-tr {% if users|length != 0 %}hidden{% endif %}">
-        <td colspan="4">
-            {{ l.auth_user_panel_empty|replace(
-                '%link%',
-                ('<a href="javascript:void(0);" class="item-add user-add">'~l.auth_user_button_add~'</a>')|safe
-            ) }}
-        </td>
-    </tr>
-    {% for user in users %}
-        <tr class="user-item" data-level="{{ user.id }}" data-entity="{{ user.to_json({"created_by": track_created(user).username, "updated_by": track_updated(user).username}) }}">
-            <td class="infos">
-                <div class="inner">
-                    <div class="badge"><i class="fa fa-key icon-left"></i> {{ user.id }}</div>
-                    <i class="fa fa-user icon-left"></i>
-
-                    {{ user.username }}
-                </div>
-            </td>
-            {% if AUTH_ENABLED %}
-                <td class="tac">
-                    {% set creator = track_created(user) %}
-                    {% if creator.username %}
-                        <a href="javascript:void(0);" class="badge item-utrack user-utrack {% if not creator.enabled %}anonymous{% endif %}">
-                            {{ creator.username }}
-                        </a>
-                    {% endif %}
-                </td>
-            {% endif %}
-            <td class="tac">
-                <label class="pure-material-switch">
-                    <input type="checkbox" {% if user.enabled %}checked="checked"{% endif %}><span></span>
-                </label>
-            </td>
-            <td class="actions tac">
-                <a href="javascript:void(0);" class="item-edit user-edit">
+<div class="tiles users">
+    <div class="tiles-inner">
+        {% for user in users %}
+        <div class="user-item tile-item {% if not user.enabled %}disabled{% endif %}" data-level="{{ user.id }}"
+            data-entity="{{ user.to_json({"created_by": track_created(user).username, "updated_by": track_updated(user).username}) }}">
+            <div class="tile-body">
+                {{ truncate(user.username, 100, '...') }}
+            </div>
+            <div class="tile-tail">
+                <a href="javascript:void(0);" class="item-edit user-edit btn btn-info">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <a href="javascript:void(0);" class="item-delete user-delete">
+                <a href="{{ url_for('auth_user_delete', user_id=user.id) }}" class="item-delete user-delete btn btn-naked protected">
                     <i class="fa fa-trash"></i>
                 </a>
-            </td>
-        </tr>
+            </div>
+        </div>
+    {% else %}
+        <div class="inner-empty empty-flag ">
+            <i class="fa fa-user"></i>
+        </div>
     {% endfor %}
-    </tbody>
-</table>
+    </div>
+</div>
