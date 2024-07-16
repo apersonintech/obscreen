@@ -20,12 +20,16 @@ class SettingsController(ObController):
         self._app.add_url_rule('/settings/variable-plugin/edit', 'settings_variable_plugin_edit', self._auth(self.settings_variable_plugin_edit), methods=['POST'])
 
     def settings_variable_list(self):
+        self._model_store.variable().update_by_name('last_pillmenu_configuration', 'settings_variable_list')
+
         return render_template(
             'configuration/settings/list.jinja.html',
             variables=self._model_store.variable().get_editable_variables(plugin=False, sort='section'),
         )
 
     def settings_variable_plugin_list(self):
+        self._model_store.variable().update_by_name('last_pillmenu_configuration', 'settings_variable_plugin_list')
+
         return render_template(
             'configuration/plugins/list.jinja.html',
             plugins=self._model_store.plugins(),

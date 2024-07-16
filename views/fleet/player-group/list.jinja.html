@@ -69,9 +69,9 @@
         <div class="page-content">
             <div class="inner">
                 {% if current_player_group %}
-{#                    {% with node_player_groups=node_player_groups %}#}
-{#                        {% include 'fleet/player-group/component/edit.jinja.html' %}#}
-{#                    {% endwith %}#}
+                    {% with node_player_groups=node_player_groups %}
+                        {% include 'fleet/player-group/component/edit.jinja.html' %}
+                    {% endwith %}
                 {% else %}
                     <div class="inner-empty empty-flag ">
                         <i class="fa fa-layer-group"></i>

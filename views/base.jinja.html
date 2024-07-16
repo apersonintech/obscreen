@@ -58,6 +58,7 @@
             "name": l.dynmenu_content,
             "icon": "fa-image",
             "position": 0,
+            "main_pill_route": last_pillmenu_slideshow,
             "pills": [
                 {"name": "Bibliothèque", "route": "slideshow_content_list", "icon": "fa-image"},
                 {"name": "Playlists", "route": "playlist", "route_alt": "playlist_list", "icon": "fa-play"},
@@ -67,6 +68,7 @@
             "name": "Configuration",
             "icon": "fa-cog",
             "position": 3,
+            "main_pill_route": last_pillmenu_configuration,
             "pills": [
                 {"name": l.settings_page_title, "route": "settings_variable_list", "icon": "fa-cogs"},
                 {"name": l.settings_plugin_page_title, "route": "settings_variable_plugin_list", "icon": "fa-puzzle-piece"},
@@ -82,6 +84,7 @@
                 "name": "Appareils",
                 "icon": "fa-tv",
                 "position": 1,
+                "main_pill_route": last_pillmenu_fleet,
                 "pills": [
                     {"name": l.fleet_node_player_page_title, "route": "fleet_node_player_list", "icon": "fa-tv"},
                     {"name": l.fleet_node_player_group_page_title, "route": "fleet_node_player_group", "route_alt": "fleet_node_player_group_list", "icon": "fa-layer-group"},
@@ -96,6 +99,7 @@
                 "name": "Sécurité",
                 "icon": "fa-key",
                 "position": 2,
+                "main_pill_route": last_pillmenu_security,
                 "pills": [
                     {"name": l.auth_page_title, "route": "auth_user_list", "icon": "fa-user"},
                 ]
@@ -130,7 +134,7 @@
                         {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
                         {% for category, menu in dynmenu.items() %}
                             <li class="{{ 'active' if current_dynmenu and menu.name == current_dynmenu.name }}">
-                                <a href="{{ url_for(menu.pills[0].route) }}">
+                                <a href="{{ url_for(menu.main_pill_route) }}">
                                     <i class="fa {{ menu.icon }}"></i> {{ menu.name }}
                                 </a>
                             </li>
@@ -196,10 +200,10 @@
                     <div class="dropdown">
                         <div class="trigger">
                             <div class="avatar">
-{#                                {{ current_user.username[0] }}#}J
+                                {#                                {{ current_user.username[0] }}#}J
                             </div>
                             <div class="username">
-{#                                {{ current_user.username }}#}Jessym
+                                {#                                {{ current_user.username }}#}Jessym
                             </div>
                             <i class="fa fa-sort-down"></i>
                         </div>

@@ -69,13 +69,13 @@
             </form>
         </div>
         <div class="preview-holder">
+            {% set preview_url = request.scheme ~ '://' ~ request.headers.get('host') ~ url_for('player_use', playlist_slug_or_id=current_playlist.slug) %}
             <h4 class="divide">
                 URL
             </h4>
             <p>
                 {{ l.playlist_form_preview_url_desc }}
             </p>
-            {% set preview_url = request.scheme ~ '://' ~ request.headers.get('host') ~ url_for('player_use', playlist_slug_or_id=current_playlist.slug) %}
 
             <div class="form-group">
                 <div class="widget">
@@ -98,21 +98,22 @@
                 {{ l.playlist_form_preview_qrcode_desc }}
             </p>
             <div id="qrcode" class="qrcode-pic" data-qrcode-payload="{{ preview_url }}"></div>
+            <h4 class="divide">
+                Iframe
+            </h4>
+            <p>
+                {{ l.playlist_form_preview_iframe_desc }}
+            </p>
+
+            <div class="preview">
+                <button type="button" class="btn btn-info btn-naked playlist-preview"
+                        data-url="{{ preview_url }}?intro=0&animation=0">
+                    <i class="fa fa-eye icon-left"></i> {{ l.playlist_panel_preview_action }}
+                </button>
+            </div>
         </div>
 
-        <h4 class="divide">
-            Iframe
-        </h4>
-        <p>
-            {{ l.playlist_form_preview_iframe_desc }}
-        </p>
 
-        <div class="preview">
-            <button type="button" class="btn btn-info btn-naked playlist-preview"
-                    data-url="{{ preview_url }}?intro=0&animation=0">
-                <i class="fa fa-eye icon-left"></i> {{ l.playlist_panel_preview_action }}
-            </button>
-        </div>
     </div>
 
 </div>

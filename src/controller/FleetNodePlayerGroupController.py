@@ -29,6 +29,7 @@ class FleetNodePlayerGroupController(ObController):
         return redirect(url_for('fleet_node_player_group_list', player_group_id=0))
 
     def fleet_node_player_group_list(self, player_group_id: int = 0):
+        self._model_store.variable().update_by_name('last_pillmenu_fleet', 'fleet_node_player_group')
         current_player_group = self._model_store.node_player_group().get(player_group_id)
         node_player_groups = self._model_store.node_player_group().get_all(sort="created_at", ascending=False)
         pcounters = self._model_store.node_player_group().get_player_counters_by_player_groups()

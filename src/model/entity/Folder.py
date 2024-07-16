@@ -9,12 +9,11 @@ from src.util.utils import str_to_enum
 
 class Folder:
 
-    def __init__(self, entity: Union[FolderEntity, str] = FolderEntity.NODE_PLAYER, name: str = 'Untitled', parent_id: Optional[int] = None, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None, depth: Optional[int] = None):
+    def __init__(self, entity: Union[FolderEntity, str] = FolderEntity.NODE_PLAYER, name: str = 'Untitled', parent_id: Optional[int] = None, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._parent_id = parent_id
         self._entity = str_to_enum(entity, FolderEntity) if isinstance(entity, str) else entity
         self._name = name
-        self._depth = depth
         self._created_by = created_by if created_by else None
         self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
@@ -87,14 +86,6 @@ class Folder:
     def updated_at(self, value: int):
         self._updated_at = value
 
-    @property
-    def depth(self) -> int:
-        return self._depth
-
-    @depth.setter
-    def depth(self, value: int):
-        self._depth = value
-
     def __str__(self) -> str:
         return f"Folder(" \
                f"id='{self.id}',\n" \
@@ -105,7 +96,6 @@ class Folder:
                f"updated_by='{self.updated_by}',\n" \
                f"created_at='{self.created_at}',\n" \
                f"updated_at='{self.updated_at}',\n" \
-               f"depth='{self.depth}',\n" \
                f")"
 
     def to_json(self) -> str:
@@ -121,7 +111,6 @@ class Folder:
             "updated_by": self.updated_by,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
-            "depth": self.depth,
         }
 
     def is_root(self) -> bool:

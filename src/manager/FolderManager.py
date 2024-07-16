@@ -16,7 +16,6 @@ class FolderManager(ModelManager):
     TABLE_MODEL = [
         "name CHAR(255)",
         "parent_id INTEGER",
-        "depth INTEGER DEFAULT 0",
         "entity CHAR(255)",
         "created_by CHAR(255)",
         "updated_by CHAR(255)",
@@ -61,8 +60,20 @@ class FolderManager(ModelManager):
 
     def get_one_by_path(self, path: str, entity: FolderEntity) -> Folder:
         parts = path[1:].split('/')
-        return self.get_one_by(
-            "name = '{}' and depth = {} and entity = '{}'".format(parts[-1], len(parts) - 1, entity.value))
+
+        result = self._database_manager.execute_read_query("""WITH RECURSIVE FolderCTE AS (
+            SELECT id, name, entity, 1 AS depth FROM folder WHERE parent_id IS NULL
+            UNION ALL
+            SELECT f.id, f.name, f.entity, cte.depth + 1 AS depth FROM folder f
+            INNER JOIN FolderCTE cte ON f.parent_id = cte.id
+        )
+        SELECT id FROM FolderCTE WHERE name = '{}' AND depth = {} AND entity = '{}'
+        """.format(parts[-1], len(parts) - 1, entity.value))
+
+        if len(result) > 0:
+            return self.get(result[0]['id'])
+
+        return None
 
     def hydrate_parents(self, folder: Optional[Folder], deep=False) -> Optional[Folder]:
         if not folder:
@@ -140,8 +151,8 @@ class FolderManager(ModelManager):
 
         if entity_is_folder:
             return self._db.execute_write_query(
-                query="UPDATE {} set parent_id = ?, depth = ? WHERE id = ?".format(self.TABLE_NAME),
-                params=(folder_id if folder else None, folder.depth + 1 if folder else 1, entity_id)
+                query="UPDATE {} set parent_id = ? WHERE id = ?".format(self.TABLE_NAME),
+                params=(folder_id if folder else None, entity_id)
             )
 
         table = None
@@ -182,12 +193,10 @@ class FolderManager(ModelManager):
         working_folder = self.get_one_by_path(path=working_folder_path, entity=entity)
         folder_path = "{}/{}".format(working_folder_path, name)
         parts = folder_path[1:].split('/')
-        depth = len(parts) - 1
 
         folder = Folder(
             entity=entity,
             name=name,
-            depth=depth,
             parent_id=working_folder.id if working_folder else None
         )
 
@@ -230,7 +239,6 @@ class FolderManager(ModelManager):
                 child_dict = {
                     'id': child.id,
                     'name': child.name,
-                    'depth': child.depth,
                     'entity': child.entity,
                     'created_by': child.created_by,
                     'updated_by': child.updated_by,

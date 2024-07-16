@@ -133,6 +133,10 @@ class VariableManager:
 
             # Not editable (System information)
             {"name": "start_counter", "value": 0, "type": VariableType.INT, "editable": False, "description": self.t('settings_variable_desc_ro_start_counter')},
+            {"name": "last_pillmenu_slideshow", "value": "slideshow_content_list", "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_pillmenu_configuration", "value": "settings_variable_list", "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_pillmenu_fleet", "value": "fleet_node_player_list", "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_pillmenu_security", "value": "auth_user_list", "type": VariableType.STRING, "editable": False, "description": None},
             {"name": "last_folder_content", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": self.t('settings_variable_desc_ro_last_folder_content')},
             {"name": "last_folder_node_player", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": self.t('settings_variable_desc_ro_last_folder_node_player')},
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},

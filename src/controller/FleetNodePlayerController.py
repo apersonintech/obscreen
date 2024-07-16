@@ -33,6 +33,7 @@ class FleetNodePlayerController(ObController):
         self._app.add_url_rule('/fleet/node-player/delete-folder', 'fleet_node_player_folder_delete', self._auth(self.fleet_node_player_folder_delete), methods=['GET'])
 
     def fleet_node_player_list(self):
+        self._model_store.variable().update_by_name('last_pillmenu_fleet', 'fleet_node_player_list')
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_node_player').as_string()
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.NODE_PLAYER)
         return render_template(
