@@ -42,10 +42,26 @@
 				&:hover {
 					opacity: 1;
 				}
+
+				&.disabled {
+					border-left-color: #444;
+				}
+
+				&.starred {
+					border-left-color: $other;
+
+					.tile-body {
+						i {
+							color: $other;
+						}
+					}
+				}
 			}
 
-
 			&.disabled {
+				.tile-body {
+					opacity: .3;
+				}
 
 				.tile-tail {
 					.head-icon {
@@ -101,6 +117,11 @@
 				line-height: 22px;
 				margin: 0;
 				flex-wrap: nowrap;
+
+				i {
+					font-size: 8px;
+					margin-right: 5px;
+				}
 			}
 
 			.tile-metrics {
@@ -117,7 +138,6 @@
 					font-family: "Courier New";
 				}
 			}
-
 
 
 		}

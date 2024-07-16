@@ -53,6 +53,17 @@
                    class="btn btn-danger-alt protected">
                     <i class="fa fa-trash"></i>
                 </a>
+
+                {% if not current_playlist.enabled %}
+                    <!-- disabled -->
+                {% elif current_playlist.fallback %}
+                    <!-- fallback -->
+                {% else %}
+                    <a href="{{ url_for('playlist_set_fallback', playlist_id=current_playlist.id) }}"
+                       class="btn btn-naked">
+                        <i class="fa fa-regular fa-star"></i>
+                    </a>
+                {% endif %}
             {% endif %}
 
             {{ HOOK(H_PLAYLIST_TOOLBAR_ACTIONS_END) }}

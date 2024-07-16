@@ -6,11 +6,12 @@ from typing import Optional, Union
 
 class Playlist:
 
-    def __init__(self, name: str = 'Untitled', slug: str = 'untitled', id: Optional[int] = None, enabled: bool = False, time_sync: bool = False, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, name: str = 'Untitled', slug: str = 'untitled', id: Optional[int] = None, enabled: bool = False, fallback: bool = False, time_sync: bool = False, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._name = name
         self._slug = slug
         self._enabled = enabled
+        self._fallback = fallback
         self._time_sync = time_sync
         self._created_by = created_by if created_by else None
         self._updated_by = updated_by if updated_by else None
@@ -28,6 +29,14 @@ class Playlist:
     @enabled.setter
     def enabled(self, value: bool):
         self._enabled = bool(value)
+
+    @property
+    def fallback(self) -> bool:
+        return bool(self._fallback)
+
+    @fallback.setter
+    def fallback(self, value: bool):
+        self._fallback = bool(value)
 
     @property
     def time_sync(self) -> bool:
@@ -91,6 +100,7 @@ class Playlist:
                f"name='{self.name}',\n" \
                f"slug='{self.slug}',\n" \
                f"enabled='{self.enabled}',\n" \
+               f"fallback='{self.fallback}',\n" \
                f"time_sync='{self.time_sync}',\n" \
                f"created_by='{self.created_by}',\n" \
                f"updated_by='{self.updated_by}',\n" \
@@ -112,6 +122,7 @@ class Playlist:
             "name": self.name,
             "slug": self.slug,
             "enabled": self.enabled,
+            "fallback": self.fallback,
             "time_sync": self.time_sync,
             "created_by": self.created_by,
             "updated_by": self.updated_by,
