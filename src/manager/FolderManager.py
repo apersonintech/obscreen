@@ -188,8 +188,10 @@ class FolderManager(ModelManager):
 
         self.update_form(folder_id, name)
 
-    def add_folder(self, entity: FolderEntity, name: str) -> Folder:
-        working_folder_path = self.get_working_folder(entity)
+    def add_folder(self, entity: FolderEntity, name: str, working_folder_path: Optional[str] = None) -> Folder:
+        if not working_folder_path:
+            working_folder_path = self.get_working_folder(entity)
+
         working_folder = self.get_one_by_path(path=working_folder_path, entity=entity)
         folder_path = "{}/{}".format(working_folder_path, name)
         parts = folder_path[1:].split('/')

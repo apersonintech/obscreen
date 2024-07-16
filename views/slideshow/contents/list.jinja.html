@@ -35,15 +35,15 @@
             </button>
 
             <div class="explr-selection-actions">
-                <button type="button" class="explr-item-edit explr-selection-entity btn-info"
+                <button type="button" class="btn explr-item-edit explr-selection-entity btn-info"
                         data-entity-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
                     <i class="fa fa-eye"></i>
                 </button>
-                <button type="button" class="explr-item-rename explr-selection-entity explr-selection-folder btn-info">
+                <button type="button" class="btn explr-item-rename explr-selection-entity explr-selection-folder btn-info">
                     <i class="fa fa-pencil"></i>
                 </button>
                 <button type="button"
-                        class="explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
+                        class="btn explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
                         data-folder-route="{{ url_for('slideshow_content_folder_delete') }}"
                         data-entity-route="{{ url_for('slideshow_content_delete') }}">
                     <i class="fa fa-trash-alt"></i>
@@ -115,6 +115,7 @@
                         <a href="javascript:void(0);">
                             <i class="fa fa-folder"></i>
                             <form action="{{ url_for('slideshow_content_folder_add') }}" method="POST">
+                                <input type="hidden" name="working_folder_path" value="{{ working_folder_path }}" />
                                 <input type="text" name="name" autocomplete="off"/>
                             </form>
                         </a>
