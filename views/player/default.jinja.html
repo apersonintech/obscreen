@@ -89,8 +89,9 @@
             };
 
             const addIp = function(ip, $container) {
-                const href = manage_url_template.replace('%ipaddr%', '<span>'+ip+'</span>');
-                const link = '<a href="' + href + '" target="_blank">' + href + '</a>';
+                const href_label = manage_url_template.replace('%ipaddr%', '<span>'+ip+'</span>');
+                const href = manage_url_template.replace('%ipaddr%', ip);
+                const link = '<a href="' + href + '" target="_blank">' + href_label + '</a>';
                 const $ipaddr = document.createElement('li');
                 Object.assign($ipaddr, { className: 'ipaddr'});
                 $ipaddr.innerHTML = link;
