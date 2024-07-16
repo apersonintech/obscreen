@@ -21,6 +21,8 @@
 {% block body_class %}view-content-list{% endblock %}
 
 {% block page %}
+    {% set explr_limit_chars = 35 %}
+
     <div class="top-content">
         <div class="top-actions">
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
@@ -93,12 +95,12 @@
                                 {% if loop.last %}
                                     <span>
                                         <i class="explr-icon explr-icon-folder"></i>
-                                        {{ truncate(dir, 25, '...') }}
+                                        {{ truncate(dir, explr_limit_chars, '...') }}
                                     </span>
                                 {% else %}
                                     <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
                                         <i class="explr-icon explr-icon-folder"></i>
-                                        {{ truncate(dir, 25, '...') }}
+                                        {{ truncate(dir, explr_limit_chars, '...') }}
                                     </a>
                                 {% endif %}
                             </li>
@@ -140,7 +142,7 @@
                             <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}"
                                class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
                                 <i class="fa fa-folder"></i>
-                                <span>{{ truncate(folder.name, 25, '...') }}</span>
+                                <span>{{ truncate(folder.name, explr_limit_chars, '...') }}</span>
                                 <form action="{{ url_for('slideshow_content_folder_rename') }}" method="POST">
                                     <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
                                     <input type="hidden" name="id" value="{{ folder.id }}"/>
@@ -159,7 +161,7 @@
                             <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}"
                                class="explr-link explr-item-selectable explr-item-actionable explr-item-entity">
                                 <i class="fa {{ icon }} {{ color }}"></i>
-                                <span>{{ truncate(content.name, 25, '...') }}</span>
+                                <span>{{ truncate(content.name, explr_limit_chars, '...') }}</span>
                                 <form action="{{ url_for('slideshow_content_rename') }}" method="POST">
                                     <input type="text" name="name" value="{{ content.name }}" autocomplete="off"/>
                                     <input type="hidden" name="id" value="{{ content.id }}"/>
