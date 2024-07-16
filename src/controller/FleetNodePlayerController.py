@@ -80,6 +80,7 @@ class FleetNodePlayerController(ObController):
         )
 
     def fleet_node_player_save(self, node_player_id: int = 0):
+        node_player_id = request.form['id'] if 'id' in request.form else node_player_id
         node_player = self._model_store.node_player().get(node_player_id)
 
         if not node_player:
@@ -93,7 +94,8 @@ class FleetNodePlayerController(ObController):
         )
         self._post_update()
 
-        return redirect(url_for('fleet_node_player_edit', node_player_id=node_player_id, saved=1))
+        # return redirect(url_for('fleet_node_player_edit', node_player_id=node_player_id, saved=1))
+        return redirect(url_for('fleet_node_player_list'))
 
     def fleet_node_player_delete(self):
         node_player = self._model_store.node_player().get(request.args.get('id'))

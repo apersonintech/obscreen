@@ -174,8 +174,8 @@
                     {% for node_player in node_players[working_folder.id|default(None)]|default([]) %}
                         {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
                         {% set color = node_player.operating_system.value %}
-                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}" data-folder="0">
-                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-entity">
+                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}" data-folder="0" data-entity-json="{{ node_player.to_json() }}">
+                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}" class="explr-link explr-item-selectable explr-item-actionable explr-item-entity" data-callback="nodePlayerEdit">
                                 <i class="fa {{ icon }} {{ color }}"></i>
                                 <span>{{ truncate(node_player.name, 25, '...') }}</span>
                                 <form action="{{ url_for('fleet_node_player_rename') }}" method="POST">
@@ -192,6 +192,7 @@
                 <div class="modals-outer">
                     <div class="modals-inner">
                         {% include 'fleet/node-players/modal/add.jinja.html' %}
+                        {% include 'fleet/node-players/modal/edit.jinja.html' %}
                     </div>
                 </div>
             </div>

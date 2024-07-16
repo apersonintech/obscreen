@@ -167,8 +167,11 @@ jQuery(function ($) {
         event.preventDefault();
         $(this).off('click');
         const href = $(this).attr('href');
+        const callback = $(this).attr('data-callback');
 
-        if ($(this).attr('target') === '_blank') {
+        if (callback) {
+            window[callback]($(this));
+        } else if ($(this).attr('target') === '_blank') {
             window.open(href);
         } else {
             window.location.href = href;

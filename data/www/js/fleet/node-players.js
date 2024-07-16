@@ -4,6 +4,16 @@ jQuery(document).ready(function ($) {
         inputOperatingSystemUpdate();
     };
 
+    window.nodePlayerEdit = function ($this) {
+        const nodePlayer = JSON.parse($this.parents('li:eq(0)').attr('data-entity-json'));
+        showModal('modal-node-player-edit');
+        $('.modal-node-player-edit input:visible:eq(0)').focus().select();
+        $('#node-player-edit-name').val(nodePlayer.name);
+        $('#node-player-edit-host').val(nodePlayer.host);
+        $('#node-player-edit-id').val(nodePlayer.id);
+        inputOperatingSystemUpdate();
+    };
+
     const inputOperatingSystemUpdate = function () {
         const $el = $('form:visible .operating-system-select');
         if ($el.length === 0) return;

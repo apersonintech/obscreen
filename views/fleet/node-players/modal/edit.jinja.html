@@ -1,0 +1,49 @@
+<div class="modal modal-node-player-edit modal-node-player">
+    <h2>
+        {{ l.fleet_node_player_form_edit_title }}
+    </h2>
+
+    <form class="form" action="{{ url_for('fleet_node_player_save', node_player_id=0) }}" method="POST">
+        <input name="id" type="hidden" id="node-player-edit-id" required="required" />
+
+        <div class="form-group">
+            <label for="node-player-edit-name">{{ l.fleet_node_player_form_label_name }}</label>
+            <div class="widget">
+                <input name="name" type="text" id="node-player-edit-name" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group tab-select">
+            <div class="widget">
+                <i class="fa fa-get-pocket operating-system-icon"></i>
+                <select name="operating_system" id="node-player-edit-operating-system" class="operating-system-select">
+                    {% for os in enum_operating_system %}
+                        <option value="{{ os.value }}" data-icon="{{ enum_operating_system.get_fa_icon(os) }}" data-color="{{ os.value }}">
+                            {{ t(os) }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <i class="fa fa-sort-desc triangle"></i>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="node-player-edit-host">{{ l.fleet_node_player_form_label_host }}</label>
+            <div class="widget">
+                <input name="host" type="text" id="node-player-edit-host" required="required" placeholder="{{ l.common_host_placeholder }}" />
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="button" class="btn btn-naked modal-close">
+                {{ l.common_close }}
+            </button>
+            <button type="submit" class="btn btn-info">
+                <i class="fa fa-save icon-left"></i>{{ l.common_save }}
+            </button>
+            <button type="button" disabled="disabled" class="btn btn-naked hidden btn-loading">
+                {{ l.common_loading }}
+            </button>
+        </div>
+    </form>
+</div>
