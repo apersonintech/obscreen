@@ -6,56 +6,120 @@
 
 {% block add_css %}
     {{ HOOK(H_PLAYLIST_CSS) }}
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/jquery-explr-1.4.css"/>
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css"/>
 {% endblock %}
 
 {% block add_js %}
+    <script type="text/javascript">
+        var schedule_start_choices = {
+            'loop': '{{ l.slideshow_slide_form_label_cron_scheduled_loop }}',
+            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
+            'cron': '{{ l.slideshow_slide_form_label_cron_scheduled_cron }}',
+        };
+        var schedule_end_choices = {
+            'stayloop': '{{ l.slideshow_slide_form_label_cron_scheduled_stayloop }}',
+            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
+            'duration': '{{ l.slideshow_slide_form_label_cron_scheduled_duration }}',
+        };
+        var contents =
+        {{ json_dumps(contents) | safe }}
+    </script>
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/flatpickr.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/tablednd-fixed.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/qrcode.min.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/slideshow/slides.js"></script>
     <script src="{{ STATIC_PREFIX }}js/playlist/playlists.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/explorer.js"></script>
     {{ HOOK(H_PLAYLIST_JAVASCRIPT) }}
 {% endblock %}
 
-{% block page %}
-    <div class="toolbar">
-        <h2><i class="fa fa-bars-staggered icon-left"></i>{{ l.playlist_page_title }}</h2>
+{% block body_class %}view-playlist-list{% endblock %}
 
-        <div class="toolbar-actions">
+{% block page %}
+    <div class="top-content">
+        <div class="top-actions">
             {{ HOOK(H_PLAYLIST_TOOLBAR_ACTIONS_START) }}
-            <button class="purple playlist-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.playlist_button_add }}</button>
+            <button type="button" class="btn btn-info playlist-add item-add">
+                <i class="fa fa-play icon-left"></i>
+                {{ l.playlist_button_add }}
+            </button>
+
+            {% if current_playlist %}
+                <a href="{{ url_for('playlist_delete', playlist_id=current_playlist.id) }}"
+                   class="btn btn-danger-alt protected">
+                    <i class="fa fa-trash"></i>
+                </a>
+
+                {% if not current_playlist.enabled %}
+                    <!-- disabled -->
+                {% elif current_playlist.fallback %}
+                    <!-- fallback -->
+                {% else %}
+                    <a href="{{ url_for('playlist_set_fallback', playlist_id=current_playlist.id) }}"
+                       class="btn btn-naked">
+                        <i class="fa fa-regular fa-star"></i>
+                    </a>
+                {% endif %}
+            {% endif %}
+
             {{ HOOK(H_PLAYLIST_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
-    <div class="alert alert-error hidden">
 
+    <div class="alert alert-info tiles-empty empty-flag {% if playlists|length != 0 %}hidden{% endif %}">
+        {{ l.playlist_panel_empty|replace(
+            '%link%',
+            ('<a href="javascript:void(0);" class="item-add playlist-add">'~l.playlist_button_add~'</a>')|safe
+        ) }}
     </div>
-    <div class="panel">
-        <div class="panel-body">
-            <h3>{{ l.playlist_panel_active }}</h3>
 
-            {% with tclass='active', playlists=enabled_playlists %}
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ l[error] }}
+        </div>
+    {% endif %}
+
+    <div class="bottom-content">
+        <div class="page-panel left-panel">
+            {% with playlists=playlists %}
                 {% include 'playlist/component/table.jinja.html' %}
             {% endwith %}
         </div>
-    </div>
-    <div class="panel panel-inactive">
-        <div class="panel-body">
-            <h3>{{ l.playlist_panel_inactive }}</h3>
 
-            {% with tclass='inactive', playlists=disabled_playlists %}
-                {% include 'playlist/component/table.jinja.html' %}
-            {% endwith %}
+        <div class="page-content">
+            <div class="inner">
+                {% if current_playlist %}
+                    {% with playlists=playlists %}
+                        {% include 'playlist/component/edit.jinja.html' %}
+                    {% endwith %}
+                {% else %}
+                    <div class="inner-empty empty-flag ">
+                        <i class="fa fa-play"></i>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
-
 
     <div class="modals hidden">
         <div class="modals-outer">
-            <a href="javascript:void(0);" class="modal-close">
-                <i class="fa fa-close"></i>
-            </a>
             <div class="modals-inner">
                 {% include 'playlist/modal/add.jinja.html' %}
-                {% include 'playlist/modal/edit.jinja.html' %}
-                {% include 'core/utrack.jinja.html' %}
+                {% include 'playlist/modal/qrcode.jinja.html' %}
+                {% include 'slideshow/slides/modal/add.jinja.html' %}
+                {% include 'slideshow/slides/modal/edit.jinja.html' %}
+            </div>
+        </div>
+    </div>
+
+    <div class="pickers hidden">
+        <div class="modals-outer">
+            <div class="modals-inner">
+                {% include 'slideshow/contents/modal/explr-picker.jinja.html' %}
             </div>
         </div>
     </div>

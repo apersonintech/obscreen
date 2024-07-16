@@ -1,49 +1,79 @@
+.pickers,
 .modals {
-  position: fixed;
-  background: rgba($black, 0.4);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+	position: fixed;
+	background: rgba($black, 0.4);
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	z-index: 10000;
 
-.modals-outer {
-  min-width: 30%;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-}
+	&.pickers {
+		.modals-outer {
+			.modals-inner {
+				.modal {
+					h2 {
+						font-size: 14px;
+						line-height: 18px;
+						display: flex;
+						margin-bottom: 5px;
+						flex-direction: row;
+						justify-content: flex-start;
+						align-items: center;
+						align-self: stretch;
+						color: #666666;
+					}
+				}
+			}
+		}
+	}
 
-.modals-outer .modal-close {
-  color: $white;
-  font-size: 30px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-top: 0px;
-}
+	.modals-outer {
+		min-width: 464px;
+		display: flex;
+		flex-direction: column;
+		overflow: auto;
+		padding-bottom: 2px;
 
-.modals-inner {
-  background: $white;
-  border-radius: 10px;
-  color: lighten($black, 20%);
-}
+		.modals-inner {
+			background: $layoutBackground;
+			border-radius: 10px;
+			color: lighten($black, 20%);
+			padding: 40px;
+			box-shadow: 0 2px #222;
+			border: 1px solid #222;
 
-.modals-inner .modal h2 {
-  border-bottom: 1px solid $lightGrey;
-  padding: 15px 15px;
-  margin: 0;
-}
+			.modal {
+				h2 {
+					padding: 0;
+					margin: 0 0 30px 0;
+					font-weight: normal;
+					color: #999;
+				}
 
-.modals-inner .modal h3 {
-  align-self: stretch;
-  border-bottom: 1px solid $lightGrey;
-  padding: 15px 15px;
-  margin: 0;
+				h3 {
+					align-self: stretch;
+					margin: 0;
+					font-size: 14px;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-start;
+					align-items: center;
+					color: white;
+					padding-bottom: 10px;
+					text-decoration: none;
+
+					&.divide {
+						border-top: 1px solid #222;
+						margin-top: 20px;
+						padding-top: 20px;
+					}
+				}
+			}
+		}
+	}
 }

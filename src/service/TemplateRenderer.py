@@ -10,7 +10,7 @@ from src.model.hook.HookRegistration import HookRegistration
 from src.model.hook.StaticHookRegistration import StaticHookRegistration
 from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.constant.WebDirConstant import WebDirConstant
-from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, seconds_to_hhmmss, am_i_in_docker
+from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, seconds_to_hhmmss, am_i_in_docker, truncate, merge_dicts, dictsort
 
 
 class TemplateRenderer:
@@ -29,7 +29,10 @@ class TemplateRenderer:
             SECRET_KEY=self._model_store.config().map().get('secret_key'),
             FLEET_PLAYER_ENABLED=self._model_store.variable().map().get('fleet_player_enabled').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
-            PLAYLIST_ENABLED=self._model_store.variable().map().get('playlist_enabled').as_bool(),
+            last_pillmenu_slideshow=self._model_store.variable().map().get('last_pillmenu_slideshow').as_string(),
+            last_pillmenu_configuration=self._model_store.variable().map().get('last_pillmenu_configuration').as_string(),
+            last_pillmenu_fleet=self._model_store.variable().map().get('last_pillmenu_fleet').as_string(),
+            last_pillmenu_security=self._model_store.variable().map().get('last_pillmenu_security').as_string(),
             track_created=self._model_store.user().track_user_created,
             track_updated=self._model_store.user().track_user_updated,
             PORT=self._model_store.config().map().get('port'),
@@ -41,6 +44,9 @@ class TemplateRenderer:
             seconds_to_hhmmss=seconds_to_hhmmss,
             is_valid_cron_date_time=is_valid_cron_date_time,
             json_dumps=json.dumps,
+            merge_dicts=merge_dicts,
+            dictsort=dictsort,
+            truncate=truncate,
             l=self._model_store.lang().map(),
             t=self._model_store.lang().translate,
         )

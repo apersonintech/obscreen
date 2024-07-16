@@ -3,11 +3,6 @@ from enum import Enum
 
 class HookType(Enum):
 
-    H_SLIDESHOW_SLIDES_TOOLBAR_ACTIONS_START = 'h_slideshow_slides_toolbar_actions_start'
-    H_SLIDESHOW_SLIDES_TOOLBAR_ACTIONS_END = 'h_slideshow_slides_toolbar_actions_end'
-    H_SLIDESHOW_SLIDES_CSS = 'h_slideshow_slides_css'
-    H_SLIDESHOW_SLIDES_JAVASCRIPT = 'h_slideshow_slides_javascript'
-
     H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START = 'h_slideshow_toolbar_actions_start'
     H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END = 'h_slideshow_toolbar_actions_end'
     H_SLIDESHOW_CONTENT_CSS = 'h_slideshow_css'

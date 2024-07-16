@@ -68,7 +68,7 @@ class ModelStore:
     def node_player_group(self) -> NodePlayerGroupManager:
         return self._node_player_group_manager
 
-    def folder_manager(self) -> FolderManager:
+    def folder(self) -> FolderManager:
         return self._folder_manager
 
     def lang(self) -> LangManager:

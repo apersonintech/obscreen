@@ -1,0 +1,31 @@
+.view-auth-user-list main .main-container {
+	.bottom-content {
+		.page-content {
+			.inner {
+				padding: 10px;
+
+
+				.tile-item {
+
+					&.disabled {
+						.tile-body {
+							opacity: .3;
+							text-decoration-line: line-through;
+						}
+					}
+
+					.tile-tail {
+						a:last-child {
+							margin-left: 10px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+

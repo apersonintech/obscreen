@@ -1,18 +1,21 @@
-
-.panel-logs {
-    padding-bottom: 20px;
+.view-sysinfo-list main .main-container {
+	.bottom-content {
+		.page-content {
+			.inner {
+				padding: 10px;
+			}
+		}
+	}
 }
 
-.panel-logs pre {
-    background: rgba($black, 0.9);
-    border: 1px solid $neutralGrey;
-    border-radius: 4px;
-    font-family: monospace;
-    color: darken($white, 5%);
-    padding: 20px;
-    min-height: 200px;
-    max-height: 500px;
-    overflow: auto;
-    max-width: 1100px;
-    overflow: auto;
+
+.view-sysinfo-list {
+	.reboot {
+		color: #CCC;
+	}
 }
+
+
+
+
+

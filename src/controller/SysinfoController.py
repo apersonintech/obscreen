@@ -12,7 +12,7 @@ from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
 from src.util.utils import restart
-from src.util.UtilNetwork import get_ip_address
+from src.util.UtilNetwork import get_network_interfaces
 from src.service.Sysinfo import get_all_sysinfo
 
 
@@ -20,15 +20,25 @@ class SysinfoController(ObController):
 
     def register(self):
         self._app.add_url_rule('/sysinfo', 'sysinfo_attribute_list', self._auth(self.sysinfo), methods=['GET'])
+        self._app.add_url_rule('/logs', 'logs', self._auth(self.logs), methods=['GET'])
         self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self.sysinfo_restart, methods=['GET', 'POST'])
         self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self._auth(self.sysinfo_restart_needed), methods=['GET'])
         self._app.add_url_rule('/sysinfo/get/ipaddr', 'sysinfo_get_ipaddr', self._auth(self.sysinfo_get_ipaddr), methods=['GET'])
 
-    def sysinfo(self):
+    def logs(self):
+        self._model_store.variable().update_by_name('last_pillmenu_configuration', 'logs')
+
         return render_template(
-            'sysinfo/list.jinja.html',
-            sysinfo=get_all_sysinfo(),
+            'configuration/logs/list.jinja.html',
             last_logs=self._model_store.logging().get_last_lines_of_stdout(100),
+        )
+
+    def sysinfo(self):
+        self._model_store.variable().update_by_name('last_pillmenu_configuration', 'sysinfo_attribute_list')
+
+        return render_template(
+            'configuration/sysinfo/list.jinja.html',
+            sysinfo=get_all_sysinfo(),
             ro_variables=self._model_store.variable().get_readonly_variables(),
             env_variables=self._model_store.config().map()
         )
@@ -57,5 +67,6 @@ class SysinfoController(ObController):
         return jsonify({'status': True})
 
     def sysinfo_get_ipaddr(self):
-        ipaddr = get_ip_address()
-        return ipaddr if ipaddr else ''
+        return jsonify({
+            'interfaces': [iface['ip_address'] for iface in get_network_interfaces()]
+        })

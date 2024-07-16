@@ -5,46 +5,182 @@
 {% endblock %}
 
 {% block add_css %}
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/jquery-explr-1.4.css"/>
     {{ HOOK(H_SLIDESHOW_CONTENT_CSS) }}
 {% endblock %}
 
 {% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/explorer.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
+
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
 
-{% block page %}
-    <div class="toolbar">
-        <h2><i class="fa fa-image icon-left"></i>{{ l.slideshow_content_page_title }}</h2>
+{% block body_class %}view-content-list{% endblock %}
 
-        <div class="toolbar-actions">
+{% block page %}
+    {% set explr_limit_chars = 35 %}
+
+    <div class="top-content">
+        <div class="top-actions">
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
-            <button class="purple content-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.slideshow_content_button_add }}</button>
+
+            <button type="button" class="btn btn-info content-add item-add">
+                <i class="fa fa-file-circle-plus icon-left"></i>
+                {{ l.slideshow_content_button_add }}
+            </button>
+            <button type="button" class="folder-add btn-neutral">
+                <i class="fa fa-folder-plus icon-left"></i>
+                {{ l.common_new_folder }}
+            </button>
+
+            <div class="explr-selection-actions">
+                <button type="button" class="btn explr-item-edit explr-selection-entity btn-info"
+                        data-entity-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
+                    <i class="fa fa-eye"></i>
+                </button>
+                <button type="button" class="btn explr-item-rename explr-selection-entity explr-selection-folder btn-info">
+                    <i class="fa fa-pencil"></i>
+                </button>
+                <button type="button"
+                        class="btn explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
+                        data-folder-route="{{ url_for('slideshow_content_folder_delete') }}"
+                        data-entity-route="{{ url_for('slideshow_content_delete') }}">
+                    <i class="fa fa-trash-alt"></i>
+                </button>
+            </div>
+
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
-    
-    <div class="panel">
-        <div class="panel-body">
-            <h3>{{ l.slideshow_content_panel_active }}</h3>
 
-            {% with tclass='active', contents=contents %}
-                {% include 'slideshow/contents/component/table.jinja.html' %}
+    {% if request.args.get('folder_not_empty_error') %}
+        <div class="alert alert-danger">
+            <i class="fa fa-warning icon-left"></i>
+            {{ l.common_folder_not_empty_error }}
+        </div>
+    {% endif %}
+
+    {% if request.args.get('referenced_in_slide_error') %}
+        <div class="alert alert-danger">
+            <i class="fa fa-warning icon-left"></i>
+            {{ l.slideshow_content_referenced_in_slide_error }}
+        </div>
+    {% endif %}
+
+    <div class="bottom-content">
+        <div class="page-panel left-panel explr-explorer">
+            {% with use_href=True %}
+                {% include 'slideshow/contents/component/explr-sidebar.jinja.html' %}
             {% endwith %}
         </div>
-    </div>
 
-    <div class="modals hidden">
-        <div class="modals-outer">
-            <a href="javascript:void(0);" class="modal-close">
-                <i class="fa fa-close"></i>
-            </a>
-            <div class="modals-inner">
-                {% include 'slideshow/contents/modal/add.jinja.html' %}
-                {% include 'slideshow/contents/modal/edit.jinja.html' %}
-                {% include 'core/utrack.jinja.html' %}
+        <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}" class="hidden"
+              method="POST">
+            <input type="hidden" name="entity_id"/>
+            <input type="hidden" name="new_folder_id"/>
+            <input type="hidden" name="is_folder"/>
+        </form>
+
+        <div class="page-content">
+            <div class="inner dirview">
+                <div class="breadcrumb-container">
+                    <ul class="breadcrumb">
+                        {% set ns = namespace(breadpath='') %}
+                        {% for dir in working_folder_path[1:].split('/') %}
+                            {% set ns.breadpath = ns.breadpath ~ '/' ~ dir %}
+                            <li>
+                                {% if loop.last %}
+                                    <span>
+                                        <i class="explr-icon explr-icon-folder"></i>
+                                        {{ truncate(dir, explr_limit_chars, '...') }}
+                                    </span>
+                                {% else %}
+                                    <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
+                                        <i class="explr-icon explr-icon-folder"></i>
+                                        {{ truncate(dir, explr_limit_chars, '...') }}
+                                    </a>
+                                {% endif %}
+                            </li>
+                            {% if not loop.last %}
+                                <li class="divider">
+                                    <i class="fa fa-chevron-right"></i>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <ul class="explr-dirview">
+                    <li class="new-folder hidden">
+                        <a href="javascript:void(0);">
+                            <i class="fa fa-folder"></i>
+                            <form action="{{ url_for('slideshow_content_folder_add') }}" method="POST">
+                                <input type="hidden" name="working_folder_path" value="{{ working_folder_path }}" />
+                                <input type="text" name="name" autocomplete="off"/>
+                            </form>
+                        </a>
+                    </li>
+
+                    {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
+                    {% if parent_path %}
+                        <li class="previous-folder droppable" data-path="{{ parent_path }}"
+                            data-id="{{ working_folder.parent_id }}" data-folder="1">
+                            <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}"
+                               class="explr-link explr-item-selectable explr-item-folder">
+                                <i class="fa fa-folder"></i>
+                                ..
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% for folder in working_folder_children %}
+                        {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
+                        <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}"
+                            data-folder="1">
+                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}"
+                               class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
+                                <i class="fa fa-folder"></i>
+                                <span>{{ truncate(folder.name, explr_limit_chars, '...') }}</span>
+                                <form action="{{ url_for('slideshow_content_folder_rename') }}" method="POST">
+                                    <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
+                                    <input type="hidden" name="id" value="{{ folder.id }}"/>
+                                </form>
+                            </a>
+                        </li>
+                    {% endfor %}
+
+
+                    {% for content in foldered_contents[working_folder.id|default(None)]|default([]) %}
+                        {% set icon = enum_content_type.get_fa_icon(content.type) %}
+                        {% set color = enum_content_type.get_color_icon(content.type) %}
+
+                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}"
+                            data-folder="0">
+                            <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}"
+                               class="explr-link explr-item-selectable explr-item-actionable explr-item-entity">
+                                <i class="fa {{ icon }} {{ color }}"></i>
+                                <span>{{ truncate(content.name, explr_limit_chars, '...') }}</span>
+                                <form action="{{ url_for('slideshow_content_rename') }}" method="POST">
+                                    <input type="text" name="name" value="{{ content.name }}" autocomplete="off"/>
+                                    <input type="hidden" name="id" value="{{ content.id }}"/>
+                                </form>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="modals hidden">
+                <div class="modals-outer">
+                    <div class="modals-inner">
+                        {% include 'slideshow/contents/modal/add.jinja.html' %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
 {% endblock %}

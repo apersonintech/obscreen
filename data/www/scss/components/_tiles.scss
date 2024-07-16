@@ -1,0 +1,157 @@
+.tiles {
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-self: stretch;
+
+	.tiles-inner {
+		display: flex;
+		flex: 1;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		justify-content: flex-start;
+		align-items: flex-start;
+		align-self: stretch;
+		padding: 2px;
+
+		.tiles-empty {
+
+		}
+
+		.tile-item {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+			align-self: stretch;
+			color: $white;
+			margin: 1px;
+			padding: 15px 10px 15px 15px;
+			border-radius: $baseRadius;
+			border-bottom: 1px solid transparent;
+
+			&:hover,
+			&.active {
+				border-left: 4px solid $seaBlue;
+				border-radius: $baseRadius;
+				border-bottom: 2px solid #171717;
+				background: #222;
+				color: $seaBlue;
+
+				&:hover {
+					opacity: 1;
+				}
+
+				&.disabled {
+					border-left-color: #444;
+					color: white;
+				}
+
+				&.starred {
+					border-left-color: $other;
+					color: $other;
+
+					.tile-tail {
+						.head-icon {
+							i {
+								opacity: 1;
+								color: $other;
+								font-size: 8px;
+							}
+						}
+					}
+				}
+			}
+
+			&.disabled {
+				.tile-body {
+					opacity: .3;
+				}
+
+				.tile-tail {
+					.head-icon {
+						i {
+							color: #444;
+							opacity: 0.4;
+						}
+					}
+				}
+			}
+
+			.tile-tail {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+				align-items: center;
+				align-self: stretch;
+				margin-left: 10px;
+				min-width: 10px;
+
+				.head-icon {
+					flex: 1;
+					display: flex;
+					text-align: right;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+					align-self: stretch;
+
+					i {
+						font-size: 6px;
+						display: flex;
+					}
+				}
+
+				.status-icons {
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-end;
+					align-items: center;
+
+					i {
+						font-size: 16px;
+						margin-left: 10px;
+					}
+				}
+			}
+
+			.tile-body {
+				flex: 1;
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+				font-size: 15px;
+				font-weight: normal;
+				letter-spacing: 0.8px;
+				line-height: 22px;
+				margin: 0;
+				flex-wrap: nowrap;
+
+				i {
+					font-size: 8px;
+					margin-right: 5px;
+				}
+			}
+
+			.tile-metrics {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-end;
+				align-items: center;
+				margin: 0;
+
+				.foot-span span,
+				.foot-span {
+					opacity: .8;
+					font-size: 13px;
+					font-family: "Courier New";
+				}
+			}
+
+
+		}
+	}
+}
