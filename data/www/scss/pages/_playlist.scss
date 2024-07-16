@@ -69,28 +69,29 @@
 					margin: 0 0 20px 0;
 				}
 
-				.form-holder {
-					margin: 20px 10px 20px 20px;
-					border-right: 1px solid #222;
-					padding-right: 20px;
-					flex: 1.3;
-
-					form {
-						max-width: initial;
-					}
-
-					.form-group {
-						flex-grow: 0;
-					}
-				}
-
-				.preview-holder {
+				.playlist-holder {
 					margin: 20px 20px 20px 10px;
 					flex: 1;
 
-					.form-group {
-						flex-grow: 0;
-						margin-bottom: 0;
+					.form-holder {
+						margin: 20px 0 0 0;
+
+						form {
+							max-width: initial;
+						}
+
+						.form-group {
+							flex-grow: 0;
+							margin-bottom: 5px;
+						}
+					}
+
+
+					.preview-holder {
+						.form-group {
+							flex-grow: 0;
+							margin-bottom: 0;
+						}
 					}
 
 					h4 {
@@ -152,10 +153,11 @@
 				}
 
 				.slides-holder {
-					margin-top: 40px;
-					border-top: 1px solid #222;
 					align-self: stretch;
-					padding-top: 20px;
+					border-right: 1px solid #222;
+					margin: 20px 10px 20px 20px;
+					padding-right: 20px;
+					flex: 1.3;
 				}
 			}
 		}

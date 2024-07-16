@@ -3,7 +3,7 @@
         {% for playlist in playlists %}
             {% set active = current_playlist and ''~playlist.id == ''~current_playlist.id %}
             <a href="{{ url_for('playlist_list', playlist_id=playlist.id) }}"
-               class="{% if active %}active{% endif %} tile-item {% if not playlist.enabled %}disabled{% endif %} playlist-item"
+               class="{% if active %}active{% endif %} tile-item playlist-item-{{ playlist.id }} {% if not playlist.enabled %}disabled{% endif %} playlist-item"
                data-level="{{ playlist.id }}"
                data-entity="{{ playlist.to_json() }}">
                 <div class="tile-header">
@@ -17,7 +17,7 @@
                     {{ truncate((title)|default(l.common_untitled), 35, '...') }}
                 </div>
                 <div class="tile-footer">
-                    <div class="foot-span">
+                    <div class="foot-span playlist-duration">
                         {% set total_duration = seconds_to_hhmmss(durations[playlist.id]) %}
                         {% if total_duration %}
                             {{ total_duration }}

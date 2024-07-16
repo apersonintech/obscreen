@@ -63,11 +63,20 @@ class PlaylistManager(ModelManager):
 
         return self.hydrate_object(object)
 
-    def get_durations_by_playlists(self):
-        durations = self._db.execute_read_query("select playlist_id, sum(duration) as total_duration from {} where cron_schedule is null group by playlist_id".format(SlideManager.TABLE_NAME))
+    def get_durations_by_playlists(self, playlist_id: Optional[int] = None):
+        durations = self._db.execute_read_query("select playlist_id, sum(duration) as total_duration from {} where cron_schedule is null {} group by playlist_id".format(
+            SlideManager.TABLE_NAME,
+            "{}".format(
+                " AND playlist_id = {}".format(playlist_id) if playlist_id else ""
+            )
+        ))
         map = {}
         for duration in durations:
             map[duration['playlist_id']] = duration['total_duration']
+
+        if playlist_id:
+            return map[playlist_id] if playlist_id in map else 0
+
         return map
 
     def get_all(self, sort: Optional[str] = 'created_at', ascending=False) -> List[Playlist]:

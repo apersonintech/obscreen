@@ -5,7 +5,7 @@ a.badge,
   justify-content: center;
   align-items: center;
   padding: 5px 5px;
-  border-radius: 4px;
+  border-radius: $baseRadius;
   font-size: 12px;
   background: rgba($white, .1);
   border: 1px solid transparent;

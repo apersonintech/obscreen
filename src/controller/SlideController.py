@@ -76,9 +76,16 @@ class SlideController(ObController):
         return redirect(url_for('playlist'))
 
     def slideshow_slide_delete(self, slide_id: int = 0):
+        slide = self._model_store.slide().get(slide_id)
+
+        if not slide:
+            abort(404)
+
         self._model_store.slide().delete(slide_id)
+        duration = self._model_store.playlist().get_durations_by_playlists(playlist_id=slide.playlist_id)
+
         self._post_update()
-        return jsonify({'status': 'ok'})
+        return jsonify({'status': 'ok', 'duration': duration, 'playlist_id': slide.playlist_id})
 
     def slideshow_slide_position(self):
         data = request.get_json()

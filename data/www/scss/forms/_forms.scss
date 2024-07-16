@@ -183,8 +183,8 @@ form {
 				text-align: left;
 				font-weight: bold;
 				cursor: pointer;
-				border-top-left-radius: 4px;
-				border-top-right-radius: 4px;
+				border-top-left-radius: $baseRadius;
+				border-top-right-radius: $baseRadius;
 				border-bottom-left-radius: 0;
 				border-bottom-right-radius: 0;
 				white-space: nowrap;
