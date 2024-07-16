@@ -21,14 +21,22 @@
 
 {% block page %}
     <div class="top-content">
-        <h1>
-            {{ l.fleet_node_player_page_title }}
-        </h1>
+{#        <h1>#}
+{#            {{ l.fleet_node_player_page_title }}#}
+{#        </h1>#}
 
         <div class="top-actions">
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START) }}
+            <button type="button" class="btn btn-info node-player-add item-add">
+                <i class="fa fa-file-circle-plus icon-left"></i>
+                {{ l.fleet_node_player_button_add }}
+            </button>
+            <button type="button" class="folder-add btn-neutral">
+                <i class="fa fa-folder-plus icon-left"></i>
+                {{ l.common_new_folder }}
+            </button>
 
-            <div class="explr-selection-actions">
+             <div class="explr-selection-actions">
                 <button type="button" class="explr-item-edit explr-selection-entity btn-info" data-entity-route="{{ url_for('fleet_node_player_edit', node_player_id='!c!') }}">
                     <i class="fa fa-eye"></i>
                 </button>
@@ -39,15 +47,6 @@
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
-
-            <button type="button" class="btn btn-info node-player-add item-add">
-                <i class="fa fa-file-circle-plus icon-left"></i>
-                {{ l.fleet_node_player_button_add }}
-            </button>
-            <button type="button" class="folder-add btn-neutral">
-                <i class="fa fa-folder-plus icon-left"></i>
-                {{ l.common_new_folder }}
-            </button>
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>

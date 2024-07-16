@@ -180,16 +180,26 @@
                 </div>
             {% endif %}
 
+
+            <div class="context-divider"></div>
+
+            <div class="{% if not AUTH_ENABLED %}contex-tail{% endif %}">
+                <a href="{{ url_for('slideshow_player_refresh', next=request.full_path) }}" class="btn btn-naked">
+                    <i class="fa fa-display main"></i>
+                    <sub><i class="fa fa-refresh"></i></sub>
+                </a>
+            </div>
+
             {% if AUTH_ENABLED %}
                 <div class="context-divider"></div>
                 <div class="context-user">
                     <div class="dropdown">
                         <div class="trigger">
                             <div class="avatar">
-                                {{ current_user.username[0] }}
+{#                                {{ current_user.username[0] }}#}J
                             </div>
                             <div class="username">
-                                {{ current_user.username }}
+{#                                {{ current_user.username }}#}Jessym
                             </div>
                             <i class="fa fa-sort-down"></i>
                         </div>
@@ -205,6 +215,13 @@
             {% endif %}
         </div>
         <div class="main-container">
+            {% if request.args.get('refresh_player') %}
+                <div class="alert alert-success">
+                    <i class="fa fa-refresh icon-left"></i>
+                    {{ l.slideshow_slide_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
+                </div>
+            {% endif %}
+
             {% block page %}{% endblock %}
         </div>
     </main>

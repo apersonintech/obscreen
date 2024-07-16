@@ -13,8 +13,11 @@
 
         <div class="actions actions-right">
             <button type="button" class="btn btn-info slide-add">
-                <i class="fa fa-image"></i> {{ l.slideshow_slide_form_add_title }}
+                <i class="fa fa-plus"></i> {{ l.slideshow_slide_form_add_title }}
             </button>
+            <a href="{{ url_for('slideshow_content_list') }}" class="btn btn-neutral" target="_blank">
+                <i class="fa fa-upload"></i>
+            </a>
         </div>
     </div>
 

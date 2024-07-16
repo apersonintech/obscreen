@@ -31,6 +31,10 @@ main {
 			margin-right: 20px;
 		}
 
+		.contex-tail {
+			margin-right: 20px;
+		}
+
 		.context-user {
 			display: flex;
 			margin-right: 20px;
@@ -42,7 +46,7 @@ main {
 					width: 32px;
 					height: 32px;
 					border-radius: $baseRadius;
-					background: $seaBlue;
+					background: #AAA;
 					margin-right: 10px;
 					display: flex;
 					flex-direction: row;
@@ -52,6 +56,7 @@ main {
 					font-weight: bold;
 					font-size: 14px;
 					border: 1px solid #444;
+					color: black;
 				}
 
 				i {
