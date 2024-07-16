@@ -136,6 +136,11 @@ form {
 				border-radius: 0;
 			}
 
+			&.input-naked {
+				padding-left: 0;
+				color: #BBB;
+			}
+
 			&.disabled,
 			&[disabled] {
 				border: none;

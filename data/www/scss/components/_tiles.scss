@@ -30,10 +30,15 @@
 			color: $white;
 			margin: 1px;
 			padding: 15px 10px 15px 15px;
+			border-radius: $baseRadius;
+			border-bottom: 1px solid transparent;
 
 			&:hover,
 			&.active {
 				background: #111;
+				border-left: 4px solid $seaBlue;
+				border-radius: $baseRadius;
+				border-bottom: 2px solid #171717;
 
 				&:hover {
 					opacity: 1;

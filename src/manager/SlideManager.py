@@ -66,6 +66,20 @@ class SlideManager(ModelManager):
     def get_all(self, sort: bool = False) -> List[Slide]:
         return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort="position" if sort else None))
 
+    def get_all_indexed(self, attribute: str = 'id', multiple=False) -> Dict[str, Slide]:
+        index = {}
+
+        for item in self.get_slides():
+            id = getattr(item, attribute)
+            if multiple:
+                if id not in index:
+                    index[id] = []
+                index[id].append(item)
+            else:
+                index[id] = item
+
+        return index
+
     def forget_for_user(self, user_id: int):
         slides = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
         edits_slides = self.user_manager.forget_user_for_entity(slides, user_id)
@@ -83,7 +97,10 @@ class SlideManager(ModelManager):
             query = "{} {}".format(query, "AND playlist_id = {}".format(playlist_id))
 
         if content_id:
-            query = "{} {}".format(query, "AND content_id = {}".format(content_id))
+            if isinstance(content_id, bool):
+                query = "{} {}".format(query, "AND content_id IS NOT NULL")
+            else:
+                query = "{} {}".format(query, "AND content_id = {}".format(content_id))
 
         return self.get_by(query=query, sort="position")
 

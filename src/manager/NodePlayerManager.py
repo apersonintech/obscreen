@@ -113,17 +113,17 @@ class NodePlayerManager(ModelManager):
     def post_delete(self, node_player_id: str) -> str:
         return node_player_id
 
-    def update_form(self, id: int, name: str, host: Optional[str] = None, operating_system: Optional[OperatingSystem] = None, group_id: Optional[int] = None) -> NodePlayer:
+    def update_form(self, id: int, name: Optional[str] = None, host: Optional[str] = None, operating_system: Optional[OperatingSystem] = None, group_id: Optional[int] = None) -> NodePlayer:
         node_player = self.get(id)
 
         if not node_player:
             return
 
         form = {
-            "name": name,
+            "name": name if name else node_player.name,
             "host": host if host else node_player.host,
             "operating_system": operating_system.value if operating_system else node_player.operating_system.value,
-            "group_id": group_id if group_id else node_player.group_id
+            "group_id": None if group_id is False else group_id if group_id else node_player.group_id
         }
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))

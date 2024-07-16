@@ -1,11 +1,11 @@
 jQuery(document).ready(function ($) {
 
     const main = function () {
-        const qrcodeElement = document.getElementById('qrcode');
+        const $qrcode = $('#qrcode');
 
-        if (qrcodeElement) {
-            new QRCode(qrcodeElement, {
-                text: qrcodeElement.attributes['data-qrcode-payload'].value,
+        if ($qrcode.length) {
+            new QRCode($qrcode.get(0), {
+                text: $qrcode.attr('data-qrcode-payload'),
                 width: 128,
                 height: 128,
                 colorDark: '#222',

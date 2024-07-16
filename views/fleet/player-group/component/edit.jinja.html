@@ -1,37 +1,40 @@
 <div class="horizontal">
     <div class="players-holder vertical">
         <h3>
-            {{ l.playlist_panel_content_management }}
+            {{ l.fleet_node_player_group_page_player_management }}
         </h3>
         <p>
-            {{ l.playlist_panel_content_management_desc }}
+            {{ l.fleet_node_player_group_page_player_management_desc }}
         </p>
 
-{#        {% with slides=slides %}#}
-{#            {% include 'slideshow/slides/component/table.jinja.html' %}#}
-{#        {% endwith %}#}
-{##}
-{#        <div class="actions actions-right">#}
-{#            <button type="button" class="btn btn-info slide-add">#}
-{#                <i class="fa fa-plus"></i> {{ l.slideshow_slide_form_add_title }}#}
-{#            </button>#}
-{#            <a href="{{ url_for('slideshow_content_list') }}" class="btn btn-neutral" target="_blank">#}
-{#                <i class="fa fa-upload"></i>#}
-{#            </a>#}
-{#        </div>#}
+        {% with players=players %}
+            {% include 'fleet/node-players/component/table.jinja.html' %}
+        {% endwith %}
+
+        <div class="actions actions-right">
+            <button type="button" class="btn btn-info node-player-group-player-assign" data-route="{{ url_for('fleet_node_player_group_assign_player', player_group_id=current_player_group.id, player_id='__id__') }}">
+                <i class="fa fa-plus"></i> {{ l.fleet_node_player_group_assign_player }}
+            </button>
+            <a href="{{ url_for('fleet_node_player_list') }}" class="btn btn-neutral" target="_blank">
+                <i class="fa fa-display main"></i>
+                <sub>
+                    <i class="fa fa-download"></i>
+                </sub>
+            </a>
+        </div>
     </div>
 
     <div class="node-player-group-holder vertical">
-{#        <h3>#}
-{#            {{ l.playlist_panel_about_playlist }}#}
-{#        </h3>#}
+        <h3>
+            {{ l.fleet_node_player_group_page_about }}
+        </h3>
 
         <div class="form-holder">
             <form class="form" action="{{ url_for('fleet_node_player_group_save') }}" method="POST">
                 <input type="hidden" name="id" id="node-player-group-edit-id" value="{{ current_player_group.id }}"/>
 
                 <div class="form-group">
-                    <label for="node-player-group-edit-name">{{ l.playlist_form_label_name }}</label>
+                    <label for="node-player-group-edit-name">{{ l.fleet_node_player_group_form_label_name }}</label>
                     <div class="widget">
                         <input type="text" name="name" id="node-player-group-edit-name" required="required" value="{{ current_player_group.name }}"/>
                     </div>
@@ -40,7 +43,7 @@
                 <div class="form-group">
                     <label for="node-player-group-edit-playlist-id">{{ l.fleet_node_player_group_form_label_playlist_id }}</label>
                     <div class="widget">
-                        <select name="playlist_id" id="node-player-group-edit-playlist-id">
+                        <select name="playlist_id" id="node-player-group-edit-playlist-id" class="input-naked">
                             {% for playlist_id, playlist_name in playlists.items() %}
                                 <option value="{{ playlist_id }}" {% if current_player_group.playlist_id == playlist_id %}selected="selected"{% endif %}>
                                     {{ playlist_name }}
@@ -61,6 +64,7 @@
                 </div>
             </form>
         </div>
+
         <div class="preview-holder">
             {% set preview_url = request.scheme ~ '://' ~ request.headers.get('host') ~ url_for('player_use', playlist_slug_or_id=current_player_group.playlist_id) %}
 

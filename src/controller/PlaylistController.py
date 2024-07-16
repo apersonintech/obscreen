@@ -35,6 +35,7 @@ class PlaylistController(ObController):
         durations = self._model_store.playlist().get_durations_by_playlists()
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
+        slides_with_content = self._model_store.slide().get_all_indexed(attribute='content_id', multiple=True)
 
         if not current_playlist and len(playlists) > 0:
             current_playlist = None
@@ -45,6 +46,7 @@ class PlaylistController(ObController):
             current_playlist=current_playlist,
             playlists=playlists,
             durations=durations,
+            slides_with_content=slides_with_content,
             slides=self._model_store.slide().get_slides(playlist_id=current_playlist.id) if current_playlist else [],
             foldered_contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
             contents={content.id: {"id": content.id, "name": content.name, "type": content.type.value} for content in self._model_store.content().get_contents()},

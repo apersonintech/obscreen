@@ -13,12 +13,26 @@
             </div>
         </div>
 
+
+        <div class="form-group form-group-for-group-id hidden">
+            <label for="node-player-edit-group-id">{{ l.fleet_node_player_form_label_group_id }}</label>
+            <div class="widget">
+                <input name="name" type="text" id="node-player-edit-group-label" class="input-naked" disabled="disabled" />
+                <input name="name" type="text" id="node-player-edit-group-id" required="required" class="hidden" disabled="disabled" />
+                <a href="javascript:void(0);" class="btn btn-neutral group-edit-link" data-route="{{ url_for('fleet_node_player_group_list', player_group_id='__id__') }}">
+                    <i class="fa-solid fa-layer-group"></i>
+                </a>
+            </div>
+        </div>
+
         <div class="form-group tab-select">
             <div class="widget">
                 <i class="fa fa-get-pocket operating-system-icon"></i>
                 <select name="operating_system" id="node-player-edit-operating-system" class="operating-system-select">
                     {% for os in enum_operating_system %}
-                        <option value="{{ os.value }}" data-icon="{{ enum_operating_system.get_fa_icon(os) }}" data-color="{{ os.value }}">
+                        {% set icon = enum_operating_system.get_fa_icon(os) %}
+                        {% set color = enum_operating_system.get_color_icon(os) %}
+                        <option value="{{ os.value }}" data-icon="{{ icon }}" data-color="{{ color }}">
                             {{ t(os) }}
                         </option>
                     {% endfor %}

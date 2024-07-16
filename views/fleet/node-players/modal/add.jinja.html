@@ -17,7 +17,9 @@
                 <i class="fa fa-get-pocket operating-system-icon"></i>
                 <select name="operating_system" id="node-player-add-operating-system" class="operating-system-select">
                     {% for os in enum_operating_system %}
-                        <option value="{{ os.value }}" data-icon="{{ enum_operating_system.get_fa_icon(os) }}" data-color="{{ os.value }}">
+                        {% set icon = enum_operating_system.get_fa_icon(os) %}
+                        {% set color = enum_operating_system.get_color_icon(os) %}
+                        <option value="{{ os.value }}" data-icon="{{ icon }}" data-color="{{ color }}">
                             {{ t(os) }}
                         </option>
                     {% endfor %}

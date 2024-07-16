@@ -3,7 +3,8 @@
     {% set has_children = folder.children or content_children %}
 
     <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id }}">
-        <a href="{% if use_href %}{{ url_for('slideshow_content_cd') }}?path={{ folder.path }}{% else %}javascript:void(0);{% endif %}"
+        <a href="{% if use_href %}{{ url_for('slideshow_content_cd') }}?path=
+            {{ folder.path }}{% else %}javascript:void(0);{% endif %}"
            class="{% if folder.path == working_folder_path %}active{% endif %} {{ 'explr-pick-folder' if not use_href }}">
             {{ folder.name }}
         </a>
@@ -14,11 +15,20 @@
                     {{ render_folder(child) }}
                 {% endfor %}
                 {% for content in content_children %}
+                    {% set slides = slides_with_content[content.id]|default([]) %}
                     {% set icon = enum_content_type.get_fa_icon(content.type) %}
                     {% set color = enum_content_type.get_color_icon(content.type) %}
                     <li class="explr-item">
                         <i class="fa {{ icon }} {{ color }}"></i>
-                        <a href="{% if use_href %}{{ url_for('slideshow_content_edit', content_id=content.id) }}{% else %}javascript:void(0);{% endif %}" class="{{ 'explr-pick-element' if not use_href }}" data-json="{{ json_dumps(content.to_dict()) }}">
+                        {% if slides|length > 0 %}
+                            <sub>
+                                <i class="fa fa-play"></i>
+                            </sub>
+                        {% endif %}
+                        <a href="
+                                {% if use_href %}{{ url_for('slideshow_content_edit', content_id=content.id) }}{% else %}javascript:void(0);{% endif %}"
+                           class="{{ 'explr-pick-element' if not use_href }}"
+                           data-json="{{ json_dumps(content.to_dict()) }}">
                             {{ content.name }}
                         </a>
                     </li>
