@@ -18,7 +18,7 @@ class SlideController(ObController):
         self._app.add_url_rule('/manage', 'manage', self.manage, methods=['GET'])
         self._app.add_url_rule('/slideshow/slide/add', 'slideshow_slide_add', self._auth(self.slideshow_slide_add), methods=['POST'])
         self._app.add_url_rule('/slideshow/slide/edit', 'slideshow_slide_edit', self._auth(self.slideshow_slide_edit), methods=['POST'])
-        self._app.add_url_rule('/slideshow/slide/delete/<slide_id>', 'slideshow_slide_delete', self._auth(self.slideshow_slide_delete), methods=['DELETE'])
+        self._app.add_url_rule('/slideshow/slide/delete/<slide_id>', 'slideshow_slide_delete', self._auth(self.slideshow_slide_delete), methods=['GET', 'DELETE'])
         self._app.add_url_rule('/slideshow/slide/position', 'slideshow_slide_position', self._auth(self.slideshow_slide_position), methods=['POST'])
         self._app.add_url_rule('/slideshow/player-refresh', 'slideshow_player_refresh', self._auth(self.slideshow_player_refresh), methods=['GET'])
 
@@ -81,11 +81,17 @@ class SlideController(ObController):
         if not slide:
             abort(404)
 
+        playlist_id = slide.playlist_id
+
         self._model_store.slide().delete(slide_id)
-        duration = self._model_store.playlist().get_durations_by_playlists(playlist_id=slide.playlist_id)
+        duration = self._model_store.playlist().get_durations_by_playlists(playlist_id=playlist_id)
 
         self._post_update()
-        return jsonify({'status': 'ok', 'duration': duration, 'playlist_id': slide.playlist_id})
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'status': 'ok', 'duration': duration, 'playlist_id': playlist_id})
+
+        return redirect(url_for('playlist_list', playlist_id=playlist_id))
 
     def slideshow_slide_position(self):
         data = request.get_json()
