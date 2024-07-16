@@ -24,8 +24,7 @@
                                 <i class="fa fa-play"></i>
                             </sub>
                         {% endif %}
-                        <a href="
-                                {% if use_href %}{{ url_for('slideshow_content_edit', content_id=content.id) }}{% else %}javascript:void(0);{% endif %}"
+                        <a href="{% if use_href %}{{ url_for('slideshow_content_edit', content_id=content.id) }}{% else %}javascript:void(0);{% endif %}"
                            class="{{ 'explr-pick-element' if not use_href }}">
                             {{ content.name }}
                         </a>
