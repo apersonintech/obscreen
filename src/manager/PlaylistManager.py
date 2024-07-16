@@ -30,6 +30,7 @@ class PlaylistManager(ModelManager):
     def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager):
         super().__init__(lang_manager, database_manager, user_manager, variable_manager)
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
+        self.check_and_set_fallback()
 
     def hydrate_object(self, raw_playlist: dict, id: int = None) -> Playlist:
         if id:
@@ -163,11 +164,15 @@ class PlaylistManager(ModelManager):
 
         self.post_update(id)
 
+    def check_and_set_fallback(self):
+        if len(self.get_by("fallback = 1")) == 0:
+            self.set_fallback()
+
     def set_fallback(self, playlist_id: Optional[int] = 0) -> None:
         self._db.execute_write_query(query="UPDATE {} set fallback = 0".format(self.TABLE_NAME))
 
         if playlist_id == 0:
-            self._db.execute_write_query(query="UPDATE {} set fallback = 1 WHERE id = (select id from {} where enabled = 1 order by id LIMIT 1)".format(self.TABLE_NAME, self.TABLE_NAME))
+            self._db.execute_write_query(query="UPDATE {} set fallback = 1 WHERE id = (select id from {} where enabled = 1 order by created_at DESC LIMIT 1)".format(self.TABLE_NAME, self.TABLE_NAME))
         else:
             self._db.execute_write_query(query="UPDATE {} set fallback = 1 WHERE id = ?".format(self.TABLE_NAME), params=(playlist_id,))
 
