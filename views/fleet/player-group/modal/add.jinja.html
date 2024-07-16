@@ -3,11 +3,11 @@
         {{ l.fleet_node_player_group_form_add_title }}
     </h2>
 
-    <form class="form" action="/fleet/node-player-group/add" method="POST" enctype="multipart/form-data">
+    <form class="form" action="{{ url_for('fleet_node_player_group_add') }}" method="POST">
         <div class="form-group">
             <label for="node-player-group-add-name">{{ l.fleet_node_player_group_form_label_name }}</label>
             <div class="widget">
-                <input name="name" type="text" id="node-player-group-add-name" required="required" />
+                <input name="name" type="text" id="node-player-group-add-name" required="required"/>
             </div>
         </div>
 
@@ -15,7 +15,6 @@
             <label for="node-player-group-add-playlist-id">{{ l.fleet_node_player_group_form_label_playlist_id }}</label>
             <div class="widget">
                 <select name="playlist_id" id="node-player-group-add-playlist-id">
-                    <option value="">{{ l.common_default_playlist }}</option>
                     {% for playlist_id, playlist_name in playlists.items() %}
                         <option value="{{ playlist_id }}">{{ playlist_name }}</option>
                     {% endfor %}
@@ -24,11 +23,14 @@
         </div>
 
         <div class="actions">
-            <button type="button" class="btn-normal modal-close">
-                {{ l.fleet_node_player_group_form_button_cancel }}
+            <button type="button" class="btn btn-naked modal-close">
+                {{ l.common_close }}
             </button>
-            <button type="submit" class="green">
-                <i class="fa fa-plus icon-left"></i> {{ l.fleet_node_player_group_form_add_submit }}
+            <button type="submit" class="btn btn-info">
+                <i class="fa fa-save icon-left"></i>{{ l.common_save }}
+            </button>
+            <button type="button" disabled="disabled" class="btn btn-naked hidden btn-loading">
+                {{ l.common_loading }}
             </button>
         </div>
     </form>
