@@ -1,6 +1,10 @@
 ul.explr-tree {
 	height: 100% !important;
 
+	ul {
+		padding-top: 0 !important;
+	}
+
 	li {
 		position: relative;
 
@@ -50,6 +54,7 @@ ul.explr-tree {
 		a {
 			color: $white;
 			padding-right: 80px;
+			margin-top: 2px;
 
 			&:hover {
 				color: $white;

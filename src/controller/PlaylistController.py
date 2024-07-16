@@ -24,7 +24,7 @@ class PlaylistController(ObController):
     def playlist_list(self, playlist_id: int = 0):
         self._model_store.variable().update_by_name('last_pillmenu_slideshow', 'playlist')
         current_playlist = self._model_store.playlist().get(playlist_id)
-        playlists = self._model_store.playlist().get_all(sort="created_at", ascending=False)
+        playlists = self._model_store.playlist().get_all(sort="created_at", ascending=True)
         durations = self._model_store.playlist().get_durations_by_playlists()
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
