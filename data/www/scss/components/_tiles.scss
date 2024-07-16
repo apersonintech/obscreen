@@ -25,7 +25,6 @@
 			flex-direction: row;
 			justify-content: flex-start;
 			align-items: center;
-			background: #222;
 			align-self: stretch;
 			color: $white;
 			margin: 1px;
@@ -35,10 +34,10 @@
 
 			&:hover,
 			&.active {
-				background: #111;
 				border-left: 4px solid $seaBlue;
 				border-radius: $baseRadius;
 				border-bottom: 2px solid #171717;
+				background: #222;
 
 				&:hover {
 					opacity: 1;
