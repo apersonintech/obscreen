@@ -42,25 +42,21 @@ class PlayerController(ObController):
         except NoFallbackPlaylistException:
             abort(404)
 
-        intro_slide_duration = self._model_store.variable().get_one_by_name('intro_slide_duration').eval()
-
-        if items['preview_mode'] or request.args.get('intro', '1') == '0':
-            intro_slide_duration = 0
-
-        animation_enabled = self._model_store.variable().get_one_by_name('slide_animation_enabled').eval()
-
-        if request.args.get('animation', '1') == '0':
-            animation_enabled = False
+        intro_slide_duration = 0 if items['preview_mode'] else int(request.args.get('intro', self._model_store.variable().get_one_by_name('intro_slide_duration').eval()))
+        animation_enabled = bool(request.args.get('animation', int(self._model_store.variable().get_one_by_name('slide_animation_enabled').eval())))
+        polling_interval = int(request.args.get('polling', self._model_store.variable().get_one_by_name('polling_interval').eval()))
+        slide_animation_speed = request.args.get('animation_speed', self._model_store.variable().get_one_by_name('slide_animation_speed').eval()).lower()
+        slide_animation_entrance_effect = request.args.get('animation_effect', self._model_store.variable().get_one_by_name('slide_animation_entrance_effect').eval())
+        # slide_animation_exit_effect = request.args.get('slide_animation_exit_effect', self._model_store.variable().get_one_by_name('slide_animation_exit_effect').eval())
 
         return render_template(
             'player/player.jinja.html',
             items=items,
             intro_slide_duration=intro_slide_duration,
-            polling_interval=self._model_store.variable().get_one_by_name('polling_interval'),
+            polling_interval=polling_interval,
             slide_animation_enabled=animation_enabled,
-            slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
-            # slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
-            slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed'),
+            slide_animation_entrance_effect=slide_animation_entrance_effect,
+            slide_animation_speed=slide_animation_speed,
             animation_speed_duration=animation_speed_duration
         )
 
