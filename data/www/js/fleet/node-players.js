@@ -4,13 +4,14 @@ jQuery(document).ready(function ($) {
         inputOperatingSystemUpdate();
     };
 
-    window.nodePlayerEdit = function ($this) {
+    window.explrNodePlayerEdit = function ($this) {
         const nodePlayer = JSON.parse($this.parents('li:eq(0)').attr('data-entity-json'));
         showModal('modal-node-player-edit');
         $('.modal-node-player-edit input:visible:eq(0)').focus().select();
         $('#node-player-edit-name').val(nodePlayer.name);
         $('#node-player-edit-host').val(nodePlayer.host);
         $('#node-player-edit-id').val(nodePlayer.id);
+        $('#node-player-edit-operating-system').val(nodePlayer.operating_system);
         $('#node-player-edit-group-label').val(nodePlayer.group_label);
         $('.group-edit-link').attr('href', 'javascript:void(0);');
         $('.form-group-for-group-id').addClass('hidden');

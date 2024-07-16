@@ -153,9 +153,9 @@
                         {% set group_label = groups[node_player.group_id]|default(l.common_empty) %}
                         <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ node_player.id }}"
                             data-folder="0" data-entity-json="{{ node_player.to_json({"group_label": group_label}) }}">
-                            <a href="{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}"
+                            <a href="javascript:void(0);"
                                class="explr-link explr-item-selectable explr-item-actionable explr-item-entity"
-                               data-callback="nodePlayerEdit">
+                               data-callback="explrNodePlayerEdit">
                                 <i class="fa {{ icon }} {{ color }} main"></i>
                                 {% if node_player.group_id %}
                                     <sub>

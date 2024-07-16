@@ -1,4 +1,5 @@
-let onPickedElement = function(element) {};
+let onPickedElement = function (element) {
+};
 
 jQuery(function ($) {
 
@@ -163,6 +164,14 @@ jQuery(function ($) {
         event.preventDefault();
         selectEpxlrLink($(this));
     });
+    $(document).on('click', 'a.explr-pick-element', function (event) {
+        event.preventDefault();
+        const callback = $(this).attr('data-callback');
+
+        if (callback) {
+            window[callback]($(this));
+        }
+    });
     $(document).on('dblclick', 'a.explr-link', function (event) {
         event.preventDefault();
         $(this).off('click');
@@ -191,7 +200,7 @@ jQuery(function ($) {
     });
 
     $(document).on('click', '.modal-explr-picker .explr-pick-element', function () {
-        onPickedElement(JSON.parse($(this).attr('data-json')));
+        onPickedElement(JSON.parse($(this).parents('li:eq(0)').attr('data-entity-json')));
         hidePicker();
     });
 
