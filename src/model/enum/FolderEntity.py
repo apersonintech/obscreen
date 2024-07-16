@@ -6,5 +6,5 @@ FOLDER_ROOT_NAME = 'drive'
 
 class FolderEntity(Enum):
 
-    NODE_PLAYER = 'node_player'
+    NODE_PLAYER = 'content'
     CONTENT = 'content'

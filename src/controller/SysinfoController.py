@@ -26,12 +26,16 @@ class SysinfoController(ObController):
         self._app.add_url_rule('/sysinfo/get/ipaddr', 'sysinfo_get_ipaddr', self._auth(self.sysinfo_get_ipaddr), methods=['GET'])
 
     def logs(self):
+        self._model_store.variable().update_by_name('last_pillmenu_configuration', 'logs')
+
         return render_template(
             'configuration/logs/list.jinja.html',
             last_logs=self._model_store.logging().get_last_lines_of_stdout(100),
         )
 
     def sysinfo(self):
+        self._model_store.variable().update_by_name('last_pillmenu_configuration', 'sysinfo_attribute_list')
+
         return render_template(
             'configuration/sysinfo/list.jinja.html',
             sysinfo=get_all_sysinfo(),

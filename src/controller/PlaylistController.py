@@ -29,6 +29,7 @@ class PlaylistController(ObController):
         return redirect(url_for('playlist_list', playlist_id=0))
 
     def playlist_list(self, playlist_id: int = 0):
+        self._model_store.variable().update_by_name('last_pillmenu_slideshow', 'playlist')
         current_playlist = self._model_store.playlist().get(playlist_id)
         playlists = self._model_store.playlist().get_all(sort="created_at", ascending=False)
         durations = self._model_store.playlist().get_durations_by_playlists()

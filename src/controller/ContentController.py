@@ -30,6 +30,7 @@ class ContentController(ObController):
         self._app.add_url_rule('/slideshow/content/show/<content_id>', 'slideshow_content_show', self._auth(self.slideshow_content_show), methods=['GET'])
 
     def slideshow_content_list(self):
+        self._model_store.variable().update_by_name('last_pillmenu_slideshow', 'slideshow_content_list')
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_content').as_string()
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
 
