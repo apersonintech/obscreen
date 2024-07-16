@@ -38,7 +38,7 @@
     // Backend config
     let items = {{ json_dumps(items) | safe}};
     const introDuration = {{ intro_slide_duration * 1000 }};
-    const playlistCheckResolutionMs = {{ polling_interval.eval() * 1000 }};
+    const playlistCheckResolutionMs = {{ polling_interval * 1000 }};
 
     // Backend flag updates
     let needHardRefresh = null;
@@ -60,12 +60,12 @@
 
     // Animations
     const animate = {{ 'true' if slide_animation_enabled and not items.preview_mode else 'false' }};
-    const animate_speed = "animate__{{ slide_animation_speed.eval()|default("normal") }}";
-    const animation_speed_duration = {{ animation_speed_duration[slide_animation_speed.eval()] if slide_animation_enabled else 0 }};
+    const animate_speed = "animate__{{ slide_animation_speed|default("normal") }}";
+    const animation_speed_duration = {{ animation_speed_duration[slide_animation_speed] if slide_animation_enabled else 0 }};
     const animate_transitions = [
-        "animate__{{ slide_animation_entrance_effect.eval()|default("fadeIn") }}",
+        "animate__{{ slide_animation_entrance_effect|default("fadeIn") }}",
         "animate__none"
-        {#"animate__{{ slide_animation_exit_effect.eval()|default("none") }}"#}
+        {#"animate__{{ slide_animation_exit_effect|default("none") }}"#}
     ];
 
     // Slide flow management
