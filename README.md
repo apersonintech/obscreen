@@ -1,4 +1,4 @@
-# <img src="https://github.com/jr-k/obscreen/blob/master/docs/img/obscreen.png" width="22"> Obscreen
+# <img src="https://github.com/jr-k/obscreen/blob/master/docs/img/obscreen.png" width="22"> Obscreen v2
 
 
 🧑‍🎄 Open to feature request and pull request
