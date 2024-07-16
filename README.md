@@ -34,7 +34,7 @@ Use a RaspberryPi (Lite OS) to show a fullscreen slideshow (Kiosk-mode)
 [<img src="https://github.com/jr-k/obscreen/blob/master/docs/img/discord.png" width="64">](https://discord.obscreen.io)
 
 ### Open an Issue or a Pull Request on Github
-[<img src="https://github.com/jr-k/obscreen/blob/master/docs/img/github.png" width="64">](https://github.com/jr-k/obscreen/issues)
+[<img src="https://github.com/jr-k/obscreen/blob/master/docs/img/github.png" width="64">](https://github.com/jr-k/obscreen/issues/new/choose)
 
 # Troubleshoot
 
