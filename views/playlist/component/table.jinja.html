@@ -6,17 +6,12 @@
                class="{% if active %}active{% endif %} tile-item playlist-item-{{ playlist.id }} {% if not playlist.enabled %}disabled{% endif %} playlist-item"
                data-level="{{ playlist.id }}"
                data-entity="{{ playlist.to_json() }}">
-                <div class="tile-header">
-                    <div class="head-icon">
-                        <i class="fa {{ 'fa fa-circle' if active else 'fa fa-circle' }}"></i>
-                    </div>
-                </div>
                 <div class="tile-body">
                     {% set title = playlist.name|trim %}
                     {% set title = title if title|length > 0 %}
                     {{ truncate((title)|default(l.common_untitled), 35, '...') }}
                 </div>
-                <div class="tile-footer">
+                <div class="tile-metrics">
                     <div class="foot-span playlist-duration">
                         {% set total_duration = seconds_to_hhmmss(durations[playlist.id]) %}
                         {% if total_duration %}
@@ -25,16 +20,11 @@
                             {{ l.common_empty }}
                         {% endif %}
                     </div>
-                    {% if AUTH_ENABLED %}
-                        {% if playlist.id %}
-                            {% set creator = track_created(playlist) %}
-                            {% if creator.username %}
-                                <div class="foot-span {% if not creator.enabled %}anonymous{% endif %}">
-                                    {{ creator.username }}
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                    {% endif %}
+                </div>
+                <div class="tile-tail">
+                    <div class="head-icon">
+                        <i class="fa {{ 'fa fa-square' if active else 'fa fa-square' }}"></i>
+                    </div>
                 </div>
             </a>
         {% endfor %}
