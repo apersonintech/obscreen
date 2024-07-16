@@ -24,7 +24,7 @@ class FleetNodePlayerGroupController(ObController):
         self._app.add_url_rule('/fleet/node-player-group/add', 'fleet_node_player_group_add', self.guard_fleet(self._auth(self.fleet_node_player_group_add)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player-group/save', 'fleet_node_player_group_save', self.guard_fleet(self._auth(self.fleet_node_player_group_save)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player-group/delete/<player_group_id>', 'fleet_node_player_group_delete', self.guard_fleet(self._auth(self.fleet_node_player_group_delete)), methods=['GET'])
-        self._app.add_url_rule('/fleet/node-player-group/unassign-player', 'fleet_node_player_group_unassign_player', self._auth(self.fleet_node_player_group_unassign_player), methods=['DELETE'])
+        self._app.add_url_rule('/fleet/node-player-group/unassign-player/<player_id>', 'fleet_node_player_group_unassign_player', self._auth(self.fleet_node_player_group_unassign_player), methods=['DELETE'])
         self._app.add_url_rule('/fleet/node-player-group/assign-player/<player_group_id>/<player_id>', 'fleet_node_player_group_assign_player', self._auth(self.fleet_node_player_group_assign_player), methods=['GET'])
 
     def fleet_node_player_group(self):
@@ -48,7 +48,11 @@ class FleetNodePlayerGroupController(ObController):
             node_player_groups=node_player_groups,
             pcounters=pcounters,
             playlists=self._model_store.playlist().get_all_labels_indexed(),
-            players=self._model_store.node_player().get_node_players(group_id=current_player_group.id) if current_player_group else [],
+            players=[] if not current_player_group else self._model_store.node_player().get_node_players(
+                group_id=current_player_group.id,
+                sort='created_at',
+                ascending=True
+            ),
             foldered_node_players=self._model_store.node_player().get_all_indexed('folder_id', multiple=True),
             working_folder_path=working_folder_path,
             working_folder=working_folder,
@@ -88,9 +92,9 @@ class FleetNodePlayerGroupController(ObController):
         self._model_store.node_player_group().delete(player_group_id)
         return redirect(url_for('fleet_node_player_group'))
 
-    def fleet_node_player_group_unassign_player(self, node_player_id: int = 0):
-        node_player_id = request.form['id'] if 'id' in request.form else node_player_id
-        node_player = self._model_store.node_player().get(node_player_id)
+    def fleet_node_player_group_unassign_player(self, player_id: int = 0):
+        player_id = request.form['id'] if 'id' in request.form else player_id
+        node_player = self._model_store.node_player().get(player_id)
 
         if not node_player:
             return redirect(url_for('fleet_node_player_group'))
@@ -107,7 +111,7 @@ class FleetNodePlayerGroupController(ObController):
         return jsonify({'status': 'ok', 'pcounter': pcounter, 'group_id': group_id})
 
     def fleet_node_player_group_assign_player(self, player_group_id: int = 0, player_id: int = 0):
-        node_player_group = self._model_store.node_player().get(player_group_id)
+        node_player_group = self._model_store.node_player_group().get(player_group_id)
 
         if not node_player_group:
             return redirect(url_for('fleet_node_player_group'))
