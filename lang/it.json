@@ -296,5 +296,5 @@
   "sysinfo_network_interface": "interfaccia di rete",
   "sysinfo_mac_address": "Indirizzo MAC",
   "sysinfo_ip_address": "indirizzo IP",
-  "player_default_welcome_message": "Per gestire questo lettore, vai al browser all'indirizzo %link%"
+  "player_default_welcome_message": "Per gestire questo lettore, vai al browser all'indirizzo"
 }

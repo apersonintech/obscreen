@@ -296,5 +296,5 @@
   "sysinfo_network_interface": "Interfaz de red",
   "sysinfo_mac_address": "Dirección MAC",
   "sysinfo_ip_address": "Dirección IP",
-  "player_default_welcome_message": "Para gestionar este reproductor, ve a un navegador en %link%"
+  "player_default_welcome_message": "Para gestionar este reproductor, ve a un navegador en"
 }

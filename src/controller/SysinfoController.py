@@ -12,7 +12,7 @@ from src.service.ModelStore import ModelStore
 
 from src.interface.ObController import ObController
 from src.util.utils import restart
-from src.util.UtilNetwork import get_ip_address
+from src.util.UtilNetwork import get_network_interfaces
 from src.service.Sysinfo import get_all_sysinfo
 
 
@@ -67,5 +67,6 @@ class SysinfoController(ObController):
         return jsonify({'status': True})
 
     def sysinfo_get_ipaddr(self):
-        ipaddr = get_ip_address()
-        return ipaddr if ipaddr else ''
+        return jsonify({
+            'interfaces': [iface['ip_address'] for iface in get_network_interfaces()]
+        })
