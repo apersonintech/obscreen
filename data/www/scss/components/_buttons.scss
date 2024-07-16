@@ -14,6 +14,8 @@ button,
 	font-weight: bold;
 	letter-spacing: -0.5px;
 	margin-top: -$shadowOffset;
+	min-width: 38px;
+	text-align: center;
 
 	i.icon-left {
 		margin-right: 5px;
@@ -129,6 +131,10 @@ button,
 
 	&.btn-double-icon {
 		margin-right: 5px;
+	}
+
+	&.disabled {
+		cursor: default;
 	}
 }
 

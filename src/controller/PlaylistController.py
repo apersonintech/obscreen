@@ -24,6 +24,7 @@ class PlaylistController(ObController):
         self._app.add_url_rule('/playlist/add', 'playlist_add', self.guard_playlist(self._auth(self.playlist_add)), methods=['POST'])
         self._app.add_url_rule('/playlist/save', 'playlist_save', self.guard_playlist(self._auth(self.playlist_save)), methods=['POST'])
         self._app.add_url_rule('/playlist/delete/<playlist_id>', 'playlist_delete', self.guard_playlist(self._auth(self.playlist_delete)), methods=['GET'])
+        self._app.add_url_rule('/playlist/set-default/<playlist_id>', 'playlist_set_fallback', self.guard_playlist(self._auth(self.playlist_set_fallback)), methods=['GET'])
 
     def playlist(self):
         return redirect(url_for('playlist_list', playlist_id=0))
@@ -81,6 +82,11 @@ class PlaylistController(ObController):
         return redirect(url_for('playlist_list', playlist_id=request.form['id']))
 
     def playlist_delete(self, playlist_id: int):
+        playlist = self._model_store.playlist().get(playlist_id)
+
+        if not playlist:
+            abort(404)
+
         if self._model_store.slide().count_slides_for_playlist(playlist_id) > 0:
             return redirect(url_for('playlist_list', playlist_id=playlist_id, error='playlist_delete_has_slides'))
 
@@ -89,3 +95,7 @@ class PlaylistController(ObController):
 
         self._model_store.playlist().delete(playlist_id)
         return redirect(url_for('playlist'))
+
+    def playlist_set_fallback(self, playlist_id: int):
+        self._model_store.playlist().set_fallback(playlist_id)
+        return redirect(url_for('playlist_list', playlist_id=playlist_id))

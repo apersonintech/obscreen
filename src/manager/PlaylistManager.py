@@ -19,6 +19,7 @@ class PlaylistManager(ModelManager):
         "name CHAR(255)",
         "slug CHAR(255)",
         "enabled INTEGER DEFAULT 0",
+        "fallback INTEGER DEFAULT 0",
         "time_sync INTEGER DEFAULT 1",
         "created_by CHAR(255)",
         "updated_by CHAR(255)",
@@ -156,7 +157,19 @@ class PlaylistManager(ModelManager):
         }
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
+
+        if playlist.fallback and not enabled:
+            self.set_fallback()
+
         self.post_update(id)
+
+    def set_fallback(self, playlist_id: Optional[int] = 0) -> None:
+        self._db.execute_write_query(query="UPDATE {} set fallback = 0".format(self.TABLE_NAME))
+
+        if playlist_id == 0:
+            self._db.execute_write_query(query="UPDATE {} set fallback = 1 WHERE id = (select id from {} where enabled = 1 order by id LIMIT 1)".format(self.TABLE_NAME, self.TABLE_NAME))
+        else:
+            self._db.execute_write_query(query="UPDATE {} set fallback = 1 WHERE id = ?".format(self.TABLE_NAME), params=(playlist_id,))
 
     def add_form(self, playlist: Union[Playlist, Dict]) -> Playlist:
         form = playlist
@@ -178,6 +191,10 @@ class PlaylistManager(ModelManager):
         if playlist:
             self.pre_delete(id)
             self._db.delete_by_id(self.TABLE_NAME, id)
+
+            if playlist.fallback:
+                self.set_fallback()
+
             self.post_delete(id)
 
     def to_dict(self, playlists: List[Playlist]) -> List[Dict]:
