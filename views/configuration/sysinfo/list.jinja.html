@@ -12,12 +12,7 @@
 {% block body_class %}view-sysinfo-list{% endblock %}
 
 {% block page %}
-
     <div class="top-content">
-{#        <h1>#}
-{#            {{ l.sysinfo_panel_title }}#}
-{#        </h1>#}
-
         <div class="top-actions align-right">
             {{ HOOK(H_SYSINFO_TOOLBAR_ACTIONS_START) }}
             <button type="button" class="btn btn-info sysinfo-restart">
