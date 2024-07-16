@@ -108,10 +108,10 @@ chromium --disable-features=Translate --ignore-certificate-errors --disable-web-
 - Install x11 and obscreen-player systemd service
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
-mkdir -p /home/pi/obscreen/var/run
-nano /home/pi/obscreen/var/run/play
+mkdir -p $HOME/obscreen/var/run
+nano $HOME/obscreen/var/run/play
 ```
-- Copy this script in `/home/pi/obscreen/var/run/play` file to autorun chromium with correct url (edit `http://localhost:5000` by anything you want)
+- Copy this script in `$HOME/obscreen/var/run/play` file to autorun chromium with correct url (edit `http://localhost:5000` by anything you want)
 ```
 #!/bin/bash
 
@@ -124,9 +124,9 @@ xset s noblank
 unclutter -display :0 -noevents -grab &
 
 # Modify Chromium preferences to avoid restore messages
-mkdir -p /home/pi/.config/chromium/Default 2>/dev/null
-touch /home/pi/.config/chromium/Default/Preferences
-sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' /home/pi/.config/chromium/Default/Preferences
+mkdir -p $HOME/.config/chromium/Default 2>/dev/null
+touch $HOME/.config/chromium/Default/Preferences
+sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' $HOME/.config/chromium/Default/Preferences
 
 RESOLUTION=$(DISPLAY=:0 xrandr | grep '*' | awk '{print $1}')
 WIDTH=$(echo $RESOLUTION | cut -d 'x' -f 1)
