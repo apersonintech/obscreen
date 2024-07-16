@@ -1,0 +1,142 @@
+.view-player-group-list main .main-container {
+
+	p {
+		font-size: 12px;
+		line-height: 18px;
+		display: flex;
+		margin-bottom: 5px;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		align-self: stretch;
+		color: #666666;
+	}
+
+	//.modal-slide {
+	//	h2 {
+	//		font-size: 20px;
+	//	}
+	//
+	//	input {
+	//		&[disabled] {
+	//			color: #AAA;
+	//		}
+	//	}
+	//
+	//	.slide-schedule-group,
+	//	.slide-schedule-end-group {
+	//		select {
+	//			margin-right: 5px;
+	//		}
+	//
+	//		select,
+	//		input {
+	//			font-size: 12px;
+	//			max-width: 50%;
+	//
+	//			&.datetimepicker {
+	//				margin-left: 5px;
+	//				padding-left: 0;
+	//			}
+	//		}
+	//	}
+	//}
+
+
+	.bottom-content {
+		.page-content {
+			flex: 1;
+
+			.inner {
+				padding: 0;
+
+				h3 {
+					font-size: 16px;
+					font-weight: 500;
+					color: #DDD;
+					text-decoration: none;
+					margin: 0 0 20px 0;
+				}
+
+				.node-player-group-holder {
+					margin: 20px 20px 20px 10px;
+					flex: 1;
+
+					.form-holder {
+						margin: 20px 0 0 0;
+
+						form {
+							max-width: initial;
+						}
+
+						.form-group {
+							flex-grow: 0;
+							margin-bottom: 15px;
+						}
+					}
+
+
+					.preview-holder {
+						.form-group {
+							flex-grow: 0;
+							margin-bottom: 0;
+						}
+					}
+
+					h4 {
+						font-size: 14px;
+						display: flex;
+						flex-direction: row;
+						justify-content: flex-start;
+						align-items: center;
+						align-self: stretch;
+						color: white;
+						padding-bottom: 10px;
+						text-decoration: none;
+
+						&.divide {
+							border-top: 1px solid #222;
+							margin-top: 20px;
+							padding-top: 20px;
+						}
+					}
+
+					.preview {
+						background: black;
+						border: 1px solid rgba($white, .3);
+						border-radius: $baseRadius;
+						justify-content: center;
+						align-items: center;
+						align-self: stretch;
+						display: flex;
+						margin: 10px 0 20px 0;
+						height: 300px;
+
+						iframe {
+							flex: 1;
+							align-self: stretch;
+						}
+					}
+				}
+
+				.players-holder {
+					align-self: stretch;
+					border-right: 1px solid #222;
+					margin: 20px 10px 20px 20px;
+					padding-right: 20px;
+					flex: 1.3;
+				}
+			}
+		}
+
+		.page-panel.left-panel {
+			flex: 0.3;
+			max-width: initial;
+			justify-content: center;
+			align-items: center;
+			display: flex;
+		}
+	}
+}
+
+

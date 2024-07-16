@@ -6,10 +6,11 @@ from typing import Optional, Union
 
 class NodePlayerGroup:
 
-    def __init__(self, name: str = 'Untitled', playlist_id: Optional[int] = None, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, name: str = 'Untitled', slug: str = 'untitled', playlist_id: Optional[int] = None, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._playlist_id = playlist_id
         self._name = name
+        self._slug = slug
         self._created_by = created_by if created_by else None
         self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
@@ -34,6 +35,14 @@ class NodePlayerGroup:
     @name.setter
     def name(self, value: str):
         self._name = value
+
+    @property
+    def slug(self) -> str:
+        return self._slug
+
+    @slug.setter
+    def slug(self, value: str):
+        self._slug = value
 
     @property
     def created_by(self) -> str:
@@ -71,6 +80,7 @@ class NodePlayerGroup:
         return f"NodePlayer(" \
                f"id='{self.id}',\n" \
                f"name='{self.name}',\n" \
+               f"slug='{self.slug}',\n" \
                f"playlist_id='{self.playlist_id}',\n" \
                f"created_by='{self.created_by}',\n" \
                f"updated_by='{self.updated_by}',\n" \
@@ -90,6 +100,7 @@ class NodePlayerGroup:
         return {
             "id": self.id,
             "name": self.name,
+            "slug": self.slug,
             "playlist_id": self.playlist_id,
             "created_by": self.created_by,
             "updated_by": self.updated_by,

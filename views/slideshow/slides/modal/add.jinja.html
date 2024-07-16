@@ -3,7 +3,7 @@
         {{ l.slideshow_slide_form_add_title }}
     </h2>
 
-    <form class="form" action="/slideshow/slide/add" method="POST" enctype="multipart/form-data">
+    <form class="form" action="{{ url_for('slideshow_slide_add') }}" method="POST" enctype="multipart/form-data">
 
         <h3>
             {{ l.slideshow_slide_form_section_content }}
@@ -13,69 +13,47 @@
             <input name="playlist_id" type="hidden" id="slide-add-playlist-id" value="{{ current_playlist.id }}">
         {% endif %}
 
-        <div class="picker col">
-             <div class="form-group slide-content-id-group">
-                <label for="slide-add-content-id">{{ l.slideshow_slide_form_label_content_id }}</label>
-                <div class="widget">
-                    <select name="content_id" type="text" id="slide-add-content-id" required="required"></select>
-                </div>
-            </div>
-
-            <div class="form-group content-new-group">
-                <label for=""></label>
-                <div class="widget">
-                     <button class="btn purple" style="margin:0;">
-                         <i class="fa fa-plus icon-left"></i>{{ l.slideshow_slide_form_label_add_content }}
-                     </button>
+        <div class="form-group form-group-horizontal">
+            <label for="">{{ l.slideshow_slide_form_label_enabled }}</label>
+            <div class="widget">
+                <div class="toggle">
+                    <input type="checkbox" class="trigger slide-enabled" name="enabled" checked="checked" value="1"
+                           id="slide-add-enabled"/>
+                    <label for="slide-add-enabled"></label>
                 </div>
             </div>
         </div>
 
-
-        <div class="upload col hidden">
-            <div class="form-group">
-                <label for="slide-add-name">{{ l.slideshow_slide_form_label_name }}</label>
-                <div class="widget">
-                    <input name="name" type="text" id="slide-add-name" required="required" disabled="disabled" />
-                </div>
+        <div class="form-group slide-content-id-group">
+            <label for="slide-add-content-id">{{ l.slideshow_slide_form_label_content_id }}</label>
+            <div class="widget">
+                <input type="text"  value="" class="disabled target-label content-explr-picker" />
+                <input type="text" name="content_id" id="slide-add-content-id" required="required" class="target hidden" />
+                <button type="button" class="btn btn-naked content-explr-picker">
+                    <i class="fa fa-crosshairs"></i>
+                </button>
+                <button type="button" class="btn btn-neutral hidden slide-content-show" data-route="{{ url_for('slideshow_content_show', content_id='__id__') }}">
+                    <i class="fa-solid fa-up-right-from-square"></i>
+                </button>
             </div>
-            <div class="form-group">
-                <label for="slide-add-type">{{ l.slideshow_slide_form_label_type }}</label>
-                <div class="widget">
-                    <select name="type" id="slide-add-type" disabled="disabled">
-                        {% for type in enum_content_type %}
-                            {% set input_type = enum_content_type.get_input(type) %}
-                            <option value="{{ type.value }}" data-input="{{ input_type.value }}">
-                                {{ t(type) }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group object-input">
-                <label for="slide-add-duration">{{ l.slideshow_slide_form_label_object }}</label>
-                <div class="widget">
-                    <input type="text" name="object" id="slide-add-object-input-text" class="slide-add-object-input" disabled="disabled" />
-                    <input type="file" name="object" id="slide-add-object-input-upload" class="slide-add-object-input hidden" disabled="disabled" />
-                </div>
-            </div>
-
         </div>
 
-        <h3>
+        <h3 class="divide">
             {{ l.slideshow_slide_form_section_scheduling }}
         </h3>
 
-        <div class="form-group slide-notification-group">
-            <label for="slide-add-is-notification">{{ l.slideshow_slide_form_label_is_notification }}</label>
+        <div class="form-group form-group-horizontal slide-notification-group">
+            <label for="">{{ l.slideshow_slide_form_label_is_notification }}</label>
             <div class="widget">
-                <input type="checkbox" class="trigger slide-is-notification" name="is_notification" id="slide-add-is-notification" />
+                <div class="toggle">
+                    <input type="checkbox" class="trigger slide-is-notification" name="is_notification" value="1"
+                           id="slide-add-is-notification"/>
+                    <label for="slide-add-is-notification"></label>
+                </div>
             </div>
         </div>
 
-
-         <div class="form-group slide-schedule-group">
+        <div class="form-group slide-schedule-group">
             <label for="slide-add-cron-schedule">{{ l.slideshow_slide_form_label_cron_scheduled }}</label>
             <div class="widget">
                 <select id="slide-add-cron-schedule-trigger" class="trigger">
@@ -83,8 +61,11 @@
                     <option value="datetime">{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}</option>
                     <option value="cron">{{ l.slideshow_slide_form_label_cron_scheduled_cron }}</option>
                 </select>
-                <input type="text" id="slide-add-cron-schedule-datetimepicker" class="datetimepicker" value="" placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}" />
-                <input type="text" name="cron_schedule" id="slide-add-cron-schedule" class="target hidden" placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}" />
+                <input type="text" id="slide-add-cron-schedule-datetimepicker" class="input-naked datetimepicker"
+                       value=""
+                       placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>
+                <input type="text" name="cron_schedule" id="slide-add-cron-schedule" class="target hidden"
+                       placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}"/>
             </div>
         </div>
 
@@ -96,29 +77,33 @@
                     <option value="datetime">{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}</option>
                     <option value="cron">{{ l.slideshow_slide_form_label_cron_scheduled_cron }}</option>
                 </select>
-                <input type="text" id="slide-add-cron-schedule-end-datetimepicker" class="datetimepicker" value="" placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}" />
-                <input type="text" name="cron_schedule_end" id="slide-add-cron-schedule-end" class="target hidden" placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}" />
+                <input type="text" id="slide-add-cron-schedule-end-datetimepicker" class="input-naked datetimepicker"
+                       value=""
+                       placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>
+                <input type="text" name="cron_schedule_end" id="slide-add-cron-schedule-end" class="target hidden"
+                       placeholder="{{ l.slideshow_slide_form_widget_cron_scheduled_placeholder }}"/>
             </div>
         </div>
 
         <div class="form-group slide-duration-group">
             <label for="slide-add-duration">{{ l.slideshow_slide_form_label_duration }}</label>
-            <div class="widget">
-                <input type="number" name="duration" id="slide-add-duration" required="required" />
-                <span>{{ l.slideshow_slide_form_label_duration_unit }}</span>
+            <div class="widget widget-unit">
+                <input type="number" name="duration" id="slide-add-duration" required="required" value="3" />
+                <span class="unit">{{ l.slideshow_slide_form_label_duration_unit }}</span>
             </div>
         </div>
 
         <div class="actions">
-            <button type="button" class="btn-normal modal-close">
-                {{ l.slideshow_slide_form_button_cancel }}
+            <button type="button" class="btn btn-naked modal-close">
+                {{ l.common_close }}
             </button>
-            <button type="submit" class="green">
-                <i class="fa fa-plus icon-left"></i> {{ l.slideshow_slide_form_add_submit }}
+            <button type="submit" class="btn btn-info">
+                <i class="fa fa-save icon-left"></i>{{ l.common_save }}
             </button>
-            <button type="button" disabled="disabled" class="green hidden btn-loading">
+            <button type="button" disabled="disabled" class="btn btn-naked hidden btn-loading">
                 {{ l.common_loading }}
             </button>
         </div>
+
     </form>
 </div>

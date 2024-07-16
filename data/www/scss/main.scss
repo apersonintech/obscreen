@@ -1,33 +1,46 @@
 // Import utility styles
-@import 'utils/variables';
 @import 'utils/mixins';
+@import 'utils/variables';
 
 // Import base styles
+@import 'base/fonts';
 @import 'base/html';
-
 @import 'base/tachyons';
 
 // Import layout styles
-@import 'layout/header';
-@import 'layout/footer';
-@import 'layout/container';
+@import 'base/context';
+@import 'base/menu';
 
 // Import component styles
+@import 'components/dropdown';
+@import 'components/keyframes';
 @import 'components/buttons';
 @import 'components/alerts';
-@import 'components/modals';
-@import 'components/panels';
-@import 'components/switches';
-@import 'components/cards';
-@import 'components/empty';
-@import 'components/badges';
 @import 'components/explorer';
-@import 'components/toolbar';
-@import 'components/icons';
+@import 'components/pills';
+@import 'components/breadcrumb';
+@import 'components/modals';
+@import 'components/toast';
+
+// Legacy
+@import 'components/panes';
+@import 'components/tiles';
+@import 'components/empty';
+@import 'components/switches';
+//@import 'components/badges';
 
 // Import form styles
 @import 'forms/forms';
 
 // Import pages styles
+@import 'pages/content';
+@import 'pages/logs';
+@import 'pages/node-player';
+@import 'pages/playlist';
+@import 'pages/player-group';
+@import 'pages/slideshow';
+@import 'pages/plugins';
 @import 'pages/settings';
 @import 'pages/sysinfo';
+@import 'pages/login';
+@import 'pages/users';

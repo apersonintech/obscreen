@@ -110,18 +110,23 @@ class DatabaseManager:
             query="select * from {} {}".format(table_name, "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "")
         )
 
-    def get_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, values: dict = {}) -> list:
+    def get_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, ascending=True, values: dict = {}) -> list:
         return self.execute_read_query(
             query="select * from {} where {} {}".format(
                 table_name,
                 query,
-                "ORDER BY {} ASC".format(sort) if sort else ""
+                "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else ""
             ),
             params=tuple(v for v in values.values())
         )
 
-    def get_one_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, values: dict = {}) -> list:
-        query = "select * from {} where {} {}".format(table_name, query, "ORDER BY {} ASC".format(sort) if sort else "")
+    def get_one_by_query(self, table_name: str, query: str = "1=1", values: dict = {}, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> list:
+        query = "select * from {} where {} {} {}".format(
+            table_name,
+            query,
+            "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "",
+            "LIMIT {}".format(limit) if limit else ""
+        )
         lines = self.execute_read_query(query=query, params=tuple(v for v in values.values()))
         count = len(lines)
 
@@ -216,6 +221,11 @@ class DatabaseManager:
             "DROP TABLE IF EXISTS fleet_studio",
             "ALTER TABLE slideshow RENAME TO slides",
             "DELETE FROM settings WHERE name = 'fleet_studio_enabled'",
+            "DELETE FROM settings WHERE name = 'default_slide_duration'",
+            "DELETE FROM settings WHERE name = 'playlist_default_time_sync'",
+            "DELETE FROM settings WHERE name = 'slide_animation_exit_effect'",
+            "DELETE FROM settings WHERE name = 'playlist_enabled'",
+            "UPDATE fleet_player_group SET slug = id WHERE slug = '' or slug is null",
             "UPDATE content SET uuid = id WHERE uuid = '' or uuid is null",
         ]
 

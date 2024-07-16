@@ -3,29 +3,43 @@
         {{ l.auth_user_form_edit_title }}
     </h2>
 
-    <form class="form" action="/auth/user/edit" method="POST">
-        <input type="hidden" name="id" id="user-edit-id" />
+    <form class="form" action="{{ url_for('auth_user_edit') }}" method="POST">
+        <input type="hidden" name="id" id="user-edit-id"/>
 
         <div class="form-group">
             <label for="user-edit-username">{{ l.auth_user_form_label_username }}</label>
             <div class="widget">
-                <input type="text" name="username" id="user-edit-username" required="required" />
+                <input type="text" name="username" id="user-edit-username" required="required"/>
             </div>
         </div>
 
         <div class="form-group">
             <label for="user-edit-password">{{ l.auth_user_form_label_password }}</label>
             <div class="widget">
-                <input type="password" name="password" id="user-edit-password" />
+                <input type="password" name="password" id="user-edit-password"/>
             </div>
         </div>
 
+        <div class="form-group">
+            <label for="">{{ l.auth_user_form_label_enabled }}</label>
+            <div class="widget">
+                <div class="toggle">
+                    <input type="checkbox" id="user-edit-enabled" name="enabled" value="1" checked="checked"/>
+                    <label for="user-edit-enabled"></label>
+                </div>
+            </div>
+        </div>
+
+
         <div class="actions">
-            <button type="button" class="btn-normal odal-close">
-                {{ l.auth_user_form_button_cancel }}
+            <button type="button" class="btn btn-naked modal-close">
+                {{ l.common_close }}
             </button>
-            <button type="submit" class="green">
-                <i class="fa fa-save icon-left"></i>{{ l.auth_user_form_edit_submit }}
+            <button type="submit" class="btn btn-info">
+                <i class="fa fa-save icon-left"></i>{{ l.common_save }}
+            </button>
+            <button type="button" disabled="disabled" class="btn btn-naked hidden btn-loading">
+                {{ l.common_loading }}
             </button>
         </div>
     </form>

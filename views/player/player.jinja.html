@@ -5,7 +5,7 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="google" content="notranslate">
     <link rel="shortcut icon" href="{{ STATIC_PREFIX }}/favicon.ico">
-    {% if slide_animation_enabled.eval() %}
+    {% if slide_animation_enabled %}
         <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/animate.min.css" />
     {% endif %}
     <style>
@@ -20,7 +20,7 @@
 </head>
 <body>
 <div id="IntroSlide" class="slide" style="z-index: 10000;">
-    {% if default_slide_duration.eval() > 0 %}
+    {% if intro_slide_duration > 0 %}
         <iframe src="/player/default"></iframe>
     {% endif %}
 </div>
@@ -36,9 +36,9 @@
 
 <script type="text/javascript">
     // Backend config
-    let items = {{items | safe}};
-    const introDuration = {{ default_slide_duration.eval() * 1000 }};
-    const playlistCheckResolutionMs = {{ polling_interval.eval() * 1000 }};
+    let items = {{ json_dumps(items) | safe }};
+    const introDuration = {{ intro_slide_duration * 1000 }};
+    const playlistCheckResolutionMs = {{ polling_interval * 1000 }};
 
     // Backend flag updates
     let needHardRefresh = null;
@@ -59,12 +59,13 @@
     let pauseClockValue = null;
 
     // Animations
-    const animate = {{ 'true' if slide_animation_enabled.eval() else 'false' }};
-    const animate_speed = "animate__{{ slide_animation_speed.eval()|default("normal") }}";
-    const animation_speed_duration = {{ animation_speed_duration[slide_animation_speed.eval()] if slide_animation_enabled.eval() else 0 }};
+    const animate = {{ 'true' if slide_animation_enabled and not items.preview_mode else 'false' }};
+    const animate_speed = "animate__{{ slide_animation_speed|default("normal") }}";
+    const animation_speed_duration = {{ animation_speed_duration[slide_animation_speed] if slide_animation_enabled else 0 }};
     const animate_transitions = [
-        "animate__{{ slide_animation_entrance_effect.eval()|default("fadeIn") }}",
-        "animate__{{ slide_animation_exit_effect.eval()|default("none") }}"
+        "animate__{{ slide_animation_entrance_effect|default("fadeIn") }}",
+        "animate__none"
+        {#"animate__{{ slide_animation_exit_effect|default("none") }}"#}
     ];
 
     // Slide flow management
@@ -83,6 +84,10 @@
 
     // Functions
     const itemCheck = setInterval(function() {
+        if (items['preview_mode']) {
+            return;
+        }
+
         fetch('/player/playlist' + (items['playlist_id'] ? '/use/'+items['playlist_id'] : '')).then(function(response) {
             if (response.ok) {
                 return response.json();
@@ -339,7 +344,8 @@
             }
 
             if (element.innerHTML === 'youtube') {
-                element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=1&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+                const autoplay = items['preview_mode'] ? '0' : '1';
+                element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=${autoplay}&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
             }
         }
         setTimeout(autoplayLoader, delayNoisyContentJIT);
@@ -366,7 +372,9 @@
             }
 
             if (element.innerHTML.match('<video>')) {
-                video.play();
+                if (!items['preview_mode']) {
+                    video.play();
+                }
             }
         }
         setTimeout(autoplayLoader, delayNoisyContentJIT);
