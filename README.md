@@ -21,7 +21,7 @@ Use a RaspberryPi (Lite OS) to show a fullscreen slideshow (Kiosk-mode)
 - No cloud
 - No telemetry
 
-![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot.png  "Obscreen Screenshot")
+![Obscreen Screenshot](https://github.com/jr-k/obscreen/blob/master/docs/screenshot-playlist-edit.png  "Obscreen Screenshot")
 
 # Cookbooks
 
