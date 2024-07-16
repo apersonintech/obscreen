@@ -9,9 +9,6 @@
                 <div class="tile-body">
                     {% set title = playlist.name|trim %}
                     {% set title = title if title|length > 0 %}
-                    {% if playlist.fallback %}
-                        <i class="fa fa-star"></i>
-                    {% endif %}
                     {{ truncate((title)|default(l.common_untitled), 35, '...') }}
                 </div>
                 <div class="tile-metrics">
@@ -26,7 +23,11 @@
                 </div>
                 <div class="tile-tail">
                     <div class="head-icon">
-                        <i class="fa {{ 'fa fa-square' if active else 'fa fa-square' }}"></i>
+                        {% if playlist.fallback %}
+                            <i class="fa fa-star"></i>
+                        {% else %}
+                            <i class="fa {{ 'fa fa-square' if active else 'fa fa-square' }}"></i>
+                        {% endif %}
                     </div>
                 </div>
             </a>
