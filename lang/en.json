@@ -71,7 +71,7 @@
   "playlist_button_delete": "Delete Playlist",
   "playlist_panel_about_playlist": "About playlist",
   "playlist_panel_content_management": "Content management",
-  "playlist_panel_content_management_desc": "You can add, modify, delete and rearrange the order of contents from this list. Disabled playlists are displayed transparently.",
+  "playlist_panel_content_management_desc": "You can add, modify, delete and rearrange the order of contents from this list. Disabled slides will not play in the slideshow.",
   "playlist_panel_preview": "Playlist preview",
   "playlist_panel_preview_action": "Preview",
   "playlist_panel_inactive": "Inactive playlists",
