@@ -54,7 +54,7 @@ class PlayerController(ObController):
             polling_interval=self._model_store.variable().get_one_by_name('polling_interval'),
             slide_animation_enabled=animation_enabled,
             slide_animation_entrance_effect=self._model_store.variable().get_one_by_name('slide_animation_entrance_effect'),
-            slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
+            # slide_animation_exit_effect=self._model_store.variable().get_one_by_name('slide_animation_exit_effect'),
             slide_animation_speed=self._model_store.variable().get_one_by_name('slide_animation_speed'),
             animation_speed_duration=animation_speed_duration
         )
@@ -156,7 +156,7 @@ class PlayerController(ObController):
 
         playlists = {
             'playlist_id': playlist.id if playlist else None,
-            'time_sync': playlist.time_sync if playlist else self._model_store.variable().get_one_by_name("playlist_default_time_sync").as_bool(),
+            'time_sync': playlist.time_sync if playlist else False,
             'loop': playlist_loop,
             'preview_mode': preview_mode,
             'notifications': playlist_notifications,

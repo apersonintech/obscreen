@@ -222,6 +222,8 @@ class DatabaseManager:
             "ALTER TABLE slideshow RENAME TO slides",
             "DELETE FROM settings WHERE name = 'fleet_studio_enabled'",
             "DELETE FROM settings WHERE name = 'default_slide_duration'",
+            "DELETE FROM settings WHERE name = 'playlist_default_time_sync'",
+            "DELETE FROM settings WHERE name = 'slide_animation_exit_effect'",
             "UPDATE content SET uuid = id WHERE uuid = '' or uuid is null",
         ]
 

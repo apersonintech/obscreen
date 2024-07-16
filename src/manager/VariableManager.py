@@ -119,12 +119,11 @@ class VariableManager:
             ### Player Animation
             {"name": "slide_animation_enabled", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_slide_animation_enabled'), "refresh_player": True},
             {"name": "slide_animation_entrance_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_entrance_effect'), "selectables": enum_to_dict(AnimationEntranceEffect), "refresh_player": True},
-            {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect), "refresh_player": True},
+            # {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect), "refresh_player": True},
             {"name": "slide_animation_speed", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_speed'), "selectables": self.t(AnimationSpeed), "refresh_player": True},
 
             ### Playlists
             {"name": "playlist_enabled", "section": self.t(VariableSection.PLAYLIST), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_enabled'), "refresh_player": False},
-            {"name": "playlist_default_time_sync", "section": self.t(VariableSection.PLAYLIST), "value": True, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_default_time_sync'), "refresh_player": True},
 
             ### Fleet Management
             {"name": "fleet_player_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_player_enabled'), "description_edition": self.t('settings_variable_desc_edition_fleet_player_enabled'), "refresh_player": False},

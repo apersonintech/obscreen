@@ -89,7 +89,6 @@ class PlaylistManager(ModelManager):
 
         return [Playlist(
             id=None,
-            time_sync=self.variable_manager.map().get('playlist_default_time_sync').as_bool(),
             name=self.t('common_default_playlist'))
         ] + playlists
 

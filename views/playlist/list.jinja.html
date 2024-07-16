@@ -92,9 +92,15 @@
 
         <div class="page-content">
             <div class="inner">
-                {% with playlists=playlists %}
-                    {% include 'playlist/component/edit.jinja.html' %}
-                {% endwith %}
+                {% if current_playlist %}
+                    {% with playlists=playlists %}
+                        {% include 'playlist/component/edit.jinja.html' %}
+                    {% endwith %}
+                {% else %}
+                    <div class="inner-empty empty-flag ">
+                        <i class="fa fa-play"></i>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

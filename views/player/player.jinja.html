@@ -64,7 +64,8 @@
     const animation_speed_duration = {{ animation_speed_duration[slide_animation_speed.eval()] if slide_animation_enabled else 0 }};
     const animate_transitions = [
         "animate__{{ slide_animation_entrance_effect.eval()|default("fadeIn") }}",
-        "animate__{{ slide_animation_exit_effect.eval()|default("none") }}"
+        "animate__none"
+        {#"animate__{{ slide_animation_exit_effect.eval()|default("none") }}"#}
     ];
 
     // Slide flow management
