@@ -20,7 +20,12 @@
 
 				&.disabled {
 					.body {
-						opacity: .8;
+						background: #111;
+						color: #555;
+						border: 1px solid rgba($white, .05);
+						.range {
+							opacity: .2;
+						}
 					}
 				}
 

@@ -1,5 +1,17 @@
 .view-playlist-list main .main-container {
 
+	p {
+		font-size: 12px;
+		line-height: 18px;
+		display: flex;
+		margin-bottom: 5px;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+		align-self: stretch;
+		color: #666666;
+	}
+
 	.modal-playlist-qrcode {
 		h2 {
 			text-align: center;
@@ -110,18 +122,6 @@
 							margin-top: 20px;
 							padding-top: 20px;
 						}
-					}
-
-					p {
-						font-size: 12px;
-						line-height: 18px;
-						display: flex;
-						margin-bottom: 5px;
-						flex-direction: row;
-						justify-content: flex-start;
-						align-items: center;
-						align-self: stretch;
-						color: #666666;
 					}
 
 					.qrcode-pic {

@@ -70,6 +70,7 @@
   "playlist_button_delete": "Elimina Playlist",
   "playlist_panel_about_playlist": "Informazioni sulla playlist",
   "playlist_panel_content_management": "Gestione dei contenuti",
+  "playlist_panel_content_management_desc": "Puoi aggiungere, modificare, eliminare e riorganizzare l'ordine dei contenuti da questo elenco. Le playlist disabilitate vengono visualizzate in modo trasparente.",
   "playlist_panel_preview": "Anteprima della playlist",
   "playlist_panel_preview_action": "Anteprima",
   "playlist_panel_inactive": "Playlist inattive",
