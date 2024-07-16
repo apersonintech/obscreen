@@ -24,7 +24,7 @@ class FleetNodePlayerGroupController(ObController):
         self._app.add_url_rule('/fleet/node-player-group/add', 'fleet_node_player_group_add', self.guard_fleet(self._auth(self.fleet_node_player_group_add)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player-group/save', 'fleet_node_player_group_save', self.guard_fleet(self._auth(self.fleet_node_player_group_save)), methods=['POST'])
         self._app.add_url_rule('/fleet/node-player-group/delete/<player_group_id>', 'fleet_node_player_group_delete', self.guard_fleet(self._auth(self.fleet_node_player_group_delete)), methods=['GET'])
-        self._app.add_url_rule('/fleet/node-player-group/unassign-player/<player_id>', 'fleet_node_player_group_unassign_player', self._auth(self.fleet_node_player_group_unassign_player), methods=['DELETE'])
+        self._app.add_url_rule('/fleet/node-player-group/unassign-player/<player_id>', 'fleet_node_player_group_unassign_player', self._auth(self.fleet_node_player_group_unassign_player), methods=['GET', 'DELETE'])
         self._app.add_url_rule('/fleet/node-player-group/assign-player/<player_group_id>/<player_id>', 'fleet_node_player_group_assign_player', self._auth(self.fleet_node_player_group_assign_player), methods=['GET'])
 
     def fleet_node_player_group(self):
@@ -108,7 +108,10 @@ class FleetNodePlayerGroupController(ObController):
         self._post_update()
         pcounter = self._model_store.node_player_group().get_player_counters_by_player_groups(group_id=group_id)
 
-        return jsonify({'status': 'ok', 'pcounter': pcounter, 'group_id': group_id})
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'status': 'ok', 'pcounter': pcounter, 'group_id': group_id})
+
+        return redirect(url_for('fleet_node_player_group_list', player_group_id=group_id))
 
     def fleet_node_player_group_assign_player(self, player_group_id: int = 0, player_id: int = 0):
         node_player_group = self._model_store.node_player_group().get(player_group_id)

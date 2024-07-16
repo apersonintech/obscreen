@@ -21,7 +21,7 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.node-player-group-player-assign', function () {
         const route = $(this).attr('data-route');
-        showPickers('modal-node-player-explr-picker', function(nodePlayer) {
+        showPickers('modal-node-player-explr-picker', function (nodePlayer) {
             if (!nodePlayer.group_id || (nodePlayer.group_id && confirm(l.js_fleet_node_player_assign_confirmation))) {
                 document.location.href = route.replace('__id__', nodePlayer.id);
             }
@@ -31,15 +31,19 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.node-player-group-unassign-player', function () {
         if (confirm(l.js_fleet_node_player_delete_confirmation)) {
             const $item = $(this).parents('.player-item:eq(0)');
-            $item.remove();
-            $.ajax({
-                method: 'DELETE',
-                url: $(this).attr('data-route'),
-                headers: {'Content-Type': 'application/json'},
-                success: function(response) {
-                    $('.node-player-group-item-'+response.group_id+' .players-counter').html(response.pcounter);
-                }
-            });
+            if ($item.parents('ul:eq(0)').find('.player-item').length === 1) {
+                document.location.href = $(this).attr('data-route');
+            } else {
+                $item.remove();
+                $.ajax({
+                    method: 'DELETE',
+                    url: $(this).attr('data-route'),
+                    headers: {'Content-Type': 'application/json'},
+                    success: function (response) {
+                        $('.node-player-group-item-' + response.group_id + ' .players-counter').html(response.pcounter);
+                    }
+                });
+            }
         }
     });
 
