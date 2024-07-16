@@ -22,6 +22,7 @@ class ContentManager(ModelManager):
         "name CHAR(255)",
         "type CHAR(30)",
         "location TEXT",
+        "folder_id INTEGER",
         "created_by CHAR(255)",
         "updated_by CHAR(255)",
         "created_at INTEGER",
@@ -61,14 +62,20 @@ class ContentManager(ModelManager):
 
         return self.hydrate_object(object)
 
-    def get_all(self, sort: bool = False) -> List[Content]:
-        return self.hydrate_list(self._db.get_all(self.TABLE_NAME, sort="created_at" if sort else None, ascending=False))
+    def get_all(self, sort: Optional[str] = 'created_at', ascending=False) -> List[Content]:
+        return self.hydrate_list(self._db.get_all(table_name=self.TABLE_NAME, sort=sort, ascending=ascending))
 
-    def get_all_indexed(self) -> Dict[str, Content]:
+    def get_all_indexed(self, attribute: str = 'id', multiple=False) -> Dict[str, Content]:
         index = {}
 
         for item in self.get_contents():
-            index[item.id] = item
+            id = getattr(item, attribute)
+            if multiple:
+                if id not in index:
+                    index[id] = []
+                index[id].append(item)
+            else:
+                index[id] = item
 
         return index
 
@@ -79,8 +86,16 @@ class ContentManager(ModelManager):
         for content_id, edits in edits_contents.items():
             self._db.update_by_id(self.TABLE_NAME, content_id, edits)
 
-    def get_contents(self) -> List[Content]:
-        return self.get_all(sort=True)
+    def get_contents(self, slide_id: Optional[id] = None, folder_id: Optional[id] = None) -> List[Content]:
+        query = " 1=1 "
+
+        if slide_id:
+            query = "{} {}".format(query, "AND slide_id = {}".format(slide_id))
+
+        if folder_id:
+            query = "{} {}".format(query, "AND folder_id = {}".format(folder_id))
+
+        return self.get_by(query=query)
 
     def pre_add(self, content: Dict) -> Dict:
         self.user_manager.track_user_on_create(content)
@@ -119,8 +134,11 @@ class ContentManager(ModelManager):
         if location is not None and location:
             form["location"] = location
 
-        if content.type == ContentType.YOUTUBE:
-            form['location'] = get_yt_video_id(form['location'])
+            if content.type == ContentType.YOUTUBE:
+                form['location'] = get_yt_video_id(form['location'])
+            elif content.type == ContentType.URL:
+                if not form['location'].startswith('http'):
+                    form['location'] = "https://{}".format(form['location'])
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))
         self.post_update(id)
@@ -139,10 +157,11 @@ class ContentManager(ModelManager):
         self._db.add(self.TABLE_NAME, self.pre_add(form))
         self.post_add(content.id)
 
-    def add_form_raw(self, name: str, type: ContentType, request_files: Optional[Dict], upload_dir: str, location: Optional[str] = None) -> Content:
+    def add_form_raw(self, name: str, type: ContentType, request_files: Optional[Dict], upload_dir: str, location: Optional[str] = None, folder_id: Optional[int] = None) -> Content:
         content = Content(
             name=name,
-            type=type
+            type=type,
+            folder_id=folder_id,
         )
 
         if content.has_file():
@@ -182,5 +201,8 @@ class ContentManager(ModelManager):
     def to_dict(self, contents: List[Content]) -> List[Dict]:
         return [content.to_dict() for content in contents]
 
-    def count_contents_for_slide(self, id: int) -> int:
-        return len(self.get_contents())
+    def count_contents_for_slide(self, slide_id: int) -> int:
+        return len(self.get_contents(slide_id=slide_id))
+
+    def count_contents_for_folder(self, folder_id: int) -> int:
+        return len(self.get_contents(folder_id=folder_id))

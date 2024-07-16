@@ -1,0 +1,41 @@
+<table class="panes variables">
+    <tbody>
+    {% set ns = namespace(last_section='') %}
+    {% for variable in variables %}
+        {% set section_change = variable.section and ns.last_section != variable.section %}
+
+        {% if section_change %}
+            {% if not loop.first %}</tbody><tbody>{% endif %}
+            <tr class="title-item">
+                <td colspan="3">
+                    {{ variable.section }}
+                </td>
+            </tr>
+        {% endif %}
+        <tr class="variable-item variable-edit" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
+            <td class="description">
+                {{ t(variable.description) }}
+            </td>
+            <td class="value">
+                <i class="fa fa-pencil icon-legend"></i>
+                {% if variable.value %}
+                    {% if variable.type.value == 'bool' %}
+                        {% if variable.display() %}
+                            <i class="fa fa-check alert-success alert-icon icon-value"></i>
+                        {% else %}
+                            <i class="fa fa-times alert-error alert-icon icon-value"></i>
+                        {% endif %}
+                    {% else %}
+                        {{ variable.display() }}
+                    {% endif %}
+                {% else %}
+                    <span class="empty">{{ l.common_empty }}</span>
+                {% endif %}
+            </td>
+        </tr>
+
+
+        {% set ns.last_section = variable.section %}
+    {% endfor %}
+    </tbody>
+</table>

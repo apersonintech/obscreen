@@ -13,50 +13,41 @@
     {{ HOOK(H_AUTH_JAVASCRIPT) }}
 {% endblock %}
 
-{% block page %}
-    <div class="toolbar">
-        <h2><i class="fa fa-user icon-left"></i>{{ l.auth_page_title }}</h2>
+{% block body_class %}view-auth-user-list{% endblock %}
 
-        <div class="toolbar-actions">
+{% block page %}
+
+    <div class="top-content">
+        <div class="top-actions">
             {{ HOOK(H_AUTH_TOOLBAR_ACTIONS_START) }}
-            <button class="purple user-add item-add"><i class="fa fa-plus icon-left"></i>{{ l.auth_user_button_add }}</button>
+            <button type="button" class="btn btn-info item-add user-add">
+                <i class="fa fa-user-plus icon-left"></i>{{ l.auth_user_button_add }}
+            </button>
             {{ HOOK(H_AUTH_TOOLBAR_ACTIONS_END) }}
         </div>
     </div>
 
-    <div class="alert alert-error hidden">
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ l[error] }}
+        </div>
+    {% endif %}
 
-    </div>
-
-    <div class="panel">
-        <div class="panel-body">
-            <h3>{{ l.auth_user_panel_active }}</h3>
-
-            {% with tclass='active', users=enabled_users %}
-                {% include 'auth/component/table.jinja.html' %}
-            {% endwith %}
+    <div class="bottom-content">
+        <div class="page-content">
+            <div class="inner">
+                {% with users=users %}
+                    {% include 'auth/component/table.jinja.html' %}
+                {% endwith %}
+            </div>
         </div>
     </div>
-    <div class="panel panel-inactive">
-        <div class="panel-body">
-            <h3>{{ l.auth_user_panel_inactive }}</h3>
-
-            {% with tclass='inactive', users=disabled_users %}
-                {% include 'auth/component/table.jinja.html' %}
-            {% endwith %}
-        </div>
-    </div>
-
 
     <div class="modals hidden">
         <div class="modals-outer">
-            <a href="javascript:void(0);" class="modal-close">
-                <i class="fa fa-close"></i>
-            </a>
             <div class="modals-inner">
                 {% include 'auth/modal/add.jinja.html' %}
                 {% include 'auth/modal/edit.jinja.html' %}
-                {% include 'core/utrack.jinja.html' %}
             </div>
         </div>
     </div>

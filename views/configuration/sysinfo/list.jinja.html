@@ -1,0 +1,94 @@
+{% extends 'base.jinja.html' %}
+
+
+{% block page_title %}
+    {{ l.sysinfo_page_title }}
+{% endblock %}
+
+{% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
+{% endblock %}
+
+{% block body_class %}view-sysinfo-list{% endblock %}
+
+{% block page %}
+    <div class="top-content">
+        <div class="top-actions align-right">
+            {{ HOOK(H_SYSINFO_TOOLBAR_ACTIONS_START) }}
+            <button type="button" class="btn btn-info sysinfo-restart">
+                <i class="fa fa-refresh icon-left"></i>{{ l.sysinfo_panel_button_restart }}
+            </button>
+            {{ HOOK(H_SYSINFO_TOOLBAR_ACTIONS_END) }}
+        </div>
+    </div>
+
+    <div class="bottom-content">
+        <div class="page-content">
+            <div class="inner">
+                <table class="panes sysinfo">
+                    <tbody>
+                    <tr class="title-item">
+                        <td colspan="2">
+                            <i class="fa fa-box-open icon-left"></i> {{ l.sysinfo_panel_table_section_system }}
+                        </td>
+                    </tr>
+
+                    {% for sysinfo_label, sysinfo_value in sysinfo.items() %}
+                        <tr>
+                            <td class="description">{{ l[sysinfo_label] }}</td>
+                            <td class="value">{{ t(sysinfo_value) }}</td>
+                        </tr>
+                    {% endfor %}
+
+
+                    {% for ro_variable in ro_variables %}
+                        {% if ro_variable.description %}
+                        <tr>
+                            <td class="description">{{ ro_variable.description }}</td>
+                            <td class="value">
+                                {% if ro_variable.value %}
+                                    {% if ro_variable.type.value == 'bool' %}
+                                        {% if ro_variable.display() %}
+                                            ✅
+                                        {% else %}
+                                            ❌
+                                        {% endif %}
+                                    {% else %}
+                                        {{ ro_variable.display() }}
+                                    {% endif %}
+                                {% else %}
+                                    <span class="empty">{{ l.common_empty }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                    <tbody>
+                    <tr class="title-item">
+                        <td colspan="2">
+                            <i class="fa fa-server icon-left"></i> {{ l.sysinfo_panel_table_section_server }}
+                        </td>
+                    </tr>
+                    {% for env_key, env_value in env_variables.items() %}
+                        <tr class="">
+                            <td class="description">{{ env_key.replace('_',' ')|capitalize }}</td>
+                            <td class="value">
+                                {% if env_value == true %}
+                                    ✅
+                                {% elif env_value == false %}
+                                    ❌
+                                {% elif env_value == none %}
+                                    <span class="empty">{{ l.common_empty }}</span>
+                                {% else %}
+                                    {{ env_value }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

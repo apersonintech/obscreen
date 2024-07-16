@@ -24,6 +24,11 @@ class Application:
         signal.signal(signal.SIGINT, self.signal_handler)
 
     def start(self) -> None:
+        variable = self._model_store.variable().get_one_by_name('start_counter')
+
+        if variable:
+            self._model_store.variable().update_by_name(variable.name, variable.as_int() + 1)
+
         self._web_server.run()
 
     def signal_handler(self, signal, frame) -> None:

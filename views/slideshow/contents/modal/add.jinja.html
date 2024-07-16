@@ -3,46 +3,55 @@
         {{ l.slideshow_content_form_add_title }}
     </h2>
 
-    <form class="form" action="/slideshow/content/add" method="POST" enctype="multipart/form-data">
-
-        {% if current_playlist %}
-            <input name="playlist_id" type="hidden" id="content-add-playlist-id" value="{{ current_playlist.id }}">
-        {% endif %}
+    <form class="form" action="{{ url_for('slideshow_content_add') }}" method="POST" enctype="multipart/form-data">
 
         <div class="form-group">
             <label for="content-add-name">{{ l.slideshow_content_form_label_name }}</label>
             <div class="widget">
-                <input name="name" type="text" id="content-add-name" required="required" />
+                <input name="name" type="text" id="content-add-name" required="required"/>
             </div>
         </div>
-        <div class="form-group">
-            <label for="content-add-type">{{ l.slideshow_content_form_label_type }}</label>
+
+        <div class="form-group tab-select">
             <div class="widget">
-                <select name="type" id="content-add-type">
+                <i class="fa fa-get-pocket type-icon"></i>
+                <select name="type" id="content-add-type" class="type-select">
                     {% for type in enum_content_type %}
                         {% set input_type = enum_content_type.get_input(type) %}
-                        <option value="{{ type.value }}" data-input="{{ input_type.value }}">
+                        <option value="{{ type.value }}" data-input="{{ input_type.value }}" data-object-label="{{ t('enum_content_type_'~type.value~'_object_label') }}" data-icon="{{ enum_content_type.get_fa_icon(type) }}" data-color="{{ enum_content_type.get_color_icon(type) }}">
                             {{ t(type) }}
                         </option>
                     {% endfor %}
                 </select>
+                <i class="fa fa-sort-desc triangle"></i>
             </div>
         </div>
 
         <div class="form-group object-input">
-            <label for="">{{ l.slideshow_content_form_label_object }}</label>
+            <label for="" class="object-label">{{ l.slideshow_content_form_label_object }}</label>
             <div class="widget">
-                <input type="text" name="object" id="content-add-object-input-text" class="content-add-object-input" />
-                <input type="file" name="object" id="content-add-object-input-upload" class="content-add-object-input hidden" disabled="disabled" />
+                <input type="text" name="object" data-input-type="text" class="content-object-input" />
+
+                <label for="content-add-object-input-upload" class="btn-upload hidden">
+                    <input type="file" name="object" data-input-type="upload" class="content-object-input" disabled="disabled" id="content-add-object-input-upload"/>
+                    <span class="btn btn-neutral normal">
+                        <i class="fa fa-file-import"></i>
+                        {{ l.slideshow_content_form_button_upload }}
+                    </span>
+                    <input type="text" value="{{ l.slideshow_content_form_button_upload_choosen }}" disabled="disabled" class="disabled" />
+                </label>
             </div>
         </div>
-    
-         <div class="actions">
-            <button type="button" class="btn-normal modal-close">
-                {{ l.slideshow_content_form_button_cancel }}
+
+        <div class="actions">
+            <button type="button" class="btn btn-naked modal-close">
+                {{ l.common_close }}
             </button>
-            <button type="submit" class="green">
-                <i class="fa fa-save icon-left"></i>{{ l.slideshow_content_form_add_submit }}
+            <button type="submit" class="btn btn-info">
+                <i class="fa fa-save icon-left"></i>{{ l.common_save }}
+            </button>
+            <button type="button" disabled="disabled" class="btn btn-naked hidden btn-loading">
+                {{ l.common_loading }}
             </button>
         </div>
     </form>
