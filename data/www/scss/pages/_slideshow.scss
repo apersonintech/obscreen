@@ -1,0 +1,123 @@
+.view-playlist-list main .main-container {
+
+	.slides-holder {
+
+		ul.slides {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+			align-self: stretch;
+			margin: 30px 0 30px 0;
+
+			li.slide-item {
+				display: flex;
+				flex-direction: row;
+				justify-content: flex-start;
+				align-items: center;
+				align-self: stretch;
+				margin: 0 0 2px 0;
+
+				&.disabled {
+					.body {
+						opacity: .8;
+					}
+				}
+
+				.sort {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+
+					a {
+						color: #999;
+						font-size: 10px;
+						padding: 10px;
+						cursor: move;
+
+						&:hover {
+							color: $info
+						}
+					}
+				}
+
+				.title {
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-start;
+					align-items: center;
+					flex: 1;
+					max-width: 120px;
+					align-self: stretch;
+
+					a {
+						font-size: 13px;
+						color: #AAA;
+
+						&:hover {
+							color: white;
+							text-decoration: underline;
+						}
+
+						i {
+							margin-left: 3px;
+							font-size: 10px;
+						}
+					}
+				}
+
+				.body {
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-start;
+					align-items: center;
+					margin: 0 10px 0 10px;
+					background: #1B1B1B;
+					padding: 10px;
+					align-self: stretch;
+					flex: 1;
+					border-radius: $baseRadius;
+					font-size: 13px;
+					color: white;
+
+					.range {
+						display: flex;
+						flex-direction: column;
+						justify-content: flex-start;
+						align-items: flex-start;
+						flex: 1;
+
+						.start {
+							display: flex;
+							flex-direction: row;
+							justify-content: flex-start;
+							align-items: center;
+							margin-bottom: 8px;
+						}
+
+						.end {
+							display: flex;
+							flex-direction: row;
+							justify-content: flex-start;
+							align-items: center;
+						}
+					}
+				}
+
+				.tail {
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+
+					a {
+						color: white;
+					}
+				}
+			}
+		}
+	}
+}
+
+

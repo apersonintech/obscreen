@@ -25,18 +25,7 @@ jQuery(document).ready(function ($) {
     };
 
     const getId = function ($el) {
-        return $el.is('tr') ? $el.attr('data-level') : $el.parents('tr:eq(0)').attr('data-level');
-    };
-
-    const updateTable = function () {
-        $('table').each(function () {
-            if ($(this).find('tbody tr.slide-item:visible').length === 0) {
-                $(this).find('tr.empty-tr').removeClass('hidden');
-            } else {
-                $(this).find('tr.empty-tr').addClass('hidden');
-            }
-        }).tableDnDUpdate();
-        updatePositions();
+        return $el.hasClass('slide-item') ? $el.attr('data-level') : $el.parents('.slide-item:eq(0)').attr('data-level');
     };
 
     const updatePositions = function (table, row) {
@@ -170,9 +159,9 @@ jQuery(document).ready(function ($) {
 
 
     const main = function () {
-        $("table").tableDnD({
-            dragHandle: 'td a.slide-sort',
-            onDrop: updatePositions
+        $("ul.slides").sortable({
+            handle: 'a.slide-sort',
+            update: updatePositions
         });
     };
 
@@ -233,7 +222,7 @@ jQuery(document).ready(function ($) {
     });
 
     $(document).on('click', '.slide-edit', function () {
-        const slide = JSON.parse($(this).parents('tr:eq(0)').attr('data-entity'));
+        const slide = JSON.parse($(this).parents('.slide-item:eq(0)').attr('data-entity'));
         showModal('modal-slide-edit');
 
         const hasCron = slide.cron_schedule && slide.cron_schedule.length > 0;
@@ -271,13 +260,15 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.slide-delete', function () {
         if (confirm(l.js_slideshow_slide_delete_confirmation)) {
-            const $tr = $(this).parents('tr:eq(0)');
-            $tr.remove();
-            updateTable();
+            const $item = $(this).parents('.slide-item:eq(0)');
+            $item.remove();
             $.ajax({
                 method: 'DELETE',
                 url: $(this).attr('data-route').replace('__id__', getId($(this))),
                 headers: {'Content-Type': 'application/json'},
+                success: function(response) {
+                    $('.playlist-item-'+response.playlist_id+' .playlist-duration').html(secondsToHHMMSS(response.duration));
+                }
             });
         }
     });

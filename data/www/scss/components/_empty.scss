@@ -12,6 +12,7 @@ span.empty {
 .inner-empty {
 	display: flex;
 	flex: 1;
+	flex-direction: column;
 	align-self: stretch;
 	justify-content: center;
 	align-items: center;
@@ -21,4 +22,5 @@ span.empty {
 		opacity: 0.3;
 		text-shadow: 0 -1px #333, 0 0px .5px #444;
 	}
+
 }

@@ -20,5 +20,15 @@ jQuery(document).ready(function ($) {
         $('.modal-playlist-add input:eq(0)').focus().select();
     });
 
+    $(document).on('click', '.playlist-preview', function () {
+        const $iframe = $('<iframe>', {
+            src: $(this).attr('data-url'),
+            frameborder: 0
+        });
+
+        $(this).parents('.preview:eq(0)').append($iframe);
+        $(this).remove();
+    });
+
     main();
 });
