@@ -1,7 +1,6 @@
 import json
 
 from flask import Flask, render_template, redirect, request, url_for, jsonify, abort
-from src.exceptions.PlaylistSlugAlreadyExist import PlaylistSlugAlreadyExist
 from src.service.ModelStore import ModelStore
 from src.model.entity.Playlist import Playlist
 from src.model.enum.FolderEntity import FolderEntity
@@ -64,7 +63,7 @@ class PlaylistController(ObController):
 
         try:
             playlist = self._model_store.playlist().add_form(playlist)
-        except PlaylistSlugAlreadyExist as e:
+        except:
             abort(409)
 
         return redirect(url_for('playlist_list', playlist_id=playlist.id))

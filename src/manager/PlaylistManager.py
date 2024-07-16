@@ -4,7 +4,6 @@ from typing import Dict, Optional, List, Tuple, Union
 
 from src.model.entity.Playlist import Playlist
 from src.util.utils import get_optional_string, get_yt_video_id, slugify, slugify_next
-from src.exceptions.PlaylistSlugAlreadyExist import PlaylistSlugAlreadyExist
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.SlideManager import SlideManager
 from src.manager.LangManager import LangManager
@@ -90,23 +89,6 @@ class PlaylistManager(ModelManager):
 
         return index
 
-    def get_enabled_playlists(self, with_default: bool = False) -> List[Playlist]:
-        playlists = self.get_by(query="enabled = 1")
-
-        if not with_default:
-            return playlists
-
-        return [Playlist(
-            id=None,
-            name=self.t('common_default_playlist'))
-        ] + playlists
-
-    def get_disabled_playlists(self) -> List[Playlist]:
-        return self.get_by(query="enabled = 0")
-
-    def update_enabled(self, id: int, enabled: bool) -> None:
-        self._db.update_by_id(self.TABLE_NAME, id, {"enabled": enabled})
-
     def forget_for_user(self, user_id: int):
         playlists = self.get_by("created_by = '{}' or updated_by = '{}'".format(user_id, user_id))
         edits_playlists = self.user_manager.forget_user_for_entity(playlists, user_id)
@@ -123,7 +105,7 @@ class PlaylistManager(ModelManager):
 
         return next_slug
 
-    def pre_add(self, playlist: Dict) -> Dict:
+    def slugify(self, playlist: Dict) -> Dict:
         playlist["slug"] = slugify(playlist["name"])
 
         known_playlist = self.get_one_by(query="slug = ?", values={
@@ -133,12 +115,16 @@ class PlaylistManager(ModelManager):
         if known_playlist:
             playlist["slug"] = self.get_available_slug(playlist["slug"])
 
+        return playlist
+
+    def pre_add(self, playlist: Dict) -> Dict:
+        playlist = self.slugify(playlist)
         self.user_manager.track_user_on_create(playlist)
         self.user_manager.track_user_on_update(playlist)
         return playlist
 
     def pre_update(self, playlist: Dict) -> Dict:
-        playlist["slug"] = slugify(playlist["name"])
+        playlist = self.slugify(playlist)
         self.user_manager.track_user_on_update(playlist)
         return playlist
 

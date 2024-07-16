@@ -1,72 +1,105 @@
-<table class="{{ tclass }}-node-players">
-    <thead>
-    <tr>
-        <th>{{ l.fleet_node_player_group_panel_th_name }}</th>
-        {% if AUTH_ENABLED %}
-            <th class="tac">
-                <i class="fa fa-user"></i>
-            </th>
-        {% endif %}
-        {% if PLAYLIST_ENABLED %}
-            <th class="tac">{{ l.fleet_node_player_group_panel_th_playlist }}</th>
-        {% endif %}
-        <th class="tac">{{ l.fleet_node_player_group_panel_th_activity }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr class="empty-tr {% if node_player_groups|length != 0 %}hidden{% endif %}">
-        <td colspan="4">
-            {{ l.fleet_node_player_group_panel_empty|replace(
-                '%link%',
-                ('<a href="javascript:void(0);" class="item-add node-player-group-add">'~l.fleet_node_player_group_button_add~'</a>')|safe
-            ) }}
-        </td>
-    </tr>
+{#<table class="{{ tclass }}-node-players">#}
+{#    <thead>#}
+{#    <tr>#}
+{#        <th>{{ l.fleet_node_player_group_panel_th_name }}</th>#}
+{#        {% if AUTH_ENABLED %}#}
+{#            <th class="tac">#}
+{#                <i class="fa fa-user"></i>#}
+{#            </th>#}
+{#        {% endif %}#}
+{#        {% if PLAYLIST_ENABLED %}#}
+{#            <th class="tac">{{ l.fleet_node_player_group_panel_th_playlist }}</th>#}
+{#        {% endif %}#}
+{#        <th class="tac">{{ l.fleet_node_player_group_panel_th_activity }}</th>#}
+{#    </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#    <tr class="empty-tr {% if node_player_groups|length != 0 %}hidden{% endif %}">#}
+{#        <td colspan="4">#}
+{#            {{ l.fleet_node_player_group_panel_empty|replace(#}
+{#                '%link%',#}
+{#                ('<a href="javascript:void(0);" class="item-add node-player-group-add">'~l.fleet_node_player_group_button_add~'</a>')|safe#}
+{#            ) }}#}
+{#        </td>#}
+{#    </tr>#}
+{##}
+{#    {% for node_player_group in node_player_groups %}#}
+{#        <tr class="node-player-group-item" data-level="{{ node_player_group.id }}" data-entity="{{ node_player_group.to_json({"created_by": track_created(node_player_group).username, "updated_by": track_updated(node_player_group).username}) }}">#}
+{#            <td class="infos">#}
+{#                <div class="inner">#}
+{#                    {% if node_player_group.id %}#}
+{#                        <div class="badge"><i class="fa fa-key icon-left"></i> {{ node_player_group.id }}</div>#}
+{#                    {% else %}#}
+{#                        <div class="badge"><i class="fa fa-lock"></i></div>#}
+{#                    {% endif %}#}
+{##}
+{#                    <i class="fa fa-layer-group icon-left"></i>#}
+{#                    {{ node_player_group.name }}#}
+{#                </div>#}
+{#            </td>#}
+{#            {% if AUTH_ENABLED %}#}
+{#                <td class="tac">#}
+{#                    {% if node_player_group.id %}#}
+{#                        {% set creator = track_created(node_player_group) %}#}
+{#                        {% if creator.username %}#}
+{#                            <a href="javascript:void(0);" class="badge item-utrack node-player-group-utrack {% if not creator.enabled %}anonymous{% endif %}">#}
+{#                                {{ creator.username }}#}
+{#                            </a>#}
+{#                        {% endif %}#}
+{#                    {% endif %}#}
+{#                </td>#}
+{#            {% endif %}#}
+{#            <td class="tac">#}
+{#                {% if node_player_group.playlist_id and playlists[node_player_group.playlist_id] %}#}
+{#                    {{ playlists[node_player_group.playlist_id] }}#}
+{#                {% else %}#}
+{#                    {{ l.common_default_playlist }}#}
+{#                {% endif %}#}
+{#            </td>#}
+{#            <td class="actions tac">#}
+{#                {% if node_player_group.id %}#}
+{#                    <a href="javascript:void(0);" class="item-edit node-player-group-edit">#}
+{#                        <i class="fa fa-pencil"></i>#}
+{#                    </a>#}
+{#                    <a href="javascript:void(0);" class="item-delete node-player-group-delete">#}
+{#                        <i class="fa fa-trash"></i>#}
+{#                    </a>#}
+{#                {% endif %}#}
+{#            </td>#}
+{#        </tr>#}
+{#    {% endfor %}#}
+{#    </tbody>#}
+{#</table>#}
 
-    {% for node_player_group in node_player_groups %}
-        <tr class="node-player-group-item" data-level="{{ node_player_group.id }}" data-entity="{{ node_player_group.to_json({"created_by": track_created(node_player_group).username, "updated_by": track_updated(node_player_group).username}) }}">
-            <td class="infos">
-                <div class="inner">
-                    {% if node_player_group.id %}
-                        <div class="badge"><i class="fa fa-key icon-left"></i> {{ node_player_group.id }}</div>
-                    {% else %}
-                        <div class="badge"><i class="fa fa-lock"></i></div>
-                    {% endif %}
 
-                    <i class="fa fa-layer-group icon-left"></i>
-                    {{ node_player_group.name }}
+<div class="tiles node-player-groups">
+    <div class="tiles-inner">
+        {% for node_player_group in node_player_groups %}
+            {% set active = current_player_group and ''~node_player_group.id == ''~current_player_group.id %}
+            <a href="{{ url_for('fleet_node_player_group_list', player_group_id=node_player_group.id) }}"
+               class="{% if active %}active{% endif %} tile-item node-player-group-item-{{ node_player_group.id }} node-player-group-item"
+               data-level="{{ node_player_group.id }}"
+               data-entity="{{ node_player_group.to_json() }}">
+                <div class="tile-body">
+                    {% set title = node_player_group.name|trim %}
+                    {% set title = title if title|length > 0 %}
+                    {{ truncate((title)|default(l.common_untitled), 35, '...') }}
                 </div>
-            </td>
-            {% if AUTH_ENABLED %}
-                <td class="tac">
-                    {% if node_player_group.id %}
-                        {% set creator = track_created(node_player_group) %}
-                        {% if creator.username %}
-                            <a href="javascript:void(0);" class="badge item-utrack node-player-group-utrack {% if not creator.enabled %}anonymous{% endif %}">
-                                {{ creator.username }}
-                            </a>
+                <div class="tile-metrics">
+                    <div class="foot-span players-counter">
+                        {% set pcounter = pcounters[node_player_group.id]|default(0) %}
+                        {% if pcounter > 0 %}
+                            {{ pcounter }} <sub><i class="fa fa-display"></i></sub>
+                        {% else %}
+                            {{ l.common_empty }}
                         {% endif %}
-                    {% endif %}
-                </td>
-            {% endif %}
-            <td class="tac">
-                {% if node_player_group.playlist_id and playlists[node_player_group.playlist_id] %}
-                    {{ playlists[node_player_group.playlist_id] }}
-                {% else %}
-                    {{ l.common_default_playlist }}
-                {% endif %}
-            </td>
-            <td class="actions tac">
-                {% if node_player_group.id %}
-                    <a href="javascript:void(0);" class="item-edit node-player-group-edit">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                    <a href="javascript:void(0);" class="item-delete node-player-group-delete">
-                        <i class="fa fa-trash"></i>
-                    </a>
-                {% endif %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+
+        <div class="inner-empty empty-flag {% if node_player_groups|length != 0 %}hidden{% endif %}">
+            <i class="fa fa-list"></i>
+        </div>
+    </div>
+</div>
