@@ -18,6 +18,7 @@ class Folder:
         self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
         self._updated_at = int(updated_at if updated_at else time.time())
+        self._previous = None
 
     @property
     def id(self) -> Optional[int]:
@@ -30,6 +31,12 @@ class Folder:
     @parent_id.setter
     def parent_id(self, value: Optional[int]):
         self._parent_id = value
+
+    def set_previous(self, value):
+        self._previous = value
+
+    def get_previous(self):
+        self._previous
 
     @property
     def name(self) -> str:
@@ -80,7 +87,7 @@ class Folder:
         self._updated_at = value
 
     def __str__(self) -> str:
-        return f"NodePlayer(" \
+        return f"Folder(" \
                f"id='{self.id}',\n" \
                f"name='{self.name}',\n" \
                f"parent_id='{self.parent_id}',\n" \

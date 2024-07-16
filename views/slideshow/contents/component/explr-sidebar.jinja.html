@@ -1,0 +1,40 @@
+{% macro render_folder(folder) %}
+    {% set content_children = foldered_contents[folder.id]|default([]) %}
+    {% set has_children = folder.children or content_children %}
+
+    <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id }}">
+        <a href="{% if use_href %}{{ url_for('slideshow_content_cd') }}?path={{ folder.path }}{% else %}javascript:void(0);{% endif %}"
+           class="{% if folder.path == working_folder_path %}active{% endif %} {{ 'explr-pick-folder' if not use_href }}">
+            {{ folder.name }}
+        </a>
+
+        {% if has_children %}
+            <ul>
+                {% for child in folder.children %}
+                    {{ render_folder(child) }}
+                {% endfor %}
+                {% for content in content_children %}
+                    {% set slides = slides_with_content[content.id]|default([]) %}
+                    {% set icon = enum_content_type.get_fa_icon(content.type) %}
+                    {% set color = enum_content_type.get_color_icon(content.type) %}
+                    <li class="explr-item" data-entity-json="{{ json_dumps(content.to_dict()) }}">
+                        <i class="fa {{ icon }} {{ color }}"></i>
+                        {% if slides|length > 0 %}
+                            <sub>
+                                <i class="fa fa-play"></i>
+                            </sub>
+                        {% endif %}
+                        <a href="{% if use_href %}{{ url_for('slideshow_content_edit', content_id=content.id) }}{% else %}javascript:void(0);{% endif %}"
+                           class="{{ 'explr-pick-element' if not use_href }}">
+                            {{ content.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+<ul class="explr hidden" id="tree" data-working-folder-id="{{ working_folder.id }}">
+    {{ render_folder(folders_tree) }}
+</ul>

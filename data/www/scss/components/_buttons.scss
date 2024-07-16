@@ -1,52 +1,141 @@
-select.select-item-picker,
-.btn,
-button {
-  background-color: $white;
-  border-radius: 5px;
-  border: 1px solid $sweetPurple;
-  color: darken($bitterPurple, 30%);
-  padding: 10px 30px;
-  text-decoration: none;
-  margin: 10px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  font-weight: 400;
-  font-size: 14px;
-  transition: .2s linear all;
+button,
+.btn {
+	$shadowOffset: 2px;
+
+	position: relative;
+	padding: 10px 10px 8px 10px;
+	font-size: 14px;
+	color: #fff;
+	cursor: pointer;
+	border: none;
+	border-radius: $baseRadius;
+	background: $seaBlue;
+	box-shadow: 0 $shadowOffset 0 0 darken($seaBlue, 20%);
+	font-weight: bold;
+	letter-spacing: -0.5px;
+	margin-top: -$shadowOffset;
+	min-width: 38px;
+	text-align: center;
+	justify-content: center;
+
+	i.icon-left {
+		margin-right: 5px;
+	}
+
+	&:hover {
+		box-shadow: 0 $shadowOffset 0 1px darken($seaBlue, 20%) inset;
+		color: rgba(white, .8);
+	}
+
+	&:focus {
+		background: darken($seaBlue, 20%);
+		color: rgba(white, .5);
+		box-shadow: none;
+	}
+
+	&.btn-pixel {
+		background: #CCC;
+		border: 1px solid transparent;
+		transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
+		text-transform: uppercase;
+		font-size: 12px;
+		@include pixel-box(4);
+		color: #222;
+		overflow: hidden;
+
+		&:hover {
+			@include pixel-box(6);
+			@include pixel-text(4);
+		}
+	}
+
+	&.btn-neutral {
+		color: #AAA;
+		background: $neutralGrey;
+		box-shadow: 0 $shadowOffset 0 0 darken($neutralGrey, 10%);
+		border: 1px solid transparent;
+
+		&:hover {
+			box-shadow: 0 $shadowOffset 0 1px #222 inset;
+			background: darken($neutralGrey, 10%);
+		}
+
+		&:focus {
+			background: darken($neutralGrey, 20%);
+			border: 1px solid #AAA;
+		}
+	}
+
+	.btn-wire-neutral {
+		background: transparent;
+		border: 2px solid $neutralGrey;
+		color: rgba($white, .8);
+		box-shadow: none;
+
+		&:hover {
+			background: rgba($neutralGrey, 0.05);
+			border-color: darken($neutralGrey, 10%);
+			color: darken($neutralGrey, 10%);
+			box-shadow: none;
+		}
+
+		&:focus {
+			border-color: darken($neutralGrey, 20%);
+			background: transparent;
+		}
+	}
+
+	&.btn-naked {
+		background: transparent;
+		box-shadow: none;
+		border: 1px solid transparent;
+
+		&:hover {
+			box-shadow: 0 $shadowOffset 0 1px #222 inset;
+			background: darken($neutralGrey, 10%);
+		}
+
+		&:focus {
+			background: darken($neutralGrey, 20%);
+			border: 1px solid #AAA;
+		}
+	}
+
+
+	i.main {
+		font-size: 18px;
+	}
+
+	sup,
+	sub {
+		position: absolute;
+		top: -4px;
+		right: -4px;
+		background: #777;
+		border-bottom: 2px solid $neutralGrey;
+		color: black;
+		border-radius: $baseRadius;
+		width: 16px;
+		height: 16px;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding-top: 2px;
+		padding-bottom: 1px;
+
+		i {
+			color: white;
+			font-size: 10px;
+		}
+	}
+
+	&.btn-double-icon {
+		margin-right: 5px;
+	}
+
+	&.disabled {
+		cursor: default;
+	}
 }
 
-a.btn:hover,
-button:hover {
-  color: $sweetPurple;
-}
-
-select.select-item-picker,
-button.purple {
-  font-weight: bold;
-  border: 1px solid $bitterPurple;
-  color: white;
-  background: $bitterPurple;
-  background: linear-gradient(90deg, $sweetPurple 0%, $bitterPurple 100%);
-}
-
-button.green {
-  font-weight: bold;
-  color: white;
-  border: 1px solid $limeGreen;
-  background: linear-gradient(90deg, lighten($limeGreen, 10%) 0%, darken($limeGreen, 10%) 100%);
-}
-
-button.normal:hover {
-  color: white;
-  border-color: $bitterPurple;
-  background: $bitterPurple;
-  background: linear-gradient(90deg, $sweetPurple 0%, $bitterPurple 100%);
-}
-
-button.green:hover,
-button.purple:hover {
-  border: 1px solid $white;
-}

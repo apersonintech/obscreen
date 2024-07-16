@@ -1,5 +1,6 @@
 import json
 import time
+import math
 from typing import Dict, Optional, List, Tuple, Union
 
 from src.manager.DatabaseManager import DatabaseManager
@@ -7,6 +8,7 @@ from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
+from src.model.enum.FolderEntity import FOLDER_ROOT_PATH
 from src.model.enum.ApplicationLanguage import ApplicationLanguage
 from src.model.enum.VariableType import VariableType
 from src.model.enum.VariableUnit import VariableUnit
@@ -110,19 +112,15 @@ class VariableManager:
             {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32, "unit": VariableUnit.MEGABYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
 
             ### Player Options
-            {"name": "default_slide_duration", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 3, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_default_slide_duration'), "refresh_player": False},
+            {"name": "intro_slide_duration", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 3, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_intro_slide_duration'), "refresh_player": False},
             {"name": "default_slide_time_with_seconds", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_default_slide_time_with_seconds'), "refresh_player": False},
             {"name": "polling_interval", "section": self.t(VariableSection.PLAYER_OPTIONS), "value": 5, "unit": VariableUnit.SECOND, "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_polling_interval'), "refresh_player": True},
 
             ### Player Animation
             {"name": "slide_animation_enabled", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_slide_animation_enabled'), "refresh_player": True},
             {"name": "slide_animation_entrance_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationEntranceEffect.FADE_IN.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_entrance_effect'), "selectables": enum_to_dict(AnimationEntranceEffect), "refresh_player": True},
-            {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect), "refresh_player": True},
+            # {"name": "slide_animation_exit_effect", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationExitEffect.NONE.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_exit_effect'), "selectables": enum_to_dict(AnimationExitEffect), "refresh_player": True},
             {"name": "slide_animation_speed", "section": self.t(VariableSection.PLAYER_ANIMATION), "value": AnimationSpeed.NORMAL.value, "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_slide_animation_speed'), "selectables": self.t(AnimationSpeed), "refresh_player": True},
-
-            ### Playlists
-            {"name": "playlist_enabled", "section": self.t(VariableSection.PLAYLIST), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_enabled'), "refresh_player": False},
-            {"name": "playlist_default_time_sync", "section": self.t(VariableSection.PLAYLIST), "value": True, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_playlist_default_time_sync'), "refresh_player": True},
 
             ### Fleet Management
             {"name": "fleet_player_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_player_enabled'), "description_edition": self.t('settings_variable_desc_edition_fleet_player_enabled'), "refresh_player": False},
@@ -131,6 +129,13 @@ class VariableManager:
             {"name": "auth_enabled", "section": self.t(VariableSection.SECURITY), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled'), "refresh_player": False},
 
             # Not editable (System information)
+            {"name": "start_counter", "value": 0, "type": VariableType.INT, "editable": False, "description": self.t('settings_variable_desc_ro_start_counter')},
+            {"name": "last_pillmenu_slideshow", "value": "slideshow_content_list", "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_pillmenu_configuration", "value": "settings_variable_list", "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_pillmenu_fleet", "value": "fleet_node_player_list", "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_pillmenu_security", "value": "auth_user_list", "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_folder_content", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": None},
+            {"name": "last_folder_node_player", "value": FOLDER_ROOT_PATH, "type": VariableType.STRING, "editable": False, "description": None},
             {"name": "last_restart", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_editable')},
             {"name": "last_slide_update", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_last_slide_update')},
             {"name": "refresh_player_request", "value": time.time(), "type": VariableType.TIMESTAMP, "editable": False, "description": self.t('settings_variable_desc_ro_refresh_player_request')},

@@ -1,0 +1,2 @@
+class NoFallbackPlaylistException(Exception):
+    pass

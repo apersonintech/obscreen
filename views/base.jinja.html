@@ -7,124 +7,235 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="google" content="notranslate">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="57x57" href="{{ STATIC_PREFIX }}favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="{{ STATIC_PREFIX }}favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_PREFIX }}favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="{{ STATIC_PREFIX }}favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_PREFIX }}favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="{{ STATIC_PREFIX }}favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="{{ STATIC_PREFIX }}favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="{{ STATIC_PREFIX }}favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ STATIC_PREFIX }}favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="{{ STATIC_PREFIX }}favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ STATIC_PREFIX }}favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ STATIC_PREFIX }}favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ STATIC_PREFIX }}favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-57x57.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="114x114"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-114x114.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-144x144.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="60x60"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-60x60.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="120x120"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-120x120.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="76x76"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-76x76.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="152x152"
+          href="{{ STATIC_PREFIX }}favicon/apple-touch-icon-152x152.png"/>
+    <link rel="icon" type="image/png" href="{{ STATIC_PREFIX }}favicon/favicon-196x196.png" sizes="196x196"/>
+    <link rel="icon" type="image/png" href="{{ STATIC_PREFIX }}favicon/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/png" href="{{ STATIC_PREFIX }}favicon/favicon-32x32.png" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="{{ STATIC_PREFIX }}favicon/favicon-16x16.png" sizes="16x16"/>
+    <link rel="icon" type="image/png" href="{{ STATIC_PREFIX }}favicon/favicon-128.png" sizes="128x128"/>
+    <meta name="application-name" content="Obscreen"/>
+    <meta name="msapplication-TileColor" content="#333333"/>
+    <meta name="msapplication-TileImage" content="{{ STATIC_PREFIX }}favicon/mstile-144x144.png"/>
+    <meta name="msapplication-square70x70logo" content="{{ STATIC_PREFIX }}favicon/mstile-70x70.png"/>
+    <meta name="msapplication-square150x150logo" content="{{ STATIC_PREFIX }}favicon/mstile-150x150.png"/>
+    <meta name="msapplication-wide310x150logo" content="{{ STATIC_PREFIX }}favicon/mstile-310x150.png"/>
+    <meta name="msapplication-square310x310logo" content="{{ STATIC_PREFIX }}favicon/mstile-310x310.png"/>
+    <meta name="theme-color" content="#333333">
     <link rel="manifest" href="/manifest.json">
-    <meta name="msapplication-TileColor" content="#777777">
-    <meta name="msapplication-TileImage" content="{{ STATIC_PREFIX }}favicon/ms-icon-144x144.png">
-    <meta name="theme-color" content="#777777">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/fontawesome.min.css" />
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/compiled/main.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/fontawesome.min.css"/>
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/compiled/main.css"/>
     {% block add_css %}{% endblock %}
     {{ HOOK(H_ROOT_CSS) }}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
+<div id="toast"></div>
+
 <div class="container {% block container_class %}{% endblock %}">
 
+    {% set authenticated_view = not AUTH_ENABLED or (current_user and current_user.is_authenticated) %}
+    {% set fully_authenticated_view = authenticated_view and current_user.is_authenticated %}
+
+    {% set dynmenu = {
+        "slideshow": {
+            "name": l.dynmenu_content,
+            "icon": "fa-image",
+            "position": 0,
+            "main_pill_route": last_pillmenu_slideshow,
+            "pills": [
+                {"name": "Bibliothèque", "route": "slideshow_content_list", "icon": "fa-image"},
+                {"name": "Playlists", "route": "playlist", "route_alt": "playlist_list", "icon": "fa-play"},
+            ]
+        },
+        "configuration": {
+            "name": "Configuration",
+            "icon": "fa-cog",
+            "position": 3,
+            "main_pill_route": last_pillmenu_configuration,
+            "pills": [
+                {"name": l.settings_page_title, "route": "settings_variable_list", "icon": "fa-cogs"},
+                {"name": l.settings_plugin_page_title, "route": "settings_variable_plugin_list", "icon": "fa-puzzle-piece"},
+                {"name": l.sysinfo_page_title, "route": "sysinfo_attribute_list", "icon": "fa-list-check"},
+                {"name": l.logs_page_title, "route": "logs", "icon": "fa-file-lines"},
+            ]
+        }
+    } %}
+
+    {% if FLEET_PLAYER_ENABLED %}
+        {% set dynmenu = merge_dicts(dynmenu, {
+            "fleet": {
+                "name": "Appareils",
+                "icon": "fa-tv",
+                "position": 1,
+                "main_pill_route": last_pillmenu_fleet,
+                "pills": [
+                    {"name": l.fleet_node_player_page_title, "route": "fleet_node_player_list", "icon": "fa-tv"},
+                    {"name": l.fleet_node_player_group_page_title, "route": "fleet_node_player_group", "route_alt": "fleet_node_player_group_list", "icon": "fa-layer-group"},
+                ]
+            }
+        }) %}
+    {% endif %}
+
+    {% if AUTH_ENABLED %}
+        {% set dynmenu = merge_dicts(dynmenu, {
+            "security": {
+                "name": "Sécurité",
+                "icon": "fa-key",
+                "position": 2,
+                "main_pill_route": last_pillmenu_security,
+                "pills": [
+                    {"name": l.auth_page_title, "route": "auth_user_list", "icon": "fa-user"},
+                ]
+            }
+        }) %}
+    {% endif %}
+
+    {% set dynmenu = dictsort(dynmenu) %}
+    {% set route_to_category = {} %}
+    {% for category, details in dynmenu.items() %}
+        {% for pill in details.pills %}
+            {% set route_to_category = route_to_category.update({pill.route: category}) or route_to_category %}
+            {% set route_to_category = route_to_category.update({pill.route_alt: category}) or route_to_category %}
+        {% endfor %}
+    {% endfor %}
+    {% set active_route = active_pill_route if active_pill_route else request.url_rule.endpoint %}
+    {% set current_dynmenu = dynmenu[route_to_category[active_route]] %}
+
     {% block header %}
-        <header>
+        <menu>
             <h1 class="logo">
-                <a href="{{ url_for('slideshow_slide_list') }}">
-                    <img src="{{ STATIC_PREFIX }}img/logo.png" />
+                <a href="{{ url_for('playlist') }}">
+                    <img src="{{ STATIC_PREFIX }}img/logo.png" class="before"/>
+                    <img src="{{ STATIC_PREFIX }}img/logo-white.png" class="after"/>
                     Obscreen
                 </a>
             </h1>
 
-            {% if not AUTH_ENABLED or (current_user and current_user.is_authenticated) %}
             <nav>
-                <ul>
-                    {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_slide_list' }}">
-                        <a href="{{ url_for('slideshow_slide_list') }}">
-                            <i class="fa-regular fa-clock"></i> {{ l.slideshow_slide_page_title }}
-                        </a>
-                    </li>
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'slideshow_content_list' }}">
-                        <a href="{{ url_for('slideshow_content_list') }}">
-                            <i class="fa fa-image"></i> {{ l.slideshow_content_page_title }}
-                        </a>
-                    </li>
-                    {% if PLAYLIST_ENABLED %}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'playlist_list' }}">
-                        <a href="{{ url_for('playlist_list') }}">
-                            <i class="fa fa-bars-staggered"></i> {{ l.playlist_page_title }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if FLEET_PLAYER_ENABLED %}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_group_list' }}">
-                        <a href="{{ url_for('fleet_node_player_group_list') }}">
-                            <i class="fa fa-layer-group"></i> {{ l.fleet_node_player_group_page_title }}
-                        </a>
-                    </li>
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'fleet_node_player_list' }}">
-                        <a href="{{ url_for('fleet_node_player_list') }}">
-                            <i class="fa fa-tv"></i> {{ l.fleet_node_player_page_title }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if AUTH_ENABLED %}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'auth_user_list' }}">
-                        <a href="{{ url_for('auth_user_list') }}">
-                            <i class="fa fa-user"></i> {{ l.auth_page_title }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'settings_variable_list' }}">
-                        <a href="{{ url_for('settings_variable_list') }}">
-                            <i class="fa-solid fa-cogs"></i> {{ l.settings_page_title }}
-                        </a>
-                    </li>
-                    <li class="{{ 'active' if request.url_rule.endpoint == 'sysinfo_attribute_list' }}">
-                        <a href="{{ url_for('sysinfo_attribute_list') }}">
-                            <i class="fa-solid fa-list-check"></i> {{ l.sysinfo_page_title }}
-                        </a>
-                    </li>
-                    {% if AUTH_ENABLED %}
-                    <li class="user-menu">
-                        <div class="username">
-                            <i class="fa fa-user"></i>
-                            {{ current_user.username }}
-                        </div>
-                        <a href="{{ url_for('logout') }}" title="{{ l.logout }}" class="logout">
-                            <i class="fa fa-right-from-bracket"></i>
-                        </a>
-                    </li>
-                    {% endif %}
-                    {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
-                </ul>
+                {% if authenticated_view %}
+                    <ul>
+                        {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
+                        {% for category, menu in dynmenu.items() %}
+                            <li class="{{ 'active' if current_dynmenu and menu.name == current_dynmenu.name }}">
+                                <a href="{{ url_for(menu.main_pill_route) }}">
+                                    <i class="fa {{ menu.icon }}"></i> {{ menu.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
+                    </ul>
+                {% endif %}
             </nav>
+
+            {% block footer %}
+                <footer>
+                    {{ HOOK(H_ROOT_FOOTER) }}
+
+                    <p class="version">
+                        Obscreen
+                        <a href="https://github.com/jr-k/obscreen/releases/tag/v{{ VERSION }}" target="_blank">
+                            v{{ VERSION }}
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                    </p>
+                </footer>
+            {% endblock %}
+        </menu>
+    {% endblock %}
+
+    <main>
+        {% set show_context_bar = current_dynmenu or fully_authenticated_view %}
+
+        {% if authenticated_view %}
+            <div class="context-bar {{ 'hidden' if not show_context_bar }}">
+                {% if current_dynmenu %}
+                    <div class="context-menu">
+                        <div class="inner">
+                            <ul class="pills">
+                                {% for menu in current_dynmenu.pills %}
+                                    <li class="{{ 'active' if active_route == menu.route or active_route == menu.route_alt }}">
+                                        {% set href = menu.url_for if menu.url_for else url_for(menu.route) %}
+                                        <a href="{{ href }}">
+                                        <span class="icon">
+                                            <i class="fa {{ menu.icon }}"></i>
+                                        </span>
+                                            {{ menu.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+
+                <div class="context-divider"></div>
+
+                <div class="{% if not AUTH_ENABLED %}contex-tail{% endif %}">
+                    <a href="{{ url_for('slideshow_player_refresh', next=request.full_path) }}" class="btn btn-naked btn-double-icon">
+                        <i class="fa fa-display main"></i>
+                        <sub><i class="fa fa-refresh"></i></sub>
+                    </a>
+                </div>
+
+                {% if fully_authenticated_view %}
+                    <div class="context-divider"></div>
+                    <div class="context-user">
+                        <div class="dropdown">
+                            <div class="trigger">
+                                <div class="avatar">
+                                    {{ current_user.username[0]|upper }}
+                                </div>
+                                <div class="username">
+                                    {{ current_user.username }}
+                                </div>
+                                <i class="fa fa-sort-down"></i>
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li class="danger">
+                                    <a href="{{ url_for('logout') }}">
+                                        <i class="fa fa-power-off"></i> {{ l.logout }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+        <div class="main-container">
+            {% if request.args.get('refresh_player') %}
+                <div class="alert alert-success">
+                    <i class="fa fa-refresh icon-left"></i>
+                    {{ l.slideshow_slide_refresh_player_success|replace('%time%', request.args.get('refresh_player')) }}
+                </div>
             {% endif %}
-        </header>
-    {% endblock %}
 
-    {% block page %}
-
-    {% endblock %}
+            {% block page %}{% endblock %}
+        </div>
+    </main>
 
 
-    {% block footer %}
-        <footer>
-            {{ HOOK(H_ROOT_FOOTER) }}
-
-            <p class="version">Obscreen version {{ VERSION }}</p>
-        </footer>
-    {% endblock %}
 </div>
 <script>
     var secret_key = '{{ SECRET_KEY }}';
@@ -135,9 +246,11 @@
         'js_slideshow_content_delete_confirmation': '{{ l.js_slideshow_content_delete_confirmation }}',
         'js_fleet_node_player_group_delete_confirmation': '{{ l.js_fleet_node_player_group_delete_confirmation }}',
         'js_fleet_node_player_delete_confirmation': '{{ l.js_fleet_node_player_delete_confirmation }}',
+        'js_fleet_node_player_assign_confirmation': '{{ l.js_fleet_node_player_assign_confirmation }}',
         'js_auth_user_delete_confirmation': '{{ l.js_auth_user_delete_confirmation }}',
         'js_sysinfo_restart_confirmation': '{{ l.js_sysinfo_restart_confirmation }}',
-        'js_sysinfo_restart_loading': '{{ l.js_sysinfo_restart_loading }}'
+        'js_sysinfo_restart_loading': '{{ l.js_sysinfo_restart_loading }}',
+        'js_common_copied': '{{ l.common_copied }}'
     };
 </script>
 <script src="{{ STATIC_PREFIX }}js/lib/jquery.min.js"></script>

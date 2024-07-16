@@ -1,0 +1,125 @@
+<div class="horizontal">
+    <div class="slides-holder vertical">
+        <h3>
+            {{ l.playlist_panel_content_management }}
+        </h3>
+        <p>
+            {{ l.playlist_panel_content_management_desc }}
+        </p>
+
+        {% with slides=slides %}
+            {% include 'slideshow/slides/component/table.jinja.html' %}
+        {% endwith %}
+
+        <div class="actions actions-right">
+            <button type="button" class="btn btn-info slide-add">
+                <i class="fa fa-plus"></i> {{ l.slideshow_slide_form_add_title }}
+            </button>
+            <a href="{{ url_for('slideshow_content_list') }}" class="btn btn-neutral" target="_blank">
+                <i class="fa fa-upload"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="playlist-holder vertical">
+        <h3>
+            {{ l.playlist_panel_about_playlist }}
+        </h3>
+
+        <div class="form-holder">
+            <form class="form" action="{{ url_for('playlist_save') }}" method="POST">
+                <input type="hidden" name="id" id="playlist-edit-id" value="{{ current_playlist.id }}"/>
+
+                <div class="form-group">
+                    <label for="playlist-edit-name">{{ l.playlist_form_label_name }}</label>
+                    <div class="widget">
+                        <input type="text" name="name" id="playlist-edit-name" required="required"
+                               value="{{ current_playlist.name }}"/>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-horizontal">
+                    <label for="">{{ l.playlist_form_label_enabled }}</label>
+                    <div class="widget">
+                        <div class="toggle">
+                            <input type="checkbox" id="playlist-edit-enabled" name="enabled" value="1"
+                                   {% if current_playlist.enabled %}checked="checked"{% endif %}>
+                            <label for="playlist-edit-enabled"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group form-group-horizontal">
+                    <label for="">{{ l.playlist_form_label_time_sync }}</label>
+                    <div class="widget">
+                        <div class="toggle">
+                            <input type="checkbox" id="playlist-edit-time-sync" name="time_sync" value="1"
+                                   {% if current_playlist.time_sync %}checked="checked"{% endif %}>
+                            <label for="playlist-edit-time-sync"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions actions-right">
+                    <button type="submit" class="btn btn-info">
+                        <i class="fa fa-save icon-left"></i>
+                        {{ l.common_save }}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="preview-holder">
+            {% set preview_url = request.scheme ~ '://' ~ request.headers.get('host') ~ url_for('player_use', playlist_slug_or_id=current_playlist.slug) %}
+            <h4 class="divide">
+                URL
+            </h4>
+            <p>
+                {{ l.playlist_form_preview_url_desc }}
+            </p>
+
+            <div class="form-group">
+                <div class="widget">
+                    <input type="text" name="name" id="playlist-preview-url" required="required"
+                           value="{{ preview_url }}"
+                           class="disabled" disabled="disabled"/>
+                    <button type="button" class="btn btn-naked copy-link" data-target-id="playlist-preview-url">
+                        <i class="fa fa-copy"></i>
+                    </button>
+                    <a href="{{ preview_url }}" class="btn btn-neutral" target="_blank">
+                        <i class="fa-solid fa-up-right-from-square"></i>
+                    </a>
+                </div>
+            </div>
+
+
+            <h4 class="divide">
+                Iframe
+            </h4>
+            <p>
+                {{ l.playlist_form_preview_iframe_desc }}
+            </p>
+
+            <div class="preview">
+                <button type="button" class="btn btn-pixel playlist-preview"
+                        title="{{ l.playlist_panel_preview_action }}"
+                        data-url="{{ preview_url }}?intro=0&animation=0">
+                    <i class="fa fa-play"></i>
+                </button>
+            </div>
+
+            <h4 class="divide">
+                QR Code
+            </h4>
+            <p>
+                {{ l.playlist_form_preview_qrcode_desc }}
+            </p>
+            <div id="qrcode" class="qrcode-pic" data-qrcode-payload="{{ preview_url }}"></div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+

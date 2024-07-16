@@ -1,0 +1,74 @@
+main {
+
+	.context-bar {
+		padding: 10px;
+		position: sticky;
+		top: 0;
+		z-index: 1000;
+		max-height: 80px;
+		border-bottom: $layoutBorder;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		.context-menu {
+			flex: 1;
+
+			.inner {
+				display: flex;
+
+				ul.pills {
+					margin: 0;
+				}
+			}
+		}
+
+		.context-divider {
+			width: 1px;
+			height: 100%;
+			background: #222;
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+
+		.contex-tail {
+			margin-right: 20px;
+
+			.btn {
+				margin-right: 0;
+			}
+		}
+
+		.context-user {
+			display: flex;
+			margin-right: 20px;
+
+			.trigger {
+				color: $white;
+
+				.avatar {
+					width: 32px;
+					height: 32px;
+					border-radius: $baseRadius;
+					background: #AAA;
+					margin-right: 10px;
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+					text-align: center;
+					font-weight: bold;
+					font-size: 14px;
+					border: 1px solid #444;
+					color: black;
+				}
+
+				i {
+					margin-top: -5px;
+					margin-left: 10px;
+				}
+			}
+		}
+	}
+
+}

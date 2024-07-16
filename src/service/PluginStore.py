@@ -121,7 +121,7 @@ class PluginStore:
                 value=False,
                 type=VariableType.BOOL,
                 editable=True,
-                description="common_enable_plugin"
+                description=self._model_store.lang().translate("common_enable_plugin")
             )
         ]
 

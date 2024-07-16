@@ -1,0 +1,86 @@
+@mixin pixel-text($pixelOffset: 1) {
+	text-align: center;
+	text-shadow: #{$pixelOffset}px 0 0 #fff,
+	#{$pixelOffset}px 2px 0 #444,
+	0 #{$pixelOffset}px 0 $limeGreen,
+	-#{$pixelOffset}px 0 0 $seaBlue,
+	0 -#{$pixelOffset}px 0 $pinkyRed;
+	text-decoration: none;
+	background: linear-gradient(90deg, #a0a0a0 0, #bebebe 46%, #dcdcdc 100%);
+	-webkit-background-clip: text;
+	color: transparent;
+}
+
+@mixin pixel-text-to-right($pixelOffset: 1) {
+	text-align: center;
+	text-shadow: -#{$pixelOffset}px 0 0 #fff,
+	-#{$pixelOffset}px #{$pixelOffset*0.5}px 0 black,
+	#{$pixelOffset*2}px #{$pixelOffset}px 0 $limeGreen,
+	#{$pixelOffset*2}px 0 0 $seaBlue,
+	#{$pixelOffset*2}px -#{$pixelOffset}px 0 $pinkyRed;
+	text-decoration: none;
+	background: linear-gradient(90deg, #a0a0a0 0, #bebebe 46%, #dcdcdc 100%);
+	-webkit-background-clip: text;
+	color: transparent;
+}
+
+@mixin pixel-box($pixelOffset: 1) {
+	box-shadow: #{$pixelOffset}px 0 0 #fff, 0 #{$pixelOffset}px 0 $limeGreen, -#{$pixelOffset}px 0 0 $seaBlue, 0 -#{$pixelOffset}px 0 $pinkyRed;
+}
+
+@mixin generate-color-classes($color-map) {
+	@each $name, $color in $color-map {
+		.#{"#{$name}"} {
+			color: $color !important;
+		}
+		.bg-#{"#{$name}"} {
+			background-color: $color !important;;
+		}
+		.border-#{"#{$name}"} {
+			border-color: $color !important;;
+		}
+	}
+}
+
+@mixin generate-button-classes($color-map) {
+	@each $name, $color in $color-map {
+		button,
+		.btn {
+			&.btn-#{"#{$name}"} {
+				background: $color;
+				box-shadow: 0 2px 0 0 darken($color, 20%);
+
+				&:hover {
+					box-shadow: 0 2px 0 1px darken($color, 20%) inset;
+				}
+
+				&:focus {
+					background: darken($color, 20%);
+				}
+			}
+
+			&.btn-wire-#{"#{$name}"} {
+				background: transparent;
+				box-shadow: none;
+				border: 2px solid $color;
+				color: rgba($white, .8);
+
+				i.btn-match {
+					color: $color;
+				}
+
+				&:hover {
+					background: rgba($color, 0.05);
+					border-color: darken($color, 10%);
+					color: darken($color, 10%);
+					box-shadow: none;
+				}
+
+				&:focus {
+					border-color: darken($color, 20%);
+					background: transparent;
+				}
+			}
+		}
+	}
+}

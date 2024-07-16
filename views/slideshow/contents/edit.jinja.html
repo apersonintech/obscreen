@@ -1,0 +1,116 @@
+{% set active_pill_route='slideshow_content_list' %}
+{% extends 'base.jinja.html' %}
+
+{% block page_title %}
+    {{ l.slideshow_content_page_title }}
+{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/flatpickr.min.css"/>
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/jquery-explr-1.4.css"/>
+    {{ HOOK(H_SLIDESHOW_CONTENT_CSS) }}
+{% endblock %}
+
+{% block add_js %}
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
+
+    {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
+{% endblock %}
+
+{% block body_class %}view-content-edit edit-page{% endblock %}
+
+{% block page %}
+    <div class="top-content">
+        <h1>
+            {{ l.slideshow_content_form_edit_title }}
+        </h1>
+    </div>
+
+    {% if request.args.get('saved') %}
+        <div class="alert alert-success alert-timeout">
+            <i class="fa fa-check icon-left"></i>
+            {{ l.common_saved }}
+        </div>
+    {% endif %}
+
+    <div class="bottom-content">
+        <div class="page-content">
+            <div class="inner dirview">
+                <div class="breadcrumb-container">
+                    <ul class="breadcrumb">
+                        {% set ns = namespace(breadpath='') %}
+                        {% for dir in working_folder_path[1:].split('/') %}
+                            {% set ns.breadpath = ns.breadpath ~ '/' ~ dir %}
+                            <li>
+                                <a href="{{ url_for('slideshow_content_cd', path=ns.breadpath) }}">
+                                    <i class="explr-icon explr-icon-folder"></i>
+                                    {{ truncate(dir, 25, '...') }}
+                                </a>
+                            </li>
+                            {% if not loop.last %}
+                                <li class="divider">
+                                    <i class="fa fa-chevron-right"></i>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="horizontal">
+                    <div class="form-holder">
+                        <form class="form" action="{{ url_for('slideshow_content_save', content_id=content.id) }}" method="POST">
+
+                            <div class="form-group">
+                                <label for="content-edit-name">{{ l.slideshow_content_form_label_name }}</label>
+                                <div class="widget">
+                                    <input type="text" name="name" id="content-edit-name" required="required" value="{{ content.name }}" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="content-edit-location">{{ l.slideshow_content_form_label_location }}</label>
+                                <div class="widget">
+                                    {% set location = content.location %}
+                                    {% if content.type == enum_content_type.YOUTUBE %}
+                                        {% set location = 'https://www.youtube.com/watch?v=' ~ content.location %}
+                                    {% endif %}
+                                    <input type="text" name="location" id="content-edit-location" value="{{ location }}" {% if not content.is_editable() %}disabled="disabled"{% endif %} />
+                                </div>
+                            </div>
+
+                            <div class="actions actions-left">
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fa fa-save icon-left"></i>
+                                    {{ l.common_save }}
+                                </button>
+                                <a href="{{ url_for('slideshow_content_list') }}" class="btn btn-naked">
+                                    <i class="fa fa-rectangle-xmark icon-left"></i>
+                                    {{ l.common_cancel }}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="page-panel right-panel">
+            {% set icon = enum_content_type.get_fa_icon(content.type) %}
+            {% set color = enum_content_type.get_color_icon(content.type) %}
+
+            <h3>
+                <span class="{{ color }} border-{{ color }}">
+                    <i class="fa {{ icon }} {{ color }}"></i> {{ t(content.type) }}
+                </span>
+            </h3>
+            <div class="iframe-wrapper">
+                 <iframe src="{{ url_for('player', preview_content_id=content.id) }}"></iframe>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

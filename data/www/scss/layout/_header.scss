@@ -54,7 +54,7 @@ header nav ul li.user-menu {
   align-items: center;
   border: 1px solid $limeGreen;
   padding: 5px 15px;
-  border-radius: 4px;
+  border-radius: $baseRadius;
   background: rgba($limeGreen, .2);
 }
 
@@ -84,5 +84,5 @@ header nav ul li a {
 
 header nav ul li a:hover,
 header nav ul li.active a {
-  color: white;
+  color: $white;
 }
