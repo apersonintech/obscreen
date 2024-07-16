@@ -26,20 +26,20 @@
                             {% if cron_desc %}
                                 {% if is_valid_cron_date_time(slide.cron_schedule) %}
                                     {% if slide.is_notification %}
-                                        🔔 {{ l.slideshow_slide_panel_td_cron_scheduled_notify }}
-                                        <span class="td-secondary">{{ cron_desc }}</span>
+                                        🔔 <span class="prefix">{{ l.slideshow_slide_panel_td_cron_scheduled_notify }}</span>
+                                        <span class="cron-description">{{ cron_desc }}</span>
                                     {% else %}
-                                        🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
-                                        <span class="td-secondary">{{ cron_desc }}</span>
+                                        🔄 <span class="prefix">{{ l.slideshow_slide_panel_td_cron_scheduled_loop }}</span>
+                                        <span class="cron-description">{{ cron_desc }}</span>
                                     {% endif %}
                                 {% else %}
-                                    ⏳ {{ cron_desc }}
+                                    ⏳ <span class="cron-description">{{ cron_desc }}</span>
                                 {% endif %}
                             {% else %}
                                 <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                             {% endif %}
                         {% else %}
-                            🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
+                            🔄 <span class="prefix">{{ l.slideshow_slide_panel_td_cron_scheduled_loop }}</span>
                         {% endif %}
                     </div>
                     <div class="end">
@@ -48,19 +48,19 @@
                             {% if cron_desc_end %}
                                 {% if is_valid_cron_date_time(slide.cron_schedule_end) %}
                                     {% if slide.is_notification %}
-                                        📆<span class="td-secondary">{{ cron_desc_end }}</span>
+                                        📆<span class="cron-description">{{ cron_desc_end }}</span>
                                     {% else %}
-                                        ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
-                                        <span class="td-secondary">{{ cron_desc_end }}</span>
+                                        ⏱️ <span class="prefix">{{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}</span>
+                                        <span class="cron-description">{{ cron_desc_end }}</span>
                                     {% endif %}
                                 {% else %}
-                                    ⏳ {{ cron_desc_end }}
+                                    ⏳ <span class="cron-description">{{ cron_desc_end }}</span>
                                 {% endif %}
                             {% else %}
                                 <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                             {% endif %}
                         {% else %}
-                            ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
+                            ⏱️ <span class="prefix">{{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}</span>
                         {% endif %}
                     </div>
                 </div>
