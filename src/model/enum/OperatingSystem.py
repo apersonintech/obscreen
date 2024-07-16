@@ -45,7 +45,7 @@ class OperatingSystem(Enum):
         elif value == OperatingSystem.WINDOWS:
             return 'windows'
         elif value == OperatingSystem.MACOS:
-            return 'apple'
+            return 'macos'
         elif value == OperatingSystem.DEBIAN:
             return 'debian'
         elif value == OperatingSystem.FEDORA:

@@ -33,7 +33,7 @@ class FleetNodePlayerGroupController(ObController):
     def fleet_node_player_group_list(self, player_group_id: int = 0):
         self._model_store.variable().update_by_name('last_pillmenu_fleet', 'fleet_node_player_group')
         current_player_group = self._model_store.node_player_group().get(player_group_id)
-        node_player_groups = self._model_store.node_player_group().get_all(sort="created_at", ascending=False)
+        node_player_groups = self._model_store.node_player_group().get_all(sort="created_at", ascending=True)
         pcounters = self._model_store.node_player_group().get_player_counters_by_player_groups()
         working_folder_path = self._model_store.variable().get_one_by_name('last_folder_node_player').as_string()
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.NODE_PLAYER)
@@ -73,7 +73,6 @@ class FleetNodePlayerGroupController(ObController):
         except:
             abort(409)
 
-        self._model_store.node_player_group().add_form(node_player_group)
         return redirect(url_for('fleet_node_player_group_list', player_group_id=node_player_group.id))
 
     def fleet_node_player_group_save(self):
