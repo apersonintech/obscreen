@@ -1,5 +1,7 @@
 from enum import Enum
+from typing import Union
 
+from src.util.utils import str_to_enum
 
 class ContentInputType(Enum):
 
@@ -33,7 +35,10 @@ class ContentType(Enum):
             return ContentInputType.TEXT
 
     @staticmethod
-    def get_fa_icon(value: Enum) -> str:
+    def get_fa_icon(value: Union[Enum, str]) -> str:
+        if isinstance(value, str):
+            value = str_to_enum(value, ContentType)
+
         if value == ContentType.PICTURE:
             return 'fa-regular fa-image'
         elif value == ContentType.VIDEO:
@@ -47,6 +52,9 @@ class ContentType(Enum):
 
     @staticmethod
     def get_color_icon(value: Enum) -> str:
+        if isinstance(value, str):
+            value = str_to_enum(value, ContentType)
+
         if value == ContentType.PICTURE:
             return 'info'
         elif value == ContentType.VIDEO:

@@ -1,17 +1,23 @@
 <ul class="slides">
     {% for slide in slides %}
+        {% set content = contents[slide.content_id] %}
         <li class="slide-item {{ 'disabled' if not slide.enabled }}" data-level="{{ slide.id }}"
-            data-entity="{{ slide.to_json({"content": contents[slide.content_id]}) }}">
+            data-entity="{{ slide.to_json({"content": content}) }}">
             <div class="sort">
                 <a href="javascript:void(0);" class="item-sort slide-sort">
                     <i class="fa fa-bars icon-left"></i>
                 </a>
             </div>
-            <div class="title">
-                <a href="javascript:void(0);" class="item-edit slide-edit">
-                    {{ truncate(contents[slide.content_id].name|default(l.common_empty), 30, '...') }} <i class="fa fa-pencil"></i>
-                </a>
-            </div>
+            <a href="javascript:void(0);" class="infos item-edit slide-edit">
+                <div class="type">
+                    {% set icon = enum_content_type.get_fa_icon(content.type) %}
+                    {% set color = enum_content_type.get_color_icon(content.type) %}
+                    <i class="fa {{ icon }} {{ color }}"></i>
+                </div>
+                <div class="title">
+                    {{ truncate(content.name|default(l.common_empty), 30, '...') }}
+                </div>
+            </a>
             <div class="body">
                 <div class="range">
                     <div class="start">
