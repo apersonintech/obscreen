@@ -46,8 +46,8 @@ class NodePlayerManager(ModelManager):
         object = self._db.get_by_id(self.TABLE_NAME, id)
         return self.hydrate_object(object, id) if object else None
 
-    def get_by(self, query, sort: Optional[str] = None) -> List[NodePlayer]:
-        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort))
+    def get_by(self, query, sort: Optional[str] = None, ascending=False) -> List[NodePlayer]:
+        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort, ascending=ascending))
 
     def get_one_by(self, query) -> Optional[NodePlayer]:
         object = self._db.get_one_by_query(self.TABLE_NAME, query=query)
@@ -81,7 +81,7 @@ class NodePlayerManager(ModelManager):
         for node_player_id, edits in edits_node_players.items():
             self._db.update_by_id(self.TABLE_NAME, node_player_id, edits)
 
-    def get_node_players(self, group_id: Optional[int] = None, folder_id: Optional[id] = None) -> List[NodePlayer]:
+    def get_node_players(self, group_id: Optional[int] = None, folder_id: Optional[id] = None, sort: Optional[str] = None, ascending=False) -> List[NodePlayer]:
         query = " 1=1 "
 
         if group_id:
@@ -90,7 +90,7 @@ class NodePlayerManager(ModelManager):
         if folder_id:
             query = "{} {}".format(query, "AND folder_id = {}".format(folder_id))
 
-        return self.get_by(query=query)
+        return self.get_by(query=query, sort=sort, ascending=ascending)
 
     def pre_add(self, node_player: Dict) -> Dict:
         self.user_manager.track_user_on_create(node_player)

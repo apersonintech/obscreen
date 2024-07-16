@@ -12,10 +12,10 @@
                     {{ truncate((title)|default(l.common_untitled), 35, '...') }}
                 </div>
                 <div class="tile-metrics">
-                    <div class="foot-span players-counter">
+                    <div class="foot-span">
                         {% set pcounter = pcounters[node_player_group.id]|default(0) %}
                         {% if pcounter > 0 %}
-                            {{ pcounter }} <sub><i class="fa fa-display"></i></sub>
+                            <span class="players-counter">{{ pcounter }}</span> <sub><i class="fa fa-display"></i></sub>
                         {% else %}
                             {{ l.common_empty }}
                         {% endif %}

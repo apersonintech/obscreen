@@ -22,7 +22,7 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.node-player-group-player-assign', function () {
         const route = $(this).attr('data-route');
         showPickers('modal-node-player-explr-picker', function(nodePlayer) {
-            if (!nodePlayer.group_id || (nodePlayer.group_id && confirm(l.js_fleet_nodePlayer_assign_confirmation))) {
+            if (!nodePlayer.group_id || (nodePlayer.group_id && confirm(l.js_fleet_node_player_assign_confirmation))) {
                 document.location.href = route.replace('__id__', nodePlayer.id);
             }
         });
@@ -37,7 +37,7 @@ jQuery(document).ready(function ($) {
                 url: $(this).attr('data-route'),
                 headers: {'Content-Type': 'application/json'},
                 success: function(response) {
-                    $('.node-player-group-item-'+response.group_id+' .players-counter').text(response.pcounter);
+                    $('.node-player-group-item-'+response.group_id+' .players-counter').html(response.pcounter);
                 }
             });
         }

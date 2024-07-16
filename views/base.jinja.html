@@ -53,6 +53,9 @@
 
 <div class="container {% block container_class %}{% endblock %}">
 
+    {% set authenticated_view = not AUTH_ENABLED or (current_user and current_user.is_authenticated) %}
+    {% set fully_authenticated_view = authenticated_view and current_user.is_authenticated %}
+
     {% set dynmenu = {
         "slideshow": {
             "name": l.dynmenu_content,
@@ -128,8 +131,8 @@
                 </a>
             </h1>
 
-            {% if not AUTH_ENABLED or (current_user and current_user.is_authenticated) %}
-                <nav>
+            <nav>
+                {% if authenticated_view %}
                     <ul>
                         {{ HOOK(H_ROOT_NAV_ELEMENT_START) }}
                         {% for category, menu in dynmenu.items() %}
@@ -141,8 +144,8 @@
                         {% endfor %}
                         {{ HOOK(H_ROOT_NAV_ELEMENT_END) }}
                     </ul>
-                </nav>
-            {% endif %}
+                {% endif %}
+            </nav>
 
             {% block footer %}
                 <footer>
@@ -161,63 +164,65 @@
     {% endblock %}
 
     <main>
-        {% set show_context_bar = current_dynmenu or AUTH_ENABLED %}
+        {% set show_context_bar = current_dynmenu or fully_authenticated_view %}
 
-        <div class="context-bar {{ 'hidden' if not show_context_bar }}">
-            {% if current_dynmenu %}
-                <div class="context-menu">
-                    <div class="inner">
-                        <ul class="pills">
-                            {% for menu in current_dynmenu.pills %}
-                                <li class="{{ 'active' if active_route == menu.route or active_route == menu.route_alt }}">
-                                    {% set href = menu.url_for if menu.url_for else url_for(menu.route) %}
-                                    <a href="{{ href }}">
+        {% if authenticated_view %}
+            <div class="context-bar {{ 'hidden' if not show_context_bar }}">
+                {% if current_dynmenu %}
+                    <div class="context-menu">
+                        <div class="inner">
+                            <ul class="pills">
+                                {% for menu in current_dynmenu.pills %}
+                                    <li class="{{ 'active' if active_route == menu.route or active_route == menu.route_alt }}">
+                                        {% set href = menu.url_for if menu.url_for else url_for(menu.route) %}
+                                        <a href="{{ href }}">
                                         <span class="icon">
                                             <i class="fa {{ menu.icon }}"></i>
                                         </span>
-                                        {{ menu.name }}
+                                            {{ menu.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+
+
+                <div class="context-divider"></div>
+
+                <div class="{% if not AUTH_ENABLED %}contex-tail{% endif %}">
+                    <a href="{{ url_for('slideshow_player_refresh', next=request.full_path) }}" class="btn btn-naked btn-double-icon">
+                        <i class="fa fa-display main"></i>
+                        <sub><i class="fa fa-refresh"></i></sub>
+                    </a>
+                </div>
+
+                {% if fully_authenticated_view %}
+                    <div class="context-divider"></div>
+                    <div class="context-user">
+                        <div class="dropdown">
+                            <div class="trigger">
+                                <div class="avatar">
+                                    {{ current_user.username[0] }}
+                                </div>
+                                <div class="username">
+                                    {{ current_user.username }}
+                                </div>
+                                <i class="fa fa-sort-down"></i>
+                            </div>
+                            <ul class="dropdown-menu">
+                                <li class="danger">
+                                    <a href="{{ url_for('logout') }}">
+                                        <i class="fa fa-power-off"></i> {{ l.logout }}
                                     </a>
                                 </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            {% endif %}
-
-
-            <div class="context-divider"></div>
-
-            <div class="{% if not AUTH_ENABLED %}contex-tail{% endif %}">
-                <a href="{{ url_for('slideshow_player_refresh', next=request.full_path) }}" class="btn btn-naked">
-                    <i class="fa fa-display main"></i>
-                    <sub><i class="fa fa-refresh"></i></sub>
-                </a>
-            </div>
-
-            {% if AUTH_ENABLED %}
-                <div class="context-divider"></div>
-                <div class="context-user">
-                    <div class="dropdown">
-                        <div class="trigger">
-                            <div class="avatar">
-                                {#                                {{ current_user.username[0] }}#}J
-                            </div>
-                            <div class="username">
-                                {#                                {{ current_user.username }}#}Jessym
-                            </div>
-                            <i class="fa fa-sort-down"></i>
+                            </ul>
                         </div>
-                        <ul class="dropdown-menu">
-                            <li class="danger">
-                                <a href="{{ url_for('logout') }}">
-                                    <i class="fa fa-power-off"></i> {{ l.logout }}
-                                </a>
-                            </li>
-                        </ul>
                     </div>
-                </div>
-            {% endif %}
-        </div>
+                {% endif %}
+            </div>
+        {% endif %}
         <div class="main-container">
             {% if request.args.get('refresh_player') %}
                 <div class="alert alert-success">

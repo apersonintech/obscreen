@@ -154,6 +154,7 @@ ul.explr-dirview {
 			justify-content: flex-start;
 			align-items: center;
 			max-width: 84px;
+			min-width: 84px;
 			position: relative;
 
 			i {
@@ -165,8 +166,8 @@ ul.explr-dirview {
 			sup,
 			sub {
 				position: absolute;
-				top: 0;
-				right: -12px;
+				top: -2px;
+				right: 0;
 				background: #777;
 				border-bottom: 2px solid $neutralGrey;
 				color: black;

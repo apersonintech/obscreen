@@ -137,6 +137,7 @@ form {
 			}
 
 			&.input-naked {
+				padding-left: 0;
 				color: #BBB;
 			}
 
@@ -145,6 +146,7 @@ form {
 				border: none;
 				background: $black;
 				border-radius: $baseRadius;
+				padding-left: 10px;
 			}
 		}
 	}
