@@ -36,7 +36,7 @@
                                     ⏳ <span class="cron-description">{{ cron_desc }}</span>
                                 {% endif %}
                             {% else %}
-                                <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
+                                <span class="error"><i class="fa fa-warning danger"></i> {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                             {% endif %}
                         {% else %}
                             🔄 <span class="prefix">{{ l.slideshow_slide_panel_td_cron_scheduled_loop }}</span>
@@ -48,7 +48,8 @@
                             {% if cron_desc_end %}
                                 {% if is_valid_cron_date_time(slide.cron_schedule_end) %}
                                     {% if slide.is_notification %}
-                                        📆<span class="cron-description">{{ cron_desc_end }}</span>
+                                        📆 <span class="prefix">{{ l.slideshow_slide_panel_td_cron_scheduled_date }}</span>
+                                        <span class="cron-description">{{ cron_desc_end }}</span>
                                     {% else %}
                                         ⏱️ <span class="prefix">{{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}</span>
                                         <span class="cron-description">{{ cron_desc_end }}</span>
@@ -57,7 +58,7 @@
                                     ⏳ <span class="cron-description">{{ cron_desc_end }}</span>
                                 {% endif %}
                             {% else %}
-                                <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
+                                <span class="error"><i class="fa fa-warning danger"></i>️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                             {% endif %}
                         {% else %}
                             ⏱️ <span class="prefix">{{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}</span>

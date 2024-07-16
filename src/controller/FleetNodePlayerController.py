@@ -143,6 +143,7 @@ class FleetNodePlayerController(ObController):
         self._model_store.folder().add_folder(
             entity=FolderEntity.NODE_PLAYER,
             name=request.form['name'],
+            working_folder_path=request.form['working_folder_path'],
         )
 
         return redirect(url_for('fleet_node_player_list'))

@@ -16,6 +16,7 @@
   "slideshow_slide_panel_th_activity": "Opciones",
   "slideshow_slide_panel_td_cron_scheduled_loop": "Bucle",
   "slideshow_slide_panel_td_cron_scheduled_notify": "Notificar",
+  "slideshow_slide_panel_td_cron_scheduled_date": "Fecha",
   "slideshow_slide_panel_td_cron_scheduled_bad_cron": "Valor de cron incorrecto",
   "slideshow_slide_form_add_title": "Agregar Diapositiva",
   "slideshow_slide_form_add_submit": "Agregar",

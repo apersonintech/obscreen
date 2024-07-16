@@ -16,6 +16,7 @@
   "slideshow_slide_panel_th_activity": "Options",
   "slideshow_slide_panel_td_cron_scheduled_loop": "En boucle",
   "slideshow_slide_panel_td_cron_scheduled_notify": "Notifie",
+  "slideshow_slide_panel_td_cron_scheduled_date": "Date",
   "slideshow_slide_panel_td_cron_scheduled_bad_cron": "Mauvaise valeur cron",
   "slideshow_slide_form_add_title": "Ajout d'une slide",
   "slideshow_slide_form_add_submit": "Ajouter",

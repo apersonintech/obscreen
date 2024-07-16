@@ -91,13 +91,7 @@
                 </div>
             </div>
 
-            <h4 class="divide">
-                QR Code
-            </h4>
-            <p>
-                {{ l.playlist_form_preview_qrcode_desc }}
-            </p>
-            <div id="qrcode" class="qrcode-pic" data-qrcode-payload="{{ preview_url }}"></div>
+
             <h4 class="divide">
                 Iframe
             </h4>
@@ -112,6 +106,15 @@
                     <i class="fa fa-play"></i>
                 </button>
             </div>
+
+            <h4 class="divide">
+                QR Code
+            </h4>
+            <p>
+                {{ l.playlist_form_preview_qrcode_desc }}
+            </p>
+            <div id="qrcode" class="qrcode-pic" data-qrcode-payload="{{ preview_url }}"></div>
+
         </div>
 
 

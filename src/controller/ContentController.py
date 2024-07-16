@@ -143,6 +143,7 @@ class ContentController(ObController):
         self._model_store.folder().add_folder(
             entity=FolderEntity.CONTENT,
             name=request.form['name'],
+            working_folder_path=request.form['working_folder_path'],
         )
 
         return redirect(url_for('slideshow_content_list'))
