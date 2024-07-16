@@ -10,21 +10,13 @@ from src.interface.ObController import ObController
 
 class PlaylistController(ObController):
 
-    def guard_playlist(self, f):
-        def decorated_function(*args, **kwargs):
-            if not self._model_store.variable().map().get('playlist_enabled').as_bool():
-                return redirect(url_for('manage'))
-            return f(*args, **kwargs)
-
-        return decorated_function
-
     def register(self):
-        self._app.add_url_rule('/playlist', 'playlist', self.guard_playlist(self._auth(self.playlist)), methods=['GET'])
-        self._app.add_url_rule('/playlist/list/<playlist_id>', 'playlist_list', self.guard_playlist(self._auth(self.playlist_list)), methods=['GET'])
-        self._app.add_url_rule('/playlist/add', 'playlist_add', self.guard_playlist(self._auth(self.playlist_add)), methods=['POST'])
-        self._app.add_url_rule('/playlist/save', 'playlist_save', self.guard_playlist(self._auth(self.playlist_save)), methods=['POST'])
-        self._app.add_url_rule('/playlist/delete/<playlist_id>', 'playlist_delete', self.guard_playlist(self._auth(self.playlist_delete)), methods=['GET'])
-        self._app.add_url_rule('/playlist/set-default/<playlist_id>', 'playlist_set_fallback', self.guard_playlist(self._auth(self.playlist_set_fallback)), methods=['GET'])
+        self._app.add_url_rule('/playlist', 'playlist', self._auth(self.playlist), methods=['GET'])
+        self._app.add_url_rule('/playlist/list/<playlist_id>', 'playlist_list', self._auth(self.playlist_list), methods=['GET'])
+        self._app.add_url_rule('/playlist/add', 'playlist_add', self._auth(self.playlist_add), methods=['POST'])
+        self._app.add_url_rule('/playlist/save', 'playlist_save', self._auth(self.playlist_save), methods=['POST'])
+        self._app.add_url_rule('/playlist/delete/<playlist_id>', 'playlist_delete', self._auth(self.playlist_delete), methods=['GET'])
+        self._app.add_url_rule('/playlist/set-default/<playlist_id>', 'playlist_set_fallback', self._auth(self.playlist_set_fallback), methods=['GET'])
 
     def playlist(self):
         return redirect(url_for('playlist_list', playlist_id=0))

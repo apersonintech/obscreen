@@ -67,11 +67,6 @@ class SettingsController(ObController):
     def _pre_update(self, id: int) -> Optional[str]:
         variable = self._model_store.variable().get(id)
 
-        if variable.name == 'playlist_enabled':
-            fleet_player_enabled = self._model_store.variable().get_one_by_name(name='fleet_player_enabled')
-            if variable.as_bool() and fleet_player_enabled.as_bool():
-                return self.t('settings_variable_form_error_not_playlist_enabled_while_fleet_player_enabled')
-
         return None
 
     def _post_update(self, id: int) -> None:
@@ -86,10 +81,6 @@ class SettingsController(ObController):
             self.reload_web_server()
 
         if variable.name == 'fleet_player_enabled':
-            playlist_enabled = self._model_store.variable().get_one_by_name(name='playlist_enabled')
-            if variable.as_bool() and not playlist_enabled.as_bool():
-                self._model_store.variable().update_by_name(name='playlist_enabled', value=True)
-
             self.reload_web_server()
 
         if variable.name == 'auth_enabled':

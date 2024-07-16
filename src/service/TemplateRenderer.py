@@ -29,7 +29,6 @@ class TemplateRenderer:
             SECRET_KEY=self._model_store.config().map().get('secret_key'),
             FLEET_PLAYER_ENABLED=self._model_store.variable().map().get('fleet_player_enabled').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
-            PLAYLIST_ENABLED=self._model_store.variable().map().get('playlist_enabled').as_bool(),
             last_pillmenu_slideshow=self._model_store.variable().map().get('last_pillmenu_slideshow').as_string(),
             last_pillmenu_configuration=self._model_store.variable().map().get('last_pillmenu_configuration').as_string(),
             last_pillmenu_fleet=self._model_store.variable().map().get('last_pillmenu_fleet').as_string(),
