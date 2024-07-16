@@ -20,6 +20,8 @@
 {% block body_class %}view-node-player-list{% endblock %}
 
 {% block page %}
+    {% set explr_limit_chars = 35 %}
+    
     <div class="top-content">
         <div class="top-actions">
             {{ HOOK(H_FLEET_NODE_PLAYER_TOOLBAR_ACTIONS_START) }}
@@ -91,12 +93,12 @@
                                 {% if loop.last %}
                                     <span>
                                         <i class="explr-icon explr-icon-folder"></i>
-                                        {{ truncate(dir, 25, '...') }}
+                                        {{ truncate(dir, explr_limit_chars, '...') }}
                                     </span>
                                 {% else %}
                                     <a href="{{ url_for('fleet_node_player_cd', path=ns.breadpath) }}">
                                         <i class="explr-icon explr-icon-folder"></i>
-                                        {{ truncate(dir, 25, '...') }}
+                                        {{ truncate(dir, explr_limit_chars, '...') }}
                                     </a>
                                 {% endif %}
                             </li>
@@ -138,7 +140,7 @@
                             <a href="{{ url_for('fleet_node_player_cd', path=folder_path) }}"
                                class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
                                 <i class="fa fa-folder"></i>
-                                <span>{{ truncate(folder.name, 25, '...') }}</span>
+                                <span>{{ truncate(folder.name, explr_limit_chars, '...') }}</span>
                                 <form action="{{ url_for('fleet_node_player_folder_rename') }}" method="POST">
                                     <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
                                     <input type="hidden" name="id" value="{{ folder.id }}"/>
@@ -163,7 +165,7 @@
                                         <i class="fa fa-layer-group"></i>
                                     </sub>
                                 {% endif %}
-                                <span>{{ truncate(node_player.name, 25, '...') }}</span>
+                                <span>{{ truncate(node_player.name, explr_limit_chars, '...') }}</span>
                                 <form action="{{ url_for('fleet_node_player_rename') }}" method="POST">
                                     <input type="text" name="name" value="{{ node_player.name }}" autocomplete="off"/>
                                     <input type="hidden" name="id" value="{{ node_player.id }}"/>
