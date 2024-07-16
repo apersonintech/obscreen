@@ -96,6 +96,7 @@ jQuery(function ($) {
     };
 
     const renameExplrItem = function ($item) {
+
         $('.dirview .renaming').removeClass('renaming');
         $item.addClass('renaming');
         $item.find('input').focus().select();
@@ -128,6 +129,10 @@ jQuery(function ($) {
     $(document).keyup(function (e) {
         const $selectedLink = $('.explr-item-selectable.highlight-clicked');
         const $selectedLi = $selectedLink.parents('li:eq(0)');
+
+        if ($('.renaming input:focus').length > 0) {
+            return;
+        }
 
         if (e.key === "Escape") {
             $('.dirview .new-folder').addClass('hidden');
