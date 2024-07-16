@@ -37,7 +37,7 @@ class PlaylistController(ObController):
         working_folder = self._model_store.folder().get_one_by_path(path=working_folder_path, entity=FolderEntity.CONTENT)
 
         if not current_playlist and len(playlists) > 0:
-            current_playlist = playlists[0]
+            current_playlist = None
 
         return render_template(
             'playlist/list.jinja.html',
@@ -45,7 +45,7 @@ class PlaylistController(ObController):
             current_playlist=current_playlist,
             playlists=playlists,
             durations=durations,
-            slides=self._model_store.slide().get_slides(playlist_id=current_playlist.id),
+            slides=self._model_store.slide().get_slides(playlist_id=current_playlist.id) if current_playlist else [],
             foldered_contents=self._model_store.content().get_all_indexed('folder_id', multiple=True),
             contents={content.id: {"id": content.id, "name": content.name, "type": content.type.value} for content in self._model_store.content().get_contents()},
             working_folder_path=working_folder_path,

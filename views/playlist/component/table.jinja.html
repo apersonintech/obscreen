@@ -5,7 +5,7 @@
             <a href="{{ url_for('playlist_list', playlist_id=playlist.id) }}"
                class="{% if active %}active{% endif %} tile-item {% if not playlist.enabled %}disabled{% endif %} playlist-item"
                data-level="{{ playlist.id }}"
-               data-entity="{{ playlist.to_json({"created_by": track_created(playlist).username, "updated_by": track_updated(playlist).username}) }}">
+               data-entity="{{ playlist.to_json() }}">
                 <div class="tile-header">
                     <div class="head-icon">
                         <i class="fa {{ 'fa fa-circle' if active else 'fa fa-circle' }}"></i>
@@ -40,7 +40,7 @@
         {% endfor %}
 
         <div class="inner-empty empty-flag {% if playlists|length != 0 %}hidden{% endif %}">
-            <i class="fa fa-play"></i>
+            <i class="fa fa-list"></i>
         </div>
     </div>
 </div>

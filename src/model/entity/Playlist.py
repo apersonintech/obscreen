@@ -6,7 +6,7 @@ from typing import Optional, Union
 
 class Playlist:
 
-    def __init__(self, name: str = 'Untitled', slug: str = 'untitled', id: Optional[int] = None, enabled: bool = False, time_sync: bool = True, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, name: str = 'Untitled', slug: str = 'untitled', id: Optional[int] = None, enabled: bool = False, time_sync: bool = False, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._name = name
         self._slug = slug

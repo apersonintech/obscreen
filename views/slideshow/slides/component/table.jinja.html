@@ -1,7 +1,8 @@
 <table class="slides">
     <tbody>
     {% for slide in slides %}
-        <tr class="slide-item" data-level="{{ slide.id }}" data-entity="{{ slide.to_json({"content": contents[slide.content_id], "created_by": track_created(slide).username, "updated_by": track_updated(slide).username}) }}">
+        <tr class="slide-item" data-level="{{ slide.id }}"
+            data-entity="{{ slide.to_json({"content": contents[slide.content_id]}) }}">
             <td class="infos">
                 <div class="inner">
                     <a href="javascript:void(0);" class="item-sort slide-sort">
@@ -11,51 +12,57 @@
                 </div>
             </td>
             <td class="">
-                {% if slide.cron_schedule %}
-                    {% set cron_desc = cron_descriptor(slide.cron_schedule) %}
-                    {% if cron_desc %}
-                        {% if is_valid_cron_date_time(slide.cron_schedule) %}
-                            {% if slide.is_notification %}
-                                🔔 {{ l.slideshow_slide_panel_td_cron_scheduled_notify }} <span class="td-secondary">{{ cron_desc }}</span>
+                <div class="start">
+                    {% if slide.cron_schedule %}
+                        {% set cron_desc = cron_descriptor(slide.cron_schedule) %}
+                        {% if cron_desc %}
+                            {% if is_valid_cron_date_time(slide.cron_schedule) %}
+                                {% if slide.is_notification %}
+                                    🔔 {{ l.slideshow_slide_panel_td_cron_scheduled_notify }}
+                                    <span class="td-secondary">{{ cron_desc }}</span>
+                                {% else %}
+                                    🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
+                                    <span class="td-secondary">{{ cron_desc }}</span>
+                                {% endif %}
                             {% else %}
-                                🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}<span class="td-secondary">{{ cron_desc }}</span>
+                                ⏳ {{ cron_desc }}
                             {% endif %}
                         {% else %}
-                        ⏳ {{ cron_desc }}
+                            <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                         {% endif %}
                     {% else %}
-                        <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
+                        🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
                     {% endif %}
-                {% else %}
-                    🔄 {{ l.slideshow_slide_panel_td_cron_scheduled_loop }}
-                {% endif %}
-            </td>
-            <td class="">
-                {% if slide.cron_schedule_end %}
-                    {% set cron_desc_end = cron_descriptor(slide.cron_schedule_end) %}
-                    {% if cron_desc_end %}
-                        {% if is_valid_cron_date_time(slide.cron_schedule_end) %}
-                            {% if slide.is_notification %}
-                                📆<span class="td-secondary">{{ cron_desc_end }}</span>
+                </div>
+                <div class="end">
+                    {% if slide.cron_schedule_end %}
+                        {% set cron_desc_end = cron_descriptor(slide.cron_schedule_end) %}
+                        {% if cron_desc_end %}
+                            {% if is_valid_cron_date_time(slide.cron_schedule_end) %}
+                                {% if slide.is_notification %}
+                                    📆<span class="td-secondary">{{ cron_desc_end }}</span>
+                                {% else %}
+                                    ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
+                                    <span class="td-secondary">{{ cron_desc_end }}</span>
+                                {% endif %}
                             {% else %}
-                                ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}<span class="td-secondary">{{ cron_desc_end }}</span>
+                                ⏳ {{ cron_desc_end }}
                             {% endif %}
                         {% else %}
-                        ⏳ {{ cron_desc_end }}
+                            <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                         {% endif %}
                     {% else %}
-                        <span class="error">⚠️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
+                        ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
                     {% endif %}
-                {% else %}
-                    ⏱️ {{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}
-                {% endif %}
+                </div>
             </td>
             <td class="actions">
                 <a href="javascript:void(0);" class="item-edit slide-edit">
                     <i class="fa fa-pencil"></i>
                 </a>
 
-                <a href="javascript:void(0);" class="item-delete slide-delete" data-route="{{ url_for('slideshow_slide_delete', slide_id=slide.id) }}">
+                <a href="javascript:void(0);" class="item-delete slide-delete"
+                   data-route="{{ url_for('slideshow_slide_delete', slide_id=slide.id) }}">
                     <i class="fa fa-trash"></i>
                 </a>
             </td>
