@@ -3,8 +3,7 @@
     {% set has_children = folder.children or node_player_children %}
 
     <li class="icon-folder li-explr-folder li-explr-folder-{{ folder.id }}">
-        <a href="{% if use_href %}{{ url_for('fleet_node_player_cd') }}?path=
-            {{ folder.path }}{% else %}javascript:void(0);{% endif %}"
+        <a href="{% if use_href %}{{ url_for('fleet_node_player_cd') }}?path={{ folder.path }}{% else %}javascript:void(0);{% endif %}"
            class="{% if folder.path == working_folder_path %}active{% endif %} {{ 'explr-pick-folder' if not use_href }}">
             {{ folder.name }}
         </a>
@@ -17,17 +16,16 @@
                 {% for node_player in node_player_children %}
                     {% set icon = enum_operating_system.get_fa_icon(node_player.operating_system) %}
                     {% set color = enum_operating_system.get_color_icon(node_player.operating_system) %}
-                    <li class="explr-item">
+                    <li class="explr-item" data-entity-json="{{ json_dumps(node_player.to_dict()) }}">
                         <i class="fa {{ icon }} {{ color }} main"></i>
                         {% if node_player.group_id %}
                             <sub>
                                 <i class="fa fa-layer-group"></i>
                             </sub>
                         {% endif %}
-                        <a href="
-                                {% if use_href %}{{ url_for('fleet_node_player_edit', node_player_id=node_player.id) }}{% else %}javascript:void(0);{% endif %}"
-                           class="{{ 'explr-pick-element' if not use_href }}"
-                           data-json="{{ json_dumps(node_player.to_dict()) }}">
+                        <a href="javascript:void(0);"
+                           class="explr-pick-element"
+                           {% if use_href %}data-callback="explrNodePlayerEdit"{% endif %}>
                             {{ node_player.name }}
                         </a>
                     </li>
