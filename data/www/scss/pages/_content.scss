@@ -1,9 +1,23 @@
 
-.view-content-list main .main-container {
+.view-content-list {
+	main .main-container {
+		.page-content {
+			.inner {
+				padding-bottom: 10px;
+			}
+		}
 
+		.content-object-input {
+			margin-bottom: 6px;
+		}
+	}
 
-	.content-object-input {
-		margin-bottom: 6px;
+	&.dragover {
+		main .main-container .inner .dropzone {
+			border-radius: $baseRadius;
+			background: rgba($white, .1);
+			border: 1px dashed rgba($white, .5);
+		}
 	}
 }
 
