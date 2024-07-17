@@ -40,7 +40,7 @@ class PlayerController(ObController):
         try:
             items = self._get_playlist(playlist_id=playlist_id, preview_content_id=preview_content_id)
         except NoFallbackPlaylistException:
-            abort(404)
+            return redirect(url_for('player_default', noplaylist=1))
 
         intro_slide_duration = 0 if items['preview_mode'] else int(request.args.get('intro', self._model_store.variable().get_one_by_name('intro_slide_duration').eval()))
         animation_enabled = bool(request.args.get('animation', int(self._model_store.variable().get_one_by_name('slide_animation_enabled').eval())))
@@ -64,7 +64,8 @@ class PlayerController(ObController):
         return render_template(
             'player/default.jinja.html',
             interfaces=[iface['ip_address'] for iface in get_network_interfaces()],
-            time_with_seconds=self._model_store.variable().get_one_by_name('default_slide_time_with_seconds')
+            time_with_seconds=self._model_store.variable().get_one_by_name('default_slide_time_with_seconds'),
+            noplaylist=request.args.get('noplaylist', '0') == '1'
         )
 
     def player_playlist(self, playlist_slug_or_id: str = ''):

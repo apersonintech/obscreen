@@ -63,7 +63,7 @@
         <script>
             const interfaces = {{ json_dumps(interfaces) | safe }};
             const translation_common_unknown_ipaddr = '{{ l.common_unknown_ipaddr }}';
-            const translation_player_default_welcome_message = '{{ l.player_default_welcome_message }}';
+            const translation_player_default_welcome_message = '{% if noplaylist %}{{ l.player_noplaylist_welcome_message }}{% else %}{{ l.player_default_welcome_message }}{% endif %}';
             const manage_url_template = '{{ 'http://%ipaddr%:' ~ PORT ~ url_for('manage') }}';
 
             const setIps = function(ips) {

@@ -2,6 +2,88 @@ let onPickedElement = function (element) {
 };
 
 jQuery(function ($) {
+    let lastClicked = null;
+    let selectionStart = null;
+    let selectionRectangle = null;
+
+    const startSelection = function (event) {
+        // mouse left button only
+        if (event.button !== 0) {
+            return;
+        }
+        selectionStart = {x: event.pageX, y: event.pageY};
+
+        selectionRectangle = $('<div class="selection-rectangle"></div>');
+        $('body').append(selectionRectangle);
+
+        $(document).on('mousemove', updateSelection);
+        $(document).on('mouseup', endSelection);
+
+        event.preventDefault();
+    };
+
+    const isMajorSelection = function () {
+        if (!selectionStart) return false;
+        const width = selectionRectangle.width();
+        const height = selectionRectangle.height()
+        return (width > 40 && height > 40)
+    };
+
+    const updateSelection = function (event) {
+        if ($('body').hasClass('dragging')) {
+            endSelection()
+            return;
+        }
+
+        if (!selectionStart) return;
+
+        const current = {x: event.pageX, y: event.pageY};
+        const top = Math.min(selectionStart.y, current.y);
+        const left = Math.min(selectionStart.x, current.x);
+        const width = Math.abs(selectionStart.x - current.x);
+        const height = Math.abs(selectionStart.y - current.y);
+
+        selectionRectangle.css({top, left, width, height});
+
+        $('.explr-dirview li > a.explr-link').each(function () {
+            const $link = $(this);
+            const linkOffset = $link.offset();
+            const linkWidth = $link.outerWidth();
+            const linkHeight = $link.outerHeight();
+
+            const isWithinSelection = (
+                linkOffset.left < left + width &&
+                linkOffset.left + linkWidth > left &&
+                linkOffset.top < top + height &&
+                linkOffset.top + linkHeight > top
+            );
+
+            if (isMajorSelection()) {
+                if (isWithinSelection) {
+                    highlightExplrLink($link);
+                } else {
+                    unhighlightExplrLink($link);
+                }
+            }
+        });
+
+        updateBodyClasses();
+    };
+
+    const endSelection = function (event) {
+        $(document).off('mousemove', updateSelection);
+        $(document).off('mouseup', endSelection);
+
+        if (selectionRectangle) {
+            selectionRectangle.remove();
+            setTimeout(function () {
+                selectionRectangle = null;
+                selectionStart = null;
+            }, 100);
+        }
+
+        updateBodyClasses();
+    };
 
     const explrSidebarOpenFromFolder = function (folderId) {
         const $leaf = $('.li-explr-folder-' + folderId);
@@ -30,8 +112,16 @@ jQuery(function ($) {
         });
 
         $('.draggable').each(function () {
-            $(this).draggable({
+            $(this).multiDraggable({
                 revert: "invalid",
+                revertDuration: 10,
+                group: 'li.highlight-clicked',
+                startNative: function (event, ui) {
+                    $('body').addClass('dragging');
+                },
+                stopNative: function () {
+                    $('body').removeClass('dragging');
+                }
             });
         });
 
@@ -47,19 +137,34 @@ jQuery(function ($) {
                 drop: function (event, ui) {
                     $(this).removeClass("highlight-drop");
                     const $form = $('#folder-move-form');
-                    const $moved = ui.draggable;
+                    const $moved = $('.ui-draggable-dragging');
                     const $target = $(this);
-                    $form.find('[name=is_folder]').val($moved.attr('data-folder'))
-                    $form.find('[name=entity_id]').val($moved.attr('data-id'))
-                    $form.find('[name=new_folder_id]').val($target.attr('data-id'))
-                    ui.draggable.position({
-                        my: "center",
-                        at: "center",
-                        of: $(this),
-                        using: function (pos) {
-                            $(this).animate(pos, 50);
+                    const folder_ids = [], entity_ids = [];
+
+                    $moved.each(function () {
+                        const $item = $(this);
+                        const is_folder = $item.attr('data-folder') === '1';
+                        const id = $item.attr('data-id');
+
+                        if (is_folder) {
+                            folder_ids.push(id);
+                        } else {
+                            entity_ids.push(id);
                         }
+
+                        $item.position({
+                            my: "center",
+                            at: "center",
+                            of: $target,
+                            using: function (pos) {
+                                $item.animate(pos, 50);
+                            }
+                        });
                     });
+
+                    $form.find('[name=entity_ids]').val(entity_ids.join(','))
+                    $form.find('[name=folder_ids]').val(folder_ids.join(','))
+                    $form.find('[name=new_folder_id]').val($target.attr('data-id'))
                     $form.submit();
                 }
             });
@@ -70,37 +175,77 @@ jQuery(function ($) {
         initExplr();
     };
 
-    const selectEpxlrLink = function ($link) {
-        $('a.explr-link').removeClass('highlight-clicked');
-        $('a.explr-link').parent().removeClass('highlight-clicked');
-        $('body').removeClass('explr-selection explr-selection-actionable explr-selection-entity explr-selection-folder');
+    const updateBodyClasses = function () {
+        const $selectedLinks = $('a.explr-link.highlight-clicked');
+        const isMultiSelect = $selectedLinks.length > 1;
+        const isSingleSelect = $selectedLinks.length === 1;
+        const $link = $selectedLinks.last();
 
-        if ($link.hasClass('explr-item-selectable')) {
-            $link.addClass('highlight-clicked');
-            $link.parent().addClass('highlight-clicked');
-            $('body').addClass('explr-selection');
-            if ($link.hasClass('explr-item-actionable')) {
-                $('body').addClass('explr-selection-actionable');
-            }
-            if ($link.hasClass('explr-item-entity')) {
-                $('body').addClass('explr-selection-entity');
-            }
-            if ($link.hasClass('explr-item-folder')) {
-                $('body').addClass('explr-selection-folder');
-            }
+        $('body')
+            .toggleClass('explr-selection', isSingleSelect)
+            .toggleClass('explr-selection-actionable', isSingleSelect && $link.hasClass('explr-item-actionable'))
+            .toggleClass('explr-selection-entity', isSingleSelect && $link.hasClass('explr-item-entity'))
+            .toggleClass('explr-selection-folder', isSingleSelect && $link.hasClass('explr-item-folder'))
+            .toggleClass('explr-multiselection', isMultiSelect)
+            .toggleClass('explr-multiselection-actionable', isMultiSelect && $selectedLinks.hasClass('explr-item-actionable'))
+            .toggleClass('explr-multiselection-entity', isMultiSelect && $selectedLinks.hasClass('explr-item-entity'))
+            .toggleClass('explr-multiselection-folder', isMultiSelect && $selectedLinks.hasClass('explr-item-folder'));
+    };
+
+    const highlightExplrLink = function ($link) {
+        $link.addClass('highlight-clicked');
+        $link.parent().addClass('highlight-clicked');
+    };
+
+    const unhighlightExplrLink = function ($link) {
+        $link.removeClass('highlight-clicked');
+        $link.parent().removeClass('highlight-clicked');
+    };
+
+    const selectEpxlrLink = function ($link) {
+        highlightExplrLink($link);
+        updateBodyClasses();
+    };
+
+    const clearSelection = function () {
+        unhighlightExplrLink($('a.explr-link'));
+        $('body').removeClass('explr-selection explr-selection-actionable explr-selection-entity explr-selection-folder explr-multiselection explr-multiselection-actionable explr-multiselection-entity explr-multiselection-folder');
+    };
+
+    const handleShiftClick = function ($link) {
+        const $links = $('li > a.explr-link');
+        const start = $links.index(lastClicked);
+        const end = $links.index($link);
+        const [from, to] = start < end ? [start, end] : [end, start];
+        $links.slice(from, to + 1).each(function () {
+            selectEpxlrLink($(this));
+        });
+        updateBodyClasses();
+    };
+
+    const handleCmdCtrlClick = function ($link) {
+        if ($link.hasClass('highlight-clicked')) {
+            $link.removeClass('highlight-clicked');
+            $link.parent().removeClass('highlight-clicked');
+        } else {
+            selectEpxlrLink($link);
         }
+        updateBodyClasses();
     };
 
     const getExplrSelection = function () {
-        return $('.explr-dirview .highlight-clicked');
+        return $('.explr-dirview li.highlight-clicked');
     };
 
     const renameExplrItem = function ($item) {
-
         $('.dirview .renaming').removeClass('renaming');
         $item.addClass('renaming');
         $item.find('input').focus().select();
-    }
+    };
+
+    const getSelectedElements = function () {
+        return $('.explr-item-selectable.highlight-clicked');
+    };
 
     $(document).on('click', '.explr-item-edit', function () {
         document.location.href = $(this).attr('data-entity-route').replace('!c!', getExplrSelection().attr('data-id'));
@@ -116,9 +261,9 @@ jQuery(function ($) {
         let route;
 
         if (is_folder) {
-            route = $(this).attr('data-folder-route') + '?id=' + $item.attr('data-id');
+            route = $(this).attr('data-folder-route') + '&id=' + $item.attr('data-id');
         } else {
-            route = $(this).attr('data-entity-route') + '?id=' + $item.attr('data-id');
+            route = $(this).attr('data-entity-route') + '&id=' + $item.attr('data-id');
         }
 
         if (confirm(l.js_common_are_you_sure)) {
@@ -126,37 +271,77 @@ jQuery(function ($) {
         }
     });
 
+    $(document).on('click', '.explr-items-delete', function () {
+        const $items = getExplrSelection();
+        const folder_ids = [], entity_ids = [];
+
+        $items.each(function () {
+            const is_folder = $(this).attr('data-folder') === '1';
+            const id = $(this).attr('data-id');
+
+            if (is_folder) {
+                folder_ids.push(id);
+            } else {
+                entity_ids.push(id);
+            }
+        });
+
+        if (confirm(l.js_common_are_you_sure)) {
+            document.location.href = $(this).attr('data-route')
+                + '&folder_ids=' + folder_ids.join(',')
+                + '&entity_ids=' + entity_ids.join(',')
+            ;
+        }
+    });
+
     $(document).keyup(function (e) {
-        const $selectedLink = $('.explr-item-selectable.highlight-clicked');
+        const $selectedLink = getSelectedElements();
+        const $selectedLinkLast = getSelectedElements().last();
         const $selectedLi = $selectedLink.parents('li:eq(0)');
+        const $selectedLiLast = $selectedLinkLast.parents('li:eq(0)');
+
+        if (e.key === "Escape") {
+            $('.dirview .new-folder').addClass('hidden');
+            $('.dirview .renaming').removeClass('renaming');
+            clearSelection();
+        }
 
         if ($('.renaming input:focus').length > 0) {
             return;
         }
 
-        if (e.key === "Escape") {
-            $('.dirview .new-folder').addClass('hidden');
-            $('.dirview .renaming').removeClass('renaming');
-        } else if (e.code === "Space") {
+        if (e.code === "Space") {
             renameExplrItem($selectedLi);
         } else if ($selectedLink.length) {
             const $prevLi = $selectedLi.prev('li:visible');
-            const $nextLi = $selectedLi.next('li:visible');
+            const $nextLi = $selectedLiLast.next('li:visible');
             const verticalNeighbors = getAboveBelowElement($selectedLi);
+            const clearIfNoMeta = function () {
+                if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
+                    clearSelection()
+                }
+            };
 
             if (e.key === "Enter") {
                 $selectedLink.trigger('dblclick');
             } else if (e.key === "ArrowLeft" && $prevLi.length) {
+                clearIfNoMeta();
                 selectEpxlrLink($prevLi.find('.explr-link'));
             } else if (e.key === "ArrowRight" && $nextLi.length) {
+                clearIfNoMeta();
                 selectEpxlrLink($nextLi.find('.explr-link'));
             } else if (e.key === "ArrowUp" && verticalNeighbors.above) {
+                clearIfNoMeta();
                 selectEpxlrLink(verticalNeighbors.above.find('.explr-link'));
             } else if (e.key === "ArrowDown" && verticalNeighbors.below) {
+                clearIfNoMeta();
                 selectEpxlrLink(verticalNeighbors.below.find('.explr-link'));
             } else if (e.key === "Backspace") {
                 if ($('.explr-item-delete:visible').length) {
                     $('.explr-item-delete:visible').click();
+                }
+                if ($('.explr-items-delete:visible').length) {
+                    $('.explr-items-delete:visible').click();
                 }
             }
         } else if (e.key.indexOf('Arrow') === 0) {
@@ -165,10 +350,23 @@ jQuery(function ($) {
     });
 
     // Explorer item selection
+    $(document).on('mousedown', '.selectable-zone', startSelection);
+
     $(document).on('click', 'a.explr-link', function (event) {
         event.preventDefault();
-        selectEpxlrLink($(this));
+        const $link = $(this);
+
+        if (event.shiftKey && lastClicked) {
+            handleShiftClick($link);
+        } else if (event.metaKey || event.ctrlKey) {
+            handleCmdCtrlClick($link);
+        } else {
+            clearSelection();
+            selectEpxlrLink($link);
+        }
+        lastClicked = $link;
     });
+
     $(document).on('click', 'a.explr-pick-element', function (event) {
         event.preventDefault();
         const callback = $(this).attr('data-callback');
@@ -177,6 +375,7 @@ jQuery(function ($) {
             window[callback]($(this));
         }
     });
+
     $(document).on('dblclick', 'a.explr-link', function (event) {
         event.preventDefault();
         $(this).off('click');
@@ -191,12 +390,11 @@ jQuery(function ($) {
             window.location.href = href;
         }
     });
+
     $(document).on('click', function (event) {
         const $parentClickable = $(event.target).parents('a, button');
-        if ($parentClickable.length === 0) {
-            $('a.explr-link').removeClass('highlight-clicked');
-            $('a.explr-link').parent().removeClass('highlight-clicked');
-            $('body').removeClass('explr-selection explr-selection-entity explr-selection-folder explr-selection-actionable');
+        if ($parentClickable.length === 0 && !isMajorSelection()) {
+            clearSelection();
         }
     });
 
