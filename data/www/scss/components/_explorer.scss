@@ -1,3 +1,5 @@
+
+
 ul.explr-tree {
 	height: 100% !important;
 
@@ -130,6 +132,11 @@ body.explr-multiselection-actionable {
 	}
 }
 
+.selectable-zone {
+	flex: 1;
+	align-self: stretch;
+	border: 1px solid transparent;
+}
 
 ul.explr-dirview {
 	display: flex;
@@ -301,4 +308,14 @@ ul.explr-dirview {
 
 .content-explr-picker {
 	cursor: pointer;
+}
+
+
+
+.selection-rectangle {
+    position: absolute;
+    border: 1px solid #0099ff;
+    background-color: rgba(0, 153, 255, 0.1);
+    pointer-events: none;
+    z-index: 1000;
 }
