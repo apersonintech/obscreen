@@ -44,12 +44,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/lib/fontawesome.min.css"/>
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/compiled/main.css"/>
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/compiled/main-{{ 'dark' if DARK_MODE else 'light' }}-mode.css"/>
     {% block add_css %}{% endblock %}
     {{ HOOK(H_ROOT_CSS) }}
 </head>
 <body class="{% block body_class %}{% endblock %}">
-<div id="toast"></div>
+<div class="toast"></div>
 
 <div class="container {% block container_class %}{% endblock %}">
 

@@ -2,12 +2,12 @@ $containerWidth: 42px;
 $containerHeight: 26px;
 $containerRadius: 15px;
 $toggleActiveColor: lighten($seaBlue, 30%);
-$containerShadowActive: 0 2px 2px #222 inset;
-$containerShadowInactive: 0 2px 2px #111 inset;
-$backgroundColorInactive: #222;
+$containerShadowActive: 0 2px 2px $gkscale2 inset;
+$containerShadowInactive: 0 2px 2px $gkscale1 inset;
+$backgroundColorInactive: $gscale2;
 $backgroundColorActive: darken($toggleActiveColor, 30%);
 $thumbColorActive: $toggleActiveColor;
-$thumbColorInactive: #777;
+$thumbColorInactive: $gscale7;
 $thumbWidth: 18px;
 $thumbHeight: $thumbWidth;
 $borderSize: 1px;
@@ -25,7 +25,7 @@ $animationSpeed: 0.2s;
 
 		&:checked + label {
 			background: darken($thumbColorActive, 30%);
-			border: $borderSize solid rgba($white, .1);
+			border: $borderSize solid rgba($gscaleF, .1);
 			box-shadow: $containerShadowActive;
 
 			&::after {
@@ -48,7 +48,7 @@ $animationSpeed: 0.2s;
 		border-radius: $containerRadius;
 		background: $backgroundColorInactive;
 		cursor: pointer;
-		border: $borderSize solid rgba($white, .1);
+		border: $borderSize solid rgba($gscaleF, .1);
 		box-shadow: $containerShadowInactive;
 
 		&::after {
@@ -59,7 +59,7 @@ $animationSpeed: 0.2s;
 			height: $thumbHeight;
 			margin: 3px;
 			background: $thumbColorInactive;
-			box-shadow: 0 2px rgba(0,0,0,0.9);
+			box-shadow: 0 2px rgba($gkscale5, 0.9);
 			transition: $animationSpeed;
 		}
 	}

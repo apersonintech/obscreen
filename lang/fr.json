@@ -178,6 +178,7 @@
   "settings_variable_desc_edition_auth_enabled": "Les identifiants de l'utilisateur par défaut seront admin/admin",
   "settings_variable_desc_external_url": "URL externe (i.e: https://studio-01.company.com or http://10.10.3.100)",
   "settings_variable_desc_slide_upload_limit": "Limite d'upload du fichier d'une slide (en mégaoctets)",
+  "settings_variable_desc_dark_mode": "Mdoe sombre",
   "settings_variable_desc_intro_slide_duration": "Durée de la slide d'introduction (en secondes)",
   "settings_variable_desc_default_slide_time_with_seconds": "Afficher les secondes de l'horloge de la slide d'introduction",
   "settings_variable_desc_polling_interval": "Intervalle de rafraîchissement des paramètres à appliquer au lecteur (en secondes)",

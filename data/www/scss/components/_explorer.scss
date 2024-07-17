@@ -11,7 +11,7 @@ ul.explr-tree {
 		position: relative;
 
 		span {
-			color: #555;
+			color: $gscale5;
 			font-size: 13px;
 			padding-left: 5px;
 			cursor: pointer;
@@ -21,7 +21,7 @@ ul.explr-tree {
 				z-index: 1;
 
 				&:hover {
-					color: #AAA;
+					color: $gscaleA;
 				}
 			}
 		}
@@ -35,9 +35,8 @@ ul.explr-tree {
 			position: absolute;
 			top: 0;
 			left: 5px;
-			background: #777;
-			border-bottom: 2px solid $neutralGrey;
-			color: black;
+			background: $gscale7;
+			border-bottom: 2px solid $gscale5;
 			border-radius: $baseRadius;
 			text-align: center;
 			display: flex;
@@ -47,23 +46,23 @@ ul.explr-tree {
 			padding-bottom: 1px;
 
 			i {
-				color: white;
+				color: $white;
 				font-size: 4px !important;
 				margin-bottom: 0;
 			}
 		}
 
 		a {
-			color: $white;
+			color: $gscaleF;
 			padding-right: 80px;
 			margin-top: 2px;
 
 			&:hover {
-				color: $white;
+				color: $gscaleF;
 			}
 
 			&.active {
-				background: rgba(255, 255, 255, .1);
+				background: rgba($gscaleF, .1);
 				border-radius: $baseRadius;
 				font-weight: bold;
 				text-decoration: underline;
@@ -174,12 +173,12 @@ ul.explr-dirview {
 		}
 
 		&.highlight-clicked {
-			border: 1px dotted rgba($white, .2);
-			background: rgba($white, .1);
+			border: 1px dotted rgba($gscaleF, .2);
+			background: rgba($gscaleF, .1);
 		}
 
 		a {
-			color: #BBB;
+			color: $gscaleB;
 			text-decoration: none;
 			flex: 1;
 			text-align: center;
@@ -197,7 +196,7 @@ ul.explr-dirview {
 				.img-holder {
 					width: 64px;
 					height: 64px;
-					background: #070707;
+					background: $gscale07;
 					border-radius: 8px;
 					display: flex;
 					flex-direction: column;
@@ -217,7 +216,7 @@ ul.explr-dirview {
 					position: absolute;
 					top: -4px;
 					left: -4px;
-					text-shadow: 0 .5px .5px #777;
+					text-shadow: 0 .5px .5px $gscale7;
 				}
 			}
 
@@ -232,9 +231,8 @@ ul.explr-dirview {
 				position: absolute;
 				top: -2px;
 				right: 0;
-				background: #777;
-				border-bottom: 2px solid $neutralGrey;
-				color: black;
+				background: $gscale7;
+				border-bottom: 2px solid $gscale5;
 				border-radius: $baseRadius;
 				width: 16px;
 				height: 16px;
@@ -246,7 +244,7 @@ ul.explr-dirview {
 				padding-bottom: 1px;
 
 				i {
-					color: white;
+					color: $white;
 					font-size: 10px;
 					margin-bottom: 0;
 				}
@@ -299,7 +297,7 @@ ul.explr-dirview {
 		width: 400px;
 		max-height: 300px;
 		overflow: auto;
-		background: #222;
+		background: $gscale2;
 		padding: 10px 20px 10px 20px;
 		border-radius: $baseRadius;
 		margin-top: 15px;
@@ -314,8 +312,8 @@ ul.explr-dirview {
 
 .selection-rectangle {
     position: absolute;
-    border: 1px solid #0099ff;
-    background-color: rgba(0, 153, 255, 0.1);
+    border: 1px solid $systemSelect;
+    background-color: rgba($systemSelect, 0.1);
     pointer-events: none;
     z-index: 1000;
 }

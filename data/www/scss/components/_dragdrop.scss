@@ -25,7 +25,7 @@ body.dragover {
 		display: none;
 		width: 200px;
 		height: 10px;
-		background: #666;
+		background: $gscale6;
 		border-radius: $baseRadius;
 		flex-direction: row;
 		justify-content: flex-start;
@@ -47,8 +47,8 @@ body.dragover {
 			bottom: 0;
 			top: 2px;
 			font-size: 15px;
-			color: white;
-			text-shadow: 0 0 2px black;
+			color: $white;
+			text-shadow: 0 0 2px $black;
 		}
 	}
 
