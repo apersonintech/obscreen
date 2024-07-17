@@ -22,6 +22,13 @@ jQuery(function ($) {
         event.preventDefault();
     };
 
+    const isMajorSelection = function () {
+        if (!selectionStart) return false;
+        const width = selectionRectangle.width();
+        const height = selectionRectangle.height()
+        return (width > 40 && height > 40)
+    };
+
     const updateSelection = function (event) {
         if ($('body').hasClass('dragging')) {
             endSelection()
@@ -51,7 +58,7 @@ jQuery(function ($) {
                 linkOffset.top + linkHeight > top
             );
 
-            if (width > 40 && height > 40) {
+            if (isMajorSelection()) {
                 if (isWithinSelection) {
                     highlightExplrLink($link);
                 } else {
@@ -370,7 +377,7 @@ jQuery(function ($) {
 
     $(document).on('click', function (event) {
         const $parentClickable = $(event.target).parents('a, button');
-        if ($parentClickable.length === 0 && selectionStart === null) {
+        if ($parentClickable.length === 0 && !isMajorSelection()) {
             clearSelection();
         }
     });
