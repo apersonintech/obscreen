@@ -78,17 +78,20 @@ class ContentController(ObController):
     def slideshow_content_upload_bulk(self):
         working_folder_path, working_folder = self.get_working_folder()
 
-        file = request.files['object']
-        type = ContentType.guess_content_type_file(file)
-        name = file.filename.rsplit('.', 1)[0]
+        for key in request.files:
+            files = request.files.getlist(key)
+            for file in files:
+                type = ContentType.guess_content_type_file(file)
+                name = file.filename.rsplit('.', 1)[0]
 
-        self._model_store.content().add_form_raw(
-            name=name,
-            type=type,
-            request_files=request.files,
-            upload_dir=self._app.config['UPLOAD_FOLDER'],
-            folder_id=working_folder.id if working_folder else None
-        )
+                if type:
+                    self._model_store.content().add_form_raw(
+                        name=name,
+                        type=type,
+                        request_files=file,
+                        upload_dir=self._app.config['UPLOAD_FOLDER'],
+                        folder_id=working_folder.id if working_folder else None
+                    )
 
         return redirect(url_for('slideshow_content_list', path=working_folder_path))
 

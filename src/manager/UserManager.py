@@ -62,6 +62,9 @@ class UserManager:
         return [self.hydrate_object(raw_user) for raw_user in raw_users]
 
     def get(self, id: int) -> Optional[User]:
+        if id in self._user_map:
+            return self._user_map[id]
+
         object = self._db.get_by_id(self.TABLE_NAME, id)
         return self.hydrate_object(object, id) if object else None
 

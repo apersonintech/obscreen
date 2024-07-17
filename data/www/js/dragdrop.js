@@ -12,6 +12,7 @@ jQuery(function ($) {
                 url: $(this).attr('data-route'),
                 dropZone: $('body'),
                 formData: {},
+                singleFileUploads: false,
                 dataType: 'json',
                 add: function (e, data) {
                     const $alert = $('.alert-danger');
