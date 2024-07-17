@@ -143,10 +143,10 @@ class FolderManager(ModelManager):
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update({"name": name}))
         self.post_update(id)
 
-    def move_to_folder(self, entity_id: int, folder_id: int, entity_is_folder=False) -> None:
-        folder = self.get(folder_id)
+    def move_to_folder(self, entity_id: int, entity: FolderEntity, folder_id: Optional[int] = None, entity_is_folder=False) -> None:
+        folder = self.get(folder_id) if folder_id else None
 
-        if not folder and not entity_is_folder:
+        if folder and folder.entity != entity:
             return
 
         if entity_is_folder:
@@ -157,15 +157,15 @@ class FolderManager(ModelManager):
 
         table = None
 
-        if folder.entity == FolderEntity.CONTENT:
+        if entity == FolderEntity.CONTENT:
             table = ContentManager.TABLE_NAME
-        elif folder.entity == FolderEntity.NODE_PLAYER:
+        elif entity == FolderEntity.NODE_PLAYER:
             table = NodePlayerManager.TABLE_NAME
 
         if table:
             return self._db.execute_write_query(
                 query="UPDATE {} set folder_id = ? WHERE id = ?".format(table),
-                params=(folder_id, entity_id)
+                params=(folder_id if folder else None, entity_id)
             )
 
     def get_working_folder(self, entity: FolderEntity) -> str:
