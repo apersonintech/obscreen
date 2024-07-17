@@ -5,9 +5,7 @@ import sqlite3
 import logging
 
 from sqlite3 import Cursor
-from src.util.utils import wrap_if, is_wrapped_by
 from typing import Optional, Dict
-
 
 class DatabaseManager:
 
@@ -48,7 +46,8 @@ class DatabaseManager:
         return self
 
     def close(self) -> None:
-        self._conn.close()
+        if self._conn:
+            self._conn.close()
 
     def __enter__(self):
         return self
@@ -61,48 +60,32 @@ class DatabaseManager:
 
     def execute_write_query(self, query, params=(), silent_errors=False) -> None:
         logging.debug(query)
-        cur = None
-        sanitized_params = []
-
-        for param in params:
-            if isinstance(param, bool):
-                sanitized_params.append(int(param))
-            elif isinstance(param, dict) or isinstance(param, list):
-                sanitized_params.append(json.dumps(param))
-            else:
-                sanitized_params.append(param)
+        sanitized_params = self._sanitize_params(params)
 
         try:
             with self._conn:
                 cur = self._conn.cursor()
                 cur.execute(query, tuple(sanitized_params))
+                cur.close()
         except sqlite3.Error as e:
             if not silent_errors:
                 logging.error("SQL query execution error while writing '{}': {}".format(query, e))
             self._conn.rollback()
         except sqlite3.OperationalError:
             pass
-        finally:
-            if cur is not None:
-                cur.close()
 
     def execute_read_query(self, query, params=()) -> list:
         logging.debug(query)
-        cur = None
-
+        result = []
         try:
             with self._conn:
                 cur = self._conn.cursor()
                 cur.execute(query, params)
                 rows = cur.fetchall()
                 result = [dict(row) for row in rows]
+                cur.close()
         except sqlite3.Error as e:
             logging.error("SQL query execution error while reading '{}': {}".format(query, e))
-            result = []
-        finally:
-            if cur is not None:
-                cur.close()
-
         return result
 
     def get_all(self, table_name: str, sort: Optional[str] = None, ascending=True) -> list:
@@ -131,7 +114,7 @@ class DatabaseManager:
         count = len(lines)
 
         if count > 1:
-            raise Error("More than one line returned by query '{}'".format(query))
+            raise ValueError("More than one line returned by query '{}'".format(query))
 
         return lines[0] if count == 1 else None
 
@@ -231,3 +214,14 @@ class DatabaseManager:
 
         for query in queries:
             self.execute_write_query(query=query, silent_errors=True)
+
+    def _sanitize_params(self, params):
+        sanitized_params = []
+        for param in params:
+            if isinstance(param, bool):
+                sanitized_params.append(int(param))
+            elif isinstance(param, dict) or isinstance(param, list):
+                sanitized_params.append(json.dumps(param))
+            else:
+                sanitized_params.append(param)
+        return sanitized_params

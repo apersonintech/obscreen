@@ -1,6 +1,7 @@
 import os
 
 from typing import Dict, Optional, List, Tuple, Union
+from werkzeug.datastructures import FileStorage
 
 from src.model.entity.Content import Content
 from src.model.entity.Playlist import Playlist
@@ -165,15 +166,19 @@ class ContentManager(ModelManager):
         )
 
         if content.has_file():
-            if 'object' not in request_files:
-                return redirect(request.url)
+            object = None
 
-            object = request_files['object']
+            if 'object' in request_files:
+                object = request_files['object']
 
-            if object.filename == '':
+            if isinstance(request_files, FileStorage):
+                object = request_files
+
+            if not object or object.filename == '':
                 return None
 
             if object:
+                object.seek(0)
                 object_name = randomize_filename(object.filename)
                 object_path = os.path.join(upload_dir, object_name)
                 object.save(object_path)
