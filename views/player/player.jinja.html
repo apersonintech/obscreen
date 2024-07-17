@@ -45,6 +45,7 @@
 
     // Frontend config
     const syncWithTime = items['time_sync'];
+    const previewMode = items['preview_mode'];
     const tickRefreshResolutionMs = 100;
 
     // Frontend flag updates
@@ -84,7 +85,7 @@
 
     // Functions
     const itemCheck = setInterval(function() {
-        if (items['preview_mode']) {
+        if (previewMode) {
             return;
         }
 
@@ -344,7 +345,7 @@
             }
 
             if (element.innerHTML === 'youtube') {
-                const autoplay = items['preview_mode'] ? '0' : '1';
+                const autoplay = previewMode ? '0' : '1';
                 element.innerHTML = `<iframe src="https://www.youtube.com/embed/${item.location}?version=3&autoplay=${autoplay}&showinfo=0&controls=0&modestbranding=1&fs=1&rel=0" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
             }
         }
@@ -352,7 +353,7 @@
     };
 
     const loadVideo = function(element, callbackReady, item) {
-        element.innerHTML = `<video><source src=/${item.location} type="video/mp4" /></video>`;
+        element.innerHTML = `<video ${previewMode ? 'controls' : ''}><source src=/${item.location} type="video/mp4" /></video>`;
         const video = element.querySelector('video');
         callbackReady(function() {});
 
@@ -372,7 +373,7 @@
             }
 
             if (element.innerHTML.match('<video>')) {
-                if (!items['preview_mode']) {
+                if (!previewMode) {
                     video.play();
                 }
             }
