@@ -15,8 +15,8 @@
 	&.dragover {
 		main .main-container .inner .dropzone {
 			border-radius: $baseRadius;
-			background: rgba($white, .1);
-			border: 1px dashed rgba($white, .5);
+			background: rgba($gscaleF, .1);
+			border: 1px dashed rgba($gscaleF, .5);
 		}
 	}
 }
@@ -44,7 +44,7 @@
 			padding: 20px;
 
 			h3 {
-				color: $white;
+				color: $gscaleF;
 				padding: 10px 10px 10px 0;
 				margin-bottom: 20px;
 				font-size: 16px;
@@ -72,7 +72,7 @@
 				padding-top: 56.25%; /* 16:9 aspect ratio */
 				overflow: hidden;
 				border-radius: $baseRadius;
-				outline: 4px solid rgba($white, .1);
+				outline: 4px solid rgba($gscaleF, .1);
 
 				iframe {
 					position: absolute;

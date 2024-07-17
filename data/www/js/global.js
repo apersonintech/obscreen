@@ -31,7 +31,7 @@ const hideDropdowns = function () {
 };
 
 const showToast = function (text) {
-    const $toast = $("#toast");
+    const $toast = $(".toast");
     $toast.addClass('show');
     $toast.text(text);
     setTimeout(function() {

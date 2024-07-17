@@ -59,7 +59,7 @@ header nav ul li.user-menu {
 }
 
 header nav ul li.user-menu .logout {
-  color: $white;
+  color: $gscaleF;
 }
 
 header nav ul li.user-menu .username {
@@ -78,11 +78,11 @@ header nav ul li.user-menu .username i {
 }
 
 header nav ul li a {
-  color: rgba($white, 0.6);
+  color: rgba($gscaleF, 0.6);
   text-decoration: none;
 }
 
 header nav ul li a:hover,
 header nav ul li.active a {
-  color: $white;
+  color: $gscaleF;
 }

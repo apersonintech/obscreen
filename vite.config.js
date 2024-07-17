@@ -10,7 +10,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'data/www/scss/main.scss'),
+        'main-dark-mode': path.resolve(__dirname, 'data/www/scss/main-dark-mode.scss'),
+        'main-light-mode': path.resolve(__dirname, 'data/www/scss/main-light-mode.scss'),
       },
       output: {
         dir: path.resolve(__dirname, 'data/www/css/compiled'),

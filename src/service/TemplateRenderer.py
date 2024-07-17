@@ -28,6 +28,7 @@ class TemplateRenderer:
             STATIC_PREFIX="/{}/{}/".format(WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS),
             SECRET_KEY=self._model_store.config().map().get('secret_key'),
             FLEET_PLAYER_ENABLED=self._model_store.variable().map().get('fleet_player_enabled').as_bool(),
+            DARK_MODE=self._model_store.variable().map().get('dark_mode').as_bool(),
             AUTH_ENABLED=self._model_store.variable().map().get('auth_enabled').as_bool(),
             last_pillmenu_slideshow=self._model_store.variable().map().get('last_pillmenu_slideshow').as_string(),
             last_pillmenu_configuration=self._model_store.variable().map().get('last_pillmenu_configuration').as_string(),

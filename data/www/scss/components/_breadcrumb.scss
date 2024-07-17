@@ -9,10 +9,10 @@
     padding: 10px;
 
     ul.breadcrumb {
-        background: #222;
+        background: $gscale2;
         padding: 6px 4px 5px 4px;
-        box-shadow: 1px 1px .5px .5px inset rgba(0, 0, 0, 0.2);
-        border: 1px solid #222;
+        box-shadow: 1px 1px .5px .5px inset rgba($gscale0, 0.2);
+        border: 1px solid $gscale2;
         border-radius: $baseRadius;
         display: flex;
         flex-direction: row;
@@ -31,7 +31,7 @@
                 margin: 0 5px;
 
                 i {
-                    color: #AAA;
+                    color: $gscaleA;
                 }
             }
 
@@ -42,7 +42,7 @@
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-                color: $white;
+                color: $gscaleF;
                 text-align: center;
                 padding: 0 3px;
 
@@ -53,7 +53,7 @@
 
             &:hover {
                 a {
-                    color: #fff;
+                    color: $gscaleF;
                     background: $seaBlue;
                 }
             }

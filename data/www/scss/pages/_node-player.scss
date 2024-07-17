@@ -27,7 +27,7 @@
 			align-items: flex-start;
 			align-self: stretch;
 			margin: 10px 0 0 0;
-			border: 1px dashed #222;
+			border: 1px dashed $gscale2;
 			border-radius: 4px;
 			padding: 10px;
 
@@ -44,7 +44,7 @@
 					flex-direction: column;
 					justify-content: center;
 					align-items: center;
-					color: #999;
+					color: $gscale9;
 					font-size: 10px;
 					padding: 10px;
 					cursor: default;
@@ -53,7 +53,7 @@
 
 				&:hover {
 					.infos .title {
-						color: white;
+						color: $gscaleF;
 					}
 				}
 
@@ -62,19 +62,19 @@
 					flex-direction: row;
 					justify-content: flex-start;
 					align-items: center;
-					color: #AAA;
+					color: $gscaleA;
 					font-size: 12px;
 					margin-right: 5px;
 					flex: 1;
 					max-width: 180px;
-					background: $black;
-					border: 1px solid #333;
+					background: $gscale0;
+					border: 1px solid $gscale3;
 					border-radius: $baseRadius;
 					padding: 3px 7px;
 
 					.title {
 						font-size: 13px;
-						color: #AAA;
+						color: $gscaleA;
 						display: block;
 						word-break: break-all;
 						white-space: nowrap;
@@ -88,7 +88,7 @@
 						flex-direction: row;
 						justify-content: flex-start;
 						align-items: center;
-						color: #AAA;
+						color: $gscaleA;
 						font-size: 12px;
 						margin-right: 5px;
 					}
@@ -100,12 +100,12 @@
 					justify-content: flex-start;
 					align-items: center;
 					margin: 0 10px 0 10px;
-					background: #1B1B1B;
+					background: $gscale0B;
 					padding: 10px;
 					align-self: stretch;
 					flex: 1;
 					border-radius: $baseRadius;
-					color: #CCC;
+					color: $gscaleC;
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
@@ -126,7 +126,7 @@
 					align-items: center;
 
 					a {
-						color: white;
+						color: $gscaleF;
 					}
 				}
 			}

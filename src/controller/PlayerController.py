@@ -43,7 +43,7 @@ class PlayerController(ObController):
             return redirect(url_for('player_default', noplaylist=1))
 
         intro_slide_duration = 0 if items['preview_mode'] else int(request.args.get('intro', self._model_store.variable().get_one_by_name('intro_slide_duration').eval()))
-        animation_enabled = bool(request.args.get('animation', int(self._model_store.variable().get_one_by_name('slide_animation_enabled').eval())))
+        animation_enabled = bool(int(request.args.get('animation', int(self._model_store.variable().get_one_by_name('slide_animation_enabled').eval()))))
         polling_interval = int(request.args.get('polling', self._model_store.variable().get_one_by_name('polling_interval').eval()))
         slide_animation_speed = request.args.get('animation_speed', self._model_store.variable().get_one_by_name('slide_animation_speed').eval()).lower()
         slide_animation_entrance_effect = request.args.get('animation_effect', self._model_store.variable().get_one_by_name('slide_animation_entrance_effect').eval())

@@ -1,9 +1,9 @@
-#toast {
+.toast {
 	visibility: hidden;
 	min-width: 250px;
 	margin-left: -125px;
-	background-color: #333;
-	color: #fff;
+	background-color: $gscale3;
+	color: $gscaleF;
 	text-align: center;
 	border-radius: $baseRadius;
 	padding: 16px;
@@ -12,7 +12,7 @@
 	left: 50%;
 	bottom: 30px;
 	font-size: 17px;
-	border: 2px dashed #222;
+	border: 2px dashed $gscale2;
 
 	&.show {
 		visibility: visible;
