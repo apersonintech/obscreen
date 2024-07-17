@@ -73,9 +73,10 @@ class DatabaseManager:
                 sanitized_params.append(param)
 
         try:
-            with self._conn:
-                cur = self._conn.cursor()
-                cur.execute(query, tuple(sanitized_params))
+            self._conn.execute('BEGIN')
+            cur = self._conn.cursor()
+            cur.execute(query, tuple(sanitized_params))
+            self._conn.commit()
         except sqlite3.Error as e:
             if not silent_errors:
                 logging.error("SQL query execution error while writing '{}': {}".format(query, e))

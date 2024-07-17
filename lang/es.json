@@ -245,6 +245,8 @@
   "common_copied": "¡Elemento copiado!",
   "common_host_placeholder": "raspberrypi.local o 192.168.1.85",
   "common_reachable_at": "Host",
+  "common_http_error_occured": "Se ha producido un error %code%",
+  "common_http_error_413": "Los archivos son demasiado grandes",
   "logout": "Cerrar sesión",
   "login_error_not_found": "Credenciales incorrectas",
   "login_error_bad_credentials": "Credenciales incorrectas",
@@ -301,5 +303,6 @@
   "sysinfo_network_interface": "Interfaz de red",
   "sysinfo_mac_address": "Dirección MAC",
   "sysinfo_ip_address": "Dirección IP",
-  "player_default_welcome_message": "Para gestionar este reproductor, ve a un navegador en"
+  "player_default_welcome_message": "Para gestionar este reproductor, ve a un navegador en",
+  "player_noplaylist_welcome_message": "No hay ninguna playlist configurada de forma predeterminada, vaya a un navegador en"
 }

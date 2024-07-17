@@ -44,8 +44,16 @@
                 </button>
                 <button type="button"
                         class="btn explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
-                        data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}"
-                        data-entity-route="{{ url_for('fleet_node_player_delete') }}">
+                        data-folder-route="{{ url_for('fleet_node_player_folder_delete') }}?path={{ working_folder_path }}"
+                        data-entity-route="{{ url_for('fleet_node_player_delete') }}?path={{ working_folder_path }}">
+                    <i class="fa fa-trash-alt"></i>
+                </button>
+            </div>
+
+            <div class="explr-multiselection-actions">
+                <button type="button"
+                        class="btn explr-items-delete explr-multiselection-entity explr-multiselection-folder btn-danger-alt"
+                        data-route="{{ url_for('fleet_node_player_delete_bulk_explr') }}?path={{ working_folder_path }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
@@ -114,8 +122,7 @@
                     <li class="new-folder hidden">
                         <a href="javascript:void(0);">
                             <i class="fa fa-folder"></i>
-                            <form action="{{ url_for('fleet_node_player_folder_add') }}" method="POST">
-                                <input type="hidden" name="working_folder_path" value="{{ working_folder_path }}" />
+                            <form action="{{ url_for('fleet_node_player_folder_add') }}?path={{ working_folder_path }}" method="POST">
                                 <input type="text" name="name" autocomplete="off"/>
                             </form>
                         </a>
@@ -141,7 +148,7 @@
                                class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
                                 <i class="fa fa-folder"></i>
                                 <span>{{ truncate(folder.name, explr_limit_chars, '...') }}</span>
-                                <form action="{{ url_for('fleet_node_player_folder_rename') }}" method="POST">
+                                <form action="{{ url_for('fleet_node_player_folder_rename') }}?path={{ working_folder_path }}" method="POST">
                                     <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
                                     <input type="hidden" name="id" value="{{ folder.id }}"/>
                                 </form>
@@ -166,7 +173,7 @@
                                     </sub>
                                 {% endif %}
                                 <span>{{ truncate(node_player.name, explr_limit_chars, '...') }}</span>
-                                <form action="{{ url_for('fleet_node_player_rename') }}" method="POST">
+                                <form action="{{ url_for('fleet_node_player_rename') }}?path={{ working_folder_path }}" method="POST">
                                     <input type="text" name="name" value="{{ node_player.name }}" autocomplete="off"/>
                                     <input type="hidden" name="id" value="{{ node_player.id }}"/>
                                 </form>

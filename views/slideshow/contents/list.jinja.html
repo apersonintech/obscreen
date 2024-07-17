@@ -10,10 +10,18 @@
 {% endblock %}
 
 {% block add_js %}
+    <script>
+        var l = $.extend(l, {
+            'js_common_http_error_occured': '{{ l.common_http_error_occured }}',
+            'js_common_http_error_413': '{{ l.common_http_error_413 }}'
+        });
+    </script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
     <script src="{{ STATIC_PREFIX }}js/explorer.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-fileupload.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/dragdrop.js"></script>
 
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
 {% endblock %}
@@ -27,27 +35,47 @@
         <div class="top-actions">
             {{ HOOK(H_SLIDESHOW_CONTENT_TOOLBAR_ACTIONS_START) }}
 
-            <button type="button" class="btn btn-info content-add item-add">
-                <i class="fa fa-file-circle-plus icon-left"></i>
-                {{ l.slideshow_content_button_add }}
-            </button>
             <button type="button" class="folder-add btn-neutral">
                 <i class="fa fa-folder-plus icon-left"></i>
                 {{ l.common_new_folder }}
             </button>
+            <button type="button" class="btn btn-info content-add item-add">
+                <i class="fa fa-file-circle-plus icon-left"></i>
+                {{ l.slideshow_content_button_add }}
+            </button>
+
+            <a href="javascript:void(0);" class="btn btn-info btn-super-upload" data-route="{{ url_for('slideshow_content_upload_bulk') }}?path={{ working_folder_path }}">
+                <input type="file" id="content_files" name="object" class="hidden" multiple />
+                <div class="unprogress">
+                    <i class="fa fa-bolt"></i>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:50%"></div>
+                    <div class="percent">0%</div>
+                </div>
+            </a>
 
             <div class="explr-selection-actions">
                 <button type="button" class="btn explr-item-edit explr-selection-entity btn-info"
                         data-entity-route="{{ url_for('slideshow_content_edit', content_id='!c!') }}">
                     <i class="fa fa-eye"></i>
                 </button>
-                <button type="button" class="btn explr-item-rename explr-selection-entity explr-selection-folder btn-info">
+                <button type="button"
+                        class="btn explr-item-rename explr-selection-entity explr-selection-folder btn-info">
                     <i class="fa fa-pencil"></i>
                 </button>
                 <button type="button"
                         class="btn explr-item-delete explr-selection-entity explr-selection-folder btn-danger-alt"
-                        data-folder-route="{{ url_for('slideshow_content_folder_delete') }}"
-                        data-entity-route="{{ url_for('slideshow_content_delete') }}">
+                        data-folder-route="{{ url_for('slideshow_content_folder_delete') }}?path={{ working_folder_path }}"
+                        data-entity-route="{{ url_for('slideshow_content_delete') }}?path={{ working_folder_path }}">
+                    <i class="fa fa-trash-alt"></i>
+                </button>
+            </div>
+
+            <div class="explr-multiselection-actions">
+                <button type="button"
+                        class="btn explr-items-delete explr-multiselection-entity explr-multiselection-folder btn-danger-alt"
+                        data-route="{{ url_for('slideshow_content_delete_bulk_explr') }}?path={{ working_folder_path }}">
                     <i class="fa fa-trash-alt"></i>
                 </button>
             </div>
@@ -61,13 +89,13 @@
             <i class="fa fa-warning icon-left"></i>
             {{ l.common_folder_not_empty_error }}
         </div>
-    {% endif %}
-
-    {% if request.args.get('referenced_in_slide_error') %}
+    {% elif request.args.get('referenced_in_slide_error') %}
         <div class="alert alert-danger">
             <i class="fa fa-warning icon-left"></i>
             {{ l.slideshow_content_referenced_in_slide_error }}
         </div>
+    {% else %}
+        <div class="alert alert-danger hidden"></div>
     {% endif %}
 
     <div class="bottom-content">
@@ -112,64 +140,73 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <ul class="explr-dirview">
-                    <li class="new-folder hidden">
-                        <a href="javascript:void(0);">
-                            <i class="fa fa-folder"></i>
-                            <form action="{{ url_for('slideshow_content_folder_add') }}" method="POST">
-                                <input type="hidden" name="working_folder_path" value="{{ working_folder_path }}" />
-                                <input type="text" name="name" autocomplete="off"/>
-                            </form>
-                        </a>
-                    </li>
-
-                    {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
-                    {% if parent_path %}
-                        <li class="previous-folder droppable" data-path="{{ parent_path }}"
-                            data-id="{{ working_folder.parent_id }}" data-folder="1">
-                            <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}"
-                               class="explr-link explr-item-selectable explr-item-folder">
+                <div class="dropzone" data-related-input="content_files">
+                    <ul class="explr-dirview">
+                        <li class="new-folder hidden">
+                            <a href="javascript:void(0);">
                                 <i class="fa fa-folder"></i>
-                                ..
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    {% for folder in working_folder_children %}
-                        {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
-                        <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}"
-                            data-folder="1">
-                            <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}"
-                               class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
-                                <i class="fa fa-folder"></i>
-                                <span>{{ truncate(folder.name, explr_limit_chars, '...') }}</span>
-                                <form action="{{ url_for('slideshow_content_folder_rename') }}" method="POST">
-                                    <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
-                                    <input type="hidden" name="id" value="{{ folder.id }}"/>
+                                <form action="{{ url_for('slideshow_content_folder_add') }}?path={{ working_folder_path }}" method="POST">
+                                    <input type="text" name="name" autocomplete="off"/>
                                 </form>
                             </a>
                         </li>
-                    {% endfor %}
+
+                        {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
+                        {% if parent_path %}
+                            <li class="previous-folder droppable" data-path="{{ parent_path }}"
+                                data-id="{{ working_folder.parent_id }}" data-folder="1">
+                                <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}"
+                                   class="explr-link explr-item-selectable explr-item-folder">
+                                    <i class="fa fa-folder"></i>
+                                    ..
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% for folder in working_folder_children %}
+                            {% set folder_path = working_folder_path ~ '/' ~ folder.name %}
+                            <li class="draggable droppable" data-path="{{ folder_path }}" data-id="{{ folder.id }}"
+                                data-folder="1">
+                                <a href="{{ url_for('slideshow_content_cd', path=folder_path) }}"
+                                   class="explr-link explr-item-selectable explr-item-actionable explr-item-folder">
+                                    <i class="fa fa-folder"></i>
+                                    <span>{{ truncate(folder.name, explr_limit_chars, '...') }}</span>
+                                    <form action="{{ url_for('slideshow_content_folder_rename') }}?path={{ working_folder_path }}" method="POST">
+                                        <input type="text" name="name" value="{{ folder.name }}" autocomplete="off"/>
+                                        <input type="hidden" name="id" value="{{ folder.id }}"/>
+                                    </form>
+                                </a>
+                            </li>
+                        {% endfor %}
 
 
-                    {% for content in foldered_contents[working_folder.id|default(None)]|default([]) %}
-                        {% set icon = enum_content_type.get_fa_icon(content.type) %}
-                        {% set color = enum_content_type.get_color_icon(content.type) %}
+                        {% for content in foldered_contents[working_folder.id|default(None)]|default([]) %}
+                            {% set icon = enum_content_type.get_fa_icon(content.type) %}
+                            {% set color = enum_content_type.get_color_icon(content.type) %}
+                            {% set thumbnail = content.type == enum_content_type.PICTURE %}
 
-                        <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}"
-                            data-folder="0">
-                            <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}"
-                               class="explr-link explr-item-selectable explr-item-actionable explr-item-entity">
-                                <i class="fa {{ icon }} {{ color }}"></i>
-                                <span>{{ truncate(content.name, explr_limit_chars, '...') }}</span>
-                                <form action="{{ url_for('slideshow_content_rename') }}" method="POST">
-                                    <input type="text" name="name" value="{{ content.name }}" autocomplete="off"/>
-                                    <input type="hidden" name="id" value="{{ content.id }}"/>
-                                </form>
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                            <li class="draggable" data-path="{{ working_folder_path }}" data-id="{{ content.id }}"
+                                data-folder="0">
+                                <a href="{{ url_for('slideshow_content_edit', content_id=content.id) }}"
+                                   class="explr-link explr-item-selectable explr-item-actionable explr-item-entity {{ 'with-thumbnail' if thumbnail }}">
+
+                                    {% if content.type == enum_content_type.PICTURE %}
+                                        <div class="img-holder">
+                                            <img src="/{{ content.location }}" alt=""/>
+                                        </div>
+                                    {% endif %}
+
+                                    <i class="fa {{ icon }} {{ color }}"></i>
+                                    <span>{{ truncate(content.name, explr_limit_chars, '...') }}</span>
+                                    <form action="{{ url_for('slideshow_content_rename') }}?path={{ working_folder_path }}" method="POST">
+                                        <input type="text" name="name" value="{{ content.name }}" autocomplete="off"/>
+                                        <input type="hidden" name="id" value="{{ content.id }}"/>
+                                    </form>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
 
             <div class="modals hidden">

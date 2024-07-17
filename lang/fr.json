@@ -246,6 +246,8 @@
   "common_copied": "Element copié !",
   "common_host_placeholder": "raspberrypi.local ou 192.168.1.85",
   "common_reachable_at": "Hôte",
+  "common_http_error_occured": "Une erreur %code% est apparue",
+  "common_http_error_413": "Les fichiers sont trop volumineux",
   "logout": "Déconnexion",
   "login_error_not_found": "Identifiants invalides",
   "login_error_bad_credentials": "Identifiants invalides",
@@ -302,5 +304,6 @@
   "sysinfo_network_interface": "Interface Réseau",
   "sysinfo_mac_address": "Addresse MAC",
   "sysinfo_ip_address": "Addresse IP",
-  "player_default_welcome_message": "Pour gérer ce lecteur, allez sur un navigateur à l'adresse"
+  "player_default_welcome_message": "Pour gérer ce lecteur, allez sur un navigateur à l'adresse",
+  "player_noplaylist_welcome_message": "Aucune playlist n'est configurée par défaut, allez sur un navigateur à l'adresse"
 }
