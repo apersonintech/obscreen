@@ -1,5 +1,10 @@
 {
   "dynmenu_content": "Contenido",
+  "dynmenu_configuration": "Configuración",
+  "dynmenu_content_library": "Biblioteca",
+  "dynmenu_content_playlists": "Listas de reproducción",
+  "dynmenu_fleet": "Dispositivos",
+  "dynmenu_security": "Seguridad",
   "slideshow_slide_page_title": "Descripción General del Programa",
   "slideshow_slide_goto_player": "Ir al reproductor",
   "slideshow_slide_refresh_player": "Actualizar reproductor",
