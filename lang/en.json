@@ -244,6 +244,8 @@
   "common_copied": "Element copied in clipboard!",
   "common_host_placeholder": "raspberrypi.local or 192.168.1.85",
   "common_reachable_at": "Host",
+  "common_http_error_occured": "Error %code% occured",
+  "common_http_error_413": "Files are too large",
   "logout": "Logout",
   "login_error_not_found": "Bad credentials",
   "login_error_bad_credentials": "Bad credentials",
@@ -300,5 +302,6 @@
   "sysinfo_network_interface": "Network Interface",
   "sysinfo_mac_address": "MAC Address",
   "sysinfo_ip_address": "IP Address",
-  "player_default_welcome_message": "To manage this player, go to a browser at"
+  "player_default_welcome_message": "To manage this player, go to a browser at",
+  "player_noplaylist_welcome_message": "No playlist is configured by default, go to a browser at"
 }
