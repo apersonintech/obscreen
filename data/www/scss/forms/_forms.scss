@@ -44,10 +44,10 @@ form {
 		justify-content: flex-start;
 		align-items: center;
 		align-self: stretch;
-		color: #666666;
+		color: $gscale6;
 
 		&.btn-upload {
-			color: $white;
+			color: $gscaleF;
 			font-size: 14px;
 			flex: 0;
 			flex-basis: auto;
@@ -91,11 +91,11 @@ form {
 				background: none;
 				box-shadow: none;
 				border: none;
-				border-bottom: 1px solid #333;
+				border-bottom: 1px solid $gscale3;
 				border-radius: 0;
 				max-width: 80px;
 				padding-left: 0;
-				color: $white;
+				color: $gscaleF;
 				text-align: center;
 			}
 
@@ -106,12 +106,12 @@ form {
 				justify-content: flex-start;
 				align-items: center;
 				margin-left: 5px;
-				color: #555;
+				color: $gscale5;
 			}
 		}
 
 		div {
-			color: rgba($white, .7);
+			color: rgba($gscaleF, .7);
 			font-size: 14px;
 		}
 
@@ -121,33 +121,33 @@ form {
 			outline: none;
 			padding: 8px 0 5px 8px;
 			border-radius: 2px;
-			border: 1px solid rgba($white, .05);
+			border: 1px solid rgba($gscaleF, .05);
 			flex: 1;
-			background: #555;
-			box-shadow: 0 2px 1px #444, 0 4px 2px #333 inset;
-			color: #DDD;
+			background: $gscale5;
+			box-shadow: 0 2px 1px $gscale4, 0 4px 2px $gscale3 inset;
+			color: $gscaleD;
 			font-size: 14px;
 
 			&.input-naked,
 			&.disabled,
 			&[disabled] {
-				color: #555;
+				color: $gscale5;
 				background: none;
 				box-shadow: none;
 				border: none;
-				border-bottom: 1px solid #333;
+				border-bottom: 1px solid $gscale3;
 				border-radius: 0;
 			}
 
 			&.input-naked {
 				padding-left: 0;
-				color: #BBB;
+				color: $gscaleB;
 			}
 
 			&.disabled,
 			&[disabled] {
 				border: none;
-				background: $black;
+				background: $gscale0;
 				border-radius: $baseRadius;
 				padding-left: 10px;
 			}
@@ -156,7 +156,7 @@ form {
 
 
 	&.tab-select {
-		border-bottom: 1px solid #444;
+		border-bottom: 1px solid $gscale4;
 		display: flex;
 		flex-direction: row;
 		position: relative;

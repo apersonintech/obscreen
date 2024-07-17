@@ -1,7 +1,7 @@
 @mixin pixel-text($pixelOffset: 1) {
 	text-align: center;
-	text-shadow: #{$pixelOffset}px 0 0 #fff,
-	#{$pixelOffset}px 2px 0 #444,
+	text-shadow: #{$pixelOffset}px 0 0 $white,
+	#{$pixelOffset}px 2px 0 $gscale4,
 	0 #{$pixelOffset}px 0 $limeGreen,
 	-#{$pixelOffset}px 0 0 $seaBlue,
 	0 -#{$pixelOffset}px 0 $pinkyRed;
@@ -13,8 +13,8 @@
 
 @mixin pixel-text-to-right($pixelOffset: 1) {
 	text-align: center;
-	text-shadow: -#{$pixelOffset}px 0 0 #fff,
-	-#{$pixelOffset}px #{$pixelOffset*0.5}px 0 black,
+	text-shadow: -#{$pixelOffset}px 0 0 $white,
+	-#{$pixelOffset}px #{$pixelOffset*0.5}px 0 $black,
 	#{$pixelOffset*2}px #{$pixelOffset}px 0 $limeGreen,
 	#{$pixelOffset*2}px 0 0 $seaBlue,
 	#{$pixelOffset*2}px -#{$pixelOffset}px 0 $pinkyRed;
@@ -25,7 +25,7 @@
 }
 
 @mixin pixel-box($pixelOffset: 1) {
-	box-shadow: #{$pixelOffset}px 0 0 #fff, 0 #{$pixelOffset}px 0 $limeGreen, -#{$pixelOffset}px 0 0 $seaBlue, 0 -#{$pixelOffset}px 0 $pinkyRed;
+	box-shadow: #{$pixelOffset}px 0 0 $white, 0 #{$pixelOffset}px 0 $limeGreen, -#{$pixelOffset}px 0 0 $seaBlue, 0 -#{$pixelOffset}px 0 $pinkyRed;
 }
 
 @mixin generate-color-classes($color-map) {
@@ -63,7 +63,7 @@
 				background: transparent;
 				box-shadow: none;
 				border: 2px solid $color;
-				color: rgba($white, .8);
+				color: rgba($gscaleF, .8);
 
 				i.btn-match {
 					color: $color;

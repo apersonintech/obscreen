@@ -7,24 +7,24 @@ a.badge,
   padding: 5px 5px;
   border-radius: $baseRadius;
   font-size: 12px;
-  background: rgba($white, .1);
+  background: rgba($gscaleF, .1);
   border: 1px solid transparent;
-  color: $white;
+  color: $gscaleF;
 }
 
 a.badge:hover {
-  color: $white;
-  border: 1px solid rgba($white, .4);
+  color: $gscaleF;
+  border: 1px solid rgba($gscaleF, .4);
 }
 
 .panel-inactive .badge {
-  background: rgba($lightGrey, .1);
-  color: $lightGrey;
+  background: rgba($gscale7, .1);
+  color: $gscale7;
 }
 
 .panel-inactive a.badge:hover {
-  color: $lightGrey;
-  border: 1px solid rgba($lightGrey,.2);
+  color: $gscale7;
+  border: 1px solid rgba($gscale7,.2);
 }
 
 .badge.anonymous {

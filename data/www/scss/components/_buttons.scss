@@ -5,7 +5,7 @@ button,
 	position: relative;
 	padding: 10px 10px 8px 10px;
 	font-size: 14px;
-	color: #fff;
+	color: $white;
 	cursor: pointer;
 	border: none;
 	border-radius: $baseRadius;
@@ -35,13 +35,13 @@ button,
 	}
 
 	&.btn-pixel {
-		background: #CCC;
+		background: $gscaleC;
 		border: 1px solid transparent;
 		transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
 		text-transform: uppercase;
 		font-size: 12px;
 		@include pixel-box(4);
-		color: #222;
+		color: $gscale2;
 		overflow: hidden;
 
 		&:hover {
@@ -51,37 +51,37 @@ button,
 	}
 
 	&.btn-neutral {
-		color: #AAA;
-		background: $neutralGrey;
-		box-shadow: 0 $shadowOffset 0 0 darken($neutralGrey, 10%);
+		color: $white;
+		background: $gscale5;
+		box-shadow: 0 $shadowOffset 0 0 darken($gscale5, 10%);
 		border: 1px solid transparent;
 
 		&:hover {
-			box-shadow: 0 $shadowOffset 0 1px #222 inset;
-			background: darken($neutralGrey, 10%);
+			box-shadow: 0 $shadowOffset 0 1px $gkscale2 inset;
+			background: darken($gscale5, 10%);
 		}
 
 		&:focus {
-			background: darken($neutralGrey, 20%);
-			border: 1px solid #AAA;
+			background: darken($gscale5, 20%);
+			border: 1px solid $gscaleA;
 		}
 	}
 
 	.btn-wire-neutral {
 		background: transparent;
-		border: 2px solid $neutralGrey;
+		border: 2px solid $gscale5;
 		color: rgba($white, .8);
 		box-shadow: none;
 
 		&:hover {
-			background: rgba($neutralGrey, 0.05);
-			border-color: darken($neutralGrey, 10%);
-			color: darken($neutralGrey, 10%);
+			background: rgba($gscale5, 0.05);
+			border-color: darken($gscale5, 10%);
+			color: darken($gscale5, 10%);
 			box-shadow: none;
 		}
 
 		&:focus {
-			border-color: darken($neutralGrey, 20%);
+			border-color: darken($gscale5, 20%);
 			background: transparent;
 		}
 	}
@@ -90,15 +90,17 @@ button,
 		background: transparent;
 		box-shadow: none;
 		border: 1px solid transparent;
+		color: $gscaleF;
 
 		&:hover {
-			box-shadow: 0 $shadowOffset 0 1px #222 inset;
-			background: darken($neutralGrey, 10%);
+			box-shadow: 0 $shadowOffset 0 1px $gkscale2 inset;
+			background: darken($gscale5, 10%);
+			color: $white;
 		}
 
 		&:focus {
-			background: darken($neutralGrey, 20%);
-			border: 1px solid #AAA;
+			background: darken($gscale5, 20%);
+			border: 1px solid $gscaleA;
 		}
 	}
 
@@ -112,9 +114,9 @@ button,
 		position: absolute;
 		top: -4px;
 		right: -4px;
-		background: #777;
-		border-bottom: 2px solid $neutralGrey;
-		color: black;
+		background: $gscale7;
+		border-bottom: 2px solid $gscale5;
+		color: red;
 		border-radius: $baseRadius;
 		width: 16px;
 		height: 16px;
@@ -126,7 +128,7 @@ button,
 		padding-bottom: 1px;
 
 		i {
-			color: white;
+			color: $white;
 			font-size: 10px;
 		}
 	}

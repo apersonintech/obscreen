@@ -177,6 +177,7 @@
   "settings_variable_desc_edition_auth_enabled": "Las credenciales predeterminadas del usuario serán admin/admin",
   "settings_variable_desc_external_url": "URL externa (ej.: https://studio-01.company.com o http://10.10.3.100)",
   "settings_variable_desc_slide_upload_limit": "Límite de carga de diapositivas (en megabytes)",
+  "settings_variable_desc_dark_mode": "Modo oscuro",
   "settings_variable_desc_intro_slide_duration": "Duración de la diapositiva de introducción (en segundos)",
   "settings_variable_desc_default_slide_time_with_seconds": "Mostrar los segundos en el reloj de la diapositiva de introducción",
   "settings_variable_desc_polling_interval": "Intervalo de actualización aplicado para configuraciones del reproductor (en segundos)",

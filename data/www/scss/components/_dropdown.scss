@@ -25,8 +25,8 @@
 		top: 100%;
 		left: 0;
 		display: none;
-		background-color: #222;
-		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+		background-color: $gscale2;
+		box-shadow: 0 8px 16px rgba($gscale0, 0.2);
 		z-index: 1000;
 		list-style-type: none;
 		margin: 0;
@@ -52,7 +52,7 @@
 
 			a {
 				padding: 8px 16px 8px 8px;
-				color: $white;
+				color: $gscaleF;
 				display: flex;
 				flex-direction: row;
 				justify-content: flex-start;

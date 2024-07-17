@@ -9,7 +9,7 @@
 		justify-content: flex-start;
 		align-items: center;
 		align-self: stretch;
-		color: #666666;
+		color: $gscale6;
 	}
 
 	//.modal-slide {
@@ -19,7 +19,7 @@
 	//
 	//	input {
 	//		&[disabled] {
-	//			color: #AAA;
+	//			color: $gscaleA;
 	//		}
 	//	}
 	//
@@ -53,7 +53,7 @@
 				h3 {
 					font-size: 16px;
 					font-weight: 500;
-					color: #DDD;
+					color: $gscaleD;
 					text-decoration: none;
 					margin: 0 0 20px 0;
 				}
@@ -90,20 +90,20 @@
 						justify-content: flex-start;
 						align-items: center;
 						align-self: stretch;
-						color: white;
+						color: $gscaleF;
 						padding-bottom: 10px;
 						text-decoration: none;
 
 						&.divide {
-							border-top: 1px solid #222;
+							border-top: 1px solid $gscale2;
 							margin-top: 20px;
 							padding-top: 20px;
 						}
 					}
 
 					.preview {
-						background: black;
-						border: 1px solid rgba($white, .3);
+						background: $black;
+						border: 1px solid rgba($gscaleF, .3);
 						border-radius: $baseRadius;
 						justify-content: center;
 						align-items: center;
@@ -121,7 +121,7 @@
 
 				.players-holder {
 					align-self: stretch;
-					border-right: 1px solid #222;
+					border-right: 1px solid $gscale2;
 					margin: 20px 10px 20px 20px;
 					padding-right: 20px;
 					flex: 1.3;
