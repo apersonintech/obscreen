@@ -1,7 +1,10 @@
+import mimetypes
+
 from enum import Enum
-from typing import Union
+from typing import Union, List, Optional
 
 from src.util.utils import str_to_enum
+
 
 class ContentInputType(Enum):
 
@@ -22,6 +25,25 @@ class ContentType(Enum):
     URL = 'url'
     YOUTUBE = 'youtube'
     VIDEO = 'video'
+
+    @staticmethod
+    def guess_content_type_file(file):
+        mime_type, _ = mimetypes.guess_type(file.filename)
+
+        if mime_type in [
+            'image/gif',
+            'image/png',
+            'image/jpeg',
+            'image/webp',
+            'image/jpg'
+        ]:
+            return ContentType.PICTURE
+        elif mime_type in [
+            'video/mp4'
+        ]:
+            return ContentType.VIDEO
+
+        return None
 
     @staticmethod
     def get_input(value: Enum) -> ContentInputType:
