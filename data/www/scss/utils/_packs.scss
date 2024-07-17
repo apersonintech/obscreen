@@ -1,0 +1,44 @@
+
+// Type Colors
+$other: $yellow;
+$info: $seaBlue;
+$success: $limeGreen;
+$danger: $pinkyRed;
+$primary: $seaBlue;
+
+// Common styles
+$baseRadius: 4px;
+$layoutBorder: 1px solid $gscale2;
+
+// Packs
+$colors: (
+	info: $info,
+	info-alt: $bitterBlue,
+	success: $success,
+	success-alt: $bitterGreen,
+	error: $danger,
+	error-alt: $bitterRed,
+	danger: $danger,
+	danger-alt: $bitterRed,
+	purple: $sweetPurple,
+	purple-alt: $bitterPurple,
+	neutral: $neutralGrey,
+	yellow: $yellow,
+	white: $white,
+	black: $black,
+	youtube: $youtube,
+	raspbian: $raspbian,
+	windows:$windows,
+	macos:$macos,
+	debian:$debian,
+	fedora:$fedora,
+	ubuntu:$ubuntu,
+	suse:$suse,
+	redhat:$redhat,
+	centos:$centos,
+	other:$other,
+);
+
+// Classes
+@include generate-color-classes($colors);
+@include generate-button-classes($colors);

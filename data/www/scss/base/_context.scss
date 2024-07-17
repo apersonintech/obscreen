@@ -26,7 +26,7 @@ main {
 		.context-divider {
 			width: 1px;
 			height: 100%;
-			background: #222;
+			background: $gscale2;
 			margin-left: 20px;
 			margin-right: 20px;
 		}
@@ -44,13 +44,13 @@ main {
 			margin-right: 20px;
 
 			.trigger {
-				color: $white;
+				color: $gscaleF;
 
 				.avatar {
 					width: 32px;
 					height: 32px;
 					border-radius: $baseRadius;
-					background: #AAA;
+					background: $gscaleA;
 					margin-right: 10px;
 					display: flex;
 					flex-direction: row;
@@ -59,8 +59,8 @@ main {
 					text-align: center;
 					font-weight: bold;
 					font-size: 14px;
-					border: 1px solid #444;
-					color: black;
+					border: 1px solid $gscale4;
+					color: $gscale0;
 				}
 
 				i {

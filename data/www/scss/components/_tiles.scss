@@ -26,7 +26,7 @@
 			justify-content: flex-start;
 			align-items: center;
 			align-self: stretch;
-			color: $white;
+			color: $gscaleF;
 			margin: 1px;
 			padding: 15px 10px 15px 15px;
 			border-radius: $baseRadius;
@@ -36,8 +36,8 @@
 			&.active {
 				border-left: 4px solid $seaBlue;
 				border-radius: $baseRadius;
-				border-bottom: 2px solid #171717;
-				background: #222;
+				border-bottom: 2px solid $gscale07;
+				background: $gscale2;
 				color: $seaBlue;
 
 				&:hover {
@@ -45,8 +45,8 @@
 				}
 
 				&.disabled {
-					border-left-color: #444;
-					color: white;
+					border-left-color: $gscale4;
+					color: $gscaleF;
 				}
 
 				&.starred {
@@ -73,7 +73,7 @@
 				.tile-tail {
 					.head-icon {
 						i {
-							color: #444;
+							color: $gscale4;
 							opacity: 0.4;
 						}
 					}

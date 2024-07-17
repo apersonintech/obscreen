@@ -1,0 +1,129 @@
+
+menu h1.logo a {
+	color: $gkscale6;
+}
+
+menu:hover h1.logo a {
+	color: transparent;
+}
+
+ul.explr-dirview li a i {
+	color: $seaBlue;
+}
+
+button.btn-neutral:hover,
+.btn.btn-neutral:hover {
+	box-shadow: 0 2px 0 1px $gkscale6 inset;
+}
+
+button.btn-naked,
+.btn.btn-naked {
+	color: $gkscale7;
+
+	&:hover {
+		box-shadow: 0 2px 0 1px $gkscale6 inset;
+	}
+}
+
+
+.tiles .tiles-inner .tile-item:hover, .tiles .tiles-inner .tile-item.active {
+	background: $white;
+}
+
+.panes {
+	.pane-section,
+	tbody {
+
+		.pane-item,
+		tr {
+			&:nth-child(odd) {
+				background-color: $gkscaleF4;
+			}
+
+			&:nth-child(even) {
+				background-color: $gscale1;
+			}
+		}
+	}
+}
+
+.form-group .widget select, .form-group .widget input, .form-group .widget textarea {
+	box-shadow: 0 2px 1px $gkscaleA, 0 4px 2px $gkscaleA inset;
+	color: $gkscale5;
+	background: $gkscaleC;
+}
+
+.toggle label {
+	box-shadow:  0 2px 2px $gkscaleA inset;
+	&::after {
+		box-shadow: 0 2px rgba($gkscaleA, 0.9);
+	}
+}
+
+.modal-explr-picker {
+	.explr-tree {
+		background: $white;
+	}
+}
+
+
+ul.pills {
+	box-shadow: 1px 1px .5px .5px inset rgba($gkscaleA, 0.2);
+	li {
+		a {
+			color: $gkscale4;
+		}
+
+		&.active {
+			a {
+				color: $white;
+				background: $seaBlue;
+			}
+		}
+	}
+}
+
+.breadcrumb-container ul.breadcrumb {
+	box-shadow: 1px 1px .5px .5px inset rgba($gkscaleA, 0.2);
+	li a,
+	li span,
+	li {
+		color: $gkscale4;
+	}
+
+	li:hover a {
+		color: $white;
+	}
+
+	li.divider i {
+		color: $gkscaleB;
+	}
+}
+
+.view-player-group-list main .main-container .bottom-content .page-content .inner .node-player-group-holder .preview,
+.view-playlist-list main .main-container .bottom-content .page-content .inner .playlist-holder .preview {
+	border-color: $gkscaleC;
+}
+
+.view-player-group-list main .main-container .players-holder ul.players li.player-item .body,
+.view-playlist-list main .main-container .slides-holder ul.slides li.slide-item .body {
+	background: $gkscaleD;
+}
+
+.dropdown ul.dropdown-menu li.danger:hover a {
+	color: $white;
+}
+
+.inner-empty i {
+	color: $gkscaleB;
+	text-shadow: 0 -1px $gkscale7, 0 0px .5px $gkscale4;
+}
+
+.view-player-group-list main .main-container .players-holder ul.players li.player-item .tail a,
+.view-playlist-list main .main-container .slides-holder ul.slides li.slide-item .tail a {
+	color: $gkscale8;
+
+	&:hover {
+		color: $white;
+	}
+}
