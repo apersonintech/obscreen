@@ -1,5 +1,10 @@
 {
   "dynmenu_content": "Content",
+  "dynmenu_configuration": "Settings",
+  "dynmenu_content_library": "Library",
+  "dynmenu_content_playlists": "Playlists",
+  "dynmenu_fleet": "Devices",
+  "dynmenu_security": "Security",
   "slideshow_slide_page_title": "Schedule Overview",
   "slideshow_slide_goto_player": "Go to player",
   "slideshow_slide_refresh_player": "Refresh player",

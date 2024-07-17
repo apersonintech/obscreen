@@ -63,12 +63,12 @@
             "position": 0,
             "main_pill_route": last_pillmenu_slideshow,
             "pills": [
-                {"name": "Bibliothèque", "route": "slideshow_content_list", "icon": "fa-image"},
-                {"name": "Playlists", "route": "playlist", "route_alt": "playlist_list", "icon": "fa-play"},
+                {"name": l.dynmenu_content_library, "route": "slideshow_content_list", "icon": "fa-image"},
+                {"name": l.dynmenu_content_playlists, "route": "playlist", "route_alt": "playlist_list", "icon": "fa-play"},
             ]
         },
         "configuration": {
-            "name": "Configuration",
+            "name": l.dynmenu_configuration,
             "icon": "fa-cog",
             "position": 3,
             "main_pill_route": last_pillmenu_configuration,
@@ -84,7 +84,7 @@
     {% if FLEET_PLAYER_ENABLED %}
         {% set dynmenu = merge_dicts(dynmenu, {
             "fleet": {
-                "name": "Appareils",
+                "name": l.dynmenu_fleet,
                 "icon": "fa-tv",
                 "position": 1,
                 "main_pill_route": last_pillmenu_fleet,
@@ -99,7 +99,7 @@
     {% if AUTH_ENABLED %}
         {% set dynmenu = merge_dicts(dynmenu, {
             "security": {
-                "name": "Sécurité",
+                "name": l.dynmenu_security,
                 "icon": "fa-key",
                 "position": 2,
                 "main_pill_route": last_pillmenu_security,

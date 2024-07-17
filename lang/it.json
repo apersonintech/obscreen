@@ -1,5 +1,10 @@
 {
   "dynmenu_content": "Contenuti",
+  "dynmenu_configuration": "Configurazione",
+  "dynmenu_content_library": "Libreria",
+  "dynmenu_content_playlists": "Playlist",
+  "dynmenu_fleet": "Dispositivi",
+  "dynmenu_security": "Sicurezza",
   "slideshow_slide_page_title": "Programmazione",
   "slideshow_slide_goto_player": "Vai al player",
   "slideshow_slide_refresh_player": "Aggiorna player",
