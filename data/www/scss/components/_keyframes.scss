@@ -10,3 +10,12 @@
 		left: 27px;
 	}
 }
+
+@keyframes shakednd {
+	0% {
+		transform: rotate(-2deg);
+	}
+	100% {
+		transform: rotate(2deg);
+	}
+}

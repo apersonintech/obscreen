@@ -1,0 +1,64 @@
+body.dragover {
+	.shakeondrag {
+		animation: shakednd .1s linear alternate infinite;
+	}
+}
+
+.btn-super-upload-busy,
+.btn-super-upload {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-left: 10px;
+	position: relative;
+
+	&.btn-super-upload-busy {
+		border: none !important;
+	}
+
+	.unprogress {
+		display: block;
+	}
+
+	.progress {
+		display: none;
+		width: 200px;
+		height: 10px;
+		background: #666;
+		border-radius: $baseRadius;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: center;
+
+		.progress-bar {
+			border-radius: $baseRadius;
+			background-color: $seaBlue;
+			height: 100%;
+		}
+
+		.percent {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 2px;
+			font-size: 15px;
+			color: white;
+			text-shadow: 0 0 2px black;
+		}
+	}
+
+	&.uploading {
+		.progress {
+			display: block;
+		}
+
+		.unprogress {
+			display: none;
+		}
+	}
+}

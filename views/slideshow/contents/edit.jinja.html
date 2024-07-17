@@ -59,7 +59,7 @@
 
                 <div class="horizontal">
                     <div class="form-holder">
-                        <form class="form" action="{{ url_for('slideshow_content_save', content_id=content.id) }}" method="POST">
+                        <form class="form" action="{{ url_for('slideshow_content_save', content_id=content.id) }}?path={{ working_folder_path }}" method="POST">
 
                             <div class="form-group">
                                 <label for="content-edit-name">{{ l.slideshow_content_form_label_name }}</label>

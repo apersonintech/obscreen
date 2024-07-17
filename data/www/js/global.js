@@ -1,6 +1,10 @@
 const $modalsRoot = $('.modals');
 const $pickersRoot = $('.pickers');
 
+const isset = function (obj){
+	return obj !== undefined && obj !== null;
+};
+
 const showModal = function (modalClass) {
     $modalsRoot.removeClass('hidden').find('form').trigger('reset');
     $modalsRoot.find('.modal').addClass('hidden');
