@@ -76,7 +76,7 @@ jQuery(function ($) {
 
         if (selectionRectangle) {
             selectionRectangle.remove();
-            setTimeout(function() {
+            setTimeout(function () {
                 selectionRectangle = null;
                 selectionStart = null;
             }, 100);
@@ -112,13 +112,14 @@ jQuery(function ($) {
         });
 
         $('.draggable').each(function () {
-            $(this).draggable({
+            $(this).multiDraggable({
                 revert: "invalid",
                 revertDuration: 10,
-                start: function(event, ui) {
+                group: 'li.highlight-clicked',
+                startNative: function (event, ui) {
                     $('body').addClass('dragging');
                 },
-                stop: function() {
+                stopNative: function () {
                     $('body').removeClass('dragging');
                 }
             });
@@ -136,19 +137,34 @@ jQuery(function ($) {
                 drop: function (event, ui) {
                     $(this).removeClass("highlight-drop");
                     const $form = $('#folder-move-form');
-                    const $moved = ui.draggable;
+                    const $moved = $('.ui-draggable-dragging');
                     const $target = $(this);
-                    $form.find('[name=is_folder]').val($moved.attr('data-folder'))
-                    $form.find('[name=entity_id]').val($moved.attr('data-id'))
-                    $form.find('[name=new_folder_id]').val($target.attr('data-id'))
-                    ui.draggable.position({
-                        my: "center",
-                        at: "center",
-                        of: $(this),
-                        using: function (pos) {
-                            $(this).animate(pos, 50);
+                    const folder_ids = [], entity_ids = [];
+
+                    $moved.each(function () {
+                        const $item = $(this);
+                        const is_folder = $item.attr('data-folder') === '1';
+                        const id = $item.attr('data-id');
+
+                        if (is_folder) {
+                            folder_ids.push(id);
+                        } else {
+                            entity_ids.push(id);
                         }
+
+                        $item.position({
+                            my: "center",
+                            at: "center",
+                            of: $target,
+                            using: function (pos) {
+                                $item.animate(pos, 50);
+                            }
+                        });
                     });
+
+                    $form.find('[name=entity_ids]').val(entity_ids.join(','))
+                    $form.find('[name=folder_ids]').val(folder_ids.join(','))
+                    $form.find('[name=new_folder_id]').val($target.attr('data-id'))
                     $form.submit();
                 }
             });
@@ -300,7 +316,7 @@ jQuery(function ($) {
             const $prevLi = $selectedLi.prev('li:visible');
             const $nextLi = $selectedLiLast.next('li:visible');
             const verticalNeighbors = getAboveBelowElement($selectedLi);
-            const clearIfNoMeta = function() {
+            const clearIfNoMeta = function () {
                 if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
                     clearSelection()
                 }

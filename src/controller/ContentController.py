@@ -189,11 +189,24 @@ class ContentController(ObController):
 
     def slideshow_content_folder_move(self):
         working_folder_path, working_folder = self.get_working_folder()
-        self._model_store.folder().move_to_folder(
-            entity_id=request.form['entity_id'],
-            folder_id=request.form['new_folder_id'],
-            entity_is_folder=True if 'is_folder' in request.form and request.form['is_folder'] == '1' else False,
-        )
+        entity_ids = request.form['entity_ids'].split(',')
+        folder_ids = request.form['folder_ids'].split(',')
+
+        for id in entity_ids:
+            self._model_store.folder().move_to_folder(
+                entity_id=id,
+                folder_id=request.form['new_folder_id'],
+                entity_is_folder=False,
+                entity=FolderEntity.CONTENT
+            )
+
+        for id in folder_ids:
+            self._model_store.folder().move_to_folder(
+                entity_id=id,
+                folder_id=request.form['new_folder_id'],
+                entity_is_folder=True,
+                entity=FolderEntity.CONTENT
+            )
 
         return redirect(url_for('slideshow_content_list', path=working_folder_path))
 

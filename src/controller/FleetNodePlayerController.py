@@ -177,12 +177,24 @@ class FleetNodePlayerController(ObController):
 
     def fleet_node_player_folder_move(self):
         working_folder_path, working_folder = self.get_working_folder()
+        entity_ids = request.form['entity_ids'].split(',')
+        folder_ids = request.form['folder_ids'].split(',')
 
-        self._model_store.folder().move_to_folder(
-            entity_id=request.form['entity_id'],
-            folder_id=request.form['new_folder_id'],
-            entity_is_folder=True if 'is_folder' in request.form and request.form['is_folder'] == '1' else False,
-        )
+        for id in entity_ids:
+            self._model_store.folder().move_to_folder(
+                entity_id=id,
+                folder_id=request.form['new_folder_id'],
+                entity_is_folder=False,
+                entity=FolderEntity.NODE_PLAYER
+            )
+
+        for id in folder_ids:
+            self._model_store.folder().move_to_folder(
+                entity_id=id,
+                folder_id=request.form['new_folder_id'],
+                entity_is_folder=True,
+                entity=FolderEntity.NODE_PLAYER
+            )
 
         return redirect(url_for('fleet_node_player_list', path=working_folder_path))
 

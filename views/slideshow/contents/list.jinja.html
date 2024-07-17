@@ -21,6 +21,7 @@
     <script src="{{ STATIC_PREFIX }}js/slideshow/contents.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-fileupload.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/lib/jquery-multidraggable.js"></script>
     <script src="{{ STATIC_PREFIX }}js/dragdrop.js"></script>
 
     {{ HOOK(H_SLIDESHOW_CONTENT_JAVASCRIPT) }}
@@ -105,11 +106,10 @@
             {% endwith %}
         </div>
 
-        <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}" class="hidden"
-              method="POST">
-            <input type="hidden" name="entity_id"/>
+        <form id="folder-move-form" action="{{ url_for('slideshow_content_folder_move') }}?path={{ working_folder_path }}" class="hidden" method="POST">
+            <input type="hidden" name="entity_ids"/>
+            <input type="hidden" name="folder_ids"/>
             <input type="hidden" name="new_folder_id"/>
-            <input type="hidden" name="is_folder"/>
         </form>
 
         <div class="page-content">
@@ -154,7 +154,7 @@
                         {% set parent_path = '/'.join(working_folder_path.rstrip('/').split('/')[:-1]) %}
                         {% if parent_path %}
                             <li class="previous-folder droppable" data-path="{{ parent_path }}"
-                                data-id="{{ working_folder.parent_id }}" data-folder="1">
+                                data-id="{{ working_folder.parent_id if working_folder.parent_id else '' }}" data-folder="1">
                                 <a href="{{ url_for('slideshow_content_cd', path=parent_path) }}"
                                    class="explr-link explr-item-selectable explr-item-folder">
                                     <i class="fa fa-folder"></i>
