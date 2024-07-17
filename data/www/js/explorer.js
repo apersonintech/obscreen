@@ -51,10 +51,12 @@ jQuery(function ($) {
                 linkOffset.top + linkHeight > top
             );
 
-            if (isWithinSelection) {
-                highlightExplrLink($link);
-            } else {
-                unhighlightExplrLink($link);
+            if (width > 40 && height > 40) {
+                if (isWithinSelection) {
+                    highlightExplrLink($link);
+                } else {
+                    unhighlightExplrLink($link);
+                }
             }
         });
 
@@ -291,16 +293,25 @@ jQuery(function ($) {
             const $prevLi = $selectedLi.prev('li:visible');
             const $nextLi = $selectedLiLast.next('li:visible');
             const verticalNeighbors = getAboveBelowElement($selectedLi);
+            const clearIfNoMeta = function() {
+                if (!e.metaKey && !e.ctrlKey && !e.shiftKey) {
+                    clearSelection()
+                }
+            };
 
             if (e.key === "Enter") {
                 $selectedLink.trigger('dblclick');
             } else if (e.key === "ArrowLeft" && $prevLi.length) {
+                clearIfNoMeta();
                 selectEpxlrLink($prevLi.find('.explr-link'));
             } else if (e.key === "ArrowRight" && $nextLi.length) {
+                clearIfNoMeta();
                 selectEpxlrLink($nextLi.find('.explr-link'));
             } else if (e.key === "ArrowUp" && verticalNeighbors.above) {
+                clearIfNoMeta();
                 selectEpxlrLink(verticalNeighbors.above.find('.explr-link'));
             } else if (e.key === "ArrowDown" && verticalNeighbors.below) {
+                clearIfNoMeta();
                 selectEpxlrLink(verticalNeighbors.below.find('.explr-link'));
             } else if (e.key === "Backspace") {
                 if ($('.explr-item-delete:visible').length) {
@@ -359,7 +370,6 @@ jQuery(function ($) {
 
     $(document).on('click', function (event) {
         const $parentClickable = $(event.target).parents('a, button');
-        console.log(selectionRectangle)
         if ($parentClickable.length === 0 && selectionStart === null) {
             clearSelection();
         }
