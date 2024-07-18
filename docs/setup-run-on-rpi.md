@@ -41,7 +41,6 @@ docker run --rm --name obscreen --pull=always \
   -v ./var/run/play:/app/var/run/play \
   jierka/obscreen:latest
 ```
----
 </details>
 
 <details closed>
@@ -61,8 +60,6 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml >
 docker compose up --detach --pull=always
 ```
 </details>
-
----
 
 <details closed>
 <summary><h3>system-wide (recommended)</h3></summary>
@@ -112,8 +109,9 @@ sudo journalctl -u obscreen-studio -f
 ## 🏁 Finally
 - Run `sudo systemctl restart obscreen-player` or `sudo reboot`
 
----
 </details>
+
+---
 
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://raspberrypi.local:5000`
