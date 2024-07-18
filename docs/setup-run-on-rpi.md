@@ -177,6 +177,8 @@ https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
 
 However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
 
+---
+
 </details>
 
 <details closed>
@@ -196,4 +198,7 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 sudo systemctl restart obscreen-studio.service
 ```
+
+---
+
 </details>
