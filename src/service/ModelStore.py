@@ -19,18 +19,18 @@ class ModelStore:
     def __init__(self, get_plugins: Dict):
         self._get_plugins = get_plugins
 
+        # Core
+        self._config_manager = ConfigManager()
+        self._logging_manager = LoggingManager(config_manager=self._config_manager)
+
         # Pure
         self._lang_manager = LangManager()
         self._database_manager = DatabaseManager()
 
         # Dynamics
         self._user_manager = UserManager(lang_manager=self._lang_manager, database_manager=self._database_manager, on_user_delete=self.on_user_delete)
-        self._variable_manager = VariableManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager)
+        self._variable_manager = VariableManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, config_manager=self._config_manager)
         self._lang_manager.set_lang(self.variable().map().get('lang').as_string())
-
-        # Core
-        self._config_manager = ConfigManager(variable_manager=self._variable_manager)
-        self._logging_manager = LoggingManager(config_manager=self._config_manager)
 
         # Model
         self._folder_manager = FolderManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)

@@ -23,7 +23,6 @@ cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 docker run --restart=always --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
-  -e PLAYER_AUTOSTART_FILE=/app/var/run/play \
   -e SECRET_KEY=ANY_SECRET_KEY_HERE \
   -p 5000:5000 \
   -v ./data/db:/app/data/db \

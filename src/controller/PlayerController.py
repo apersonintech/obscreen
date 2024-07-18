@@ -64,6 +64,7 @@ class PlayerController(ObController):
         return render_template(
             'player/default.jinja.html',
             interfaces=[iface['ip_address'] for iface in get_network_interfaces()],
+            external_url=self._model_store.variable().get_one_by_name('external_url').as_string().strip(),
             time_with_seconds=self._model_store.variable().get_one_by_name('default_slide_time_with_seconds'),
             noplaylist=request.args.get('noplaylist', '0') == '1'
         )
