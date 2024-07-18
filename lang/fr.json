@@ -228,6 +228,7 @@
   "basic_month_10": "Octobre",
   "basic_month_11": "Novembre",
   "basic_month_12": "Décembre",
+  "common_restart_needed": "Veuillez redémarrer obscreen studio (ou redémarrer l'appareil) pour que les changements soient pris en compte",
   "common_pick_element": "Choisissez un élément",
   "common_untitled": "<sans-titre>",
   "common_loading": "Chargement...",

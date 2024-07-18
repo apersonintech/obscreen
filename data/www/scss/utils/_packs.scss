@@ -5,6 +5,7 @@ $info: $seaBlue;
 $success: $limeGreen;
 $danger: $pinkyRed;
 $primary: $seaBlue;
+$warning: $orange;
 
 // Common styles
 $baseRadius: 4px;
@@ -12,6 +13,7 @@ $layoutBorder: 1px solid $gscale2;
 
 // Packs
 $colors: (
+	warning: $warning,
 	info: $info,
 	info-alt: $bitterBlue,
 	success: $success,
@@ -42,3 +44,4 @@ $colors: (
 // Classes
 @include generate-color-classes($colors);
 @include generate-button-classes($colors);
+@include generate-alert-classes($colors);

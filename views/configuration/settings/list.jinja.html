@@ -15,7 +15,13 @@
 
     {% if request.args.get('error') %}
         <div class="alert alert-error">
-            {{ request.args.get('error') }}
+            {{ t(request.args.get('error')) }}
+        </div>
+    {% endif %}
+
+    {% if request.args.get('warning') %}
+        <div class="alert alert-yellow">
+            <i class="fa fa-warning"></i>{{ t(request.args.get('warning')) }}
         </div>
     {% endif %}
 
