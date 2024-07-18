@@ -1,83 +1,45 @@
-<form id="timeForm">
-  <label for="timePeriod">Sélectionnez une période:</label>
-  <select id="timePeriod" name="timePeriod" onchange="showFields()">
-    <option value="">--Sélectionnez--</option>
-    <option value="year">À un moment dans l'année</option>
-    <option value="week">À un moment dans la semaine</option>
-    <option value="month">À un moment dans le mois</option>
-    <option value="day">À un moment de la journée</option>
-    <option value="specificDate">À un jour précis dans le calendrier</option>
-  </select>
+<table class="panes variables">
+    <tbody>
+        {% set ns = namespace(last_section='') %}
+        {% for variable in variables %}
+            {% set section_change = variable.plugin and ns.last_section != variable.plugin %}
 
-  <div id="yearFields" class="hidden">
-    <label for="monthOfYear">Mois de l'année:</label>
-    <input type="number" id="monthOfYear" name="monthOfYear" min="1" max="12">
-    <label for="dayOfMonthYear">Jour du mois:</label>
-    <input type="number" id="dayOfMonthYear" name="dayOfMonthYear" min="1" max="30">
-    <label for="hourYear">Heure:</label>
-    <input type="number" id="hourYear" name="hourYear" min="0" max="24">
-    <label for="minuteYear">Minute:</label>
-    <input type="number" id="minuteYear" name="minuteYear" min="0" max="60">
-  </div>
+            {% if section_change %}
+                {% if not loop.first %}</tbody><tbody>{% endif %}
+                <tr class="title-item">
+                    <td colspan="3">
+                        {% set plugin = plugins[variable.plugin] %}
+                        {{ t(plugin.use_title()) }}
 
-  <div id="weekFields" class="hidden">
-    <label for="dayOfWeek">Jour de la semaine:</label>
-    <input type="number" id="dayOfWeek" name="dayOfWeek" min="1" max="7">
-    <label for="hourWeek">Heure:</label>
-    <input type="number" id="hourWeek" name="hourWeek" min="0" max="24">
-    <label for="minuteWeek">Minute:</label>
-    <input type="number" id="minuteWeek" name="minuteWeek" min="0" max="60">
-  </div>
+                        {% if plugin.use_description() %}
+                            <div class="more">{{ t(plugin.use_description()) }}</div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+            <tr class="variable-item variable-edit" data-level="{{ variable.id }}" data-entity="{{ variable.to_json() }}">
+                <td class="description">
+                    {{ t(variable.description) }}
+                </td>
+                <td class="value">
+                    <i class="fa fa-pencil icon-legend"></i>
+                    {% if variable.value %}
+                        {% if variable.type.value == 'bool' %}
+                            {% if variable.display() %}
+                                <i class="fa fa-check alert-success alert-icon icon-value"></i>
+                            {% else %}
+                                <i class="fa fa-times alert-error alert-icon icon-value"></i>
+                            {% endif %}
+                        {% else %}
+                            {{ variable.display() }}
+                        {% endif %}
+                    {% else %}
+                        <span class="empty">{{ l.common_empty }}</span>
+                    {% endif %}
+                </td>
+            </tr>
 
-  <div id="monthFields" class="hidden">
-    <label for="dayOfMonth">Jour du mois:</label>
-    <input type="number" id="dayOfMonth" name="dayOfMonth" min="1" max="30">
-    <label for="hourMonth">Heure:</label>
-    <input type="number" id="hourMonth" name="hourMonth" min="0" max="24">
-    <label for="minuteMonth">Minute:</label>
-    <input type="number" id="minuteMonth" name="minuteMonth" min="0" max="60">
-  </div>
-
-  <div id="dayFields" class="hidden">
-    <label for="hourDay">Heure:</label>
-    <input type="number" id="hourDay" name="hourDay" min="0" max="24">
-    <label for="minuteDay">Minute:</label>
-    <input type="number" id="minuteDay" name="minuteDay" min="0" max="60">
-  </div>
-
-  <div id="specificDateFields" class="hidden">
-    <label for="specificDate">Date complète (Y-m-d H-i):</label>
-    <input type="datetime-local" id="specificDate" name="specificDate">
-  </div>
-
-  <button type="submit">Soumettre</button>
-</form>
-
-<script>
-  function showFields() {
-    document.getElementById('yearFields').classList.add('hidden');
-    document.getElementById('weekFields').classList.add('hidden');
-    document.getElementById('monthFields').classList.add('hidden');
-    document.getElementById('dayFields').classList.add('hidden');
-    document.getElementById('specificDateFields').classList.add('hidden');
-
-    var timePeriod = document.getElementById('timePeriod').value;
-    if (timePeriod === 'year') {
-      document.getElementById('yearFields').classList.remove('hidden');
-    } else if (timePeriod === 'week') {
-      document.getElementById('weekFields').classList.remove('hidden');
-    } else if (timePeriod === 'month') {
-      document.getElementById('monthFields').classList.remove('hidden');
-    } else if (timePeriod === 'day') {
-      document.getElementById('dayFields').classList.remove('hidden');
-    } else if (timePeriod === 'specificDate') {
-      document.getElementById('specificDateFields').classList.remove('hidden');
-    }
-  }
-</script>
-
-<style>
-  .hidden {
-    display: none;
-  }
-</style>
+            {% set ns.last_section = variable.plugin %}
+        {% endfor %}
+    </tbody>
+</table>
