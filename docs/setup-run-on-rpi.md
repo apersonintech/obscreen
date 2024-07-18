@@ -122,7 +122,7 @@ sudo journalctl -u obscreen-studio -f
 - Page which plays slideshow is reachable at `http://raspberrypi.local:5000`
 - Slideshow manager is reachable at `http://raspberrypi.local:5000/manage`
 
----
+
 ## 📺 Run the player instance
 
 <details closed>
