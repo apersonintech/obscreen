@@ -18,7 +18,7 @@
 <details open>
 <summary>### with docker run</summary>
 
-> ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
+⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
 ```bash
 # (Optional) Install docker if needed
 curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
