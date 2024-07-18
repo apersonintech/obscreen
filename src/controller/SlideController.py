@@ -64,7 +64,7 @@ class SlideController(ObController):
             content_id=request.form['content_id'],
             enabled='enabled' in request.form and request.form['enabled'],
             duration=request.form['duration'],
-            is_notification=True if 'is_notification' in request.form else False,
+            is_notification=True if 'is_notification' in request.form and request.form['is_notification'] == '1' else False,
             cron_schedule=request.form['cron_schedule'],
             cron_schedule_end=request.form['cron_schedule_end'],
         )
