@@ -126,7 +126,7 @@ sudo journalctl -u obscreen-studio -f
 #### How to install
 - Install player autorun by executing following script (will install chromium, x11, pulseaudio and obscreen-player systemd service)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
+curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh -o /tmp/install-autorun-rpi.sh && chmod +x /tmp/install-autorun-rpi.sh && sudo /bin/bash /tmp/install-autorun-rpi.sh $USER $HOME
 ```
 
 #### How to restart
