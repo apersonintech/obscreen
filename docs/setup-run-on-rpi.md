@@ -44,7 +44,8 @@ docker run --rm --name obscreen --pull=always \
 ---
 </details>
 
-### or with docker compose
+<details closed>
+<summary><h3>with docker compose</h3></summary>
 ```bash
 # Prepare application data file tree
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
@@ -58,7 +59,10 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml >
 # Run
 docker compose up --detach --pull=always
 ```
+</details>
+
 ---
+
 ### or system-wide
 #### Install
 ```bash
