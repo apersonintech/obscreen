@@ -3,6 +3,7 @@
     <head>
         <script type="text/javascript">
             const time_with_seconds = {{ 'true' if time_with_seconds.as_bool() else 'false' }};
+            let external_url = '{{ external_url }}';
 
             function updateTime() {
                 const date = new Date();
@@ -13,11 +14,11 @@
                 const month = date.getMonth();
                 const year = date.getFullYear();
                 const day = date.getDay();
-                const dayLabels = ["{{l.basic_day_7}}", "{{l.basic_day_1}}", "{{l.basic_day_2}}", "{{l.basic_day_3}}", "{{l.basic_day_4}}", "{{l.basic_day_5}}", "{{l.basic_day_6}}"];
-                const monthLabels = ["{{l.basic_month_1}}", "{{l.basic_month_2}}", "{{l.basic_month_3}}", "{{l.basic_month_4}}", "{{l.basic_month_5}}", "{{l.basic_month_6}}", "{{l.basic_month_7}}", "{{l.basic_month_8}}", "{{l.basic_month_9}}", "{{l.basic_month_10}}", "{{l.basic_month_11}}", "{{l.basic_month_12}}"];
+                const day_labels = ["{{l.basic_day_7}}", "{{l.basic_day_1}}", "{{l.basic_day_2}}", "{{l.basic_day_3}}", "{{l.basic_day_4}}", "{{l.basic_day_5}}", "{{l.basic_day_6}}"];
+                const month_labels = ["{{l.basic_month_1}}", "{{l.basic_month_2}}", "{{l.basic_month_3}}", "{{l.basic_month_4}}", "{{l.basic_month_5}}", "{{l.basic_month_6}}", "{{l.basic_month_7}}", "{{l.basic_month_8}}", "{{l.basic_month_9}}", "{{l.basic_month_10}}", "{{l.basic_month_11}}", "{{l.basic_month_12}}"];
 
                 const timeLabel = hours + ":" + minutes + (time_with_seconds ? ':' + seconds : '');
-                const dateLabel = dayLabels[day] + " " + dayInMonth + " " + monthLabels[month] + " " + year;
+                const dateLabel = day_labels[day] + " " + dayInMonth + " " + month_labels[month] + " " + year;
 
                 document.getElementById('time').innerHTML = timeLabel;
                 document.getElementById('date').innerHTML = dateLabel;
@@ -32,8 +33,9 @@
                 xhr.open("GET", "{{ url_for('sysinfo_get_ipaddr') }}", true);
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        const jsonResponse = JSON.parse(xhr.responseText);
-                        setIps(jsonResponse.interfaces)
+                        const json_response = JSON.parse(xhr.responseText);
+                        external_url = json_response.external_url;
+                        setIps(json_response.interfaces)
                     }
                 };
                 xhr.send();
@@ -51,6 +53,8 @@
             .ipaddr a { text-decoration: none; font-weight: normal; font-size: 1.2em; color: #666; transition: .1s ease-in all; display:block; flex-direction:row; align-self: stretch; flex: 1; text-align: center; margin: 0 20px; border-radius: 6px; padding: 10px 0; }
             .ipaddr a span { color: white; font-size: 1.2em; }
             .ipaddr a:hover { color: #fff; background: #017BFF; }
+            .ipaddr a.external { color: #017BFF; }
+            .ipaddr a.external:hover { background: #FFFFFF; }
             #hidden-container { display: none; }
         </style>
     </head>
@@ -82,21 +86,29 @@
                     Object.assign($ipaddrs, { className: 'ipaddrs'});
                     $container.appendChild($ipaddrs);
 
+                    if (external_url.length) {
+                        addLink($ipaddrs, external_url, external_url, 'external');
+                    }
+
                     for (let i = 0; i < ips.length; i++) {
-                        addIp(ips[i], $ipaddrs);
+                        addIp($ipaddrs, ips[i]);
                     }
                 }
             };
 
-            const addIp = function(ip, $container) {
+            const addIp = function($container, ip) {
                 const href_label = manage_url_template.replace('%ipaddr%', '<span>'+ip+'</span>');
                 const href = manage_url_template.replace('%ipaddr%', ip);
-                const link = '<a href="' + href + '" target="_blank">' + href_label + '</a>';
+                addLink($container, href_label, href, 'ip');
+            };
+
+            const addLink = function($container, href_label, href, classname) {
+                const link = '<a href="' + href + '" target="_blank" class="' + classname + '">' + href_label + '</a>';
                 const $ipaddr = document.createElement('li');
                 Object.assign($ipaddr, { className: 'ipaddr'});
                 $ipaddr.innerHTML = link;
                 $container.appendChild($ipaddr);
-            }
+            };
 
             setIps(interfaces);
         </script>

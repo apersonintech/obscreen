@@ -177,6 +177,11 @@ class ContentManager(ModelManager):
             if not object or object.filename == '':
                 return None
 
+            guessed_type = ContentType.guess_content_type_file(object)
+
+            if not guessed_type or guessed_type != type:
+                return None
+
             if object:
                 object.seek(0)
                 object_name = randomize_filename(object.filename)

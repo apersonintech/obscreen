@@ -95,6 +95,11 @@
             <i class="fa fa-warning icon-left"></i>
             {{ l.slideshow_content_referenced_in_slide_error }}
         </div>
+    {% elif request.args.get('error') %}
+        <div class="alert alert-danger">
+            <i class="fa fa-warning icon-left"></i>
+            {{ t(request.args.get('error')) }}
+        </div>
     {% else %}
         <div class="alert alert-danger hidden"></div>
     {% endif %}
