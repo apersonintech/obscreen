@@ -9,7 +9,7 @@ from src.model.entity.Slide import Slide
 from src.exceptions.NoFallbackPlaylistException import NoFallbackPlaylistException
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
-from src.util.utils import get_safe_cron_descriptor, is_valid_cron_date_time, get_cron_date_time
+from src.util.utils import get_safe_cron_descriptor, is_cron_calendar_moment, is_cron_in_day_moment, get_cron_date_time
 from src.util.UtilNetwork import get_safe_remote_addr, get_network_interfaces
 from src.model.enum.AnimationSpeed import animation_speed_duration
 
@@ -144,14 +144,14 @@ class PlayerController(ObController):
             else:
                 continue
 
-            has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_valid_cron_date_time(slide['cron_schedule'])
-            has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_valid_cron_date_time(slide['cron_schedule_end'])
+            has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_cron_calendar_moment(slide['cron_schedule'])
+            has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_cron_calendar_moment(slide['cron_schedule_end'])
 
-            if slide['is_notification'] and has_valid_start_date:
+            if slide['is_notification']:
                 if has_valid_start_date:
                     playlist_notifications.append(slide)
                 else:
-                    logging.warn('Slide {} is notification but start date is invalid'.format(slide['name']))
+                    logging.warn('Slide \'{}\' is a notification but start date is invalid'.format(slide['name']))
             else:
                 if has_valid_start_date:
                     start_date = get_cron_date_time(slide['cron_schedule'], object=True)

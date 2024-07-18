@@ -7,17 +7,30 @@
             {{ l.playlist_panel_content_management_desc }}
         </p>
 
-        {% with slides=slides %}
+        {% with slides=slides, are_notifications=False %}
             {% include 'slideshow/slides/component/table.jinja.html' %}
         {% endwith %}
 
         <div class="actions actions-right">
-            <button type="button" class="btn btn-info slide-add">
+            <button type="button" class="btn btn-info slide-add" data-modal="modal-slide-add">
                 <i class="fa fa-plus"></i> {{ l.slideshow_slide_form_add_title }}
             </button>
-            <a href="{{ url_for('slideshow_content_list') }}" class="btn btn-neutral" target="_blank">
-                <i class="fa fa-upload"></i>
-            </a>
+        </div>
+
+        <h3 class="divide">
+            {{ l.playlist_panel_content_management_notifications }}
+        </h3>
+        <p>
+            {{ l.playlist_panel_content_management_notifications_desc }}
+        </p>
+        {% with slides=notifications, are_notifications=True %}
+            {% include 'slideshow/slides/component/table.jinja.html' %}
+        {% endwith %}
+
+        <div class="actions actions-right">
+            <button type="button" class="btn btn-info slide-add" data-modal="modal-slide-notification-add">
+                <i class="fa fa-bell"></i> {{ l.slideshow_slide_button_add_notification }}
+            </button>
         </div>
     </div>
 

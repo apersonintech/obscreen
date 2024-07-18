@@ -12,18 +12,35 @@
 
 {% block add_js %}
     <script type="text/javascript">
-        var schedule_start_choices = {
+
+        var route_slide_position = '{{ url_for('slideshow_slide_position') }}';
+
+        var choices_translations = {
             'loop': '{{ l.slideshow_slide_form_label_cron_scheduled_loop }}',
             'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
             'cron': '{{ l.slideshow_slide_form_label_cron_scheduled_cron }}',
-        };
-        var schedule_end_choices = {
             'stayloop': '{{ l.slideshow_slide_form_label_cron_scheduled_stayloop }}',
-            'datetime': '{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}',
             'duration': '{{ l.slideshow_slide_form_label_cron_scheduled_duration }}',
+            'inweek': 'in week',
         };
-        var contents =
-        {{ json_dumps(contents) | safe }}
+        var choices_map = {
+            'normal': {
+                'loop': {},
+                'datetime': {
+                    'stayloop': choices_translations['stayloop'],
+                    'datetime': choices_translations['datetime']
+                },
+                {#'inweek': {'stayloop': choices_translations['stayloop'], 'inweek': choices_translations['inweek']},#}
+            },
+            'notification': {
+                'datetime': {
+                    'datetime': choices_translations['datetime'],
+                    'duration': choices_translations['duration']
+                },
+                'cron': {'duration': choices_translations['duration']}
+            }
+        }
+        var contents = {{ json_dumps(contents) | safe }}
     </script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-explr-1.4.js"></script>
     <script src="{{ STATIC_PREFIX }}js/lib/jquery-ui.min.js"></script>
@@ -32,7 +49,6 @@
     <script src="{{ STATIC_PREFIX }}js/lib/qrcode.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/slideshow/slides.js"></script>
     <script src="{{ STATIC_PREFIX }}js/playlist/playlists.js"></script>
-    <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
     <script src="{{ STATIC_PREFIX }}js/explorer.js"></script>
     {{ HOOK(H_PLAYLIST_JAVASCRIPT) }}
 {% endblock %}
@@ -110,8 +126,11 @@
             <div class="modals-inner">
                 {% include 'playlist/modal/add.jinja.html' %}
                 {% include 'playlist/modal/qrcode.jinja.html' %}
-                {% include 'slideshow/slides/modal/add.jinja.html' %}
-                {% include 'slideshow/slides/modal/edit.jinja.html' %}
+
+                {% with is_notification=True %}{% include 'slideshow/slides/modal/edit.jinja.html' %}{% endwith %}
+                {% with is_notification=False %}{% include 'slideshow/slides/modal/edit.jinja.html' %}{% endwith %}
+                {% with is_notification=True %}{% include 'slideshow/slides/modal/add.jinja.html' %}{% endwith %}
+                {% with is_notification=False %}{% include 'slideshow/slides/modal/add.jinja.html' %}{% endwith %}
             </div>
         </div>
     </div>

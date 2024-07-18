@@ -1,8 +1,7 @@
-<div class="modal modal-slide-edit modal-slide hidden">
+<div class="modal modal-slide-{{ 'notification-' if is_notification }}edit modal-slide hidden">
     <h2>
         {{ l.slideshow_slide_form_edit_title }}
     </h2>
-
 
     <form class="form" action="{{ url_for('slideshow_slide_edit') }}" method="POST">
 
@@ -10,9 +9,9 @@
             {{ l.slideshow_slide_form_section_content }}
         </h3>
 
-
         <input type="hidden" name="id" id="slide-edit-id"/>
 
+        <input type="hidden" name="is_notification" id="slide-edit-is-notification" value="{{ '1' if is_notification else '0' }}" />
 
         <div class="form-group form-group-horizontal">
             <label for="">{{ l.slideshow_slide_form_label_enabled }}</label>
@@ -45,25 +44,10 @@
             {{ l.slideshow_slide_form_section_scheduling }}
         </h3>
 
-        <div class="form-group slide-notification-group">
-            <label for="slide-edit-is-notification">{{ l.slideshow_slide_form_label_is_notification }}</label>
-            <div class="widget">
-                <div class="toggle">
-                    <input type="checkbox" class="trigger slide-is-notification" name="is_notification" value="1"
-                           id="slide-edit-is-notification"/>
-                    <label for="slide-edit-is-notification"></label>
-                </div>
-            </div>
-        </div>
-
         <div class="form-group slide-schedule-group">
             <label for="slide-edit-cron-schedule">{{ l.slideshow_slide_form_label_cron_scheduled }}</label>
             <div class="widget">
-                <select id="slide-edit-cron-schedule-trigger" class="trigger">
-                    <option value="loop">{{ l.slideshow_slide_form_label_cron_scheduled_loop }}</option>
-                    <option value="datetime">{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}</option>
-                    <option value="cron">{{ l.slideshow_slide_form_label_cron_scheduled_cron }}</option>
-                </select>
+                <select id="slide-edit-cron-schedule-trigger" class="trigger"></select>
                 <input type="text" id="slide-edit-cron-schedule-datetimepicker" class="input-naked datetimepicker"
                        value=""
                        placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>
@@ -75,10 +59,7 @@
         <div class="form-group slide-schedule-end-group">
             <label for="slide-edit-cron-schedule-end">{{ l.slideshow_slide_form_label_cron_scheduled_end }}</label>
             <div class="widget">
-                <select id="slide-edit-cron-schedule-end-trigger" class="trigger">
-                    <option value="duration">{{ l.slideshow_slide_form_label_cron_scheduled_duration }}</option>
-                    <option value="datetime">{{ l.slideshow_slide_form_label_cron_scheduled_datetime }}</option>
-                </select>
+                <select id="slide-edit-cron-schedule-end-trigger" class="trigger"></select>
                 <input type="text" id="slide-edit-cron-schedule-end-datetimepicker" class="input-naked datetimepicker"
                        value=""
                        placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>
