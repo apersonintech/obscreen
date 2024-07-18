@@ -2,7 +2,7 @@
 
 > #### 👈 [back to readme](/README.md)
 
-#### 🔵 You just want a slideshow manager and you'll deal with screen and browser yourself ? You're in the right place.
+#### 🔵 You just want a slideshow manager, and you'll deal with screen and browser yourself ? You're in the right place.
 
 
 ---
@@ -42,7 +42,7 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.headl
 docker compose up --detach --pull=always
 ```
 ---
-### or system wide
+### or system-wide
 #### Install
 ```bash
 # Install system dependencies
@@ -97,41 +97,16 @@ sudo journalctl -u obscreen-studio -f
 ---
 ## 📺 Run the player instance
 
-### Autorun for a RaspberryPi
-- Install player autorun by executing following script (will install chromium, x11 and obscreen-player systemd service)
+### Autorun for a linux based system
+#### How to install
+- Install player autorun by executing following script (will install chromium, x11, pulseaudio and obscreen-player systemd service)
 ```bash
 curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh | sudo bash -s -- $USER $HOME
-mkdir -p ~/obscreen/var/run
-nano ~/obscreen/var/run/play
+sudo reboot
 ```
-- Copy following script in `~/obscreen/var/run/play` file to enable chromium autorun (replace `http://localhost:5000` by your own `obscreen-studio` instance url)
-```
-#!/bin/bash
 
-# Disable screensaver and DPMS
-xset s off
-xset -dpms
-xset s noblank
-
-# Start unclutter to hide the mouse cursor
-unclutter -display :0 -noevents -grab &
-
-# Modify Chromium preferences to avoid restore messages
-mkdir -p $HOME/.config/chromium/Default 2>/dev/null
-touch $HOME/.config/chromium/Default/Preferences
-sed -i 's/"exited_cleanly": false/"exited_cleanly": true/' $HOME/.config/chromium/Default/Preferences
-
-RESOLUTION=$(DISPLAY=:0 xrandr | grep '*' | awk '{print $1}')
-WIDTH=$(echo $RESOLUTION | cut -d 'x' -f 1)
-HEIGHT=$(echo $RESOLUTION | cut -d 'x' -f 2)
-
-# Start Chromium in kiosk mode
-chromium-browser --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=${WIDTH},${HEIGHT} --display=:0 http://localhost:5000
-```
-- Restart
-```bash
-sudo systemctl restart obscreen-player.service
-```
+#### How to restart
+1. Just use systemctl `sudo systemctl restart obscreen-player.service`
 
 ### Manually on any device capable of running chromium
 When you run the browser yourself, don't forget to use these flags for chromium browser:
@@ -150,7 +125,7 @@ chromium --disable-features=Translate --ignore-certificate-errors --disable-web-
 - Just add `--pull=always` to your `docker run ...` command, you'll get latest version automatically.
 >#### or with docker compose
 - Just add `--pull=always` to your `docker compose up ...` command, , you'll get latest version automatically.
->#### or system wide
+>#### or system-wide
 - Execute following script
 ```bash
 cd ~/obscreen
