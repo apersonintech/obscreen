@@ -13,7 +13,7 @@
             <input name="playlist_id" type="hidden" id="slide-add-playlist-id" value="{{ current_playlist.id }}">
         {% endif %}
 
-        <input type="text" name="is_notification" id="slide-add-is-notification" value="{{ '1' if is_notification else '0' }}" />
+        <input type="hidden" name="is_notification" id="slide-add-is-notification" value="{{ '1' if is_notification else '0' }}" />
 
         <div class="form-group form-group-horizontal">
             <label for="">{{ l.slideshow_slide_form_label_enabled }}</label>
