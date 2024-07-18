@@ -90,5 +90,5 @@ chmod +x "$WORKING_DIR/obscreen/var/run/play"
 # Start
 # ============================================================
 
-# Finally, start player service
-systemctl start obscreen-player.service
+# Finally, restart player service
+systemctl restart obscreen-player.service
