@@ -26,9 +26,9 @@
                     {% if variable.value %}
                         {% if variable.type.value == 'bool' %}
                             {% if variable.display() %}
-                                <i class="fa fa-check alert-success alert-icon icon-value"></i>
+                                <i class="fa fa-check alert alert-success alert-icon icon-value"></i>
                             {% else %}
-                                <i class="fa fa-times alert-error alert-icon icon-value"></i>
+                                <i class="fa fa-times alert alert-error alert-icon icon-value"></i>
                             {% endif %}
                         {% else %}
                             {{ variable.display() }}
