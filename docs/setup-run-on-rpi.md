@@ -46,6 +46,7 @@ docker run --rm --name obscreen --pull=always \
 
 <details closed>
 <summary><h3>with docker compose</h3></summary>
+
 ```bash
 # Prepare application data file tree
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
