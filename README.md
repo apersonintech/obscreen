@@ -15,7 +15,7 @@ Obscreen is a user-friendly self-hosted digital signage tool. Manage a fleet of 
 
 Try it!
 
-Demo Server (Location: Roubaix - France): [https://demo.obscreen.io](https://demo.obscreen.io?username=admin&password=admin)
+Demo Server (Location: Roubaix - France): [https://demo.obscreen.io/login](https://demo.obscreen.io/login?username=admin&password=admin)
 
 It is a temporary live demo, all data will be deleted after 10 minutes. Sponsored by myself.
 
