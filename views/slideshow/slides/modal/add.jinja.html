@@ -1,6 +1,10 @@
 <div class="modal modal-slide-{{ 'notification-' if is_notification }}add modal-slide">
     <h2>
-        {{ l.slideshow_slide_form_add_title }}
+        {% if is_notification %}
+            {{ l.slideshow_slide_form_add_notification_title }}
+        {% else %}
+            {{ l.slideshow_slide_form_add_title }}
+        {% endif %}
     </h2>
 
     <form class="form" action="{{ url_for('slideshow_slide_add') }}" method="POST" enctype="multipart/form-data">
