@@ -44,7 +44,7 @@ class SlideController(ObController):
             content_id=content.id if content else request.form['content_id'],
             duration=request.form['duration'],
             enabled='enabled' in request.form and request.form['enabled'],
-            is_notification=True if 'is_notification' in request.form else False,
+            is_notification=True if 'is_notification' in request.form and request.form['is_notification'] == '1' else False,
             playlist_id=request.form['playlist_id'] if 'playlist_id' in request.form and request.form['playlist_id'] else None,
             cron_schedule=get_optional_string(request.form['cron_schedule']),
             cron_schedule_end=get_optional_string(request.form['cron_schedule_end']),

@@ -102,29 +102,18 @@ class PlayerController(ObController):
             return request.remote_addr
 
     def _get_playlist(self, playlist_id: Optional[int] = 0, preview_content_id: Optional[int] = None) -> dict:
+        preview_content = self._model_store.content().get(preview_content_id) if preview_content_id else None
+        preview_mode = preview_content is not None
+
         if playlist_id == 0 or not playlist_id:
             playlist = self._model_store.playlist().get_one_by(query="fallback = 1")
 
             if playlist:
                 playlist_id = playlist.id
-            else:
+            elif not preview_mode:
                 raise NoFallbackPlaylistException()
 
-        enabled_slides = []
-        preview_mode = False
-
-        if preview_content_id:
-            content = self._model_store.content().get(preview_content_id)
-
-            if content:
-                enabled_slides = [Slide(
-                    content_id=content.id,
-                    duration=1000000,
-                )]
-                preview_mode = True
-        else:
-            enabled_slides = self._model_store.slide().get_slides(enabled=True, playlist_id=playlist_id)
-
+        enabled_slides = [Slide(content_id=preview_content.id, duration=1000000)] if preview_mode else self._model_store.slide().get_slides(enabled=True, playlist_id=playlist_id)
         slides = self._model_store.slide().to_dict(enabled_slides)
         contents = self._model_store.content().get_all_indexed()
         playlist = self._model_store.playlist().get(playlist_id)
