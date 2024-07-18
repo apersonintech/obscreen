@@ -64,7 +64,9 @@ docker compose up --detach --pull=always
 
 ---
 
-### or system-wide
+<details closed>
+<summary><h3>system-wide (recommended)</h3></summary>
+
 #### Install
 ```bash
 # Install system dependencies
@@ -111,6 +113,8 @@ sudo journalctl -u obscreen-studio -f
 - Run `sudo systemctl restart obscreen-player` or `sudo reboot`
 
 ---
+</details>
+
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://raspberrypi.local:5000`
 - Slideshow manager is reachable at `http://raspberrypi.local:5000/manage`
