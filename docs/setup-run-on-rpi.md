@@ -170,7 +170,7 @@ However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
 </details>
 
 <details closed>
-<summary><h3>How to upgrade `obscreen-studio`</h3></summary>
+<summary><h3>How to upgrade studio instance</h3></summary>
 
 #### with docker run
 - Just add `--pull=always` to your `docker run ...` command, you'll get the latest version automatically.
@@ -178,7 +178,7 @@ However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
 - Just add `--pull=always` to your `docker compose up ...` command, you'll get the latest version automatically.
 #### or system-wide
 - Using Git Updater plugin
-- Or execute following script
+- Or by executing following script
 ```bash
 cd ~/obscreen
 git pull
