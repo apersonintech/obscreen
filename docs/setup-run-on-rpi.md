@@ -135,7 +135,9 @@ curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install
 #### How to enable sound
 1. First you have to reboot your device with `sudo reboot`
 2. You have to set audio channel to HDMI `sudo raspi-config nonint do_audio 1` (0 is for jack 3.5 output)
+
 ---
+
 </details>
 
 <details closed>
