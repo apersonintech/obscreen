@@ -102,12 +102,11 @@ sudo systemctl start obscreen-studio.service
 sudo journalctl -u obscreen-studio -f 
 ```
 ---
-## 🏁 Finally
-- Run `sudo systemctl restart obscreen-studio` or `sudo reboot`
-
----
 
 </details>
+
+## 🏁 Finally
+- Run `sudo systemctl restart obscreen-studio` or `sudo reboot`
 
 
 ## 👌 Usage
