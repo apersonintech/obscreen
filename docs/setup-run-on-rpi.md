@@ -12,7 +12,6 @@
 2. Log into your RaspberryPi locally or via ssh (by default it's `ssh pi@raspberrypi.local`)
 
 
----
 ## 📡 Run the studio instance
 
 <details closed>
@@ -41,6 +40,9 @@ docker run --rm --name obscreen --pull=always \
   -v ./var/run/play:/app/var/run/play \
   jierka/obscreen:latest
 ```
+
+---
+
 </details>
 
 <details closed>
@@ -59,6 +61,9 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml >
 # Run
 docker compose up --detach --pull=always
 ```
+
+---
+
 </details>
 
 <details closed>
@@ -109,9 +114,9 @@ sudo journalctl -u obscreen-studio -f
 ## 🏁 Finally
 - Run `sudo systemctl restart obscreen-studio` or `sudo reboot`
 
-</details>
-
 ---
+
+</details>
 
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://raspberrypi.local:5000`
@@ -149,9 +154,12 @@ When you run the browser yourself, don't forget to use these flags for chromium 
 # replace http://localhost:5000 with your obscreen-studio instance url
 chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
 ```
-</details>
 
 ---
+
+</details>
+
+
 
 ## 📎 Additional
 
