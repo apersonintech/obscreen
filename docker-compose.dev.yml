@@ -9,10 +9,8 @@ services:
     environment:
       - DEBUG=${DEBUG-false}
       - PORT=${PORT-5000}
-      - PLAYER_AUTOSTART_FILE=/app/var/run/play
       - SECRET_KEY=${SECRET_KEY-ANY_SECRET_KEY_HERE}
     volumes:
       - .:/app
-      - ${PLAYER_AUTOSTART_FILE-/dev/null}:/app/var/run/play
     ports:
       - ${PORT}:${PORT}

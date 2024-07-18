@@ -48,7 +48,7 @@ class AuthController(ObController):
         return render_template(
             'auth/login.jinja.html',
             login_error=login_error,
-            last_username=request.form['username'] if 'username' in request.form else ''
+            last_username=request.form['username'] if 'username' in request.form else None
         )
 
     def logout(self):

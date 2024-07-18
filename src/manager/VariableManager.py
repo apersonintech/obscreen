@@ -5,6 +5,7 @@ from typing import Dict, Optional, List, Tuple, Union
 
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.LangManager import LangManager
+from src.manager.ConfigManager import ConfigManager
 from src.manager.UserManager import UserManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
@@ -38,9 +39,10 @@ class VariableManager:
         "value TEXT"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager):
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, config_manager: ConfigManager):
         self._lang_manager = lang_manager
         self._user_manager = user_manager
+        self._config_manager = config_manager
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
         self._var_map = {}
         self.reload()
@@ -94,6 +96,9 @@ class VariableManager:
             if variable.refresh_player != default_var['refresh_player']:
                 self._db.update_by_id(self.TABLE_NAME, variable.id, {"refresh_player": default_var['refresh_player']})
 
+            if variable.editable != default_var['editable']:
+                self._db.update_by_id(self.TABLE_NAME, variable.id, {"editable": default_var['editable']})
+
             if not same_selectables_keys or not same_selectables_label:
                 self._db.update_by_id(self.TABLE_NAME, variable.id, {"selectables": default_var['selectables']})
 
@@ -103,13 +108,15 @@ class VariableManager:
         return variable
 
     def reload(self) -> None:
+        demo = self._config_manager.map().get('demo')
+
         default_vars = [
             # Editable (Customizable settings)
 
             ### General
             {"name": "lang", "section": self.t(VariableSection.GENERAL), "value": "en", "type": VariableType.SELECT_SINGLE, "editable": True, "description": self.t('settings_variable_desc_lang'), "selectables": self.t(ApplicationLanguage), "refresh_player": False},
-            {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": True, "description": self.t('settings_variable_desc_external_url'), "refresh_player": False},
-            {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32, "unit": VariableUnit.MEGABYTE,  "type": VariableType.INT, "editable": True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
+            {"name": "external_url", "section": self.t(VariableSection.GENERAL), "value": "", "type": VariableType.STRING, "editable": False if demo else True, "description": self.t('settings_variable_desc_external_url'), "refresh_player": False},
+            {"name": "slide_upload_limit", "section": self.t(VariableSection.GENERAL), "value": 32, "unit": VariableUnit.MEGABYTE,  "type": VariableType.INT, "editable": False if demo else True, "description": self.t('settings_variable_desc_slide_upload_limit'), "refresh_player": False},
             {"name": "dark_mode", "section": self.t(VariableSection.GENERAL), "value": True, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_dark_mode'), "refresh_player": False},
 
             ### Player Options
@@ -209,6 +216,16 @@ class VariableManager:
         return self.get_by(query="editable = 0", sort="name")
 
     def update_form(self, id: int, value: Union[int, bool, str]) -> None:
+        variable = self.get(id)
+
+        if not variable:
+            if var.name in self._var_map:
+                del self._var_map[var.name]
+            return None
+
+        if not variable.editable:
+            return None
+
         self._db.update_by_id(self.TABLE_NAME, id, {"value": value})
         var = self.get_one_by("id = {}".format(id))
         self._var_map[var.name] = var

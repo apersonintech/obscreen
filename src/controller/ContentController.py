@@ -63,8 +63,11 @@ class ContentController(ObController):
 
     def slideshow_content_add(self):
         working_folder_path, working_folder = self.get_working_folder()
+        route_args = {
+            "path": working_folder_path,
+        }
 
-        self._model_store.content().add_form_raw(
+        content = self._model_store.content().add_form_raw(
             name=request.form['name'],
             type=str_to_enum(request.form['type'], ContentType),
             request_files=request.files,
@@ -73,7 +76,10 @@ class ContentController(ObController):
             folder_id=working_folder.id if working_folder else None
         )
 
-        return redirect(url_for('slideshow_content_list', path=working_folder_path))
+        if not content:
+            route_args["error"] = 'common_bad_file_type'
+
+        return redirect(url_for('slideshow_content_list', **route_args))
 
     def slideshow_content_upload_bulk(self):
         working_folder_path, working_folder = self.get_working_folder()
