@@ -84,3 +84,12 @@
 		}
 	}
 }
+
+@mixin generate-alert-classes($color-map) {
+	@each $name, $color in $color-map {
+		.alert.alert-#{"#{$name}"} {
+			color: $color;
+			background: rgba($color, .2);
+		}
+	}
+}

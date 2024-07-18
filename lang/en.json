@@ -226,6 +226,7 @@
   "basic_month_10": "October",
   "basic_month_11": "November",
   "basic_month_12": "December",
+  "common_restart_needed": "Please restart obscreen studio (or restart the device) for the changes to take effect",
   "common_pick_element": "Pick an element",
   "common_untitled": "<untitled>",
   "common_loading": "Loading...",

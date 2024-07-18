@@ -79,6 +79,7 @@ class SettingsController(ObController):
 
         if variable.name == 'slide_upload_limit':
             self.reload_web_server()
+            return redirect(url_for('settings_variable_list', warning='common_restart_needed'))
 
         if variable.name == 'fleet_player_enabled':
             self.reload_web_server()
@@ -97,7 +98,7 @@ class SettingsController(ObController):
             thread = threading.Thread(target=self.plugin_update)
             thread.daemon = True
             thread.start()
-            return redirect(url_for('settings_variable_plugin_list'))
+            return redirect(url_for('settings_variable_plugin_list', warning='common_restart_needed'))
 
     def plugin_update(self) -> None:
         restart()

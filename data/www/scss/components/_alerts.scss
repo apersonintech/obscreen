@@ -7,30 +7,15 @@
 	align-items: center;
 	border-radius: $baseRadius;
 
+	i {
+		margin-right: 13px;
+	}
+
 	a {
 		color: inherit;
 		margin-left: 4px;
 		margin-right: 4px;
-        text-decoration: underline;
+		text-decoration: underline;
 	}
 }
 
-.alert-info {
-	color: $info;
-	background: rgba($info, .2);
-}
-
-.alert-success {
-	color: $success;
-	background: rgba($success, .2);
-}
-
-.alert-danger,
-.alert-error {
-	color: $danger;
-	background: rgba($danger, .2);
-}
-
-.alert i {
-	margin-right: 13px;
-}
