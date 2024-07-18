@@ -29,13 +29,13 @@
                     <div class="form-group">
                         <label for="password">{{ l.login_form_username }}</label>
                         <div class="widget">
-                            <input type="text" name="username" required="required" value="{{ last_username }}" />
+                            <input type="text" name="username" required="required" value="{{ last_username|d(request.args.get('username', ''), True) }}" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="password">{{ l.login_form_password }}</label>
                         <div class="widget">
-                            <input type="password" name="password" required="required"/>
+                            <input type="password" name="password" required="required" value="{{ request.args.get('password', '') }}" />
                         </div>
                     </div>
                     <div class="actions actions-center">

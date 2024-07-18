@@ -52,9 +52,9 @@
                                 {% if ro_variable.value %}
                                     {% if ro_variable.type.value == 'bool' %}
                                         {% if ro_variable.display() %}
-                                            ✅
+                                            <i class="fa fa-check alert alert-success alert-icon icon-value"></i>
                                         {% else %}
-                                            ❌
+                                            <i class="fa fa-times alert alert-error alert-icon icon-value"></i>
                                         {% endif %}
                                     {% else %}
                                         {{ ro_variable.display() }}
@@ -78,9 +78,9 @@
                             <td class="description">{{ env_key.replace('_',' ')|capitalize }}</td>
                             <td class="value">
                                 {% if env_value == true %}
-                                    ✅
+                                    <i class="fa fa-check alert alert-success alert-icon icon-value"></i>
                                 {% elif env_value == false %}
-                                    ❌
+                                    <i class="fa fa-times alert alert-error alert-icon icon-value"></i>
                                 {% elif env_value == none %}
                                     <span class="empty">{{ l.common_empty }}</span>
                                 {% else %}

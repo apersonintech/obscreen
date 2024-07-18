@@ -25,14 +25,10 @@ curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # t
 # Prepare application data file tree
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
-# Prepare player autostart file
-mkdir -p var/run && touch var/run/play && chmod +x var/run/play 
-
 # Run the Docker container
 docker run --rm --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
-  -e PLAYER_AUTOSTART_FILE=/app/var/run/play \
   -e SECRET_KEY=ANY_SECRET_KEY_HERE \
   -p 5000:5000 \
   -v ./data/db:/app/data/db \
@@ -51,9 +47,6 @@ docker run --rm --name obscreen --pull=always \
 ```bash
 # Prepare application data file tree
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
-
-# Prepare player autostart file
-mkdir -p var/run && touch var/run/play && chmod +x var/run/play 
 
 # Download docker-compose.yml
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml > docker-compose.yml
