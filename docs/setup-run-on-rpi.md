@@ -15,7 +15,7 @@
 ---
 ## 📡 Run the studio instance
 
-<details open>
+<details closed>
 <summary>### with docker run</summary>
 
 ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
