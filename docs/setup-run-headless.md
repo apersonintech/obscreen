@@ -143,7 +143,7 @@ chromium --disable-features=Translate --ignore-certificate-errors --disable-web-
 
 
 <details closed>
-<summary><h3>How to upgrade `obscreen-studio`</h3></summary>
+<summary><h3>How to upgrade studio instance</h3></summary>
 
 #### with docker run
 - Just add `--pull=always` to your `docker run ...` command, you'll get the latest version automatically.
@@ -151,7 +151,7 @@ chromium --disable-features=Translate --ignore-certificate-errors --disable-web-
 - Just add `--pull=always` to your `docker compose up ...` command, you'll get the latest version automatically.
 #### or system-wide
 - Using Git Updater plugin
-- Or execute following script
+- Or by executing following script
 ```bash
 cd ~/obscreen
 git pull
