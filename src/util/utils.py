@@ -59,8 +59,28 @@ def camel_to_snake(camel: str) -> str:
     return CAMEL_CASE_TO_SNAKE_CASE_PATTERN.sub('_', camel).lower()
 
 
-def is_valid_cron_date_time(expression: str) -> bool:
+def is_cron_calendar_moment(expression: str) -> bool:
     pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$')
+    return bool(pattern.match(expression))
+
+
+def is_cron_in_year_moment(expression: str) -> bool:
+    pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+\*$')
+    return bool(pattern.match(expression))
+
+
+def is_cron_in_week_moment(expression: str) -> bool:
+    pattern = re.compile(r'^(\d+)\s+(\d+)\s+\*\s+\*\s+(\d+)\s+\*$')
+    return bool(pattern.match(expression))
+
+
+def is_cron_in_month_moment(expression: str) -> bool:
+    pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+\*\s+\*\s+\*$')
+    return bool(pattern.match(expression))
+
+
+def is_cron_in_day_moment(expression: str) -> bool:
+    pattern = re.compile(r'^(\d+)\s+(\d+)\s+\*\s+\*\s+\*\s+\*$')
     return bool(pattern.match(expression))
 
 
@@ -71,7 +91,7 @@ def get_cron_date_time(cron_expression: str, object: bool) -> str:
 
 
 def get_safe_cron_descriptor(expression: str, use_24hour_time_format=True, locale_code: Optional[str] = None) -> str:
-    if is_valid_cron_date_time(expression):
+    if is_cron_calendar_moment(expression):
         [minutes, hours, day, month, _, year] = expression.split(' ')
         return "{}-{}-{} at {}:{}".format(
             year,

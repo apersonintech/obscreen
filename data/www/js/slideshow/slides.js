@@ -1,13 +1,14 @@
 jQuery(document).ready(function ($) {
-    const loadDateTimePicker = function ($els) {
+    const loadDateTimePicker = function ($els, timeOnly) {
         const d = new Date();
-
         $els.each(function () {
             var $el = $(this);
-            $el.flatpickr({
+
+            const options = {
                 enableTime: true,
                 time_24hr: true,
                 allowInput: false,
+                noCalendar: false,
                 allowInvalidPreload: false,
                 dateFormat: 'Y-m-d H:i',
                 defaultHour: d.getHours(),
@@ -19,9 +20,15 @@ jQuery(document).ready(function ($) {
                         d ? `${d.getMinutes()} ${d.getHours()} ${d.getDate()} ${(d.getMonth() + 1)} * ${d.getFullYear()}` : ''
                     );
                 }
-            });
+            };
+
+            if (timeOnly) {
+                options['noCalendar'] = true;
+            }
+
+            $el.flatpickr(options);
             $el.addClass('hidden');
-        })
+        });
     };
 
     const getId = function ($el) {
@@ -36,29 +43,10 @@ jQuery(document).ready(function ($) {
 
         $.ajax({
             method: 'POST',
-            url: '/slideshow/slide/position',
+            url: route_slide_position,
             headers: {'Content-Type': 'application/json'},
             data: JSON.stringify(positions),
         });
-    };
-
-    const inputTypeUpdate = function () {
-        const $modal = $('.modal-slide:visible');
-        const $el = $('#slide-add-type');
-        const value = $el.val();
-        const inputType = $el.find('option').filter(function (i, el) {
-            return $(el).val() === value;
-        }).data('input');
-
-        if ($modal.find('.picker:visible').length === 0) {
-            $('.slide-add-object-input')
-                .addClass('hidden')
-                .prop('disabled', true).prop('required', false)
-                .filter('#slide-add-object-input-' + inputType)
-                .removeClass('hidden')
-                .prop('disabled', false).prop('required', true)
-            ;
-        }
     };
 
     const inputSchedulerUpdate = function () {
@@ -76,48 +64,24 @@ jQuery(document).ready(function ($) {
 
         const $datetimepickerStart = $scheduleStartGroup.find('.datetimepicker');
         const $datetimepickerEnd = $scheduleEndGroup.find('.datetimepicker');
-        const $isNotification = $isNotificationGroup.find('.trigger');
+        const $isNotification = $modal.find('#slide-edit-is-notification');
 
-        const isNotification = $isNotification.prop('checked');
+        const isNotification = $isNotification.val() === '1';
         let isLoopStart = $triggerStart.val() === 'loop';
         let isCronStart = $triggerStart.val() === 'cron';
 
-        function updateScheduleChoices(isNotification, isLoopStart, isCronStart) {
-            let scheduleStartChoices = $.extend({}, schedule_start_choices);
-            let scheduleEndChoices = $.extend({}, schedule_end_choices);
-
-            if (!isNotification || isLoopStart) {
-                delete scheduleStartChoices['cron'];
-                delete scheduleEndChoices['duration'];
-            }
-
-            if (isNotification) {
-                delete scheduleStartChoices['loop'];
-                delete scheduleEndChoices['stayloop'];
-
-                if (isCronStart) {
-                    delete scheduleEndChoices['datetime'];
-                }
-            }
-
-            return {scheduleStartChoices, scheduleEndChoices};
-        }
-
-        function applyChoices() {
-            const {
-                scheduleStartChoices,
-                scheduleEndChoices
-            } = updateScheduleChoices(isNotification, isLoopStart, isCronStart);
-            recreateSelectOptions($triggerStart, scheduleStartChoices);
-            recreateSelectOptions($triggerEnd, scheduleEndChoices);
-        }
-
-        applyChoices();
+        const choice_map = choices_map[isNotification ? 'notification' : 'normal']
+        recreateSelectOptions($triggerStart, Object.keys(choice_map).reduce((obj, key) => {
+            obj[key] = choices_translations[key];
+            return obj;
+        }, {}));
+        recreateSelectOptions($triggerEnd, choice_map[$triggerStart.val()]);
 
         isLoopStart = $triggerStart.val() === 'loop';
         isCronStart = $triggerStart.val() === 'cron';
 
         const isCronEnd = $triggerEnd.val() === 'cron';
+        const isInWeekMomentStart = $triggerStart.val() === 'inweek';
         const isDatetimeStart = $triggerStart.val() === 'datetime';
         const isDatetimeEnd = $triggerEnd.val() === 'datetime';
         const isStayloopEnd = $triggerEnd.val() === 'stayloop';
@@ -126,6 +90,7 @@ jQuery(document).ready(function ($) {
         const flushValueStart = isLoopStart;
         const flushValueEnd = isLoopStart || isStayloopEnd || isDurationEnd;
         const flushDuration = isNotification && isDatetimeEnd;
+        const datetimepickerWithCalendar = !isInWeekMomentStart;
 
         function toggleVisibility() {
             $targetCronFieldStart.toggleClass('hidden', !isCronStart);
@@ -155,9 +120,9 @@ jQuery(document).ready(function ($) {
             }
         }
 
+        loadDateTimePicker($modal.find('.datetimepicker'), datetimepickerWithCalendar);
         toggleVisibility();
         flushValues();
-        applyChoices();
     };
 
 
@@ -172,27 +137,12 @@ jQuery(document).ready(function ($) {
         inputSchedulerUpdate();
     });
 
-    $(document).on('change', '#slide-add-type', inputTypeUpdate);
-
-    // $(document).on('click', '.picker button', function () {
-    //     const $parent = $(this).parents('.modal-slide-add');
-    //     $parent.find('.picker').addClass('hidden').find('select').prop('disabled', true);
-    //     $parent.find('.upload').removeClass('hidden').find('input,select').prop('disabled', false);
-    //     inputTypeUpdate();
-    // });
-
     $(document).on('click', '.slide-add', function () {
-        showModal('modal-slide-add');
-        const $modal = $('.modal-slide-add:visible');
-        loadDateTimePicker($modal.find('.datetimepicker'));
-        // $modal.find('.picker').removeClass('hidden').find('select').prop('disabled', false);
-        // $modal.find('.upload').addClass('hidden').find('input,select').prop('disabled', true);
-        // $modal.find('button[type=submit]').removeClass('hidden');
-        // $modal.find('.btn-loading').addClass('hidden');
-        inputTypeUpdate();
+        showModal($(this).attr('data-modal'));
+        const $modal = $('.modal-slide:visible');
         inputSchedulerUpdate();
         inputContentUpdate();
-        $('.modal-slide-add input:eq(0)').focus().select();
+        $modal.find('input[type=text]:visible:eq(0)').focus().select();
     });
 
     $(document).on('click', '.content-explr-picker', function () {
@@ -226,7 +176,8 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.slide-edit', function () {
         const slide = JSON.parse($(this).parents('.slide-item:eq(0)').attr('data-entity'));
-        showModal('modal-slide-edit');
+        showModal($(this).attr('data-modal'));
+        const $modal = $('.modal-slide:visible');
 
         const hasCron = slide.cron_schedule && slide.cron_schedule.length > 0;
         const hasDateTime = hasCron && validateCronDateTime(slide.cron_schedule);
@@ -237,26 +188,25 @@ jQuery(document).ready(function ($) {
 
         inputContentUpdate(slide.content);
 
-        $('.modal-slide-edit input:visible:eq(0)').focus().select();
-        $('#slide-edit-duration').val(slide.duration);
-        $('#slide-edit-is-notification').prop('checked', isNotification);
-        $('#slide-edit-enabled').prop('checked', slide.enabled);
+        $modal.find('input[type=text]:visible:eq(0)').focus().select();
+        $modal.find('#slide-edit-duration').val(slide.duration);
+        $modal.find('#slide-edit-enabled').prop('checked', slide.enabled);
 
-        $('#slide-edit-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
-        $('#slide-edit-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
+        $modal.find('#slide-edit-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
+        $modal.find('#slide-edit-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
 
-        $('#slide-edit-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || hasDateTimeEnd);
-        $('#slide-edit-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : (isNotification ? 'duration' : 'stayloop')));
+        $modal.find('#slide-edit-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || hasDateTimeEnd);
+        $modal.find('#slide-edit-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : (isNotification ? 'duration' : 'stayloop')));
 
-        $('#slide-edit-cron-schedule-datetimepicker').toggleClass('hidden', !hasDateTime).val(
+        $modal.find('#slide-edit-cron-schedule-datetimepicker').toggleClass('hidden', !hasDateTime).val(
             hasDateTime ? getCronDateTime(slide.cron_schedule) : ''
         );
 
-        $('#slide-edit-cron-schedule-end-datetimepicker').toggleClass('hidden', !hasDateTimeEnd).val(
+        $modal.find('#slide-edit-cron-schedule-end-datetimepicker').toggleClass('hidden', !hasDateTimeEnd).val(
             hasDateTimeEnd ? getCronDateTime(slide.cron_schedule_end) : ''
         );
-        $('#slide-edit-id').val(slide.id);
-        loadDateTimePicker($('.modal-slide-edit .datetimepicker'));
+        $modal.find('#slide-edit-id').val(slide.id);
+        loadDateTimePicker($modal.find('.datetimepicker'));
 
         inputSchedulerUpdate();
     });
@@ -280,7 +230,7 @@ jQuery(document).ready(function ($) {
         }
     });
 
-    $(document).on('submit', '.modal-slide-add form', function () {
+    $(document).on('submit', '.modal-slide form', function () {
         $(this).find('button[type=submit]').addClass('hidden');
         $(this).find('.btn-loading').removeClass('hidden');
     });

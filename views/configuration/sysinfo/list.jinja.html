@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block add_js %}
+    <script>
+        route_sysinfo_restart = '{{ url_for('sysinfo_restart') }}';
+    </script>
     <script src="{{ STATIC_PREFIX }}js/restart.js"></script>
 {% endblock %}
 

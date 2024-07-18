@@ -3,12 +3,14 @@
         {% set content = contents[slide.content_id] %}
         <li class="slide-item {{ 'disabled' if not slide.enabled }}" data-level="{{ slide.id }}"
             data-entity="{{ slide.to_json({"content": content}) }}">
-            <div class="head sort">
-                <a href="javascript:void(0);" class="item-sort slide-sort">
-                    <i class="fa fa-bars icon-left"></i>
-                </a>
-            </div>
-            <a href="javascript:void(0);" class="infos item-edit slide-edit">
+            {% if not are_notifications %}
+                <div class="head sort">
+                    <a href="javascript:void(0);" class="item-sort slide-sort">
+                        <i class="fa fa-bars icon-left"></i>
+                    </a>
+                </div>
+            {% endif %}
+            <a href="javascript:void(0);" class="infos item-edit slide-edit" data-modal="{% if are_notifications %}modal-slide-notification-edit{% else %}modal-slide-edit{% endif %}">
                 <div class="type">
                     {% set icon = enum_content_type.get_fa_icon(content.type) %}
                     {% set color = enum_content_type.get_color_icon(content.type) %}
@@ -24,7 +26,7 @@
                         {% if slide.cron_schedule %}
                             {% set cron_desc = cron_descriptor(slide.cron_schedule) %}
                             {% if cron_desc %}
-                                {% if is_valid_cron_date_time(slide.cron_schedule) %}
+                                {% if is_cron_calendar_moment(slide.cron_schedule) %}
                                     {% if slide.is_notification %}
                                         🔔 <span class="prefix">{{ l.slideshow_slide_panel_td_cron_scheduled_notify }}</span>
                                         <span class="cron-description">{{ cron_desc }}</span>
@@ -46,7 +48,7 @@
                         {% if slide.cron_schedule_end %}
                             {% set cron_desc_end = cron_descriptor(slide.cron_schedule_end) %}
                             {% if cron_desc_end %}
-                                {% if is_valid_cron_date_time(slide.cron_schedule_end) %}
+                                {% if is_cron_calendar_moment(slide.cron_schedule_end) %}
                                     {% if slide.is_notification %}
                                         📆 <span class="prefix">{{ l.slideshow_slide_panel_td_cron_scheduled_date }}</span>
                                         <span class="cron-description">{{ cron_desc_end }}</span>
@@ -75,8 +77,12 @@
             </div>
         </li>
     {% else %}
-        <div class="inner-empty empty-flag ">
-            <i class="fa fa-image"></i>
+        <div class="inner-empty empty-flag">
+            {% if are_notifications %}
+                <i class="fa fa-bell"></i>
+            {% else %}
+                <i class="fa fa-image"></i>
+            {% endif %}
         </div>
     {% endfor %}
 </ul>
