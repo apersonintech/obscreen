@@ -16,9 +16,9 @@
 ## 📡 Run the studio instance
 
 <details closed>
-<summary><h3>with docker run</h3></summary>
+<summary><h3>Using docker run</h3></summary>
 
-⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
+- ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
 ```bash
 # (Optional) Install docker if needed
 curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
@@ -44,7 +44,7 @@ docker run --rm --name obscreen --pull=always \
 </details>
 
 <details closed>
-<summary><h3>with docker compose</h3></summary>
+<summary><h3>Using docker compose</h3></summary>
 
 ```bash
 # Prepare application data file tree
@@ -62,7 +62,7 @@ docker compose up --detach --pull=always
 </details>
 
 <details closed>
-<summary><h3>system-wide (recommended)</h3></summary>
+<summary><h3>System-wide (recommended)</h3></summary>
 
 #### Install
 ```bash
@@ -107,7 +107,7 @@ sudo journalctl -u obscreen-studio -f
 ```
 ---
 ## 🏁 Finally
-- Run `sudo systemctl restart obscreen-player` or `sudo reboot`
+- Run `sudo systemctl restart obscreen-studio` or `sudo reboot`
 
 </details>
 
@@ -120,7 +120,9 @@ sudo journalctl -u obscreen-studio -f
 ---
 ## 📺 Run the player instance
 
-### Autorun for a RaspberryPi
+<details closed>
+<summary><h3>Autorun for a RaspberryPi</h3></summary>
+
 #### How to install
 - Install player autorun by executing following script (will install chromium, x11, pulseaudio and obscreen-player systemd service)
 ```bash
@@ -134,20 +136,25 @@ curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install
 1. First you have to reboot your device with `sudo reboot`
 2. You have to set audio channel to HDMI `sudo raspi-config nonint do_audio 1` (0 is for jack 3.5 output)
 
-### Manually on any device capable of running chromium
+</details>
+
+<details closed>
+<summary><h3>Manually on any device capable of running chromium</h3></summary>
+
 When you run the browser yourself, don't forget to use these flags for chromium browser:
 ```bash
 # chromium or chromium-browser or even chrome
 # replace http://localhost:5000 with your obscreen-studio instance url
 chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
 ```
+</details>
+
 ---
 
-## ✨ You are done now :)
-- If everything is set up correctly, the RaspberryPi shall start chromium in fullscreen directly after boot screen and after some seconds of showing the date & time (`views/player/default.jinja.html`) your slideshow shall start and loop endlessly.
-- Make sure that `PLAYER_AUTOSTART_FILE` exists and is writeable !
-
 ## 📎 Additional
+
+<details closed>
+<summary><h3>Hardware checks</h3></summary>
 
 ### Hardware checks
 - Basic Setup
@@ -160,13 +167,18 @@ https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
 
 However, I used this one: `(2,82) = 1920x1080	60Hz	1080p`
 
-### How to upgrade `obscreen-studio`
->#### with docker run
-- Just add `--pull=always` to your `docker run ...` command, you'll get latest version automatically.
->#### or with docker compose
-- Just add `--pull=always` to your `docker compose up ...` command, , you'll get latest version automatically.
->#### or system-wide
-- Execute following script
+</details>
+
+<details closed>
+<summary><h3>How to upgrade `obscreen-studio`</h3></summary>
+
+#### with docker run
+- Just add `--pull=always` to your `docker run ...` command, you'll get the latest version automatically.
+#### or with docker compose
+- Just add `--pull=always` to your `docker compose up ...` command, you'll get the latest version automatically.
+#### or system-wide
+- Using Git Updater plugin
+- Or execute following script
 ```bash
 cd ~/obscreen
 git pull
@@ -174,4 +186,4 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 sudo systemctl restart obscreen-studio.service
 ```
-
+</details>

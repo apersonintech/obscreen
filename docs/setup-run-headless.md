@@ -8,8 +8,10 @@
 ---
 ## 📡 Run the studio instance
 
-### with docker run
-> ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
+<details closed>
+<summary><h3>Using docker run</h3></summary>
+
+- ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
 ```bash
 # (Optional) Install docker if needed
 curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
@@ -29,8 +31,11 @@ docker run --restart=always --name obscreen --pull=always \
   -v /dev/null:/app/var/run/play \
   jierka/obscreen:latest
 ```
----
-### or with docker compose
+</details>
+
+<details closed>
+<summary><h3>Using docker compose</h3></summary>
+
 ```bash
 # Prepare application data file tree
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
@@ -41,8 +46,11 @@ curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.headl
 # Run
 docker compose up --detach --pull=always
 ```
----
-### or system-wide
+</details>
+
+<details closed>
+<summary><h3>System-wide</h3></summary>
+
 #### Install
 ```bash
 # Install system dependencies
@@ -88,6 +96,12 @@ sudo systemctl start obscreen-studio.service
 sudo journalctl -u obscreen-studio -f 
 ```
 ---
+## 🏁 Finally
+- Run `sudo systemctl restart obscreen-studio` or `sudo reboot`
+
+</details>
+
+---
 
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://localhost:5000`
@@ -97,7 +111,9 @@ sudo journalctl -u obscreen-studio -f
 ---
 ## 📺 Run the player instance
 
-### Autorun for a linux based system
+<details closed>
+<summary><h3>Autorun for a RaspberryPi</h3></summary>
+
 #### How to install
 - Install player autorun by executing following script (will install chromium, x11, pulseaudio and obscreen-player systemd service)
 ```bash
@@ -108,25 +124,34 @@ sudo reboot
 #### How to restart
 1. Just use systemctl `sudo systemctl restart obscreen-player.service`
 
-### Manually on any device capable of running chromium
+</details>
+
+<details closed>
+<summary><h3>Manually on any device capable of running chromium</h3></summary>
+
 When you run the browser yourself, don't forget to use these flags for chromium browser:
 ```bash
 # chromium or chromium-browser or even chrome
 # replace http://localhost:5000 with your obscreen-studio instance url
 chromium --disable-features=Translate --ignore-certificate-errors --disable-web-security --disable-restore-session-state --autoplay-policy=no-user-gesture-required --start-maximized --allow-running-insecure-content --remember-cert-error-decisions --noerrdialogs --kiosk --incognito --window-position=0,0 --window-size=1920,1080 --display=:0 http://localhost:5000
 ```
+</details>
+
 ---
 
 ## 📎 Additional
 
 
-### How to upgrade `obscreen-studio`
->#### with docker run
-- Just add `--pull=always` to your `docker run ...` command, you'll get latest version automatically.
->#### or with docker compose
-- Just add `--pull=always` to your `docker compose up ...` command, , you'll get latest version automatically.
->#### or system-wide
-- Execute following script
+<details closed>
+<summary><h3>How to upgrade `obscreen-studio`</h3></summary>
+
+#### with docker run
+- Just add `--pull=always` to your `docker run ...` command, you'll get the latest version automatically.
+#### or with docker compose
+- Just add `--pull=always` to your `docker compose up ...` command, you'll get the latest version automatically.
+#### or system-wide
+- Using Git Updater plugin
+- Or execute following script
 ```bash
 cd ~/obscreen
 git pull
@@ -134,3 +159,4 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 sudo systemctl restart obscreen-studio.service
 ```
+</details>
