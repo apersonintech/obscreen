@@ -84,6 +84,7 @@ systemctl set-default graphical.target
 
 mkdir -p "$WORKING_DIR/obscreen/var/run"
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/autostart-browser-x11.sh  | sed "s#/home/pi#$WORKING_DIR#g" | sed "s#=pi#=$OWNER#g" | sed "s#=http://localhost:5000#=$obscreen_studio_url#g" | tee "$WORKING_DIR/obscreen/var/run/play"
+chmod +x "$WORKING_DIR/obscreen/var/run/play"
 
 # ============================================================
 # Start
