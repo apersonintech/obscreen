@@ -16,7 +16,9 @@ Use a RaspberryPi (Lite OS) to show a fullscreen slideshow in a web browser (Kio
 - Very few dependencies
 - SQLite database
 - Plugin system
-- Feature flags to enable complex use cases (Fleet/User/Playlist management)
+- Fleet management
+- Playlist management
+- User management
 - No stupid pricing plan
 - No cloud
 - No telemetry
