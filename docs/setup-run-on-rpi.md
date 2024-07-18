@@ -15,7 +15,9 @@
 ---
 ## 📡 Run the studio instance
 
-### with docker run
+<details open>
+<summary>### with docker run</summary>
+
 > ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
 ```bash
 # (Optional) Install docker if needed
@@ -40,6 +42,8 @@ docker run --rm --name obscreen --pull=always \
   jierka/obscreen:latest
 ```
 ---
+</details>
+
 ### or with docker compose
 ```bash
 # Prepare application data file tree
