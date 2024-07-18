@@ -3,10 +3,11 @@
 OWNER=${1:-$USER}
 WORKING_DIR=${2:-$HOME}
 
-echo "### Installing Obscreen Player ###"
+echo "# ==============================="
+echo "# Installing Obscreen Player"
 echo "# Using user: $OWNER"
 echo "# Working Directory: $WORKING_DIR"
-echo "# ------------------------------ #"
+echo "# ==============================="
 
 # ============================================================
 # User Interaction
@@ -25,23 +26,36 @@ do
 done
 
 if [ "$disable_interaction" = false ]; then
-    read -p "Enter Obscreen studio instance URL [${default_studio_url}]: " user_url
-    obscreen_studio_url=${user_url:-$default_studio_url}
-    read -p "Do you confirm ${obscreen_studio_url} is a valid Obscreen studio instance? [Y/n]: " confirm
-    if [[ $confirm == "Y" || $confirm == "y" || $confirm == "" ]]; then
-        echo "Using Obscreen studio instance URL: $obscreen_studio_url"
+    if [ -t 0 ]; then
+        echo ""
+        read -p "Enter Obscreen studio instance URL [${default_studio_url}]: " user_url
+        obscreen_studio_url=${user_url:-$default_studio_url}
+        read -p "Do you confirm ${obscreen_studio_url} is a valid Obscreen studio instance? [Y/n]: " confirm
+        if [[ $confirm == "Y" || $confirm == "y" || $confirm == "" ]]; then
+            echo ""
+            echo "Using Obscreen studio instance URL: $obscreen_studio_url"
+        else
+            echo "Confirmation not received. Please run the script again and enter a valid URL."
+            exit 1
+        fi
     else
-        echo "Confirmation not received. Please run the script again and enter a valid URL."
+        echo "Interactive input required, but not available. Please run the script in an interactive terminal."
         exit 1
     fi
 else
     # If --disable-interaction is passed, use the default URL without prompting
+    echo ""
     echo "Using Obscreen studio instance URL: $default_studio_url"
 fi
 
 # ============================================================
 # Installation
 # ============================================================
+
+
+echo ""
+echo "# Waiting 3 seconds before installation..."
+sleep 3
 
 # Update and install necessary packages
 apt update
