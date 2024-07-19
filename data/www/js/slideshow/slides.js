@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
             };
 
             if (timeOnly) {
-                options['noCalendar'] = true;
+                // options['noCalendar'] = true;
             }
 
             $el.flatpickr(options);
