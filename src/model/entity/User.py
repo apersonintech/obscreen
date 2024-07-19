@@ -6,6 +6,8 @@ from typing import Optional, Union
 
 class User:
 
+    DEFAULT_USER = 'admin'
+
     def __init__(self, username: str = '', password: str = '', enabled: bool = True, id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._username = username

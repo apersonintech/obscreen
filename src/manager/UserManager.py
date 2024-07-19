@@ -68,8 +68,8 @@ class UserManager:
         object = self._db.get_by_id(self.TABLE_NAME, id)
         return self.hydrate_object(object, id) if object else None
 
-    def get_by(self, query, sort: Optional[str] = None, values: dict = {}) -> List[User]:
-        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, sort=sort, values=values))
+    def get_by(self, query, values: dict = {}, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> List[User]:
+        return self.hydrate_list(self._db.get_by_query(self.TABLE_NAME, query=query, values=values, sort=sort, ascending=ascending, limit=limit))
 
     def get_one_by(self, query, values: dict = {}, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> Optional[User]:
         object = self._db.get_one_by_query(self.TABLE_NAME, query=query, values=values, sort=sort, ascending=ascending, limit=limit)
@@ -122,7 +122,9 @@ class UserManager:
         for user_id, edits in edits_users.items():
             self._db.update_by_id(self.TABLE_NAME, user_id, edits)
 
-    def get_users(self) -> List[User]:
+    def get_users(self, exclude: Optional[str] = None) -> List[User]:
+        if exclude:
+            return self.get_by(query='username != ?', values={"username":exclude}, sort='created_at', ascending=True)
         return self.get_all()
 
     def pre_add(self, user: Dict) -> Dict:

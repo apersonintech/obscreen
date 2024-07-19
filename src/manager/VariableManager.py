@@ -9,6 +9,7 @@ from src.manager.ConfigManager import ConfigManager
 from src.manager.UserManager import UserManager
 from src.model.entity.Variable import Variable
 from src.model.entity.Selectable import Selectable
+from src.model.entity.User import User
 from src.model.enum.FolderEntity import FOLDER_ROOT_PATH
 from src.model.enum.ApplicationLanguage import ApplicationLanguage
 from src.model.enum.VariableType import VariableType
@@ -134,7 +135,7 @@ class VariableManager:
             {"name": "fleet_player_enabled", "section": self.t(VariableSection.FLEET), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_fleet_player_enabled'), "description_edition": self.t('settings_variable_desc_edition_fleet_player_enabled'), "refresh_player": False},
 
             ### Security
-            {"name": "auth_enabled", "section": self.t(VariableSection.SECURITY), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled'), "refresh_player": False},
+            {"name": "auth_enabled", "section": self.t(VariableSection.SECURITY), "value": False, "type": VariableType.BOOL, "editable": True, "description": self.t('settings_variable_desc_auth_enabled'), "description_edition": self.t('settings_variable_desc_edition_auth_enabled').replace("%username%", User.DEFAULT_USER).replace("%password%", User.DEFAULT_USER), "refresh_player": False},
 
             # Not editable (System information)
             {"name": "start_counter", "value": 0, "type": VariableType.INT, "editable": False, "description": self.t('settings_variable_desc_ro_start_counter')},

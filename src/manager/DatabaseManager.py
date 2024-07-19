@@ -88,17 +88,22 @@ class DatabaseManager:
             logging.error("SQL query execution error while reading '{}': {}".format(query, e))
         return result
 
-    def get_all(self, table_name: str, sort: Optional[str] = None, ascending=True) -> list:
+    def get_all(self, table_name: str, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> list:
         return self.execute_read_query(
-            query="select * from {} {}".format(table_name, "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "")
+            query="select * from {} {} {}".format(
+                table_name,
+                "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "",
+                "LIMIT {}".format(limit) if limit else ""
+            )
         )
 
-    def get_by_query(self, table_name: str, query: str = "1=1", sort: Optional[str] = None, ascending=True, values: dict = {}) -> list:
+    def get_by_query(self, table_name: str, query: str = "1=1", values: dict = {}, sort: Optional[str] = None, ascending=True, limit: Optional[int] = None) -> list:
         return self.execute_read_query(
-            query="select * from {} where {} {}".format(
+            query="select * from {} where {} {} {}".format(
                 table_name,
                 query,
-                "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else ""
+                "ORDER BY {} {}".format(sort, "ASC" if ascending else "DESC") if sort else "",
+                "LIMIT {}".format(limit) if limit else ""
             ),
             params=tuple(v for v in values.values())
         )
