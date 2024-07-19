@@ -63,10 +63,12 @@ class AuthController(ObController):
         return redirect(url_for('login'))
 
     def auth_user_list(self):
+        demo = self._model_store.config().map().get('demo')
+
         return render_template(
             'auth/list.jinja.html',
             error=request.args.get('error', None),
-            users=self._model_store.user().get_users(),
+            users=self._model_store.user().get_users(exclude=User.DEFAULT_USER if demo else None),
         )
 
     def auth_user_add(self):

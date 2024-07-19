@@ -178,7 +178,7 @@
   "settings_variable_desc_fleet_player_enabled": "Enable fleet player management",
   "settings_variable_desc_edition_fleet_player_enabled": "Playlist management will also be enabled",
   "settings_variable_desc_auth_enabled": "Enable auth management",
-  "settings_variable_desc_edition_auth_enabled": "Default user credentials will be admin/admin",
+  "settings_variable_desc_edition_auth_enabled": "Default user credentials will be %username%/%password%",
   "settings_variable_desc_external_url": "External url (i.e: https://studio-01.company.com or http://10.10.3.100)",
   "settings_variable_desc_slide_upload_limit": "Slide upload limit (in megabytes)",
   "settings_variable_desc_dark_mode": "Dark mode",

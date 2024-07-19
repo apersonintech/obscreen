@@ -86,7 +86,7 @@ class SettingsController(ObController):
 
         if variable.name == 'auth_enabled':
             if variable.as_bool() and self._model_store.user().count_all_enabled() == 0:
-                self._model_store.user().add_form(User(username="admin", password="admin", enabled=True))
+                self._model_store.user().add_form(User(username=User.DEFAULT_USER, password=User.DEFAULT_USER, enabled=True))
 
             self.reload_web_server()
             return redirect(url_for('logout'))

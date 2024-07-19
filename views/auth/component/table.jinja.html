@@ -1,6 +1,6 @@
 <div class="tiles users">
     <div class="tiles-inner">
-        {% for user in users %}
+    {% for user in users %}
         <div class="user-item tile-item {% if not user.enabled %}disabled{% endif %}" data-level="{{ user.id }}"
             data-entity="{{ user.to_json({"created_by": track_created(user).username, "updated_by": track_updated(user).username}) }}">
             <div class="tile-body">
