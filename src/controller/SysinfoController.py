@@ -23,7 +23,7 @@ class SysinfoController(ObController):
         self._app.add_url_rule('/logs', 'logs', self._auth(self.logs), methods=['GET'])
         self._app.add_url_rule('/sysinfo/restart', 'sysinfo_restart', self.sysinfo_restart, methods=['GET', 'POST'])
         self._app.add_url_rule('/sysinfo/restart/needed', 'sysinfo_restart_needed', self._auth(self.sysinfo_restart_needed), methods=['GET'])
-        self._app.add_url_rule('/sysinfo/get/ipaddr', 'sysinfo_get_ipaddr', self._auth(self.sysinfo_get_ipaddr), methods=['GET'])
+        self._app.add_url_rule('/sysinfo/get/ipaddr', 'sysinfo_get_ipaddr', self.sysinfo_get_ipaddr, methods=['GET'])
 
     def logs(self):
         self._model_store.variable().update_by_name('last_pillmenu_configuration', 'logs')

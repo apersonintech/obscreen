@@ -3,7 +3,7 @@
     <head>
         <script type="text/javascript">
             const time_with_seconds = {{ 'true' if time_with_seconds.as_bool() else 'false' }};
-            let external_url = '{{ external_url }}';
+            let external_url = '{{ external_url.strip() }}';
 
             function updateTime() {
                 const date = new Date();
@@ -22,7 +22,7 @@
 
                 document.getElementById('time').innerHTML = timeLabel;
                 document.getElementById('date').innerHTML = dateLabel;
-                setTimeout(updateTime, 1000);
+                setTimeout(updateTime, 5000);
             }
 
             window.addEventListener("load", updateTime);
@@ -39,7 +39,7 @@
                     }
                 };
                 xhr.send();
-            }, 1000);
+            }, 5000);
         </script>
         <style>
             * { font-family: 'Tahoma', 'Arial', 'sans-serif'; }
@@ -53,8 +53,6 @@
             .ipaddr a { text-decoration: none; font-weight: normal; font-size: 1.2em; color: #666; transition: .1s ease-in all; display:block; flex-direction:row; align-self: stretch; flex: 1; text-align: center; margin: 0 20px; border-radius: 6px; padding: 10px 0; }
             .ipaddr a span { color: white; font-size: 1.2em; }
             .ipaddr a:hover { color: #fff; background: #017BFF; }
-            .ipaddr a.external { color: #017BFF; }
-            .ipaddr a.external:hover { background: #FFFFFF; }
             #hidden-container { display: none; }
         </style>
     </head>
@@ -87,7 +85,12 @@
                     $container.appendChild($ipaddrs);
 
                     if (external_url.length) {
-                        addLink($ipaddrs, external_url, external_url, 'external');
+                        const isHttps = external_url.indexOf('https://') === 0;
+                        let href = external_url.replace('http://', '').replace('https://', '').replace(/\/$/, '');
+                        const path = '{{ url_for('manage') }}';
+                        const scheme = (isHttps ? 'https://' : 'http://');
+                        const href_label = scheme + '<span>' + href + '</span>' + path;
+                        addLink($ipaddrs, href_label, scheme + href + path, 'external');
                     }
 
                     for (let i = 0; i < ips.length; i++) {
