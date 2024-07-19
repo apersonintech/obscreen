@@ -44,15 +44,18 @@
                     <label for="node-player-group-edit-playlist-id">{{ l.fleet_node_player_group_form_label_playlist_id }}</label>
                     <div class="widget">
                         <select name="playlist_id" id="node-player-group-edit-playlist-id" class="input-naked">
+                            <option value="">{{ l.common_empty }}</option>
                             {% for playlist_id, playlist_name in playlists.items() %}
                                 <option value="{{ playlist_id }}" {% if current_player_group.playlist_id == playlist_id %}selected="selected"{% endif %}>
                                     {{ playlist_name }}
                                 </option>
                             {% endfor %}
                         </select>
-                        <a href="{{ url_for('playlist_list', playlist_id=current_player_group.playlist_id) }}" class="btn btn-neutral">
-                            <i class="fa-solid fa-up-right-from-square"></i>
-                        </a>
+                        {% if current_player_group.playlist_id %}
+                            <a href="{{ url_for('playlist_list', playlist_id=current_player_group.playlist_id) }}" class="btn btn-neutral">
+                                <i class="fa-solid fa-up-right-from-square"></i>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -65,24 +68,26 @@
             </form>
         </div>
 
-        <div class="preview-holder">
-            {% set preview_url = request.scheme ~ '://' ~ request.headers.get('host') ~ url_for('player_use', playlist_slug_or_id=current_player_group.playlist_id) %}
+        {% if current_player_group.playlist_id %}
+            <div class="preview-holder">
+                {% set preview_url = request.scheme ~ '://' ~ request.headers.get('host') ~ url_for('player_use', playlist_slug_or_id=current_player_group.playlist_id) %}
 
-            <h4 class="divide">
-                Iframe
-            </h4>
-            <p>
-                {{ l.playlist_form_preview_iframe_desc }}
-            </p>
+                <h4 class="divide">
+                    Iframe
+                </h4>
+                <p>
+                    {{ l.playlist_form_preview_iframe_desc }}
+                </p>
 
-            <div class="preview">
-                <button type="button" class="btn btn-pixel node-player-group-preview"
-                        title="{{ l.playlist_panel_preview_action }}"
-                        data-url="{{ preview_url }}?intro=0&animation=0">
-                    <i class="fa fa-play"></i>
-                </button>
+                <div class="preview">
+                    <button type="button" class="btn btn-pixel node-player-group-preview"
+                            title="{{ l.playlist_panel_preview_action }}"
+                            data-url="{{ preview_url }}?intro=0&animation=0">
+                        <i class="fa fa-play"></i>
+                    </button>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 
 </div>
