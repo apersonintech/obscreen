@@ -327,7 +327,8 @@
     }
 
     const loadPicture = function(element, callbackReady, item) {
-        element.innerHTML = `<img src="/${item.location}" alt="" />`;
+        const hasScheme = item.location.indexOf('://') >= 0;
+        element.innerHTML = `<img src="${hasScheme ? item.location : ('/' + item.location)}" alt="" />`;
         callbackReady(function() {});
     };
 

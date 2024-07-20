@@ -48,6 +48,7 @@ class ContentController(ObController):
         self._model_store.variable().update_by_name('last_pillmenu_slideshow', 'slideshow_content_list')
         working_folder_path, working_folder = self.get_working_folder()
         slides_with_content = self._model_store.slide().get_all_indexed(attribute='content_id', multiple=True)
+        external_storages = self._model_store.external_storage().list_usb_storage_devices()
 
         return render_template(
             'slideshow/contents/list.jinja.html',
@@ -59,6 +60,11 @@ class ContentController(ObController):
             working_folder_children=self._model_store.folder().get_children(folder=working_folder, entity=FolderEntity.CONTENT, sort='created_at', ascending=False),
             enum_content_type=ContentType,
             enum_folder_entity=FolderEntity,
+            external_storages={storage.mount_point: "{} ({} - {}GB)".format(
+                storage.mount_point,
+                storage.logical_name,
+                storage.total_size_in_gigabytes()
+            ) for storage in external_storages},
         )
 
     def slideshow_content_add(self):
@@ -67,12 +73,21 @@ class ContentController(ObController):
             "path": working_folder_path,
         }
 
+        location = request.form['object'] if 'object' in request.form else None
+
+        if 'storage' in request.form:
+            location = "{}/{}".format(request.form['storage'], location.strip('/'))
+
+            if not os.path.exists(location):
+                route_args["error"] = "common_bad_directory_path"
+                return redirect(url_for('slideshow_content_list', **route_args))
+
         content = self._model_store.content().add_form_raw(
             name=request.form['name'],
             type=str_to_enum(request.form['type'], ContentType),
             request_files=request.files,
             upload_dir=self._app.config['UPLOAD_FOLDER'],
-            location=request.form['object'] if 'object' in request.form else None,
+            location=location,
             folder_id=working_folder.id if working_folder else None
         )
 
@@ -87,7 +102,7 @@ class ContentController(ObController):
         for key in request.files:
             files = request.files.getlist(key)
             for file in files:
-                type = ContentType.guess_content_type_file(file)
+                type = ContentType.guess_content_type_file(file.filename)
                 name = file.filename.rsplit('.', 1)[0]
 
                 if type:
@@ -240,7 +255,9 @@ class ContentController(ObController):
         var_external_url = self._model_store.variable().get_one_by_name('external_url')
         location = content.location
 
-        if content.type == ContentType.YOUTUBE:
+        if content.type == ContentType.EXTERNAL_STORAGE:
+            location = "file://{}".format(location)
+        elif content.type == ContentType.YOUTUBE:
             location = "https://www.youtube.com/watch?v={}".format(content.location)
         elif len(var_external_url.as_string().strip()) > 0 and content.has_file():
             location = "{}/{}".format(var_external_url.value, content.location)

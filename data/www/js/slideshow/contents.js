@@ -9,14 +9,15 @@ jQuery(document).ready(function ($) {
         }).data('input');
 
         $form.find('.content-object-input').each(function() {
-            const active = $(this).attr('data-input-type') === inputType;
-
-            if ($(this).is('input[type=file]')) {
-                $(this).prop('disabled', !active).prop('required', active);
-                $(this).parents('label:eq(0)').toggleClass('hidden', !active);
-            } else {
-                $(this).prop('disabled', !active).prop('required', active).toggleClass('hidden', !active);
-            }
+            const $input = $(this);
+            const active = $input.attr('data-input-type') === inputType;
+            const $holder = $input.parents('.object-holder:eq(0)');
+            $holder.find('input, select, textarea').prop('disabled', !active).prop('required', active).toggleClass('hidden', !active);
+            $holder.toggleClass('hidden', !active);
+            console.log(active)
+            console.log($input)
+            if (active)
+            console.log($holder)
         });
 
         const optionAttributes = $selectedOption.get(0).attributes;
