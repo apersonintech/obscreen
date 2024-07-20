@@ -12,6 +12,7 @@ from src.manager.LangManager import LangManager
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.ConfigManager import ConfigManager
 from src.manager.LoggingManager import LoggingManager
+from src.manager.ExternalStorageManager import ExternalStorageManager
 
 
 class ModelStore:
@@ -39,6 +40,7 @@ class ModelStore:
         self._playlist_manager = PlaylistManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._content_manager = ContentManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
+        self._external_storage_manager = ExternalStorageManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._variable_manager.reload()
 
     def logging(self) -> LoggingManager:
@@ -46,6 +48,9 @@ class ModelStore:
 
     def config(self) -> ConfigManager:
         return self._config_manager
+
+    def external_storage(self) -> ExternalStorageManager:
+        return self._external_storage_manager
 
     def variable(self) -> VariableManager:
         return self._variable_manager
@@ -81,6 +86,7 @@ class ModelStore:
         return self._get_plugins()
 
     def on_user_delete(self, user_id: int) -> None:
+        self._external_storage_manager.forget_for_user(user_id)
         self._playlist_manager.forget_for_user(user_id)
         self._folder_manager.forget_for_user(user_id)
         self._node_player_group_manager.forget_for_user(user_id)
