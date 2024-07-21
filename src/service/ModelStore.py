@@ -16,11 +16,14 @@ from src.manager.LoggingManager import LoggingManager
 
 class ModelStore:
 
-    def __init__(self, get_plugins: Dict):
+    def __init__(self, kernel, get_plugins: Dict):
         self._get_plugins = get_plugins
+        self._kernel = kernel
 
         # Core
-        self._config_manager = ConfigManager()
+        self._config_manager = ConfigManager(replacers={
+            'application_dir': kernel.get_application_dir()
+        })
         self._logging_manager = LoggingManager(config_manager=self._config_manager)
 
         # Pure

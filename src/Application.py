@@ -16,7 +16,7 @@ class Application:
     def __init__(self, application_dir: str):
         self._application_dir = application_dir
         self._stop_event = threading.Event()
-        self._model_store = ModelStore(self.get_plugins)
+        self._model_store = ModelStore(self, self.get_plugins)
         self._template_renderer = TemplateRenderer(kernel=self, model_store=self._model_store, render_hook=self.render_hook)
         self._web_server = WebServer(kernel=self, model_store=self._model_store, template_renderer=self._template_renderer)
         self._external_storage_server = ExternalStorageServer(kernel=self, model_store=self._model_store)

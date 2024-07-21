@@ -3,6 +3,7 @@ import sys
 import logging
 import argparse
 
+from typing import Dict
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -11,7 +12,8 @@ class ConfigManager:
     DEFAULT_PORT = 5000
     VERSION_FILE = 'version.txt'
 
-    def __init__(self):
+    def __init__(self, replacers: Dict):
+        self._replacers = replacers
         self._CONFIG = {
             'version': None,
             'demo': False,
@@ -35,6 +37,8 @@ class ConfigManager:
 
         if self.map().get('debug'):
             logging.debug(self._CONFIG)
+
+        self.apply_replacers()
 
     def map(self) -> dict:
         return self._CONFIG
@@ -95,3 +99,9 @@ class ConfigManager:
                     value = True
                 self._CONFIG[key.lower()] = value
                 logging.info(f"Env var {key} has been found")
+
+    def apply_replacers(self):
+        for key, value in self._CONFIG.items():
+            if isinstance(value, str):
+                for replace_key, replace_value in self._replacers.items():
+                    self._CONFIG[key] = value.replace("%{}%".format(replace_key), replace_value)
