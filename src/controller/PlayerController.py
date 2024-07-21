@@ -147,12 +147,11 @@ class PlayerController(ObController):
                             slide['id'] = str(uuid.uuid4())
                             slide['position'] = position
                             slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
+                            slide['name'] = file.stem
                             slide['location'] = "{}/{}".format(
                                 self._model_store.content().resolve_content_location(content),
                                 file.name
                             )
-                            slide['name'] = file.stem
-                            logging.info(slide)
                             self._check_slide_enablement(playlist_loop, playlist_notifications, slide)
                             position = position + 1
             else:
