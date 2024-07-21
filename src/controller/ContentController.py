@@ -49,6 +49,7 @@ class ContentController(ObController):
         working_folder_path, working_folder = self.get_working_folder()
         slides_with_content = self._model_store.slide().get_all_indexed(attribute='content_id', multiple=True)
         external_storages = self._model_store.external_storage().list_usb_storage_devices()
+        print(external_storages[0] if len(external_storages) > 0 else 'none')
 
         return render_template(
             'slideshow/contents/list.jinja.html',
