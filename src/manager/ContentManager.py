@@ -227,9 +227,8 @@ class ContentManager(ModelManager):
         if content.type == ContentType.EXTERNAL_STORAGE:
             var_external_storage_url = self._variable_manager.get_one_by_name('external_url_storage').as_string().strip().strip('/')
             port_ex_st = self._config_manager.map().get('port_http_external_storage')
-            location = "{}:{}/{}".format(
-                var_external_storage_url if var_external_storage_url else 'http://{}'.format(get_preferred_ip_address()),
-                port_ex_st,
+            location = "{}/{}".format(
+                var_external_storage_url if var_external_storage_url else 'http://{}:{}'.format(get_preferred_ip_address(), port_ex_st),
                 content.location.strip('/')
             )
         elif content.type == ContentType.YOUTUBE:
