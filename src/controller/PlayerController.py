@@ -152,7 +152,7 @@ class PlayerController(ObController):
                                 file.name
                             )
                             slide['name'] = file.stem
-                            logging.info(slide.to_json())
+                            logging.info(slide)
                             self._feed_playlist(playlist_loop, playlist_notifications, slide)
             else:
                 self._feed_playlist(playlist_loop, playlist_notifications, slide)
