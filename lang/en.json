@@ -33,6 +33,7 @@
   "slideshow_slide_form_section_scheduling": "Scheduling",
   "slideshow_slide_form_label_name": "Name",
   "slideshow_slide_form_label_enabled": "Enable/Disable",
+  "slideshow_slide_form_label_auto_duration": "Use video's duration as timer",
   "slideshow_slide_form_label_add_content": "Upload to library",
   "slideshow_slide_form_label_from_library": "From library",
   "slideshow_slide_form_label_content_id": "Content",

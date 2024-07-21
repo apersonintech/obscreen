@@ -33,6 +33,7 @@
   "slideshow_slide_form_section_scheduling": "Programmazione",
   "slideshow_slide_form_label_name": "Nome",
   "slideshow_slide_form_label_enabled": "Abilita/Disabilita",
+  "slideshow_slide_form_label_auto_duration": "Utilizza la durata del video",
   "slideshow_slide_form_label_add_content": "Upload alla biblioteca",
   "slideshow_slide_form_label_from_library": "Dalla biblioteca",
   "slideshow_slide_form_label_content_id": "Contenuti",
