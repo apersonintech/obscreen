@@ -87,6 +87,19 @@ form {
 		display: flex;
 		flex-direction: row;
 
+		&.vertical {
+			flex-direction: column;
+
+			select,
+			input {
+				align-self: stretch;
+
+				&:first-child {
+					margin-bottom: 10px;
+				}
+			}
+		}
+
 		.btn {
 			margin-left: 10px;
 		}
@@ -158,6 +171,7 @@ form {
 				background: $gscale0;
 				border-radius: $baseRadius;
 				padding-left: 10px;
+				padding-right: 10px;
 			}
 		}
 	}

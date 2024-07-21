@@ -16,7 +16,8 @@ class ConfigManager:
             'version': None,
             'demo': False,
             'port_http_external_storage': None,
-            'bind_http_external_storage': '0.0.0.0',
+            'bind_http_external_storage': 'localhost',
+            'chroot_http_external_storage': '%application_dir%/var/run/storage',
             'port': self.DEFAULT_PORT,
             'bind': '0.0.0.0',
             'debug': False,
@@ -48,8 +49,9 @@ class ConfigManager:
         parser.add_argument('--log-level', '-ll', default=self._CONFIG['log_level'], help='Log Level')
         parser.add_argument('--log-stdout', '-ls', default=self._CONFIG['log_stdout'], action='store_true', help='Log to standard output')
         parser.add_argument('--demo', '-o', default=self._CONFIG['demo'], help='Demo mode to showcase obscreen in a sandbox')
-        parser.add_argument('--port-http-external-storage', '-bx', default=self._CONFIG['port_http_external_storage'], help='Port of http server serving external storage directory')
-        parser.add_argument('--bind-http-external-storage', '-px', default=self._CONFIG['bind_http_external_storage'], help='Bind address of http server serving external storage directory')
+        parser.add_argument('--port-http-external-storage', '-bx', default=self._CONFIG['port_http_external_storage'], help='Port of http server serving external storage')
+        parser.add_argument('--bind-http-external-storage', '-px', default=self._CONFIG['bind_http_external_storage'], help='Bind address of http server serving external storage')
+        parser.add_argument('--chroot-http-external-storage', '-cx', default=self._CONFIG['chroot_http_external_storage'], help='Chroot directory of http server serving external storage')
         parser.add_argument('--version', '-v', default=None, action='store_true', help='Get version number')
 
         return parser.parse_args()
@@ -69,6 +71,8 @@ class ConfigManager:
             self._CONFIG['port_http_external_storage'] = args.port_http_external_storage
         if args.bind_http_external_storage:
             self._CONFIG['bind_http_external_storage'] = args.bind_http_external_storage
+        if args.chroot_http_external_storage:
+            self._CONFIG['chroot_http_external_storage'] = args.chroot_http_external_storage
         if args.log_file:
             self._CONFIG['log_file'] = args.log_file
         if args.secret_key:
