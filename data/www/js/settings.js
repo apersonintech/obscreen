@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
         $('#variable-edit-name').val(variable.name);
         $('#variable-edit-description').html(variable.description);
         $('#variable-edit-description-edition').html(variable.description_edition).toggleClass('hidden', variable.description_edition == '');
-        $('#variable-edit-value').val(variable.value);
+        $('#variable-edit-value').prop('required', variable.type !== 'string').val(variable.value);
         $('#variable-edit-id').val(variable.id);
     });
 
