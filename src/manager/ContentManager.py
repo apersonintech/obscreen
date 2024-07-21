@@ -8,6 +8,7 @@ from src.model.entity.Playlist import Playlist
 from src.model.enum.ContentType import ContentType
 from src.util.utils import get_yt_video_id
 from src.manager.DatabaseManager import DatabaseManager
+from src.manager.ConfigManager import ConfigManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
@@ -30,8 +31,9 @@ class ContentManager(ModelManager):
         "updated_at INTEGER"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager):
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager, config_manager: ConfigManager):
         super().__init__(lang_manager, database_manager, user_manager, variable_manager)
+        self._config_manager = config_manager
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     def hydrate_object(self, raw_content: dict, id: int = None) -> Content:
@@ -222,7 +224,7 @@ class ContentManager(ModelManager):
         location = content.location
 
         if content.type == ContentType.EXTERNAL_STORAGE:
-            port_ex_st = self._model_store.config().map().get('port_http_external_storage')
+            port_ex_st = self._config_manager.map().get('port_http_external_storage')
             location = "http://localhost:{}/{}".format(port_ex_st, content.location.strip('/'))
         elif content.type == ContentType.YOUTUBE:
             location = "https://www.youtube.com/watch?v={}".format(content.location)
