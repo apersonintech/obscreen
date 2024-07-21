@@ -136,17 +136,19 @@ class PlayerController(ObController):
             slide['location'] = content['location']
             slide['type'] = content['type']
 
+
             if slide['type'] == ContentType.EXTERNAL_STORAGE.value:
                 mount_point_dir = Path(slide['location'])
-                if mount_point_dir.is_dir():
-                    for file in mount_point_dir.iterdir():
-                        if file.is_file() and not file.stem.startswith('.'):
-                            slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
-                            slide['location'] = "file://{}".format(str(file.resolve()))
-                            slide['name'] = file.stem
-                            self._feed_playlist(playlist_loop, playlist_notifications, slide)
+                if True: #mount_point_dir.is_dir():
+                    for file in [Path('/Volumes/ESD-USB/obscreen/test/autumn.jpg'), Path('/Volumes/ESD-USB/obscreen/test/soundonly.jpg')]: #mount_point_dir.iterdir():
+                        # if file.is_file() and not file.stem.startswith('.'):
+                        slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
+                        slide['location'] = "file://{}".format(str(file.resolve()))
+                        slide['name'] = file.stem
+                        self._feed_playlist(playlist_loop, playlist_notifications, slide)
             else:
                 self._feed_playlist(playlist_loop, playlist_notifications, slide)
+
 
         playlists = {
             'playlist_id': playlist.id if playlist else None,
