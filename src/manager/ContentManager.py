@@ -218,7 +218,7 @@ class ContentManager(ModelManager):
         return len(self.get_contents(folder_id=folder_id))
 
     def resolve_content_location(self, content: Content) -> str:
-        var_external_url = self._model_store.variable().get_one_by_name('external_url').as_string().strip().strip('/')
+        var_external_url = self._variable_manager.get_one_by_name('external_url').as_string().strip().strip('/')
         location = content.location
 
         if content.type == ContentType.EXTERNAL_STORAGE:
