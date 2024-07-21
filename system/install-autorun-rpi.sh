@@ -59,11 +59,10 @@ sleep 3
 
 # Update and install necessary packages
 apt update
-apt install -y xinit xserver-xorg chromium-browser unclutter pulseaudio
+apt install -y xinit xserver-xorg chromium-browser unclutter pulseaudio exfat-fuse ntfs-3g
 
-# Add user to tty and video groups
-usermod -aG tty $OWNER
-usermod -aG video $OWNER
+# Add user to tty, video and plugdev groups
+usermod -aG tty,video,plugdev $OWNER
 
 # Configure Xwrapper
 touch /etc/X11/Xwrapper.config
@@ -72,6 +71,12 @@ grep -qxF "needs_root_rights=yes" /etc/X11/Xwrapper.config || echo "needs_root_r
 
 # Create the systemd service to start Chromium in kiosk mode
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/obscreen-player.service  | sed "s#/home/pi#$WORKING_DIR#g" | sed "s#=pi#=$OWNER#g" | tee /etc/systemd/system/obscreen-player.service
+
+# Configure external storage automount
+curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/10-obscreen-media-automount.rules  | sed "s#/home/pi#$WORKING_DIR#g" | tee /etc/udev/rules.d/10-obscreen-media-automount.rules
+udevadm control --reload-rules
+systemctl restart udev
+udevadm trigger
 
 # Reload systemd, enable and start the service
 systemctl daemon-reload
