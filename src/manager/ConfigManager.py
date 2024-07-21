@@ -10,6 +10,7 @@ load_dotenv()
 class ConfigManager:
 
     DEFAULT_PORT = 5000
+    DEFAULT_PORT_HTTP_EXTERNAL_STORAGE = 5001
     VERSION_FILE = 'version.txt'
 
     def __init__(self, replacers: Dict):
@@ -17,8 +18,8 @@ class ConfigManager:
         self._CONFIG = {
             'version': None,
             'demo': False,
-            'port_http_external_storage': None,
-            'bind_http_external_storage': 'localhost',
+            'port_http_external_storage': self.DEFAULT_PORT_HTTP_EXTERNAL_STORAGE,
+            'bind_http_external_storage': '0.0.0.0',
             'chroot_http_external_storage': '%application_dir%/var/run/storage',
             'port': self.DEFAULT_PORT,
             'bind': '0.0.0.0',
