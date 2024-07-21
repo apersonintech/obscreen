@@ -34,6 +34,7 @@
   "slideshow_slide_form_label_name": "Nombre",
   "slideshow_slide_form_label_add_content": "Upload a la biblioteca",
   "slideshow_slide_form_label_enabled": "Activar/Desactivar",
+  "slideshow_slide_form_label_auto_duration": "Utilizar la duración del vídeo",
   "slideshow_slide_form_label_from_library": "Dalla biblioteca",
   "slideshow_slide_form_label_content_id": "Contenido",
   "slideshow_slide_form_label_location": "Ubicación",

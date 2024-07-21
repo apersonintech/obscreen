@@ -5,6 +5,8 @@ from typing import Union, List, Optional
 
 from src.util.utils import str_to_enum
 
+AUTO_DURATION_CHEATCODE = 98769876
+
 
 class ContentInputType(Enum):
 

@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for, jsonify, a
 from src.service.ModelStore import ModelStore
 from src.model.entity.Playlist import Playlist
 from src.model.enum.FolderEntity import FolderEntity
-from src.model.enum.ContentType import ContentType
+from src.model.enum.ContentType import ContentType, AUTO_DURATION_CHEATCODE
 from src.interface.ObController import ObController
 
 
@@ -49,6 +49,7 @@ class PlaylistController(ObController):
             folders_tree=self._model_store.folder().get_folder_tree(FolderEntity.CONTENT),
             enum_content_type=ContentType,
             enum_folder_entity=FolderEntity,
+            auto_duration_cheatcode=AUTO_DURATION_CHEATCODE,
         )
 
     def playlist_add(self):

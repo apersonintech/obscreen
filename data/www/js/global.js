@@ -162,5 +162,12 @@ jQuery(document).ready(function ($) {
 
         showToast(l.js_common_copied);
     });
+
+    // Weird fix for toggle in modals
+    $(document).on('click', '.modal .toggle label', function (e) {
+        const $toggle = $(this).parents('.toggle:eq(0)');
+        const $checkbox = $toggle.find('input[type=checkbox]');
+        $checkbox.prop('checked', !$checkbox.prop('checked'));
+    });
 });
 

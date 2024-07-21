@@ -98,7 +98,7 @@ jQuery(document).ready(function ($) {
             $datetimepickerStart.toggleClass('hidden', !isDatetimeStart);
             $datetimepickerEnd.toggleClass('hidden', !isDatetimeEnd);
 
-            $durationGroup.toggleClass('hidden', isNotification && isDatetimeEnd);
+            $durationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || parseInt($targetDuration.val()) === auto_duration_cheatcode);
             $scheduleEndGroup.toggleClass('hidden', isLoopStart);
 
             $durationGroup.find('.widget input').prop('required', $durationGroup.is(':visible'));
@@ -125,6 +125,18 @@ jQuery(document).ready(function ($) {
         flushValues();
     };
 
+    const inputAutoDurationUpdate = function (enableAutoDuration) {
+        const $modal = $('.modal-slide:visible');
+        const $input = $modal.find('.slide-auto-duration');
+        const $durationGroup = $modal.find('.slide-duration-group');
+        const $durationInput = $durationGroup.find('input');
+        const $autoDurationGroup = $modal.find('.slide-auto-duration-group');
+        const activeAutoDuration = $input.prop('checked');
+
+        $durationGroup.toggleClass('hidden', enableAutoDuration && activeAutoDuration);
+        $autoDurationGroup.toggleClass('hidden', !enableAutoDuration);
+        $durationInput.val(enableAutoDuration && activeAutoDuration ? auto_duration_cheatcode : 3);
+    };
 
     const main = function () {
         $("ul.slides").sortable({
@@ -147,7 +159,7 @@ jQuery(document).ready(function ($) {
 
     $(document).on('click', '.content-explr-picker', function () {
         showPickers('modal-content-explr-picker', function (content) {
-            inputContentUpdate(content)
+            inputContentUpdate(content);
         });
     });
 
@@ -157,8 +169,11 @@ jQuery(document).ready(function ($) {
         const $inputLabel = $group.find('.target-label');
         const $inputId = $group.find('.target');
         const $actionShow = $group.find('.slide-content-show');
+        const invalidContent = content === undefined || !content.id;
 
-        if (content === undefined || !content.id) {
+        inputAutoDurationUpdate(!invalidContent && content.type === 'video');
+
+        if (invalidContent) {
             $inputLabel.val('');
             $inputId.val('');
             $actionShow.addClass('hidden');
@@ -169,6 +184,10 @@ jQuery(document).ready(function ($) {
         $inputId.val(content.id);
         $actionShow.removeClass('hidden');
     };
+
+    $(document).on('change', '.slide-auto-duration', function () {
+        inputAutoDurationUpdate(true);
+    });
 
     $(document).on('click', '.slide-content-show', function () {
         window.open($(this).attr('data-route').replace('__id__', $(this).parents('.widget:eq(0)').find('.target').val()));
@@ -185,6 +204,9 @@ jQuery(document).ready(function ($) {
         const hasCronEnd = slide.cron_schedule_end && slide.cron_schedule_end.length > 0;
         const hasDateTimeEnd = hasCronEnd && validateCronDateTime(slide.cron_schedule_end);
         const isNotification = slide.is_notification;
+
+
+        $modal.find('#slide-edit-auto-duration').prop('checked', slide.duration === auto_duration_cheatcode);
 
         inputContentUpdate(slide.content);
 
