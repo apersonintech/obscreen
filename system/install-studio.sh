@@ -50,7 +50,7 @@ udevadm trigger
 # Systemd service installation
 # ============================================================
 
-cat "./system/obscreen-studio.service" | sed "s#/home/pi#$HOME#g" | sed "s#=pi#=$USER#g" | sudo tee /etc/systemd/system/obscreen-studio.service
+cat "./system/obscreen-studio.service" | sed "s#/home/pi#$WORKING_DIR#g" | sed "s#=pi#=$OWNER#g" | sudo tee /etc/systemd/system/obscreen-studio.service
 sudo systemctl daemon-reload
 sudo systemctl enable obscreen-studio.service
 
