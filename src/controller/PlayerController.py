@@ -131,10 +131,10 @@ class PlayerController(ObController):
             if int(slide['content_id']) not in contents:
                 continue
 
-            content = contents[int(slide['content_id'])].to_dict()
-            slide['name'] = content['name']
-            slide['location'] = content['location']
-            slide['type'] = content['type']
+            content = contents[int(slide['content_id'])]
+            slide['name'] = content.name
+            slide['location'] = content.location
+            slide['type'] = content.type.value
 
 
             if slide['type'] == ContentType.EXTERNAL_STORAGE.value:
