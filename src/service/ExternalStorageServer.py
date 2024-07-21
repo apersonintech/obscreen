@@ -28,6 +28,10 @@ class ExternalStorageServer:
     def get_directory(self):
         return Path(self._kernel.get_project_dir(), self.MOUNTPOINT)
 
+    def get_port(self) -> Optional[int]:
+        port = self._model_store.config().map().get('port_http_external_storage')
+        return int(port) if port else None
+
     def run(self):
         port = self.get_port()
         bind = self._model_store.config().map().get('bind_http_external_storage')
@@ -37,10 +41,6 @@ class ExternalStorageServer:
         thread = threading.Thread(target=self._start, args=(self.get_directory(), port, bind))
         thread.daemon = True
         thread.start()
-
-    def get_port(self) -> Optional[int]:
-        port = self._model_store.config().map().get('port_http_external_storage')
-        return int(port) if port else None
 
     def _start(self, directory, port, bind):
         class CustomHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
