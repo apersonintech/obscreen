@@ -1,5 +1,6 @@
 import json
 import logging
+import uuid
 
 from datetime import datetime
 from typing import Optional, List, Dict
@@ -120,6 +121,7 @@ class PlayerController(ObController):
         slides = self._model_store.slide().to_dict(enabled_slides)
         contents = self._model_store.content().get_all_indexed()
         playlist = self._model_store.playlist().get(playlist_id)
+        position = 9999
 
         playlist_loop = []
         playlist_notifications = []
@@ -137,15 +139,14 @@ class PlayerController(ObController):
             slide['type'] = content.type.value
 
 
+
             if slide['type'] == ContentType.EXTERNAL_STORAGE.value:
                 mount_point_dir = Path(self.get_external_storage_server().get_directory(), slide['location'])
-                logging.info(mount_point_dir)
                 if mount_point_dir.is_dir():
-                    logging.info('exist !')
                     for file in mount_point_dir.iterdir():
-                        logging.info(file)
                         if file.is_file() and not file.stem.startswith('.'):
-                            logging.info("f is ok !")
+                            slide['id'] = str(uuid.uuid4())
+                            slide['position'] = position
                             slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
                             slide['location'] = "{}/{}".format(
                                 self._model_store.content().resolve_content_location(content),
@@ -154,6 +155,7 @@ class PlayerController(ObController):
                             slide['name'] = file.stem
                             logging.info(slide)
                             self._feed_playlist(playlist_loop, playlist_notifications, slide)
+                            position = position + 1
             else:
                 self._feed_playlist(playlist_loop, playlist_notifications, slide)
 
