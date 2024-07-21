@@ -167,7 +167,7 @@ class PlayerController(ObController):
             'hard_refresh_request': self._model_store.variable().get_one_by_name("refresh_player_request").as_int()
         }
 
-        print(playlists['loop'])
+        logging.info(playlists['loop'])
 
         return playlists
 
