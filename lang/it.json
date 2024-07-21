@@ -182,6 +182,7 @@
   "settings_variable_desc_auth_enabled": "Abilita la gestione autenticazione",
   "settings_variable_desc_edition_auth_enabled": "Le credenziali utente predefinite sono %username%/%password%",
   "settings_variable_desc_external_url": "Url esterno (esempio: https://studio-01.company.com or http://10.10.3.100)",
+  "settings_variable_desc_external_storage_url": "Url esterno per l'archiviazione esterna (esempio: https://studio-01.company.com or http://10.10.3.100)",
   "settings_variable_desc_slide_upload_limit": "Limite upload slide (in megabytes)",
   "settings_variable_desc_dark_mode": "Modalità scura",
   "settings_variable_desc_intro_slide_duration": "Durata introduzione slide (in secondi)",
