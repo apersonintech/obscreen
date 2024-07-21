@@ -9,6 +9,7 @@ from src.model.entity.Content import Content
 from src.model.enum.ContentType import ContentType
 from src.model.enum.FolderEntity import FolderEntity, FOLDER_ROOT_PATH
 from src.interface.ObController import ObController
+from src.service.ExternalStorageServer import ExternalStorageServer
 from src.util.utils import str_to_enum, get_optional_string
 from src.util.UtilFile import randomize_filename
 
@@ -48,8 +49,6 @@ class ContentController(ObController):
         self._model_store.variable().update_by_name('last_pillmenu_slideshow', 'slideshow_content_list')
         working_folder_path, working_folder = self.get_working_folder()
         slides_with_content = self._model_store.slide().get_all_indexed(attribute='content_id', multiple=True)
-        external_storages = self._model_store.external_storage().list_usb_storage_devices()
-        print(external_storages[0] if len(external_storages) > 0 else 'none')
 
         return render_template(
             'slideshow/contents/list.jinja.html',
@@ -60,12 +59,7 @@ class ContentController(ObController):
             working_folder=working_folder,
             working_folder_children=self._model_store.folder().get_children(folder=working_folder, entity=FolderEntity.CONTENT, sort='created_at', ascending=False),
             enum_content_type=ContentType,
-            enum_folder_entity=FolderEntity,
-            external_storages={storage.mount_point: "{} ({} - {}GB)".format(
-                storage.mount_point,
-                storage.logical_name,
-                storage.total_size_in_gigabytes()
-            ) for storage in external_storages},
+            enum_folder_entity=FolderEntity
         )
 
     def slideshow_content_add(self):
@@ -75,13 +69,6 @@ class ContentController(ObController):
         }
 
         location = request.form['object'] if 'object' in request.form else None
-
-        if 'storage' in request.form:
-            location = "{}/{}".format(request.form['storage'], location.strip('/'))
-
-            if not os.path.exists(location):
-                route_args["error"] = "common_bad_directory_path"
-                return redirect(url_for('slideshow_content_list', **route_args))
 
         content = self._model_store.content().add_form_raw(
             name=request.form['name'],
@@ -253,21 +240,7 @@ class ContentController(ObController):
         if not content:
             return abort(404)
 
-        var_external_url = self._model_store.variable().get_one_by_name('external_url')
-        location = content.location
-
-        if content.type == ContentType.EXTERNAL_STORAGE:
-            location = "file://{}".format(location)
-        elif content.type == ContentType.YOUTUBE:
-            location = "https://www.youtube.com/watch?v={}".format(content.location)
-        elif len(var_external_url.as_string().strip()) > 0 and content.has_file():
-            location = "{}/{}".format(var_external_url.value, content.location)
-        elif content.has_file():
-            location = "/{}".format(content.location)
-        elif content.type == ContentType.URL:
-            location = 'http://' + content.location if not content.location.startswith('http') else content.location
-
-        return redirect(location)
+        return redirect(self._model_store.content().resolve_content_location(content))
 
     def slideshow_content_delete_bulk_explr(self):
         working_folder_path, working_folder = self.get_working_folder()

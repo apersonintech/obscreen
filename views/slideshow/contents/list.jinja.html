@@ -11,7 +11,6 @@
 
 {% block add_js %}
     <script>
-        var external_storages = {{ json_dumps(external_storages) | safe }};
         var l = $.extend(l, {
             'js_common_http_error_occured': '{{ l.common_http_error_occured }}',
             'js_common_http_error_413': '{{ l.common_http_error_413 }}'

@@ -216,3 +216,24 @@ class ContentManager(ModelManager):
 
     def count_contents_for_folder(self, folder_id: int) -> int:
         return len(self.get_contents(folder_id=folder_id))
+
+    def resolve_content_location(self, content: Content) -> str:
+        var_external_url = self._model_store.variable().get_one_by_name('external_url').as_string().strip().strip('/')
+        location = content.location
+
+        if content.type == ContentType.EXTERNAL_STORAGE:
+            port_ex_st = self.get_external_storage_server().get_port()
+            if len(var_external_url) > 0:
+                location = "{}:{}/{}".format(var_external_url, port_ex_st, content.location.strip('/'))
+            else:
+                location = "http://localhost:{}/{}".format(port_ex_st, content.location.strip('/'))
+        elif content.type == ContentType.YOUTUBE:
+            location = "https://www.youtube.com/watch?v={}".format(content.location)
+        elif len(var_external_url) > 0 and content.has_file():
+            location = "{}/{}".format(var_external_url.value, content.location)
+        elif content.has_file():
+            location = "/{}".format(content.location)
+        elif content.type == ContentType.URL:
+            location = 'http://' + content.location if not content.location.startswith('http') else content.location
+
+        return location

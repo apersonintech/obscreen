@@ -27,32 +27,37 @@
             </div>
         </div>
 
-        <div class="form-group object-input">
-            <label for="" class="object-label">{{ l.slideshow_content_form_label_object }}</label>
-            <div class="widget">
-                <div class="object-holder hidden">
-                    <input type="text" name="object" data-input-type="text" class="content-object-input" />
+        <div class="from-group-condition hidden">
+            <div class="form-group">
+                <label for="" class="object-label"></label>
+                <div class="widget">
+                    <input type="text" name="object" data-input-type="text" class="content-object-input"/>
                 </div>
+            </div>
+        </div>
 
-                <label for="content-add-object-input-upload" class="btn-upload hidden object-holder">
-                    <input type="file" name="object" data-input-type="upload" class="content-object-input" disabled="disabled" id="content-add-object-input-upload" />
-                    <span class="btn btn-neutral normal">
-                        <i class="fa fa-file-import"></i>
-                        {{ l.slideshow_content_form_button_upload }}
-                    </span>
-                    <input type="text" value="{{ l.slideshow_content_form_button_upload_choosen }}" disabled="disabled" class="disabled" />
-                </label>
-
-                <div class="object-holder hidden">
-                    <select name="storage" disabled="disabled">
-                        {% for key, value in external_storages.items() %}
-                            <option value="{{ key }}">{{ value }}</option>
-                        {% endfor %}
-                    </select>
-                    <div class="form-group">
-                        <label for="content-add-object-input-storage-target-path">{{ l.enum_content_type_external_storage_target_path_label }}</label>
-                        <input type="text" name="object" data-input-type="storage" class="content-object-input" disabled="disabled" id="content-add-object-input-storage-target-path" />
+        <div class="from-group-condition hidden">
+            <div class="form-group">
+                <label for="" class="object-label"></label>
+                <label class="btn-upload" for="content-add-object-input-upload">
+                    <div class="widget">
+                        <input type="file" name="object" data-input-type="upload" class="content-object-input" disabled="disabled" id="content-add-object-input-upload"/>
+                        <span class="btn btn-neutral normal">
+                            <i class="fa fa-file-import"></i>
+                            {{ l.slideshow_content_form_button_upload }}
+                        </span>
+                        <input type="text" value="{{ l.slideshow_content_form_button_upload_choosen }}" disabled="disabled" class="disabled"/>
                     </div>
+                </label>
+            </div>
+        </div>
+
+
+        <div class="from-group-condition hidden">
+            <div class="form-group">
+                <label for="" class="object-label"></label>
+                <div class="widget">
+                    <input type="text" name="object" data-input-type="storage" class="content-object-input" disabled="disabled" />
                 </div>
             </div>
         </div>

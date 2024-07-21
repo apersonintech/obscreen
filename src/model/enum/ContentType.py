@@ -19,7 +19,7 @@ class ContentInputType(Enum):
         elif value == ContentInputType.TEXT:
             return True
         elif value == ContentInputType.STORAGE:
-            return False
+            return True
 
 
 class ContentType(Enum):

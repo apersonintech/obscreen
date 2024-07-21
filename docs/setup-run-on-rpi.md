@@ -66,7 +66,7 @@ docker compose up --detach --pull=always
 ```bash
 # Install system dependencies
 sudo apt-get update
-sudo apt-get install -y git python3-pip python3-venv libsqlite3-dev
+sudo apt-get install -y git python3-pip python3-venv libsqlite3-dev exfat-fuse ntfs-3g
 
 # Get files
 cd ~ && git clone https://github.com/jr-k/obscreen.git && cd obscreen

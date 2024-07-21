@@ -42,3 +42,6 @@ class ObController(abc.ABC):
 
     def t(self, token) -> Union[Dict, str]:
         return self._model_store.lang().translate(token)
+
+    def get_external_storage_server(self):
+        return self._kernel.external_storage_server

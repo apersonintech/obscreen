@@ -11,18 +11,14 @@ jQuery(document).ready(function ($) {
         $form.find('.content-object-input').each(function() {
             const $input = $(this);
             const active = $input.attr('data-input-type') === inputType;
-            const $holder = $input.parents('.object-holder:eq(0)');
+            const $holder = $input.parents('.from-group-condition:eq(0)');
             $holder.find('input, select, textarea').prop('disabled', !active).prop('required', active).toggleClass('hidden', !active);
             $holder.toggleClass('hidden', !active);
-            console.log(active)
-            console.log($input)
-            if (active)
-            console.log($holder)
         });
 
         const optionAttributes = $selectedOption.get(0).attributes;
         const color = optionAttributes['data-color'].value;
-        $form.find('.object-label').html(optionAttributes['data-object-label'].value);
+        $form.find('.object-label:visible').html(optionAttributes['data-object-label'].value);
         $('.type-icon').attr('class', 'type-icon fa ' + optionAttributes['data-icon'].value);
         $('.tab-select .widget').attr('class', 'widget ' + ('border-' + color) + ' ' + color);
         $form.find('button[type=submit]').attr('class', 'btn ' + ('btn-' + color));
