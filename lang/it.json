@@ -286,7 +286,7 @@
   "enum_application_language_italian": "Italiano",
   "enum_application_language_spanish": "Spagnolo",
   "enum_content_type_external_storage": "Archiviazione esterna",
-  "enum_content_type_external_storage_object_label": "Specifica un percorso di directory esistente con file visualizzabili all'interno del tuo dispositivo rimovibile",
+  "enum_content_type_external_storage_object_label": "Specificare una directory esistente relativi al seguente percorso",
   "enum_content_type_external_storage_flashdrive_label": "Percorso relativo ad un dispositivo rimovibile",
   "enum_content_type_url": "URL",
   "enum_content_type_video": "Video",

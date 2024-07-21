@@ -285,7 +285,7 @@
   "enum_application_language_italian": "Italian",
   "enum_application_language_spanish": "Spanish",
   "enum_content_type_external_storage": "External Storage",
-  "enum_content_type_external_storage_object_label": "Specify an existing directory path with displayable files within your removeable device",
+  "enum_content_type_external_storage_object_label": "Specify an existing directory relative to the following path",
   "enum_content_type_external_storage_flashdrive_label": "Path relative to a removeable device",
   "enum_content_type_url": "URL",
   "enum_content_type_video": "Video",

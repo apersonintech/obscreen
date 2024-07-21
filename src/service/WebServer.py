@@ -54,13 +54,13 @@ class WebServer:
         return self._app
 
     def get_template_folder(self) -> str:
-        return "{}/{}".format(self._kernel.get_project_dir(), WebDirConstant.FOLDER_TEMPLATES)
+        return "{}/{}".format(self._kernel.get_application_dir(), WebDirConstant.FOLDER_TEMPLATES)
 
     def get_static_folder(self) -> str:
-        return "{}/{}".format(self._kernel.get_project_dir(), WebDirConstant.FOLDER_STATIC)
+        return "{}/{}".format(self._kernel.get_application_dir(), WebDirConstant.FOLDER_STATIC)
 
     def get_web_folder(self) -> str:
-        return "{}/{}/{}".format(self._kernel.get_project_dir(), WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS)
+        return "{}/{}/{}".format(self._kernel.get_application_dir(), WebDirConstant.FOLDER_STATIC, WebDirConstant.FOLDER_STATIC_WEB_ASSETS)
 
     def _setup_flask_app(self) -> None:
         self._app = Flask(

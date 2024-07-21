@@ -19,14 +19,14 @@ from src.model.entity.ExternalStorage import ExternalStorage
 
 class ExternalStorageServer:
 
-    MOUNTPOINT = Path("var/run/storage")
-
     def __init__(self, kernel, model_store: ModelStore):
         self._kernel = kernel
         self._model_store = model_store
 
     def get_directory(self):
-        return Path(self._kernel.get_project_dir(), self.MOUNTPOINT)
+        return self._model_store.config().map().get('chroot_http_external_storage').replace(
+            '%application_dir%', self._kernel.get_application_dir()
+        )
 
     def get_port(self) -> Optional[int]:
         port = self._model_store.config().map().get('port_http_external_storage')
@@ -53,7 +53,7 @@ class ExternalStorageServer:
             allow_reuse_address = True
 
         with ReusableTCPServer((bind, port), Handler) as httpd:
-            logging.info("Serving external storage on dir://{}:{}".format(directory, port))
+            logging.info("Serving external storage on path>{}:{}".format(directory, port))
             httpd.serve_forever()
 
     @staticmethod

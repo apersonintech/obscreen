@@ -69,8 +69,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="content-edit-location">{{ l.slideshow_content_form_label_location }}</label>
-                                <div class="widget">
+                                <label for="content-edit-location">
+                                    {% if content.type == enum_content_type.EXTERNAL_STORAGE %}
+                                        {{ l.enum_content_type_external_storage_object_label }}
+                                    {% else %}
+                                        {{ l.slideshow_content_form_label_location }}
+                                    {% endif %}
+                                </label>
+                                <div class="widget vertical">
+                                    <input type="text" class="disabled" disabled value="{{ chroot_http_external_storage }}/" />
                                     {% set location = content.location %}
                                     {% if content.type == enum_content_type.YOUTUBE %}
                                         {% set location = 'https://www.youtube.com/watch?v=' ~ content.location %}

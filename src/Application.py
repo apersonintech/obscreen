@@ -13,8 +13,8 @@ from src.model.enum.HookType import HookType
 
 class Application:
 
-    def __init__(self, project_dir: str):
-        self._project_dir = project_dir
+    def __init__(self, application_dir: str):
+        self._application_dir = application_dir
         self._stop_event = threading.Event()
         self._model_store = ModelStore(self.get_plugins)
         self._template_renderer = TemplateRenderer(kernel=self, model_store=self._model_store, render_hook=self.render_hook)
@@ -40,8 +40,8 @@ class Application:
         self._stop_event.set()
         sys.exit(0)
 
-    def get_project_dir(self) -> str:
-        return self._project_dir
+    def get_application_dir(self) -> str:
+        return self._application_dir
 
     def render_hook(self, hook: HookType) -> str:
         return self._template_renderer.render_hooks(self._plugin_store.map_hooks()[hook])
