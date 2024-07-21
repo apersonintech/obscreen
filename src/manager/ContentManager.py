@@ -222,11 +222,8 @@ class ContentManager(ModelManager):
         location = content.location
 
         if content.type == ContentType.EXTERNAL_STORAGE:
-            port_ex_st = self.get_external_storage_server().get_port()
-            if len(var_external_url) > 0:
-                location = "{}:{}/{}".format(var_external_url, port_ex_st, content.location.strip('/'))
-            else:
-                location = "http://localhost:{}/{}".format(port_ex_st, content.location.strip('/'))
+            port_ex_st = self._model_store.config().map().get('port_http_external_storage')
+            location = "http://localhost:{}/{}".format(port_ex_st, content.location.strip('/'))
         elif content.type == ContentType.YOUTUBE:
             location = "https://www.youtube.com/watch?v={}".format(content.location)
         elif len(var_external_url) > 0 and content.has_file():
