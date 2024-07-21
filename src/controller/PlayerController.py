@@ -143,6 +143,7 @@ class PlayerController(ObController):
                 if mount_point_dir.is_dir():
                     for file in mount_point_dir.iterdir():
                         if file.is_file() and not file.stem.startswith('.'):
+                            slide = dict(slide)
                             slide['id'] = str(uuid.uuid4())
                             slide['position'] = position
                             slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
