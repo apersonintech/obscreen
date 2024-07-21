@@ -138,8 +138,6 @@ class PlayerController(ObController):
             slide['location'] = content.location
             slide['type'] = content.type.value
 
-
-
             if slide['type'] == ContentType.EXTERNAL_STORAGE.value:
                 mount_point_dir = Path(self.get_external_storage_server().get_directory(), slide['location'])
                 if mount_point_dir.is_dir():
@@ -154,10 +152,10 @@ class PlayerController(ObController):
                             )
                             slide['name'] = file.stem
                             logging.info(slide)
-                            self._feed_playlist(playlist_loop, playlist_notifications, slide)
+                            self._check_slide_enablement(playlist_loop, playlist_notifications, slide)
                             position = position + 1
             else:
-                self._feed_playlist(playlist_loop, playlist_notifications, slide)
+                self._check_slide_enablement(playlist_loop, playlist_notifications, slide)
 
 
         playlists = {
@@ -169,9 +167,11 @@ class PlayerController(ObController):
             'hard_refresh_request': self._model_store.variable().get_one_by_name("refresh_player_request").as_int()
         }
 
+        print(playlists['loop'])
+
         return playlists
 
-    def _feed_playlist(self, loop: List, notifications: List, slide: Dict) -> None:
+    def _check_slide_enablement(self, loop: List, notifications: List, slide: Dict) -> None:
         has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_cron_calendar_moment(slide['cron_schedule'])
         has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_cron_calendar_moment(slide['cron_schedule_end'])
 
