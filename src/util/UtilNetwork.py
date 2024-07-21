@@ -8,6 +8,22 @@ from typing import Optional, List
 from src.service.Sysinfo import get_network_ipaddr, get_network_info
 
 
+def get_preferred_ip_address() -> str:
+    network_interfaces = get_network_interfaces()
+    interfaces = {iface['interface']: iface['ip_address'] for iface in network_interfaces}
+
+    if len(network_interfaces) == 0:
+        return 'localhost'
+
+    if 'eth0' in interfaces:
+        return interfaces['eth0']
+
+    if 'wlan0' in interfaces:
+        return interfaces['wlan0']
+
+    return network_interfaces[0]['ip_address']
+
+
 def get_network_interfaces() -> List:
     return get_network_info(all=True)
 

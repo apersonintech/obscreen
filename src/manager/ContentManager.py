@@ -14,6 +14,7 @@ from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
 from src.service.ModelManager import ModelManager
 from src.util.UtilFile import randomize_filename
+from src.util.UtilNetwork import get_preferred_ip_address
 
 
 class ContentManager(ModelManager):
@@ -224,8 +225,13 @@ class ContentManager(ModelManager):
         location = content.location
 
         if content.type == ContentType.EXTERNAL_STORAGE:
+            var_external_storage_url = self._variable_manager.get_one_by_name('external_url_storage').as_string().strip().strip('/')
             port_ex_st = self._config_manager.map().get('port_http_external_storage')
-            location = "http://localhost:{}/{}".format(port_ex_st, content.location.strip('/'))
+            location = "{}:{}/{}".format(
+                var_external_storage_url if var_external_storage_url else 'http://{}'.format(get_preferred_ip_address()),
+                port_ex_st,
+                content.location.strip('/')
+            )
         elif content.type == ContentType.YOUTUBE:
             location = "https://www.youtube.com/watch?v={}".format(content.location)
         elif len(var_external_url) > 0 and content.has_file():
