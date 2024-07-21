@@ -17,23 +17,26 @@
 <details closed>
 <summary><h3>Using docker run</h3></summary>
 
-- ⚠️ `docker ... --rm` option is not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use --restart=always instead to ensure that it persists.
 ```bash
 # (Optional) Install docker if needed
-curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout # then login again
+curl -sSL get.docker.com | sh && sudo usermod -aG docker $(whoami) && logout 
+# ....then login again
+```
 
+---
+
+```bash
 # Prepare application data file tree
 cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Run the Docker container
-docker run --rm --name obscreen --pull=always \
+docker run --restart=always --name obscreen --pull=always \
   -e DEBUG=false \
   -e PORT=5000 \
   -e SECRET_KEY=ANY_SECRET_KEY_HERE \
   -p 5000:5000 \
   -v ./data/db:/app/data/db \
   -v ./data/uploads:/app/data/uploads \
-  -v ./var/run/play:/app/var/run/play \
   jierka/obscreen:latest
 ```
 
@@ -46,7 +49,7 @@ docker run --rm --name obscreen --pull=always \
 
 ```bash
 # Prepare application data file tree
-cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads obscreen/system && cd obscreen
+cd ~ && mkdir -p obscreen/data/db obscreen/data/uploads && cd obscreen
 
 # Download docker-compose.yml
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/docker-compose.yml > docker-compose.yml
@@ -63,49 +66,17 @@ docker compose up --detach --pull=always
 <summary><h3>System-wide (recommended)</h3></summary>
 
 #### Install
+- Install studio by executing following script
+
 ```bash
-# Install system dependencies
-sudo apt-get update
-sudo apt-get install -y git python3-pip python3-venv libsqlite3-dev exfat-fuse ntfs-3g
-
-# Get files
-cd ~ && git clone https://github.com/jr-k/obscreen.git && cd obscreen
-
-# Install application dependencies
-python3 -m venv venv
-source ./venv/bin/activate
-pip install -r requirements.txt
-
-# Customize server default values
-cp .env.dist .env
+curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-studio.sh -o /tmp/install-studio.sh && chmod +x /tmp/install-studio.sh && sudo /bin/bash /tmp/install-studio.sh $USER $HOME
+sudo reboot
 ```
 
 #### Configure
 - Server configuration is editable in `.env` file.
 - Application configuration will be available at `http://raspberrypi.local:5000/settings` page after run.
-
-#### Start server
-> ⚠️ Not suitable for production use because it won't survive a reboot. However, it's okay for quick testing. You need to use `systemd` (detailed in next section) to ensure that it persists.
-```bash
-python ./obscreen.py
-```
-
-#### Start server forever with systemctl
-```bash
-cat "$(pwd)/system/obscreen-studio.service" | sed "s#/home/pi#$HOME#g" | sed "s#=pi#=$USER#g" | sudo tee /etc/systemd/system/obscreen-studio.service
-sudo systemctl daemon-reload
-sudo systemctl enable obscreen-studio.service
-sudo systemctl start obscreen-studio.service
-```
-
-#### Troubleshoot
-```bash
-# Watch logs with following command
-sudo journalctl -u obscreen-studio -f 
-```
-
-## 🏁 Finally
-- Run `sudo systemctl restart obscreen-studio` or `sudo reboot`
+- Check logs with `journalctl -u obscreen-studio -f` 
 
 ---
 
@@ -124,7 +95,8 @@ sudo journalctl -u obscreen-studio -f
 #### How to install
 - Install player autorun by executing following script (will install chromium, x11, pulseaudio and obscreen-player systemd service)
 ```bash
-curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-autorun-rpi.sh -o /tmp/install-autorun-rpi.sh && chmod +x /tmp/install-autorun-rpi.sh && sudo /bin/bash /tmp/install-autorun-rpi.sh $USER $HOME
+curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-player-rpi.sh -o /tmp/install-player-rpi.sh && chmod +x /tmp/install-player-rpi.sh && sudo /bin/bash /tmp/install-player-rpi.sh $USER $HOME
+sudo reboot
 ```
 
 #### How to restart
