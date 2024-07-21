@@ -138,7 +138,7 @@ class PlayerController(ObController):
 
 
             if slide['type'] == ContentType.EXTERNAL_STORAGE.value:
-                mount_point_dir = Path(slide['location'])
+                mount_point_dir = Path(self.get_external_storage_server().get_directory(), slide['location'])
                 logging.info(mount_point_dir)
                 if mount_point_dir.is_dir():
                     logging.info('exist !')
