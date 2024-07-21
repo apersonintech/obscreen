@@ -73,7 +73,7 @@ grep -qxF "needs_root_rights=yes" /etc/X11/Xwrapper.config || echo "needs_root_r
 curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/obscreen-player.service  | sed "s#/home/pi#$WORKING_DIR#g" | sed "s#=pi#=$OWNER#g" | tee /etc/systemd/system/obscreen-player.service
 
 # Configure external storage automount
-curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/10-obscreen-media-automount.rules  | sed "s#/home/pi#$WORKING_DIR#g" | tee /etc/udev/rules.d/10-obscreen-media-automount.rules
+curl https://raw.githubusercontent.com/jr-k/obscreen/master/system/external-storage/10-obscreen-media-automount.rules  | sed "s#/home/pi#$WORKING_DIR#g" | tee /etc/udev/rules.d/10-obscreen-media-automount.rules
 udevadm control --reload-rules
 systemctl restart udev
 udevadm trigger
