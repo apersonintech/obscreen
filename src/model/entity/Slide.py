@@ -3,16 +3,16 @@ import time
 
 from typing import Optional, Union
 from src.util.utils import str_to_enum
-from src.model.enum.ContentType import AUTO_DURATION_CHEATCODE
 
 
 class Slide:
 
-    def __init__(self, playlist_id: Optional[int] = None, content_id: Optional[int] = None, duration: int = 3, is_notification: bool = False, enabled: bool = False, position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
+    def __init__(self, playlist_id: Optional[int] = None, content_id: Optional[int] = None, delegate_duration=False, duration: int = 3, is_notification: bool = False, enabled: bool = False, position: int = 999, id: Optional[int] = None, cron_schedule: Optional[str] = None, cron_schedule_end: Optional[str] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None):
         self._id = id if id else None
         self._playlist_id = playlist_id
         self._content_id = content_id
         self._duration = duration
+        self._delegate_duration = delegate_duration
         self._enabled = enabled
         self._is_notification = is_notification
         self._position = position
@@ -92,6 +92,14 @@ class Slide:
         self._cron_schedule_end = value
 
     @property
+    def delegate_duration(self) -> bool:
+        return self._delegate_duration
+
+    @delegate_duration.setter
+    def delegate_duration(self, value: bool):
+        self._delegate_duration = value
+
+    @property
     def duration(self) -> int:
         return self._duration
 
@@ -129,6 +137,7 @@ class Slide:
                f"enabled='{self.enabled}',\n" \
                f"is_notification='{self.is_notification}',\n" \
                f"duration='{self.duration}',\n" \
+               f"delegate_duration='{self.delegate_duration}',\n" \
                f"position='{self.position}',\n" \
                f"created_by='{self.created_by}',\n" \
                f"updated_by='{self.updated_by}',\n" \
@@ -155,6 +164,7 @@ class Slide:
             "is_notification": self.is_notification,
             "position": self.position,
             "duration": self.duration,
+            "delegate_duration": self.delegate_duration,
             "created_by": self.created_by,
             "updated_by": self.updated_by,
             "created_at": self.created_at,
@@ -166,6 +176,3 @@ class Slide:
         }
 
         return slide
-
-    def has_auto_duration(self) -> bool:
-        return self.duration == AUTO_DURATION_CHEATCODE

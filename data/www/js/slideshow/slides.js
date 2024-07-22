@@ -54,7 +54,7 @@ jQuery(document).ready(function ($) {
         const $scheduleStartGroup = $modal.find('.slide-schedule-group');
         const $scheduleEndGroup = $modal.find('.slide-schedule-end-group');
         const $durationGroup = $modal.find('.slide-duration-group');
-        const $autoDurationGroup = $modal.find('.slide-auto-duration-group');
+        const $delegateDurationGroup = $modal.find('.slide-delegate-duration-group');
         const $contentGroup = $modal.find('.slide-content-id-group');
 
         const $triggerStart = $scheduleStartGroup.find('.trigger');
@@ -62,7 +62,7 @@ jQuery(document).ready(function ($) {
         const $targetCronFieldStart = $scheduleStartGroup.find('.target');
         const $targetCronFieldEnd = $scheduleEndGroup.find('.target');
         const $targetDuration = $durationGroup.find('input');
-        const $targetAutoDuration = $autoDurationGroup.find('input');
+        const $targetDelegateDuration = $delegateDurationGroup.find('input')
 
         const $datetimepickerStart = $scheduleStartGroup.find('.datetimepicker');
         const $datetimepickerEnd = $scheduleEndGroup.find('.datetimepicker');
@@ -101,12 +101,13 @@ jQuery(document).ready(function ($) {
             $datetimepickerStart.toggleClass('hidden', !isDatetimeStart);
             $datetimepickerEnd.toggleClass('hidden', !isDatetimeEnd);
 
-            // $targetAutoDuration
-            $autoDurationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || !isVideo);
-            $durationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || $targetAutoDuration.prop('checked'));
-            $scheduleEndGroup.toggleClass('hidden', isLoopStart);
+            $delegateDurationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || !isVideo);
+            $durationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || $targetDelegateDuration.prop('checked'));
 
-            $durationGroup.find('.widget input').prop('required', $durationGroup.is(':visible'));
+            $targetDuration.prop('required', $durationGroup.is(':visible'));
+            $targetDelegateDuration.prop('disabled', !$delegateDurationGroup.is(':visible'));
+
+            $scheduleEndGroup.toggleClass('hidden', isLoopStart);
         }
 
         function flushValues() {
@@ -178,17 +179,7 @@ jQuery(document).ready(function ($) {
         $actionShow.removeClass('hidden');
     };
 
-    $(document).on('change', '.slide-auto-duration', function () {
-        const $modal = $(this).parents('.modal:eq(0)');
-        const $durationGroup = $modal.find('.slide-duration-group');
-        const $durationInput = $durationGroup.find('input');
-
-        if ($(this).prop('checked')) {
-            $durationInput.val(auto_duration_cheatcode);
-        } else {
-            $durationInput.val(3);
-        }
-
+    $(document).on('change', '.slide-delegate-duration', function () {
         inputSchedulerUpdate();
     });
 
@@ -217,7 +208,7 @@ jQuery(document).ready(function ($) {
 
         inputCallbacks();
 
-        $modal.find(tclass + '-auto-duration').prop('checked', slide.duration === auto_duration_cheatcode);
+        $modal.find(tclass + '-delegate-duration').prop('checked', slide.delegate_duration);
 
         $modal.find('input[type=text]:visible:eq(0)').focus().select();
         $modal.find(tclass + '-duration').val(slide.duration);

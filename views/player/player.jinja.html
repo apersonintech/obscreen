@@ -158,10 +158,6 @@
         pause();
     };
 
-    const isDurationAuto = function(duration) {
-        return duration === {{ auto_duration_cheatcode }};
-    } ;
-
     const lookupPreviousItem = function() {
         return (curItemIndex - 1 < 0) ? items.loop[items.loop.length - 1] : items.loop[curItemIndex - 1];
     };
@@ -245,7 +241,7 @@
 
             if (i === curItemIndex) {
                 secondsBeforeNext = accumulatedTime + safe_duration(item) - timeInCurrentLoop;
-                //console.log("remaining:", secondsBeforeNext, "clock:",clockValue, curItemIndex);
+                console.log("remaining:", secondsBeforeNext, "clock:",clockValue, curItemIndex);
             }
 
             if (timeInCurrentLoop < accumulatedTime + safe_duration(item)) {
@@ -375,7 +371,7 @@
         delayNoisyContentJIT = lookupCurrentItem().id !== item.id ? delayNoisyContentJIT : 0;
 
         video.addEventListener('loadedmetadata', function() {
-            if (item.duration !== video.duration && isDurationAuto(item.duration)) {
+            if (item.duration !== video.duration && item.delegate_duration) {
                 durationsOverride[item.id] = video.duration;
                 console.warn('Given duration ' + item.duration + 's is different from video file ' + Math.ceil(video.duration) + 's');
             }

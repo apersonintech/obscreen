@@ -2,6 +2,7 @@ import os
 
 from typing import Dict, Optional, List, Tuple, Union
 from werkzeug.datastructures import FileStorage
+from moviepy.editor import VideoFileClip
 
 from src.model.entity.Content import Content
 from src.model.entity.Playlist import Playlist
@@ -25,6 +26,7 @@ class ContentManager(ModelManager):
         "name CHAR(255)",
         "type CHAR(30)",
         "location TEXT",
+        "duration INTEGER",
         "folder_id INTEGER",
         "created_by CHAR(255)",
         "updated_by CHAR(255)",
@@ -125,7 +127,7 @@ class ContentManager(ModelManager):
     def post_delete(self, content_id: str) -> str:
         return content_id
 
-    def update_form(self, id: int, name: str, location: Optional[str] = None) -> Content:
+    def update_form(self, id: int, name: str, location: Optional[str] = None) -> Optional[Content]:
         content = self.get(id)
 
         if not content:
@@ -191,6 +193,11 @@ class ContentManager(ModelManager):
                 object_path = os.path.join(upload_dir, object_name)
                 object.save(object_path)
                 content.location = object_path
+
+                if type == ContentType.VIDEO:
+                    with VideoFileClip(content.location) as video:
+                        content.duration = int(video.duration)
+
         else:
             content.location = location
 

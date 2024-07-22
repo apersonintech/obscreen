@@ -8,7 +8,7 @@ from flask import Flask, render_template, redirect, request, url_for, send_from_
 from pathlib import Path
 
 from src.model.entity.Slide import Slide
-from src.model.enum.ContentType import ContentType, AUTO_DURATION_CHEATCODE
+from src.model.enum.ContentType import ContentType
 from src.exceptions.NoFallbackPlaylistException import NoFallbackPlaylistException
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
@@ -61,7 +61,6 @@ class PlayerController(ObController):
             slide_animation_entrance_effect=slide_animation_entrance_effect,
             slide_animation_speed=slide_animation_speed,
             animation_speed_duration=animation_speed_duration,
-            auto_duration_cheatcode=AUTO_DURATION_CHEATCODE
         )
 
     def player_default(self):

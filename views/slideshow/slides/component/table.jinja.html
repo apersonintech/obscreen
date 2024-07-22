@@ -63,8 +63,8 @@
                                 <span class="error"><i class="fa fa-warning danger"></i>️ {{ l.slideshow_slide_panel_td_cron_scheduled_bad_cron }}</span>
                             {% endif %}
                         {% else %}
-                            {% if slide.has_auto_duration() %}
-                                <i class="fa {{ icon }}"></i> <span class="prefix">{{ l.slideshow_slide_panel_th_auto_duration_video }}</span>
+                            {% if slide.delegate_duration %}
+                                <i class="fa {{ icon }}"></i> <span class="prefix">{{ l.slideshow_slide_panel_th_delegate_duration_video }}</span>
                             {% else %}
                                 ⏱️ <span class="prefix">{{ slide.duration }} {{ l.slideshow_slide_panel_th_duration_unit }}</span>
                             {% endif %}
