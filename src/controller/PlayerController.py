@@ -1,11 +1,14 @@
 import json
 import logging
+import uuid
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List, Dict
 from flask import Flask, render_template, redirect, request, url_for, send_from_directory, jsonify, abort
+from pathlib import Path
 
 from src.model.entity.Slide import Slide
+from src.model.enum.ContentType import ContentType
 from src.exceptions.NoFallbackPlaylistException import NoFallbackPlaylistException
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
@@ -57,7 +60,7 @@ class PlayerController(ObController):
             slide_animation_enabled=animation_enabled,
             slide_animation_entrance_effect=slide_animation_entrance_effect,
             slide_animation_speed=slide_animation_speed,
-            animation_speed_duration=animation_speed_duration
+            animation_speed_duration=animation_speed_duration,
         )
 
     def player_default(self):
@@ -118,44 +121,42 @@ class PlayerController(ObController):
         slides = self._model_store.slide().to_dict(enabled_slides)
         contents = self._model_store.content().get_all_indexed()
         playlist = self._model_store.playlist().get(playlist_id)
+        position = 9999
 
         playlist_loop = []
         playlist_notifications = []
 
         for slide in slides:
-            if slide['content_id']:
-                if int(slide['content_id']) not in contents:
-                    continue
-
-                content = contents[int(slide['content_id'])].to_dict()
-                slide['name'] = content['name']
-                slide['location'] = content['location']
-                slide['type'] = content['type']
-            else:
+            if not slide['content_id']:
                 continue
 
-            has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_cron_calendar_moment(slide['cron_schedule'])
-            has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_cron_calendar_moment(slide['cron_schedule_end'])
+            if int(slide['content_id']) not in contents:
+                continue
 
-            if slide['is_notification']:
-                if has_valid_start_date:
-                    playlist_notifications.append(slide)
-                else:
-                    logging.warn('Slide \'{}\' is a notification but start date is invalid'.format(slide['name']))
+            content = contents[int(slide['content_id'])]
+            slide['name'] = content.name
+            slide['location'] = content.location
+            slide['type'] = content.type.value
+
+            if slide['type'] == ContentType.EXTERNAL_STORAGE.value:
+                mount_point_dir = Path(self.get_external_storage_server().get_directory(), slide['location'])
+                if mount_point_dir.is_dir():
+                    for file in mount_point_dir.iterdir():
+                        if file.is_file() and not file.stem.startswith('.'):
+                            slide = dict(slide)
+                            slide['id'] = str(uuid.uuid4())
+                            slide['position'] = position
+                            slide['type'] = ContentType.guess_content_type_file(str(file.resolve())).value
+                            slide['name'] = file.stem
+                            slide['location'] = "{}/{}".format(
+                                self._model_store.content().resolve_content_location(content),
+                                file.name
+                            )
+                            self._check_slide_enablement(playlist_loop, playlist_notifications, slide)
+                            position = position + 1
             else:
-                if has_valid_start_date:
-                    start_date = get_cron_date_time(slide['cron_schedule'], object=True)
-                    if datetime.now() <= start_date:
-                        continue
+                self._check_slide_enablement(playlist_loop, playlist_notifications, slide)
 
-                if has_valid_end_date:
-                    end_date = get_cron_date_time(slide['cron_schedule_end'], object=True)
-                    if datetime.now() >= end_date:
-                        continue
-
-                    playlist_loop.append(slide)
-                else:
-                    playlist_loop.append(slide)
 
         playlists = {
             'playlist_id': playlist.id if playlist else None,
@@ -167,3 +168,24 @@ class PlayerController(ObController):
         }
 
         return playlists
+
+    def _check_slide_enablement(self, loop: List, notifications: List, slide: Dict) -> None:
+        has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_cron_calendar_moment(slide['cron_schedule'])
+        has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_cron_calendar_moment(slide['cron_schedule_end'])
+
+        if slide['is_notification']:
+            if has_valid_start_date:
+                return notifications.append(slide)
+            return logging.warn('Slide \'{}\' is a notification but start date is invalid'.format(slide['name']))
+
+        if has_valid_start_date:
+            start_date = get_cron_date_time(slide['cron_schedule'], object=True)
+            if datetime.now() <= start_date:
+                return
+
+        if has_valid_end_date:
+            end_date = get_cron_date_time(slide['cron_schedule_end'], object=True)
+            if datetime.now() >= end_date:
+                return
+
+        loop.append(slide)

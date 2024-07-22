@@ -76,7 +76,7 @@ If you value this project, please think about awarding it a ⭐. Thanks ! 🙏
 
 
 <details closed>
-<summary><h5>Videos aren't playing why ?</h3></summary>
+<summary><h3>Videos aren't playing why ?</h3></summary>
 
 This is "normal" behavior. Videos do not play automatically in Chrome because it requires user interaction with the page (a simple click inside the webpage is enough). If you open the console, you'll see the error: [Uncaught (in promise) DOMException: play() failed because the user didn't interact with the document first...](https://goo.gl/xX8pDD)
 

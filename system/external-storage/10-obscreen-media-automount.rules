@@ -1,0 +1,6 @@
+KERNEL!="sd[a-z][0-9]*", GOTO="obscreen_automount_end"
+ENV{dir_name}="/home/pi/obscreen/var/run/storage"
+ACTION=="add", PROGRAM!="/sbin/blkid %N", GOTO="obscreen_automount_end"
+ACTION=="add", RUN+="/home/pi/obscreen/system/external-storage/obscreen-media-automount.sh /dev/%k '%E{dir_name}'"
+ACTION=="remove", ENV{dir_name}!="", RUN+="/usr/bin/systemd-umount '%E{dir_name}'"
+LABEL="obscreen_automount_end"

@@ -84,12 +84,12 @@ class ObPlugin(abc.ABC):
     def _init_rendering_env(self) -> Environment:
         alias_paths = {
             "::": "{}/".format(WebDirConstant.FOLDER_TEMPLATES),
-            "@": "{}/{}/".format(self._plugin_dir.replace(self._kernel.get_project_dir(), ''), WebDirConstant.FOLDER_TEMPLATES)
+            "@": "{}/{}/".format(self._plugin_dir.replace(self._kernel.get_application_dir(), ''), WebDirConstant.FOLDER_TEMPLATES)
         }
 
         env = Environment(
             loader=AliasFileSystemLoader(
-                searchpath=self._kernel.get_project_dir(),
+                searchpath=self._kernel.get_application_dir(),
                 alias_paths=alias_paths
             ),
             autoescape=select_autoescape(['html', 'xml'])
