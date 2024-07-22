@@ -6,6 +6,7 @@ from src.model.entity.Playlist import Playlist
 from src.util.utils import get_optional_string, get_yt_video_id, slugify, slugify_next
 from src.manager.DatabaseManager import DatabaseManager
 from src.manager.SlideManager import SlideManager
+from src.manager.ContentManager import ContentManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
@@ -65,8 +66,20 @@ class PlaylistManager(ModelManager):
         return self.hydrate_object(object)
 
     def get_durations_by_playlists(self, playlist_id: Optional[int] = None):
-        durations = self._db.execute_read_query("select playlist_id, sum(duration) as total_duration from {} where cron_schedule is null {} group by playlist_id".format(
+        durations = self._db.execute_read_query("""
+SELECT
+    playlist_id,
+    SUM(CASE
+        WHEN s.delegate_duration = 1 THEN c.duration
+        ELSE s.duration
+    END) AS total_duration
+FROM {} s
+LEFT JOIN {} c ON c.id = s.content_id
+WHERE cron_schedule IS NULL {}
+GROUP BY playlist_id;
+""".format(
             SlideManager.TABLE_NAME,
+            ContentManager.TABLE_NAME,
             "{}".format(
                 " AND playlist_id = {}".format(playlist_id) if playlist_id else ""
             )
@@ -145,7 +158,7 @@ class PlaylistManager(ModelManager):
     def post_delete(self, playlist_id: str) -> str:
         return playlist_id
 
-    def update_form(self, id: int, name: str, time_sync: bool, enabled: bool) -> None:
+    def update_form(self, id: int, name: Optional[str] = None, time_sync: Optional[bool] = None, enabled: Optional[bool] = None) -> None:
         playlist = self.get(id)
 
         if not playlist:
@@ -153,8 +166,8 @@ class PlaylistManager(ModelManager):
 
         form = {
             "name": name,
-            "time_sync": time_sync,
-            "enabled": enabled
+            "time_sync": time_sync if isinstance(time_sync, bool) else slide.time_sync,
+            "enabled": enabled if isinstance(enabled, bool) else slide.enabled,
         }
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))

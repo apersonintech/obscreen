@@ -9,6 +9,7 @@ from src.model.entity.Content import Content
 from src.model.enum.ContentType import ContentType
 from src.model.enum.FolderEntity import FolderEntity, FOLDER_ROOT_PATH
 from src.interface.ObController import ObController
+from src.service.ExternalStorageServer import ExternalStorageServer
 from src.util.utils import str_to_enum, get_optional_string
 from src.util.UtilFile import randomize_filename
 
@@ -59,6 +60,7 @@ class ContentController(ObController):
             working_folder_children=self._model_store.folder().get_children(folder=working_folder, entity=FolderEntity.CONTENT, sort='created_at', ascending=False),
             enum_content_type=ContentType,
             enum_folder_entity=FolderEntity,
+            chroot_http_external_storage=self.get_external_storage_server().get_directory(),
         )
 
     def slideshow_content_add(self):
@@ -67,12 +69,14 @@ class ContentController(ObController):
             "path": working_folder_path,
         }
 
+        location = request.form['object'] if 'object' in request.form else None
+
         content = self._model_store.content().add_form_raw(
             name=request.form['name'],
             type=str_to_enum(request.form['type'], ContentType),
             request_files=request.files,
             upload_dir=self._app.config['UPLOAD_FOLDER'],
-            location=request.form['object'] if 'object' in request.form else None,
+            location=location,
             folder_id=working_folder.id if working_folder else None
         )
 
@@ -87,7 +91,7 @@ class ContentController(ObController):
         for key in request.files:
             files = request.files.getlist(key)
             for file in files:
-                type = ContentType.guess_content_type_file(file)
+                type = ContentType.guess_content_type_file(file.filename)
                 name = file.filename.rsplit('.', 1)[0]
 
                 if type:
@@ -115,6 +119,7 @@ class ContentController(ObController):
             working_folder_path=working_folder_path,
             working_folder=working_folder,
             enum_content_type=ContentType,
+            chroot_http_external_storage=self.get_external_storage_server().get_directory(),
         )
 
     def slideshow_content_save(self, content_id: int = 0):
@@ -237,19 +242,7 @@ class ContentController(ObController):
         if not content:
             return abort(404)
 
-        var_external_url = self._model_store.variable().get_one_by_name('external_url')
-        location = content.location
-
-        if content.type == ContentType.YOUTUBE:
-            location = "https://www.youtube.com/watch?v={}".format(content.location)
-        elif len(var_external_url.as_string().strip()) > 0 and content.has_file():
-            location = "{}/{}".format(var_external_url.value, content.location)
-        elif content.has_file():
-            location = "/{}".format(content.location)
-        elif content.type == ContentType.URL:
-            location = 'http://' + content.location if not content.location.startswith('http') else content.location
-
-        return redirect(location)
+        return redirect(self._model_store.content().resolve_content_location(content))
 
     def slideshow_content_delete_bulk_explr(self):
         working_folder_path, working_folder = self.get_working_folder()

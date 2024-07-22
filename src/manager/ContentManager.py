@@ -2,17 +2,20 @@ import os
 
 from typing import Dict, Optional, List, Tuple, Union
 from werkzeug.datastructures import FileStorage
+from moviepy.editor import VideoFileClip
 
 from src.model.entity.Content import Content
 from src.model.entity.Playlist import Playlist
 from src.model.enum.ContentType import ContentType
 from src.util.utils import get_yt_video_id
 from src.manager.DatabaseManager import DatabaseManager
+from src.manager.ConfigManager import ConfigManager
 from src.manager.LangManager import LangManager
 from src.manager.UserManager import UserManager
 from src.manager.VariableManager import VariableManager
 from src.service.ModelManager import ModelManager
 from src.util.UtilFile import randomize_filename
+from src.util.UtilNetwork import get_preferred_ip_address
 
 
 class ContentManager(ModelManager):
@@ -23,6 +26,7 @@ class ContentManager(ModelManager):
         "name CHAR(255)",
         "type CHAR(30)",
         "location TEXT",
+        "duration INTEGER",
         "folder_id INTEGER",
         "created_by CHAR(255)",
         "updated_by CHAR(255)",
@@ -30,8 +34,9 @@ class ContentManager(ModelManager):
         "updated_at INTEGER"
     ]
 
-    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager):
+    def __init__(self, lang_manager: LangManager, database_manager: DatabaseManager, user_manager: UserManager, variable_manager: VariableManager, config_manager: ConfigManager):
         super().__init__(lang_manager, database_manager, user_manager, variable_manager)
+        self._config_manager = config_manager
         self._db = database_manager.open(self.TABLE_NAME, self.TABLE_MODEL)
 
     def hydrate_object(self, raw_content: dict, id: int = None) -> Content:
@@ -122,7 +127,7 @@ class ContentManager(ModelManager):
     def post_delete(self, content_id: str) -> str:
         return content_id
 
-    def update_form(self, id: int, name: str, location: Optional[str] = None) -> Content:
+    def update_form(self, id: int, name: str, location: Optional[str] = None) -> Optional[Content]:
         content = self.get(id)
 
         if not content:
@@ -177,7 +182,7 @@ class ContentManager(ModelManager):
             if not object or object.filename == '':
                 return None
 
-            guessed_type = ContentType.guess_content_type_file(object)
+            guessed_type = ContentType.guess_content_type_file(object.filename)
 
             if not guessed_type or guessed_type != type:
                 return None
@@ -188,6 +193,11 @@ class ContentManager(ModelManager):
                 object_path = os.path.join(upload_dir, object_name)
                 object.save(object_path)
                 content.location = object_path
+
+                if type == ContentType.VIDEO:
+                    with VideoFileClip(content.location) as video:
+                        content.duration = int(video.duration)
+
         else:
             content.location = location
 
@@ -216,3 +226,25 @@ class ContentManager(ModelManager):
 
     def count_contents_for_folder(self, folder_id: int) -> int:
         return len(self.get_contents(folder_id=folder_id))
+
+    def resolve_content_location(self, content: Content) -> str:
+        var_external_url = self._variable_manager.get_one_by_name('external_url').as_string().strip().strip('/')
+        location = content.location
+
+        if content.type == ContentType.EXTERNAL_STORAGE:
+            var_external_storage_url = self._variable_manager.get_one_by_name('external_url_storage').as_string().strip().strip('/')
+            port_ex_st = self._config_manager.map().get('port_http_external_storage')
+            location = "{}/{}".format(
+                var_external_storage_url if var_external_storage_url else 'http://{}:{}'.format(get_preferred_ip_address(), port_ex_st),
+                content.location.strip('/')
+            )
+        elif content.type == ContentType.YOUTUBE:
+            location = "https://www.youtube.com/watch?v={}".format(content.location)
+        elif len(var_external_url) > 0 and content.has_file():
+            location = "{}/{}".format(var_external_url.value, content.location)
+        elif content.has_file():
+            location = "/{}".format(content.location)
+        elif content.type == ContentType.URL:
+            location = 'http://' + content.location if not content.location.startswith('http') else content.location
+
+        return location

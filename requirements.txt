@@ -5,3 +5,4 @@ waitress
 flask-login
 pysqlite3
 psutil
+moviepy
