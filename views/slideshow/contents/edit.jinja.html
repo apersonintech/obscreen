@@ -77,7 +77,10 @@
                                     {% endif %}
                                 </label>
                                 <div class="widget vertical">
-                                    <input type="text" class="disabled" disabled value="{{ chroot_http_external_storage }}/" />
+                                    {% if content.type == enum_content_type.EXTERNAL_STORAGE %}
+                                        <input type="text" class="disabled" disabled value="{{ chroot_http_external_storage }}/" />
+                                    {% endif %}
+                                
                                     {% set location = content.location %}
                                     {% if content.type == enum_content_type.YOUTUBE %}
                                         {% set location = 'https://www.youtube.com/watch?v=' ~ content.location %}
