@@ -62,7 +62,8 @@ class SlideController(ObController):
         slide = self._model_store.slide().update_form(
             id=request.form['id'],
             content_id=request.form['content_id'],
-            enabled='enabled' in request.form and request.form['enabled'],
+            enabled='enabled' in request.form and request.form['enabled'] == '1',
+            delegate_duration='delegate_duration' in request.form and request.form['delegate_duration'] == '1',
             duration=request.form['duration'],
             is_notification=True if 'is_notification' in request.form and request.form['is_notification'] == '1' else False,
             cron_schedule=request.form['cron_schedule'],

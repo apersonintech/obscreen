@@ -61,9 +61,8 @@ sleep 3
 apt update
 apt install -y xinit xserver-xorg chromium-browser unclutter pulseaudio
 
-# Add user to tty and video groups
-usermod -aG tty $OWNER
-usermod -aG video $OWNER
+# Add user to tty, video groups
+usermod -aG tty,video $OWNER
 
 # Configure Xwrapper
 touch /etc/X11/Xwrapper.config

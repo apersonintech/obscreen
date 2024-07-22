@@ -10,12 +10,15 @@ class ContentInputType(Enum):
 
     UPLOAD = 'upload'
     TEXT = 'text'
+    STORAGE = 'storage'
 
     @staticmethod
     def is_editable(value: Enum) -> bool:
         if value == ContentInputType.UPLOAD:
             return False
         elif value == ContentInputType.TEXT:
+            return True
+        elif value == ContentInputType.STORAGE:
             return True
 
 
@@ -25,10 +28,11 @@ class ContentType(Enum):
     URL = 'url'
     YOUTUBE = 'youtube'
     VIDEO = 'video'
+    EXTERNAL_STORAGE = 'external_storage'
 
     @staticmethod
-    def guess_content_type_file(file):
-        mime_type, _ = mimetypes.guess_type(file.filename)
+    def guess_content_type_file(filename: str):
+        mime_type, _ = mimetypes.guess_type(filename)
 
         if mime_type in [
             'image/gif',
@@ -55,6 +59,8 @@ class ContentType(Enum):
             return ContentInputType.TEXT
         elif value == ContentType.URL:
             return ContentInputType.TEXT
+        elif value == ContentType.EXTERNAL_STORAGE:
+            return ContentInputType.STORAGE
 
     @staticmethod
     def get_fa_icon(value: Union[Enum, str]) -> str:
@@ -69,6 +75,8 @@ class ContentType(Enum):
             return 'fa-brands fa-youtube'
         elif value == ContentType.URL:
             return 'fa-link'
+        elif value == ContentType.EXTERNAL_STORAGE:
+            return 'fa-brands fa-usb'
 
         return 'fa-file'
 
@@ -85,5 +93,7 @@ class ContentType(Enum):
             return 'youtube'
         elif value == ContentType.URL:
             return 'danger'
+        elif value == ContentType.EXTERNAL_STORAGE:
+            return 'other'
 
         return 'neutral'

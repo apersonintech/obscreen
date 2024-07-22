@@ -9,13 +9,14 @@ from src.util.utils import str_to_enum
 
 class Content:
 
-    def __init__(self, uuid: str = '', location: str = '', type: Union[ContentType, str] = ContentType.URL, name: str = 'Untitled', id: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None, folder_id: Optional[int] = None):
+    def __init__(self, uuid: str = '', location: str = '', type: Union[ContentType, str] = ContentType.URL, name: str = 'Untitled', id: Optional[int] = None, duration: Optional[int] = None, created_by: Optional[str] = None, updated_by: Optional[str] = None, created_at: Optional[int] = None, updated_at: Optional[int] = None, folder_id: Optional[int] = None):
         self._uuid = uuid if uuid else self.generate_and_set_uuid()
         self._id = id if id else None
         self._location = location
         self._type = str_to_enum(type, ContentType) if isinstance(type, str) else type
         self._name = name
         self._folder_id = folder_id
+        self._duration = duration
         self._created_by = created_by if created_by else None
         self._updated_by = updated_by if updated_by else None
         self._created_at = int(created_at if created_at else time.time())
@@ -87,6 +88,14 @@ class Content:
         self._folder_id = value
 
     @property
+    def duration(self) -> Optional[int]:
+        return self._duration
+
+    @duration.setter
+    def duration(self, value: Optional[int]):
+        self._duration = value
+
+    @property
     def type(self) -> ContentType:
         return self._type
 
@@ -114,6 +123,7 @@ class Content:
                f"created_at='{self.created_at}',\n" \
                f"updated_at='{self.updated_at}',\n" \
                f"folder_id='{self.folder_id}',\n" \
+               f"duration='{self.duration}',\n" \
                f")"
 
     def to_json(self, edits: dict = {}) -> str:
@@ -136,6 +146,7 @@ class Content:
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "folder_id": self.folder_id,
+            "duration": self.duration,
         }
 
         if with_virtual:

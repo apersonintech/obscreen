@@ -54,7 +54,7 @@ class PluginStore:
 
     def find_plugins_in_directory(self, directory: str) -> list:
         plugins = []
-        for root, dirs, files in os.walk('{}/{}'.format(self._kernel.get_project_dir(), directory)):
+        for root, dirs, files in os.walk('{}/{}'.format(self._kernel.get_application_dir(), directory)):
             for file in files:
                 if file.endswith(".py"):
                     module_name = file[:-3]
