@@ -17,6 +17,7 @@ class SlideManager(ModelManager):
     TABLE_NAME = "slides"
     TABLE_MODEL = [
         "enabled INTEGER DEFAULT 0",
+        "delegate_duration INTEGER DEFAULT 0",
         "is_notification INTEGER DEFAULT 0",
         "playlist_id INTEGER",
         "content_id INTEGER",
@@ -135,16 +136,17 @@ class SlideManager(ModelManager):
         for slide_id, slide_position in positions.items():
             self._db.update_by_id(self.TABLE_NAME, slide_id, {"position": slide_position})
 
-    def update_form(self, id: int, duration: int, content_id: Optional[int] = None, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', enabled: bool = True) -> Slide:
+    def update_form(self, id: int, duration: Optional[int] = None, content_id: Optional[int] = None, delegate_duration: Optional[bool] = None, is_notification: bool = False, cron_schedule: Optional[str] = '', cron_schedule_end: Optional[str] = '', enabled: Optional[bool] = None) -> Optional[Slide]:
         slide = self.get(id)
 
         if not slide:
             return
 
         form = {
-            "duration": duration,
-            "content_id": content_id,
-            "enabled": enabled,
+            "duration": duration if duration else slide.duration,
+            "content_id": content_id if content_id else slide.content_id,
+            "enabled": enabled if isinstance(enabled, bool) else slide.enabled,
+            "delegate_duration": delegate_duration if isinstance(delegate_duration, bool) else slide.delegate_duration,
             "is_notification": True if is_notification else False,
             "cron_schedule": get_optional_string(cron_schedule),
             "cron_schedule_end": get_optional_string(cron_schedule_end)

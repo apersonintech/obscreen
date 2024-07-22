@@ -5,8 +5,6 @@ from typing import Union, List, Optional
 
 from src.util.utils import str_to_enum
 
-AUTO_DURATION_CHEATCODE = 98769876
-
 
 class ContentInputType(Enum):
 
@@ -26,11 +24,11 @@ class ContentInputType(Enum):
 
 class ContentType(Enum):
 
-    EXTERNAL_STORAGE = 'external_storage'
     PICTURE = 'picture'
     URL = 'url'
     YOUTUBE = 'youtube'
     VIDEO = 'video'
+    EXTERNAL_STORAGE = 'external_storage'
 
     @staticmethod
     def guess_content_type_file(filename: str):
