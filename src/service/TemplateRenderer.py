@@ -12,6 +12,7 @@ from src.model.hook.FunctionalHookRegistration import FunctionalHookRegistration
 from src.constant.WebDirConstant import WebDirConstant
 from src.util.utils import get_safe_cron_descriptor, \
     is_cron_in_datetime_moment, \
+    is_cron_in_week_moment, \
     seconds_to_hhmmss, am_i_in_docker, \
     truncate, merge_dicts, dictsort
 
@@ -47,6 +48,7 @@ class TemplateRenderer:
             str=str,
             seconds_to_hhmmss=seconds_to_hhmmss,
             is_cron_in_datetime_moment=is_cron_in_datetime_moment,
+            is_cron_in_week_moment=is_cron_in_week_moment,
             json_dumps=json.dumps,
             merge_dicts=merge_dicts,
             dictsort=dictsort,

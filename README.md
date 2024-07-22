@@ -4,7 +4,7 @@
 
 # Obscreen
 
-Obscreen is a user-friendly self-hosted digital signage tool. Manage a fleet of Raspberry Pi devices to transform your screens into a professional digital signage network.
+Obscreen is a user-friendly self-hosted digital signage tool leveraging chromium browser. 
 
 <a target="_blank" href="https://github.com/jr-k/obscreen"><img src="https://img.shields.io/github/stars/jr-k/obscreen?style=flat" /></a> <a target="_blank" href="https://hub.docker.com/r/jierka/obscreen"><img src="https://img.shields.io/docker/pulls/jierka/obscreen" /></a> <a target="_blank" href="https://hub.docker.com/r/jierka/obscreen"><img src="https://img.shields.io/docker/v/jierka/obscreen/latest?label=docker%20image%20ver." /></a> <a target="_blank" href="https://github.com/jr-k/obscreen"><img src="https://img.shields.io/github/last-commit/jr-k/obscreen" /></a> 
 
@@ -17,7 +17,7 @@ Try it!
 
 Demo Server (Location: Roubaix - France): [https://demo.obscreen.io](https://demo.obscreen.io/login?username=admin&password=admin)
 
-It is a temporary live demo, all data will be deleted after 30 minutes (~30secs downtime) . Sponsored by myself.
+It is a temporary live demo, all data will be deleted after 30 minutes (~30secs downtime).
 
 ## ⭐️ Features
 - Dead simple chromium webview inside
@@ -27,6 +27,7 @@ It is a temporary live demo, all data will be deleted after 30 minutes (~30secs 
 - Fleet screen management
 - Playlist management
 - Authentication management
+- Plays content from flashdrive in offline mode
 - Plugin system to extend capabilities
 - [Multi Languages](https://github.com/jr-k/obscreen/tree/master/lang)
 - No costly monthly pricing plan per screen or whatever, no cloud, no telemetry
