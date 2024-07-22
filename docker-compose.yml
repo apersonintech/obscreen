@@ -4,11 +4,15 @@ services:
     restart: unless-stopped
     image: jierka/obscreen:latest
     environment:
+      - DEMO=false
       - DEBUG=false
-      - PORT=5000
       - SECRET_KEY=ANY_SECRET_KEY_HERE
+      - PORT=5000
+      - PORT_HTTP_EXTERNAL_STORAGE=5001
     volumes:
       - ./data/db:/app/data/db
       - ./data/uploads:/app/data/uploads
+      - ./var/run/storage:/app/var/run/storage
     ports:
       - 5000:5000
+      - 5001:5001

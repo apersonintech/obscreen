@@ -19,7 +19,7 @@ sleep 3
 
 # Install system dependencies
 sudo apt-get update
-sudo apt-get install -y git python3-pip python3-venv libsqlite3-dev exfat-fuse ntfs-3g
+sudo apt-get install -y git python3-pip python3-venv libsqlite3-dev ntfs-3g ffmpeg
 
 # Get files
 cd $WORKING_DIR
