@@ -52,6 +52,13 @@
             <label for="{{ tclass }}-cron-schedule">{{ l.slideshow_slide_form_label_cron_scheduled }}</label>
             <div class="widget">
                 <select id="{{ tclass }}-cron-schedule-trigger" class="trigger"></select>
+                <select name="" id="{{ tclass }}-cron-schedule-weekdaypicker" class="input-naked weekdaypicker">
+                    {% for day_number in range(1,8) %}
+                        <option value="{{ day_number }}">
+                            {{ t('basic_day_' ~ day_number) }}
+                        </option>
+                    {% endfor %}
+                </select>
                 <input type="text" id="{{ tclass }}-cron-schedule-datetimepicker" class="input-naked datetimepicker"
                        value=""
                        placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>
@@ -64,6 +71,13 @@
             <label for="{{ tclass }}-cron-schedule-end">{{ l.slideshow_slide_form_label_cron_scheduled_end }}</label>
             <div class="widget">
                 <select id="{{ tclass }}-cron-schedule-end-trigger" class="trigger"></select>
+                <select name="" id="{{ tclass }}-cron-schedule-end-weekdaypicker" class="input-naked weekdaypicker">
+                    {% for day_number in range(1,8) %}
+                        <option value="{{ day_number }}">
+                            {{ t('basic_day_' ~ day_number) }}
+                        </option>
+                    {% endfor %}
+                </select>
                 <input type="text" id="{{ tclass }}-cron-schedule-end-datetimepicker" class="input-naked datetimepicker"
                        value=""
                        placeholder="{{ l.slideshow_slide_form_label_cron_scheduled_datetime_placeholder }}"/>

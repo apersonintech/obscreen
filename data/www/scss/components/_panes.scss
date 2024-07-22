@@ -14,7 +14,7 @@
 		align-items: flex-start;
 		align-self: stretch;
 		margin: 1px 1px 28px 1px;
-		background: $gscale1;
+		background: $layoutBackground;
 		border-radius: $baseRadius;
 		border: 4px solid rgba($gscaleF, .05);
 
@@ -46,7 +46,7 @@
 			}
 
 			&:nth-child(even) {
-				background-color: $gscale04;
+				background-color: $gscale14;
 			}
 
 			.pane-cell,

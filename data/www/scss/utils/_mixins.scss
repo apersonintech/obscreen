@@ -24,8 +24,8 @@
 	color: transparent;
 }
 
-@mixin pixel-box($pixelOffset: 1) {
-	box-shadow: #{$pixelOffset}px 0 0 $white, 0 #{$pixelOffset}px 0 $limeGreen, -#{$pixelOffset}px 0 0 $seaBlue, 0 -#{$pixelOffset}px 0 $pinkyRed;
+@mixin pixel-box($pixelOffset: 1, $whiteColor: $white) {
+	box-shadow: #{$pixelOffset}px 0 0 $whiteColor, 0 #{$pixelOffset}px 0 $limeGreen, -#{$pixelOffset}px 0 0 $seaBlue, 0 -#{$pixelOffset}px 0 $pinkyRed;
 }
 
 @mixin generate-color-classes($color-map) {

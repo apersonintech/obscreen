@@ -1,8 +1,9 @@
 jQuery(document).ready(function ($) {
-    const loadDateTimePicker = function ($els, timeOnly) {
+    const loadDateTimePicker = function ($els) {
         const d = new Date();
         $els.each(function () {
-            var $el = $(this);
+            const $el = $(this);
+            const timeOnly = isScheduleInWeekMoment($el);
 
             const options = {
                 enableTime: true,
@@ -10,25 +11,51 @@ jQuery(document).ready(function ($) {
                 allowInput: false,
                 noCalendar: false,
                 allowInvalidPreload: false,
-                dateFormat: 'Y-m-d H:i',
+                dateFormat: timeOnly ? 'H:i' : 'Y-m-d H:i',
                 defaultHour: d.getHours(),
                 defaultMinute: d.getMinutes(),
                 onChange: function (selectedDates, dateStr, instance) {
-                    const d = selectedDates[0];
-                    const $target = $el.parents('.widget:eq(0)').find('.target');
-                    $target.val(
-                        d ? `${d.getMinutes()} ${d.getHours()} ${d.getDate()} ${(d.getMonth() + 1)} * ${d.getFullYear()}` : ''
-                    );
+                    callScheduleChange($el);
                 }
             };
 
             if (timeOnly) {
-                // options['noCalendar'] = true;
+                options['noCalendar'] = true;
+            } else {
+                if ($el.val().indexOf('-') < 0) {
+                    $el.val('');
+                }
             }
 
             $el.flatpickr(options);
-            $el.addClass('hidden');
         });
+    };
+
+    const onInDateTimeMomentChanged = function($el) {
+        const $holder = $el.parents('.widget:eq(0)');
+        const $datetimepicker = $holder.find('.datetimepicker');
+        const $cronTarget = $holder.find('.target');
+        const matches = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2}) (?<hour>\d{2}):(?<minute>\d{2})/.exec($datetimepicker.val());
+        if (matches) {
+            const {year, month, day, hour, minute} = matches.groups;
+            $cronTarget.val(`${parseInt(minute)} ${parseInt(hour)} ${parseInt(day)} ${parseInt(month)} * ${parseInt(year)}`);
+        } else {
+            $cronTarget.val('');
+        }
+    };
+
+    const onInWeekMomentChanged = function($el) {
+        const $holder = $el.parents('.widget:eq(0)');
+        const $datetimepicker = $holder.find('.datetimepicker');
+        const $weekdaypicker = $holder.find('.weekdaypicker');
+        const $cronTarget = $holder.find('.target');
+        const matches = $datetimepicker.val().split(':').map(function(e) { return parseInt(e) });
+        if (matches.length === 2) {
+            [hour, minute] = matches;
+            $cronTarget.val(`${minute} ${hour} * * ${$weekdaypicker.val()}`);
+        } else {
+            $cronTarget.val('');
+        }
     };
 
     const getId = function ($el) {
@@ -49,6 +76,31 @@ jQuery(document).ready(function ($) {
         });
     };
 
+    const getScheduleValue = function ($el) {
+        const $scheduleGroup = $el.parents('.form-group:eq(0)');
+        const $cronTrigger = $scheduleGroup.find('.trigger');
+        return $cronTrigger.val();
+    };
+
+    const isScheduleInDateTimeMoment = function($el) {
+        const scheduleValue = getScheduleValue($el);
+        return scheduleValue === 'datetime';
+    };
+
+    const isScheduleInWeekMoment = function($el) {
+        const scheduleValue = getScheduleValue($el);
+        return scheduleValue === 'inweek';
+    };
+
+    const callScheduleChange = function($el) {
+        if (isScheduleInWeekMoment($el)) {
+            onInWeekMomentChanged($el);
+        }
+        if (isScheduleInDateTimeMoment($el)) {
+            onInDateTimeMomentChanged($el);
+        }
+    };
+
     const inputSchedulerUpdate = function () {
         const $modal = $('.modal-slide:visible');
         const $scheduleStartGroup = $modal.find('.slide-schedule-group');
@@ -66,6 +118,9 @@ jQuery(document).ready(function ($) {
 
         const $datetimepickerStart = $scheduleStartGroup.find('.datetimepicker');
         const $datetimepickerEnd = $scheduleEndGroup.find('.datetimepicker');
+
+        const $weekdaypickerStart = $scheduleStartGroup.find('.weekdaypicker');
+        const $weekdaypickerEnd = $scheduleEndGroup.find('.weekdaypicker');
         const $isNotification = $modal.find('.slide-is-notification');
 
         const isNotification = $isNotification.val() === '1';
@@ -89,24 +144,27 @@ jQuery(document).ready(function ($) {
         const isDatetimeEnd = $triggerEnd.val() === 'datetime';
         const isStayloopEnd = $triggerEnd.val() === 'stayloop';
         const isDurationEnd = $triggerEnd.val() === 'duration';
+        const isInWeekMomentEnd = $triggerEnd.val() === 'inweek';
 
         const flushValueStart = isLoopStart;
         const flushValueEnd = isLoopStart || isStayloopEnd || isDurationEnd;
         const flushDuration = isNotification && isDatetimeEnd;
-        const datetimepickerWithCalendar = !isInWeekMomentStart;
+        const delegateDuration = $targetDelegateDuration.prop('checked');
 
         function toggleVisibility() {
             $targetCronFieldStart.toggleClass('hidden', !isCronStart);
             $targetCronFieldEnd.toggleClass('hidden', !isCronEnd);
-            $datetimepickerStart.toggleClass('hidden', !isDatetimeStart);
-            $datetimepickerEnd.toggleClass('hidden', !isDatetimeEnd);
+            $datetimepickerStart.toggleClass('hidden', !(isDatetimeStart || isInWeekMomentStart));
+            $datetimepickerEnd.toggleClass('hidden', !isDatetimeEnd && !isInWeekMomentEnd);
+
+            $weekdaypickerStart.toggleClass('hidden', !isInWeekMomentStart);
+            $weekdaypickerEnd.toggleClass('hidden', !isInWeekMomentEnd);
 
             $delegateDurationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || !isVideo);
-            $durationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || $targetDelegateDuration.prop('checked'));
+            $durationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || delegateDuration);
 
             $targetDuration.prop('required', $durationGroup.is(':visible'));
             $targetDelegateDuration.prop('disabled', !$delegateDurationGroup.is(':visible'));
-
             $scheduleEndGroup.toggleClass('hidden', isLoopStart);
         }
 
@@ -126,9 +184,14 @@ jQuery(document).ready(function ($) {
             }
         }
 
-        loadDateTimePicker($modal.find('.datetimepicker'), datetimepickerWithCalendar);
+        loadDateTimePicker($modal.find('.datetimepicker'));
         toggleVisibility();
         flushValues();
+
+        callScheduleChange($weekdaypickerStart);
+        callScheduleChange($weekdaypickerEnd);
+        callScheduleChange($datetimepickerStart);
+        callScheduleChange($weekdaypickerEnd);
     };
 
     const main = function () {
@@ -137,6 +200,10 @@ jQuery(document).ready(function ($) {
             update: updatePositions
         });
     };
+
+    $(document).on('change', '.weekdaypicker', function() {
+        callScheduleChange($(this));
+    });
 
     $(document).on('change', '.modal-slide select.trigger, .modal-slide input.trigger', function () {
         inputSchedulerUpdate();
@@ -193,10 +260,12 @@ jQuery(document).ready(function ($) {
         const $modal = $('.modal-slide:visible');
 
         const hasCron = slide.cron_schedule && slide.cron_schedule.length > 0;
-        const hasDateTime = hasCron && validateCronDateTime(slide.cron_schedule);
+        const isInDateTimeMomentStart = hasCron && isCronInDatetimeMoment(slide.cron_schedule);
+        const isInWeekMomentStart = hasCron && isCronInWeekMoment(slide.cron_schedule);
 
         const hasCronEnd = slide.cron_schedule_end && slide.cron_schedule_end.length > 0;
-        const hasDateTimeEnd = hasCronEnd && validateCronDateTime(slide.cron_schedule_end);
+        const isInDateTimeMomentEnd = hasCronEnd && isCronInDatetimeMoment(slide.cron_schedule_end);
+        const isInWeekMomentEnd = hasCronEnd && isCronInWeekMoment(slide.cron_schedule_end);
         const isNotification = slide.is_notification;
 
         const tclass = '#slide-' + (isNotification ? 'notification-' : '') + 'edit';
@@ -214,22 +283,31 @@ jQuery(document).ready(function ($) {
         $modal.find(tclass + '-duration').val(slide.duration);
         $modal.find(tclass + '-enabled').prop('checked', slide.enabled);
 
-        $modal.find(tclass + '-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
-        $modal.find(tclass + '-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
+        $modal.find(tclass + '-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || isInDateTimeMomentStart || isInWeekMomentStart);
+        $modal.find(tclass + '-cron-schedule-trigger').val(isInWeekMomentStart ? 'inweek' : (isInDateTimeMomentStart ? 'datetime' : (hasCron ? 'cron' : 'loop')));
 
-        $modal.find(tclass + '-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || hasDateTimeEnd);
-        $modal.find(tclass + '-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : (isNotification ? 'duration' : 'stayloop')));
-
-        $modal.find(tclass + '-cron-schedule-datetimepicker').toggleClass('hidden', !hasDateTime).val(
-            hasDateTime ? getCronDateTime(slide.cron_schedule) : ''
-        );
-
-        $modal.find(tclass + '-cron-schedule-end-datetimepicker').toggleClass('hidden', !hasDateTimeEnd).val(
-            hasDateTimeEnd ? getCronDateTime(slide.cron_schedule_end) : ''
-        );
-        $modal.find(tclass + '-id').val(slide.id);
-        loadDateTimePicker($modal.find('.datetimepicker'));
         inputCallbacks();
+
+        $modal.find(tclass + '-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || isInDateTimeMomentEnd || isInWeekMomentEnd);
+        $modal.find(tclass + '-cron-schedule-end-trigger').val(isInWeekMomentEnd ? 'inweek' : (isInDateTimeMomentEnd ? 'datetime' : (hasCronEnd ? 'cron' : (isNotification ? 'duration' : 'stayloop'))));
+
+        $modal.find(tclass + '-cron-schedule-datetimepicker').toggleClass('hidden', !(isInDateTimeMomentStart || isInWeekMomentStart)).val(
+            isInWeekMomentStart ? getCronTime(slide.cron_schedule) : (isInDateTimeMomentStart ? getCronDateTime(slide.cron_schedule) : '')
+        );
+        $modal.find(tclass + '-cron-schedule-weekdaypicker').toggleClass('hidden', !isInWeekMomentStart).val(
+            isInWeekMomentStart ? getCronDayInWeek(slide.cron_schedule) : '1'
+        );
+
+        $modal.find(tclass + '-cron-schedule-end-datetimepicker').toggleClass('hidden', !(isInDateTimeMomentEnd || isInWeekMomentEnd)).val(
+            isInWeekMomentEnd ? getCronTime(slide.cron_schedule_end) : (isInDateTimeMomentEnd ? getCronDateTime(slide.cron_schedule_end) : '')
+        );
+        $modal.find(tclass + '-cron-schedule-end-weekdaypicker').toggleClass('hidden', !isInWeekMomentEnd).val(
+            isInWeekMomentEnd ? getCronDayInWeek(slide.cron_schedule_end) : '1'
+        );
+
+        $modal.find(tclass + '-id').val(slide.id);
+        inputCallbacks();
+        loadDateTimePicker($modal.find('.datetimepicker'));
     });
 
     $(document).on('click', '.slide-delete', function () {

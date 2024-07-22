@@ -8,13 +8,28 @@ const getCronDateTime = function(cronExpression) {
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')} ${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
 };
 
-const validateCronDateTime = function(cronExpression) {
+const getCronTime = function(cronExpression) {
+    const [minutes, hours, day, month, _, year] = cronExpression.split(' ');
+    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+};
+
+const getCronDayInWeek = function(cronExpression) {
+    const [minutes, hours, day, month, day_week, year] = cronExpression.split(' ');
+    return day_week;
+};
+
+const isCronInDatetimeMoment = function(cronExpression) {
     const pattern = /^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$/;
     return pattern.test(cronExpression);
 };
 
+const isCronInWeekMoment = function(cronExpression) {
+    const pattern = /^(\d+)\s+(\d+)\s+\*\s+\*\s+(\d+)$/;
+    return pattern.test(cronExpression);
+};
+
 const cronToDateTimeObject = function(cronExpression) {
-    if (!validateCronDateTime(cronExpression)) {
+    if (!isCronInDatetimeMoment(cronExpression)) {
         return null;
     }
 

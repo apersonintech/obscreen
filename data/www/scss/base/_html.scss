@@ -6,7 +6,7 @@
 }
 
 html {
-	background-color: $gscale1;
+	background-color: $layoutBackground;
 }
 
 body, html {
@@ -96,9 +96,7 @@ main {
 			align-items: flex-start;
 			flex: 1;
 			overflow-y: auto;
-			background: radial-gradient(circle at 0% 53%, rgba($pinkyRed, 0.8) 10%, transparent 45%),
-			radial-gradient(circle at 135% 53%, rgba($seaBlue, 0.8) 10%, transparent 95%),
-			radial-gradient(circle at 50% 80%, rgba($limeGreen, 0.8) 40%, transparent 95%);
+			background: $fancyBackground;
 
 			.page-content {
 				flex: 2;
@@ -118,7 +116,7 @@ main {
 					justify-content: flex-start;
 					align-items: flex-start;
 					padding: 0 10px 40px 10px;
-					background: $gscale1;
+					background: $layoutBackground;
 					align-self: stretch;
 				}
 			}
@@ -127,7 +125,7 @@ main {
 				flex: 1;
 				overflow-y: auto;
 				align-self: stretch;
-				background: $gscale1;
+				background: $layoutBackground;
 				border-top: none;
 
 				&.left-panel {
@@ -138,7 +136,7 @@ main {
 						flex: 0.5;
 						overflow-y: auto;
 						padding: 0;
-						background: $gscale1;
+						background: $layoutBackground;
 						box-shadow: 1px 1px .5px .5px inset rgba($gscale0, 0.2);
 						max-width: 250px;
 					}
