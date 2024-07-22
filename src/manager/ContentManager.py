@@ -2,7 +2,6 @@ import os
 
 from typing import Dict, Optional, List, Tuple, Union
 from werkzeug.datastructures import FileStorage
-from moviepy.editor import VideoFileClip
 
 from src.model.entity.Content import Content
 from src.model.entity.Playlist import Playlist
@@ -16,6 +15,7 @@ from src.manager.VariableManager import VariableManager
 from src.service.ModelManager import ModelManager
 from src.util.UtilFile import randomize_filename
 from src.util.UtilNetwork import get_preferred_ip_address
+from src.util.UtilVideo import mp4_duration_with_ffprobe
 
 
 class ContentManager(ModelManager):
@@ -195,8 +195,7 @@ class ContentManager(ModelManager):
                 content.location = object_path
 
                 if type == ContentType.VIDEO:
-                    with VideoFileClip(content.location) as video:
-                        content.duration = int(video.duration)
+                    content.duration = mp4_duration_with_ffprobe(content.location)
 
         else:
             content.location = location
