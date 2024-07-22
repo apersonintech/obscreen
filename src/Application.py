@@ -6,18 +6,20 @@ import threading
 from src.service.ModelStore import ModelStore
 from src.service.PluginStore import PluginStore
 from src.service.TemplateRenderer import TemplateRenderer
+from src.service.ExternalStorageServer import ExternalStorageServer
 from src.service.WebServer import WebServer
 from src.model.enum.HookType import HookType
 
 
 class Application:
 
-    def __init__(self, project_dir: str):
-        self._project_dir = project_dir
+    def __init__(self, application_dir: str):
+        self._application_dir = application_dir
         self._stop_event = threading.Event()
-        self._model_store = ModelStore(self.get_plugins)
+        self._model_store = ModelStore(self, self.get_plugins)
         self._template_renderer = TemplateRenderer(kernel=self, model_store=self._model_store, render_hook=self.render_hook)
         self._web_server = WebServer(kernel=self, model_store=self._model_store, template_renderer=self._template_renderer)
+        self._external_storage_server = ExternalStorageServer(kernel=self, model_store=self._model_store)
 
         logging.info("[{}] Starting application v{}...".format(self.get_name(), self.get_version()))
         self._plugin_store = PluginStore(kernel=self, model_store=self._model_store, template_renderer=self._template_renderer, web_server=self._web_server)
@@ -29,6 +31,7 @@ class Application:
         if variable:
             self._model_store.variable().update_by_name(variable.name, variable.as_int() + 1)
 
+        self._external_storage_server.run()
         self._web_server.run()
 
     def signal_handler(self, signal, frame) -> None:
@@ -37,8 +40,8 @@ class Application:
         self._stop_event.set()
         sys.exit(0)
 
-    def get_project_dir(self) -> str:
-        return self._project_dir
+    def get_application_dir(self) -> str:
+        return self._application_dir
 
     def render_hook(self, hook: HookType) -> str:
         return self._template_renderer.render_hooks(self._plugin_store.map_hooks()[hook])
@@ -59,3 +62,7 @@ class Application:
         self._model_store.lang().set_lang(lang)
         self._model_store.variable().reload()
         self._plugin_store.reload_lang()
+
+    @property
+    def external_storage_server(self):
+        return self._external_storage_server

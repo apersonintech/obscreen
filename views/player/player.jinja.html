@@ -75,6 +75,7 @@
     let clockValue = 0;
     let curItemIndex = -1;
     let secondsBeforeNext = 0;
+    const durationsOverride = {};
     const introSlide = document.getElementById('IntroSlide');
     const notificationSlide = document.getElementById('NotificationSlide');
     const firstSlide = document.getElementById('FirstSlide');
@@ -191,7 +192,14 @@
         if (!item) {
             return tickRefreshResolutionMs/1000;
         }
-        return item.duration + Math.ceil(animation_speed_duration/1000);
+
+        let duration = item.duration;
+
+        if (durationsOverride[item.id]) {
+            duration = durationsOverride[item.id];
+        }
+
+        return duration + Math.ceil(animation_speed_duration/1000);
     };
 
     const main = function() {
@@ -327,7 +335,8 @@
     }
 
     const loadPicture = function(element, callbackReady, item) {
-        element.innerHTML = `<img src="/${item.location}" alt="" />`;
+        const hasScheme = item.location.indexOf('://') >= 0;
+        element.innerHTML = `<img src="${hasScheme ? item.location : ('/' + item.location)}" alt="" />`;
         callbackReady(function() {});
     };
 
@@ -362,7 +371,8 @@
         delayNoisyContentJIT = lookupCurrentItem().id !== item.id ? delayNoisyContentJIT : 0;
 
         video.addEventListener('loadedmetadata', function() {
-            if (item.duration !== video.duration) {
+            if (item.duration !== video.duration && item.delegate_duration) {
+                durationsOverride[item.id] = video.duration;
                 console.warn('Given duration ' + item.duration + 's is different from video file ' + Math.ceil(video.duration) + 's');
             }
         });

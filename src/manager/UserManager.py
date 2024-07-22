@@ -164,7 +164,7 @@ class UserManager:
 
         form = {
             "username": username if user else user.username,
-            "enabled": enabled if enabled is not None else user.enabled
+            "enabled": enabled if isinstance(enabled, bool) else user.enabled
         }
 
         if password is not None and password:

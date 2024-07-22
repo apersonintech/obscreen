@@ -153,7 +153,7 @@ class NodePlayerGroupManager(ModelManager):
 
         form = {
             "name": name,
-            "playlist_id": playlist_id if playlist_id else None
+            "playlist_id": playlist_id if playlist_id else node_player_group.playlist_id
         }
 
         self._db.update_by_id(self.TABLE_NAME, id, self.pre_update(form))

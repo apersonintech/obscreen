@@ -16,11 +16,14 @@ from src.manager.LoggingManager import LoggingManager
 
 class ModelStore:
 
-    def __init__(self, get_plugins: Dict):
+    def __init__(self, kernel, get_plugins: Dict):
         self._get_plugins = get_plugins
+        self._kernel = kernel
 
         # Core
-        self._config_manager = ConfigManager()
+        self._config_manager = ConfigManager(replacers={
+            'application_dir': kernel.get_application_dir()
+        })
         self._logging_manager = LoggingManager(config_manager=self._config_manager)
 
         # Pure
@@ -38,7 +41,7 @@ class ModelStore:
         self._node_player_group_manager = NodePlayerGroupManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._playlist_manager = PlaylistManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
         self._slide_manager = SlideManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
-        self._content_manager = ContentManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager)
+        self._content_manager = ContentManager(lang_manager=self._lang_manager, database_manager=self._database_manager, user_manager=self._user_manager, variable_manager=self._variable_manager, config_manager=self._config_manager)
         self._variable_manager.reload()
 
     def logging(self) -> LoggingManager:
