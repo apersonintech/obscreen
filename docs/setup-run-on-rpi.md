@@ -15,6 +15,26 @@
 ## 📡 Run the studio instance
 
 <details closed>
+<summary><h3>System-wide (recommended)</h3></summary>
+
+#### Install
+- Install studio by executing following script
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-studio.sh -o /tmp/install-studio.sh && chmod +x /tmp/install-studio.sh && sudo /bin/bash /tmp/install-studio.sh $USER $HOME
+sudo reboot
+```
+
+#### Configure
+- Server configuration is editable in `.env` file.
+- Application configuration will be available at `http://raspberrypi.local:5000/settings` page after run.
+- Check logs with `journalctl -u obscreen-studio -f` 
+
+---
+
+</details>
+
+<details closed>
 <summary><h3>Using docker run</h3></summary>
 
 ```bash
@@ -62,25 +82,6 @@ docker compose up --detach --pull=always
 
 </details>
 
-<details closed>
-<summary><h3>System-wide (recommended)</h3></summary>
-
-#### Install
-- Install studio by executing following script
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/jr-k/obscreen/master/system/install-studio.sh -o /tmp/install-studio.sh && chmod +x /tmp/install-studio.sh && sudo /bin/bash /tmp/install-studio.sh $USER $HOME
-sudo reboot
-```
-
-#### Configure
-- Server configuration is editable in `.env` file.
-- Application configuration will be available at `http://raspberrypi.local:5000/settings` page after run.
-- Check logs with `journalctl -u obscreen-studio -f` 
-
----
-
-</details>
 
 ## 👌 Usage
 - Page which plays slideshow is reachable at `http://raspberrypi.local:5000`
