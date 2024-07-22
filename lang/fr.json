@@ -48,6 +48,7 @@
   "slideshow_slide_form_label_cron_scheduled_end": "Fin",
   "slideshow_slide_form_label_cron_scheduled_loop": "Toujours en boucle",
   "slideshow_slide_form_label_cron_scheduled_duration": "Durée",
+  "slideshow_slide_form_label_cron_scheduled_inweek": "Moment de la semaine",
   "slideshow_slide_form_label_cron_scheduled_stayloop": "Suit la boucle",
   "slideshow_slide_form_label_cron_scheduled_duration_unit": "secondes",
   "slideshow_slide_form_label_cron_scheduled_datetime": "Date & Heure",

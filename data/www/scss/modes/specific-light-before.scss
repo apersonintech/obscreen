@@ -1,2 +1,8 @@
 $limeGreen: $bitterGreen;
 $yellow: rgb(255, 167, 10);
+$layoutBackground: $white;
+$fancyBackground:  radial-gradient(circle at 0% 53%, rgba($seaBlue, 0.8) 10%, transparent 45%),
+			radial-gradient(circle at 135% 53%, rgba($seaBlue, 0.8) 10%, transparent 95%),
+			radial-gradient(circle at 50% 80%, rgba($bitterPurple, 0.8) 40%, transparent 95%);
+
+

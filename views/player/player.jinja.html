@@ -399,8 +399,8 @@
             const isFullyElapsedMinute = (new Date()).getSeconds() === 0;
             const hasCron = item.cron_schedule && item.cron_schedule.length > 0;
             const hasCronEnd = item.cron_schedule_end && item.cron_schedule_end.length > 0;
-            const hasDateTime = hasCron && validateCronDateTime(item.cron_schedule);
-            const hasDateTimeEnd = hasCronEnd && validateCronDateTime(item.cron_schedule_end);
+            const hasDateTime = hasCron && isCronInDatetimeMoment(item.cron_schedule);
+            const hasDateTimeEnd = hasCronEnd && isCronInDatetimeMoment(item.cron_schedule_end);
 
             if (notificationItemIndex !== i && hasDateTime) {
                 const startDate = cronToDateTimeObject(item.cron_schedule);

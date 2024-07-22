@@ -48,6 +48,7 @@
   "slideshow_slide_form_label_cron_scheduled_end": "End",
   "slideshow_slide_form_label_cron_scheduled_loop": "Always in loop",
   "slideshow_slide_form_label_cron_scheduled_duration": "Duration",
+  "slideshow_slide_form_label_cron_scheduled_inweek": "Moment in week",
   "slideshow_slide_form_label_cron_scheduled_stayloop": "Follow the loop",
   "slideshow_slide_form_label_cron_scheduled_duration_unit": "seconds",
   "slideshow_slide_form_label_cron_scheduled_datetime": "Date & Time",

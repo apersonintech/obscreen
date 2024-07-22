@@ -8,7 +8,7 @@ import unicodedata
 import platform
 
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, List, Dict
 from enum import Enum
 from cron_descriptor import ExpressionDescriptor
@@ -59,18 +59,18 @@ def camel_to_snake(camel: str) -> str:
     return CAMEL_CASE_TO_SNAKE_CASE_PATTERN.sub('_', camel).lower()
 
 
-def is_cron_calendar_moment(expression: str) -> bool:
+def is_cron_in_datetime_moment(expression: str) -> bool:
     pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+(\d+)$')
+    return bool(pattern.match(expression))
+
+
+def is_cron_in_week_moment(expression: str) -> bool:
+    pattern = re.compile(r'^(\d+)\s+(\d+)\s+\*\s+\*\s+(\d+)$')
     return bool(pattern.match(expression))
 
 
 def is_cron_in_year_moment(expression: str) -> bool:
     pattern = re.compile(r'^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+\*\s+\*$')
-    return bool(pattern.match(expression))
-
-
-def is_cron_in_week_moment(expression: str) -> bool:
-    pattern = re.compile(r'^(\d+)\s+(\d+)\s+\*\s+\*\s+(\d+)\s+\*$')
     return bool(pattern.match(expression))
 
 
@@ -84,14 +84,29 @@ def is_cron_in_day_moment(expression: str) -> bool:
     return bool(pattern.match(expression))
 
 
-def get_cron_date_time(cron_expression: str, object: bool) -> str:
-    minutes, hours, day, month, _, year = cron_expression.split(' ')
+def is_now_after_cron_date_time_moment(expression: str) -> bool:
+    minutes, hours, day, month, _, year = expression.split(' ')
     formatted_date_time = f"{year}-{month.zfill(2)}-{day.zfill(2)} {hours.zfill(2)}:{minutes.zfill(2)}"
-    return datetime.strptime(formatted_date_time, '%Y-%m-%d %H:%M') if object else formatted_date_time
+    start_date = datetime.strptime(formatted_date_time, '%Y-%m-%d %H:%M')
+    return datetime.now() >= start_date
+
+
+def is_now_after_cron_week_moment(cron_expression: str) -> bool:
+    minutes, hours, day, month, day_of_week = cron_expression.split(' ')
+    now = datetime.now()
+    week_start = now - timedelta(days=now.isoweekday() - 1)
+
+    for day_offset in range(7):
+        check_date = week_start + timedelta(days=day_offset)
+        if check_date.isoweekday() == int(day_of_week):
+            check_date = check_date.replace(hour=int(hours), minute=int(minutes), second=0, microsecond=0)
+            if datetime.now() >= check_date:
+                return True
+    return False
 
 
 def get_safe_cron_descriptor(expression: str, use_24hour_time_format=True, locale_code: Optional[str] = None) -> str:
-    if is_cron_calendar_moment(expression):
+    if is_cron_in_datetime_moment(expression):
         [minutes, hours, day, month, _, year] = expression.split(' ')
         return "{}-{}-{} at {}:{}".format(
             year,

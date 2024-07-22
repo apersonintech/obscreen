@@ -12,7 +12,7 @@ from src.model.enum.ContentType import ContentType
 from src.exceptions.NoFallbackPlaylistException import NoFallbackPlaylistException
 from src.service.ModelStore import ModelStore
 from src.interface.ObController import ObController
-from src.util.utils import get_safe_cron_descriptor, is_cron_calendar_moment, is_cron_in_day_moment, get_cron_date_time
+from src.util.utils import get_safe_cron_descriptor, is_cron_in_datetime_moment, is_cron_in_week_moment, is_now_after_cron_date_time_moment, is_now_after_cron_week_moment
 from src.util.UtilNetwork import get_safe_remote_addr, get_network_interfaces
 from src.model.enum.AnimationSpeed import animation_speed_duration
 
@@ -170,22 +170,28 @@ class PlayerController(ObController):
         return playlists
 
     def _check_slide_enablement(self, loop: List, notifications: List, slide: Dict) -> None:
-        has_valid_start_date = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_cron_calendar_moment(slide['cron_schedule'])
-        has_valid_end_date = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_cron_calendar_moment(slide['cron_schedule_end'])
+        is_in_datetime_moment_start = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_cron_in_datetime_moment(slide['cron_schedule'])
+        is_in_datetime_moment_end = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_cron_in_datetime_moment(slide['cron_schedule_end'])
+        is_in_week_moment_start = 'cron_schedule' in slide and slide['cron_schedule'] and get_safe_cron_descriptor(slide['cron_schedule']) and is_cron_in_week_moment(slide['cron_schedule'])
+        is_in_week_moment_end = 'cron_schedule_end' in slide and slide['cron_schedule_end'] and get_safe_cron_descriptor(slide['cron_schedule_end']) and is_cron_in_week_moment(slide['cron_schedule_end'])
 
         if slide['is_notification']:
-            if has_valid_start_date:
+            if is_in_datetime_moment_start:
                 return notifications.append(slide)
             return logging.warn('Slide \'{}\' is a notification but start date is invalid'.format(slide['name']))
 
-        if has_valid_start_date:
-            start_date = get_cron_date_time(slide['cron_schedule'], object=True)
-            if datetime.now() <= start_date:
+        if is_in_datetime_moment_start:
+            if not is_now_after_cron_date_time_moment(slide['cron_schedule']):
+                return
+        elif is_in_week_moment_start:
+            if not is_now_after_cron_week_moment(slide['cron_schedule']):
                 return
 
-        if has_valid_end_date:
-            end_date = get_cron_date_time(slide['cron_schedule_end'], object=True)
-            if datetime.now() >= end_date:
+        if is_in_datetime_moment_end:
+            if is_now_after_cron_date_time_moment(slide['cron_schedule_end']):
+                return
+        elif is_in_week_moment_end:
+            if is_now_after_cron_week_moment(slide['cron_schedule_end']):
                 return
 
         loop.append(slide)
