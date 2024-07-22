@@ -21,9 +21,17 @@ jQuery(document).ready(function ($) {
 
             if (timeOnly) {
                 options['noCalendar'] = true;
+
+                if ($el.val() === '') {
+                    $el.val('00:00');
+                }
             } else {
                 if ($el.val().indexOf('-') < 0) {
                     $el.val('');
+                }
+
+                if ($el.val() === '') {
+                    $el.val(prettyTimestamp(d.getTime()));
                 }
             }
 
