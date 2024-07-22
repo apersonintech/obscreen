@@ -3,6 +3,7 @@ import time
 
 from typing import Optional, Union
 from src.util.utils import str_to_enum
+from src.model.enum.ContentType import AUTO_DURATION_CHEATCODE
 
 
 class Slide:
@@ -166,3 +167,5 @@ class Slide:
 
         return slide
 
+    def has_auto_duration(self) -> bool:
+        return self.duration == AUTO_DURATION_CHEATCODE

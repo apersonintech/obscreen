@@ -54,19 +54,22 @@ jQuery(document).ready(function ($) {
         const $scheduleStartGroup = $modal.find('.slide-schedule-group');
         const $scheduleEndGroup = $modal.find('.slide-schedule-end-group');
         const $durationGroup = $modal.find('.slide-duration-group');
-        const $isNotificationGroup = $modal.find('.slide-notification-group');
+        const $autoDurationGroup = $modal.find('.slide-auto-duration-group');
+        const $contentGroup = $modal.find('.slide-content-id-group');
 
         const $triggerStart = $scheduleStartGroup.find('.trigger');
         const $triggerEnd = $scheduleEndGroup.find('.trigger');
         const $targetCronFieldStart = $scheduleStartGroup.find('.target');
         const $targetCronFieldEnd = $scheduleEndGroup.find('.target');
         const $targetDuration = $durationGroup.find('input');
+        const $targetAutoDuration = $autoDurationGroup.find('input');
 
         const $datetimepickerStart = $scheduleStartGroup.find('.datetimepicker');
         const $datetimepickerEnd = $scheduleEndGroup.find('.datetimepicker');
-        const $isNotification = $modal.find('#slide-edit-is-notification');
+        const $isNotification = $modal.find('.slide-is-notification');
 
         const isNotification = $isNotification.val() === '1';
+        const isVideo = $contentGroup.find('.target').attr('data-type') === 'video';
         let isLoopStart = $triggerStart.val() === 'loop';
         let isCronStart = $triggerStart.val() === 'cron';
 
@@ -98,7 +101,9 @@ jQuery(document).ready(function ($) {
             $datetimepickerStart.toggleClass('hidden', !isDatetimeStart);
             $datetimepickerEnd.toggleClass('hidden', !isDatetimeEnd);
 
-            $durationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || parseInt($targetDuration.val()) === auto_duration_cheatcode);
+            // $targetAutoDuration
+            $autoDurationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || !isVideo);
+            $durationGroup.toggleClass('hidden', (isNotification && isDatetimeEnd) || $targetAutoDuration.prop('checked'));
             $scheduleEndGroup.toggleClass('hidden', isLoopStart);
 
             $durationGroup.find('.widget input').prop('required', $durationGroup.is(':visible'));
@@ -125,19 +130,6 @@ jQuery(document).ready(function ($) {
         flushValues();
     };
 
-    const inputAutoDurationUpdate = function (enableAutoDuration) {
-        const $modal = $('.modal-slide:visible');
-        const $input = $modal.find('.slide-auto-duration');
-        const $durationGroup = $modal.find('.slide-duration-group');
-        const $durationInput = $durationGroup.find('input');
-        const $autoDurationGroup = $modal.find('.slide-auto-duration-group');
-        const activeAutoDuration = $input.prop('checked');
-
-        $durationGroup.toggleClass('hidden', enableAutoDuration && activeAutoDuration);
-        $autoDurationGroup.toggleClass('hidden', !enableAutoDuration);
-        $durationInput.val(enableAutoDuration && activeAutoDuration ? auto_duration_cheatcode : 3);
-    };
-
     const main = function () {
         $("ul.slides").sortable({
             handle: 'a.slide-sort',
@@ -160,6 +152,7 @@ jQuery(document).ready(function ($) {
     $(document).on('click', '.content-explr-picker', function () {
         showPickers('modal-content-explr-picker', function (content) {
             inputContentUpdate(content);
+            inputSchedulerUpdate();
         });
     });
 
@@ -171,22 +164,32 @@ jQuery(document).ready(function ($) {
         const $actionShow = $group.find('.slide-content-show');
         const invalidContent = content === undefined || !content.id;
 
-        inputAutoDurationUpdate(!invalidContent && content.type === 'video');
-
         if (invalidContent) {
             $inputLabel.val('');
             $inputId.val('');
             $actionShow.addClass('hidden');
+            $inputId.attr('data-type', '');
             return;
         }
 
         $inputLabel.val(content.name);
         $inputId.val(content.id);
+        $inputId.attr('data-type', content.type);
         $actionShow.removeClass('hidden');
     };
 
     $(document).on('change', '.slide-auto-duration', function () {
-        inputAutoDurationUpdate(true);
+        const $modal = $(this).parents('.modal:eq(0)');
+        const $durationGroup = $modal.find('.slide-duration-group');
+        const $durationInput = $durationGroup.find('input');
+
+        if ($(this).prop('checked')) {
+            $durationInput.val(auto_duration_cheatcode);
+        } else {
+            $durationInput.val(3);
+        }
+
+        inputSchedulerUpdate();
     });
 
     $(document).on('click', '.slide-content-show', function () {
@@ -205,32 +208,37 @@ jQuery(document).ready(function ($) {
         const hasDateTimeEnd = hasCronEnd && validateCronDateTime(slide.cron_schedule_end);
         const isNotification = slide.is_notification;
 
+        const tclass = '#slide-' + (isNotification ? 'notification-' : '') + 'edit';
 
-        $modal.find('#slide-edit-auto-duration').prop('checked', slide.duration === auto_duration_cheatcode);
+        const inputCallbacks = function() {
+            inputContentUpdate(slide.content);
+            inputSchedulerUpdate();
+        };
 
-        inputContentUpdate(slide.content);
+        inputCallbacks();
+
+        $modal.find(tclass + '-auto-duration').prop('checked', slide.duration === auto_duration_cheatcode);
 
         $modal.find('input[type=text]:visible:eq(0)').focus().select();
-        $modal.find('#slide-edit-duration').val(slide.duration);
-        $modal.find('#slide-edit-enabled').prop('checked', slide.enabled);
+        $modal.find(tclass + '-duration').val(slide.duration);
+        $modal.find(tclass + '-enabled').prop('checked', slide.enabled);
 
-        $modal.find('#slide-edit-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
-        $modal.find('#slide-edit-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
+        $modal.find(tclass + '-cron-schedule').val(slide.cron_schedule).toggleClass('hidden', !hasCron || hasDateTime);
+        $modal.find(tclass + '-cron-schedule-trigger').val(hasDateTime ? 'datetime' : (hasCron ? 'cron' : 'loop'));
 
-        $modal.find('#slide-edit-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || hasDateTimeEnd);
-        $modal.find('#slide-edit-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : (isNotification ? 'duration' : 'stayloop')));
+        $modal.find(tclass + '-cron-schedule-end').val(slide.cron_schedule_end).toggleClass('hidden', !hasCronEnd || hasDateTimeEnd);
+        $modal.find(tclass + '-cron-schedule-end-trigger').val(hasDateTimeEnd ? 'datetime' : (hasCronEnd ? 'cron' : (isNotification ? 'duration' : 'stayloop')));
 
-        $modal.find('#slide-edit-cron-schedule-datetimepicker').toggleClass('hidden', !hasDateTime).val(
+        $modal.find(tclass + '-cron-schedule-datetimepicker').toggleClass('hidden', !hasDateTime).val(
             hasDateTime ? getCronDateTime(slide.cron_schedule) : ''
         );
 
-        $modal.find('#slide-edit-cron-schedule-end-datetimepicker').toggleClass('hidden', !hasDateTimeEnd).val(
+        $modal.find(tclass + '-cron-schedule-end-datetimepicker').toggleClass('hidden', !hasDateTimeEnd).val(
             hasDateTimeEnd ? getCronDateTime(slide.cron_schedule_end) : ''
         );
-        $modal.find('#slide-edit-id').val(slide.id);
+        $modal.find(tclass + '-id').val(slide.id);
         loadDateTimePicker($modal.find('.datetimepicker'));
-
-        inputSchedulerUpdate();
+        inputCallbacks();
     });
 
     $(document).on('click', '.slide-delete', function () {
