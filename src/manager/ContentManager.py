@@ -240,7 +240,7 @@ class ContentManager(ModelManager):
         elif content.type == ContentType.YOUTUBE:
             location = "https://www.youtube.com/watch?v={}".format(content.location)
         elif len(var_external_url) > 0 and content.has_file():
-            location = "{}/{}".format(var_external_url.value, content.location)
+            location = "{}/{}".format(var_external_url, content.location)
         elif content.has_file():
             location = "/{}".format(content.location)
         elif content.type == ContentType.URL:
