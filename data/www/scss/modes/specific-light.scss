@@ -7,8 +7,16 @@ menu:hover h1.logo a {
 	color: transparent;
 }
 
-ul.explr-dirview li a i {
-	color: $seaBlue;
+ul.explr-dirview li a {
+	&.with-thumbnail {
+		.img-holder {
+			background: $gkscaleD;
+		}
+	}
+
+	i {
+		color: $seaBlue;
+	}
 }
 
 button,
@@ -185,3 +193,5 @@ ul.pills {
 		background: $gkscaleF7;
 	}
 }
+
+
