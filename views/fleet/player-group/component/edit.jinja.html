@@ -64,7 +64,8 @@
 
         {% if current_player_group.playlist_id %}
             <div class="preview-holder">
-                {% set preview_url = request.scheme ~ '://' ~ request.headers.get('host') ~ url_for('player_use', playlist_slug_or_id=current_player_group.playlist_id) %}
+                {% set base_url = external_url if external_url else request.scheme ~ '://' ~ request.headers.get('host') %}
+                {% set preview_url = base_url ~ url_for('player_use', playlist_slug_or_id=current_player_group.playlist_id) %}
 
                 <h4 class="divide">
                     Iframe
