@@ -33,7 +33,7 @@ It is a temporary live demo, all data will be deleted after 30 minutes (~30secs 
 - Cast pictures and iframes to Chromecast
 - No costly monthly pricing plan per screen or whatever, no cloud, no telemetry
 
-## 👨‍🍳 Cookbooks
+## 👨‍🍳 Installations
 
 ### 🔴 [I want to power a RaspberryPi and automatically see my slideshow on a screen connected to it and manage the slideshow](docs/setup-run-on-rpi.md)
 ### 🔵 [I just want a slideshow manager and I'll deal with screen and browser myself](docs/setup-run-headless.md)
